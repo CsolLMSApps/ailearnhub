@@ -1,0 +1,117 @@
+{
+  "courseSlug": "chatgpt-mastery",
+  "moduleNumber": 1,
+  "passPercentage": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What is the best way to think of ChatGPT?",
+      "options": [
+        "A search engine that finds information on the internet",
+        "A knowledgeable colleague who needs clear instructions to help effectively",
+        "A replacement for all human workers",
+        "A calculator that solves math problems"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q2",
+      "question": "Which ChatGPT version is recommended for beginners to start learning?",
+      "options": [
+        "GPT-4 with plugins (most expensive)",
+        "GPT-3.5 (free tier)",
+        "Custom enterprise version",
+        "ChatGPT API only"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q3",
+      "question": "What makes a prompt effective?",
+      "options": [
+        "Using as few words as possible",
+        "Writing in all capital letters",
+        "Including context, audience, tone, and constraints",
+        "Asking the same question multiple times"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "question": "A customer emails complaining about late delivery. Which prompt is BEST for writing a response?",
+      "options": [
+        "Write an email",
+        "Respond to customer complaint",
+        "Write a professional email response to a customer who received their order late. Apologize sincerely, explain shipping delays, and offer a 15% discount on next purchase. Tone: empathetic and solution-focused. 100-150 words.",
+        "Email about late order problem"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q5",
+      "question": "What is one common beginner mistake when using ChatGPT?",
+      "options": [
+        "Asking it to write emails",
+        "Treating it like Google and expecting real-time data",
+        "Using it for work tasks",
+        "Requesting specific word counts"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q6",
+      "question": "What should you do if ChatGPT's first response isn't quite what you need?",
+      "options": [
+        "Give up and write it yourself",
+        "Start a completely new conversation",
+        "Iterate and refine with follow-up prompts",
+        "Use the exact same prompt again"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q7",
+      "question": "How can ChatGPT help with meeting notes?",
+      "options": [
+        "It can attend meetings for you",
+        "It can record audio automatically",
+        "It can turn messy notes into structured summaries with action items",
+        "It cannot help with meetings at all"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q8",
+      "question": "What is the estimated time savings for using ChatGPT to write emails (according to the module)?",
+      "options": [
+        "2 minutes per day",
+        "50 minutes daily (10 min/email × 5 emails)",
+        "5 hours per week",
+        "No time savings"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q9",
+      "question": "What does 'LLM' stand for in the context of ChatGPT?",
+      "options": [
+        "Limited Language Machine",
+        "Large Language Model",
+        "Learning Logic Module",
+        "Language Limitation Method"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q10",
+      "question": "Which scenario is ChatGPT BEST suited for (without plugins)?",
+      "options": [
+        "Checking today's stock prices",
+        "Drafting a professional business proposal based on your instructions",
+        "Booking a flight for next week",
+        "Getting tomorrow's weather forecast"
+      ],
+      "correct": 1
+    }
+  ]
+}
