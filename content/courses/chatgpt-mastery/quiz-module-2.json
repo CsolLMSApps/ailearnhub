@@ -1,0 +1,117 @@
+{
+  "courseSlug": "chatgpt-mastery",
+  "moduleNumber": 2,
+  "passPercentage": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What are the 5 components of the Universal Prompt Formula?",
+      "options": [
+        "Role, Task, Context, Format, Tone",
+        "Subject, Verb, Object, Adjective, Adverb",
+        "Who, What, When, Where, Why",
+        "Input, Process, Output, Review, Revise"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "q2",
+      "question": "Why is specifying a ROLE important in your prompt?",
+      "options": [
+        "It makes the prompt longer and more impressive",
+        "It influences the vocabulary, perspective, and depth of the response",
+        "It's not important, you can skip it",
+        "It only matters for creative writing tasks"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q3",
+      "question": "Which is an example of a SPECIFIC task (not vague)?",
+      "options": [
+        "Write an email",
+        "Make a list",
+        "Write a follow-up email to a potential client who requested a demo but didn't respond after the meeting",
+        "Explain this to me"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "question": "What is 'prompt chaining'?",
+      "options": [
+        "Using multiple AI tools at the same time",
+        "Breaking complex tasks into sequential prompts that build on each other",
+        "Copying the same prompt many times",
+        "Linking prompts together with special characters"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q5",
+      "question": "You want ChatGPT to practice a difficult conversation with you. Which technique should you use?",
+      "options": [
+        "Prompt chaining",
+        "Role-playing scenarios",
+        "Using constraints",
+        "Sequential refinement"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q6",
+      "question": "What's the benefit of using CONSTRAINTS in your prompts?",
+      "options": [
+        "They make prompts harder to write",
+        "They limit ChatGPT's capabilities",
+        "They force better, more creative, and focused output",
+        "They're only useful for poetry"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q7",
+      "question": "Which is a common prompt engineering MISTAKE?",
+      "options": [
+        "Being too specific about what you want",
+        "Iterating and refining the output",
+        "Accepting the first output even if it's not quite right",
+        "Providing context and examples"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q8",
+      "question": "You get a response that's close but not perfect. What should you do?",
+      "options": [
+        "Start a completely new conversation",
+        "Give up and write it yourself",
+        "Iterate with a follow-up prompt like 'This is close, but can you make it more concise?'",
+        "Use the exact same prompt again"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q9",
+      "question": "What does specifying FORMAT in your prompt accomplish?",
+      "options": [
+        "Makes the prompt look more professional",
+        "Saves time reformatting - you get usable output immediately",
+        "It's optional and doesn't really matter",
+        "Only works for creating tables"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q10",
+      "question": "For a project requiring a 10-page report, what's the BEST approach?",
+      "options": [
+        "Ask for the entire 10-page report in one prompt",
+        "Use prompt chaining: outline first, then expand each section sequentially",
+        "Give up because ChatGPT can't handle long content",
+        "Copy the same prompt 10 times for 10 pages"
+      ],
+      "correct": 1
+    }
+  ]
+}
