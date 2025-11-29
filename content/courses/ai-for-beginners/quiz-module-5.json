@@ -1,0 +1,17 @@
+{
+  "courseSlug": "ai-for-beginners",
+  "moduleNumber": 5,
+  "passPercentage": 70,
+  "questions": [
+    {"id": "q1", "question": "How can ChatGPT help with creative writing?", "options": ["Write everything for you", "Generate ideas, prompts, and outlines as a starting point", "Replace human creativity entirely", "Only for professional writers"], "correct": 1},
+    {"id": "q2", "question": "What's a good way to use AI for personal projects?", "options": ["Have AI do all the work", "Use for planning, ideas, and step-by-step guidance", "Avoid using AI for personal things", "Only for tech projects"], "correct": 1},
+    {"id": "q3", "question": "Can AI help with creative problem-solving?", "options": ["No, creativity is only human", "Yes, by generating unconventional ideas and perspectives", "Only for logical problems", "It makes problems worse"], "correct": 1},
+    {"id": "q4", "question": "How should you use AI-generated story ideas?", "options": ["Publish them as-is", "Use as inspiration and develop in your own voice", "Never use AI for creative work", "Only for fanfiction"], "correct": 1},
+    {"id": "q5", "question": "What's the role of AI in content creation?", "options": ["Complete replacement for creators", "Helper for ideas, drafts, and overcoming blocks", "Only for social media", "Creates perfect content automatically"], "correct": 1},
+    {"id": "q6", "question": "Can ChatGPT help plan home improvement projects?", "options": ["No, you need professionals only", "Yes, for planning phases, budgets, and materials", "Yes, instead of contractors", "Only for small projects"], "correct": 1},
+    {"id": "q7", "question": "How can AI support habit building?", "options": ["It can't help with habits", "Create 30-day challenges with progressive difficulty", "Force you to build habits", "Only track existing habits"], "correct": 1},
+    {"id": "q8", "question": "What makes AI useful for brainstorming?", "options": ["It thinks for you", "Generates diverse ideas quickly to spark creativity", "Replaces team brainstorming", "Only for business ideas"], "correct": 1},
+    {"id": "q9", "question": "Should you give ChatGPT credit for creative work?", "options": ["No, never mention AI", "Yes, be transparent when AI contributed significantly", "Only for professional work", "AI owns the copyright"], "correct": 1},
+    {"id": "q10", "question": "What's the best approach to AI-assisted creativity?", "options": ["Let AI do everything", "Use AI as a collaborator while maintaining your voice", "Avoid AI to stay authentic", "Only use AI for editing"], "correct": 1}
+  ]
+}

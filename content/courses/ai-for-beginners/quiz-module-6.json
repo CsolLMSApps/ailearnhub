@@ -1,0 +1,17 @@
+{
+  "courseSlug": "ai-for-beginners",
+  "moduleNumber": 6,
+  "passPercentage": 70,
+  "questions": [
+    {"id": "q1", "question": "What's included in the free Starter AI Toolkit?", "options": ["Only ChatGPT", "ChatGPT, Gemini, Canva, Grammarly", "You must pay for all AI tools", "Only Microsoft tools"], "correct": 1},
+    {"id": "q2", "question": "When should you upgrade to paid AI tools?", "options": ["Immediately", "When you use AI daily and need advanced features", "Never upgrade", "Only if you're a business"], "correct": 1},
+    {"id": "q3", "question": "What should you do with sensitive information?", "options": ["Put everything in ChatGPT", "Never input personal or confidential data into AI", "Only use paid versions for sensitive data", "It's always safe"], "correct": 1},
+    {"id": "q4", "question": "Is using AI for work considered 'cheating'?", "options": ["Yes, always", "No, it's a tool like a calculator, but be transparent", "Yes, unless you're in tech", "Only if you don't disclose it"], "correct": 1},
+    {"id": "q5", "question": "How much time can beginners typically save with AI?", "options": ["No time saved", "3-5 hours weekly", "1 hour per month", "It wastes time"], "correct": 1},
+    {"id": "q6", "question": "What's important about ethical AI use?", "options": ["Nothing, just use it however", "Be transparent, verify information, respect privacy", "Only matters for businesses", "Ethics don't apply to AI"], "correct": 1},
+    {"id": "q7", "question": "Will AI take your job?", "options": ["Yes, immediately", "AI changes how we work; those who learn AI have an advantage", "No change to any jobs", "Only tech jobs affected"], "correct": 1},
+    {"id": "q8", "question": "What's the best way to continue learning AI?", "options": ["Stop after this course", "Practice daily, try new tools, join communities", "Wait for AI to improve", "Only learn if required"], "correct": 1},
+    {"id": "q9", "question": "What should you do with AI-generated information?", "options": ["Trust it completely", "Verify important facts and use professional judgment", "Never trust AI", "Only verify if it seems wrong"], "correct": 1},
+    {"id": "q10", "question": "What's the main takeaway from this course?", "options": ["AI is too complicated", "AI is a powerful tool anyone can learn to use effectively", "AI will do everything for you", "Only experts should use AI"], "correct": 1}
+  ]
+}

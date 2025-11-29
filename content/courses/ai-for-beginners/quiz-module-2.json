@@ -1,0 +1,117 @@
+{
+  "courseSlug": "ai-for-beginners",
+  "moduleNumber": 2,
+  "passPercentage": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What's the website to access ChatGPT?",
+      "options": [
+        "www.google.com",
+        "chat.openai.com",
+        "www.chatgpt.org",
+        "www.ai.com"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q2",
+      "question": "What makes a GOOD prompt for ChatGPT?",
+      "options": [
+        "One word questions",
+        "Vague requests like 'help me'",
+        "Specific, clear requests with details",
+        "As short as possible"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q3",
+      "question": "If ChatGPT's first answer isn't perfect, what should you do?",
+      "options": [
+        "Give up and write it yourself",
+        "Start a new account",
+        "Keep conversing and ask it to refine the answer",
+        "Copy it anyway"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "question": "True or False: ChatGPT can search the internet in real-time.",
+      "options": [
+        "True for all versions",
+        "False - it generates answers from training, doesn't search",
+        "True only for paid version",
+        "True only on weekends"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q5",
+      "question": "What should you do when starting a new topic?",
+      "options": [
+        "Continue in the same conversation",
+        "Delete your account and start over",
+        "Start a new chat for fresh context",
+        "It doesn't matter"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q6",
+      "question": "Which is a GOOD use of ChatGPT for beginners?",
+      "options": [
+        "Medical diagnosis",
+        "Legal advice",
+        "Helping write emails and explain topics simply",
+        "Predicting lottery numbers"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q7",
+      "question": "What's a common beginner mistake?",
+      "options": [
+        "Being too specific",
+        "Treating ChatGPT like a search engine",
+        "Using it daily",
+        "Asking questions"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q8",
+      "question": "Does ChatGPT remember you between conversations?",
+      "options": [
+        "Yes, always",
+        "No, unless you tell it context in each chat",
+        "Yes, but only for one day",
+        "Only if you pay"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q9",
+      "question": "What's the difference between free ChatGPT and ChatGPT Plus?",
+      "options": [
+        "No difference",
+        "Plus is faster, has GPT-4, and priority access",
+        "Plus is the only version that works",
+        "Free version expires after a month"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q10",
+      "question": "What should you always do with ChatGPT's math calculations?",
+      "options": [
+        "Trust them completely",
+        "Never use ChatGPT for math",
+        "Double-check important calculations",
+        "Only use for simple addition"
+      ],
+      "correct": 2
+    }
+  ]
+}

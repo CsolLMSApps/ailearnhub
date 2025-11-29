@@ -1,0 +1,17 @@
+{
+  "courseSlug": "ai-for-beginners",
+  "moduleNumber": 4,
+  "passPercentage": 70,
+  "questions": [
+    {"id": "q1", "question": "What's the best way to use ChatGPT for professional emails?", "options": ["Copy exactly without reading", "Use as a draft, then personalize", "Never use AI for work emails", "Only for personal emails"], "correct": 1},
+    {"id": "q2", "question": "Can ChatGPT help with job applications?", "options": ["No, only humans can", "Yes, for resume enhancement, cover letters, interview prep", "Yes, but it guarantees you'll get the job", "Only for tech jobs"], "correct": 1},
+    {"id": "q3", "question": "What should you do with AI-generated meeting notes?", "options": ["Send immediately without review", "Review, verify accuracy, then share", "Delete them", "Keep them private"], "correct": 1},
+    {"id": "q4", "question": "How can AI help with presentations?", "options": ["Create full presentations automatically", "Generate outlines, structure, and content ideas", "It can't help with presentations", "Only for sales presentations"], "correct": 1},
+    {"id": "q5", "question": "Is ChatGPT useful across different industries?", "options": ["No, only tech", "Yes, healthcare, finance, marketing, education, etc.", "Only for creative industries", "Only for large companies"], "correct": 1},
+    {"id": "q6", "question": "What's a good use for career development?", "options": ["Replacing networking", "Identifying skill gaps and creating learning plans", "Guarantee promotions", "Nothing career-related"], "correct": 1},
+    {"id": "q7", "question": "How should you handle confidential company information?", "options": ["Put everything in ChatGPT", "Never input confidential or sensitive data", "Only use paid version for confidential info", "It's always safe"], "correct": 1},
+    {"id": "q8", "question": "What's the estimated time savings for work emails with AI?", "options": ["No time saved", "A few seconds", "Minutes to hours per day", "Only saves time for long emails"], "correct": 2},
+    {"id": "q9", "question": "Can ChatGPT help explain technical concepts?", "options": ["No, it can't simplify technical things", "Yes, translate technical jargon for non-technical audiences", "Only for engineers", "It makes things more confusing"], "correct": 1},
+    {"id": "q10", "question": "What's the key to good work-related prompts?", "options": ["Keep them vague", "Be specific: role, audience, tone, purpose", "Use technical jargon", "Make them as long as possible"], "correct": 1}
+  ]
+}
