@@ -1,0 +1,117 @@
+{
+  "courseSlug": "chatgpt-mastery",
+  "moduleNumber": 7,
+  "passPercentage": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What's the main difference between ChatGPT and Claude?",
+      "options": [
+        "ChatGPT is free, Claude is paid",
+        "Claude has longer context windows and is better for detailed document analysis",
+        "They're exactly the same",
+        "Claude can't generate text"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q2",
+      "question": "What is the recommended 'Starter Stack' for AI tools (free/low cost)?",
+      "options": [
+        "Only ChatGPT paid version",
+        "ChatGPT Free, Google Gemini, Canva AI, Grammarly Free",
+        "Every AI tool available",
+        "Wait until you can afford premium tools"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q3",
+      "question": "When should you use image AI tools like DALL-E or Midjourney?",
+      "options": [
+        "For all your work",
+        "Never, only use stock photos",
+        "When creating visuals for content, product mockups, marketing materials, or concept visualization",
+        "Only if you're a professional designer"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "question": "What is a 'multi-modal AI'?",
+      "options": [
+        "AI that works on multiple devices",
+        "AI that can process and generate multiple types of content (text, images, audio, video)",
+        "AI with multiple modes like dark mode",
+        "AI for transportation"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q5",
+      "question": "When should you NOT use AI?",
+      "options": [
+        "For writing emails",
+        "For creating content",
+        "For medical diagnoses, legal advice, or high-stakes decisions without human oversight",
+        "For research"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q6",
+      "question": "What's the estimated ROI from this course (time saved per week)?",
+      "options": [
+        "2-3 hours",
+        "5-7 hours",
+        "10-15 hours",
+        "20+ hours"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q7",
+      "question": "Which skill remains valuable as AI advances?",
+      "options": [
+        "Data entry speed",
+        "Memorization",
+        "Critical thinking and evaluating AI outputs",
+        "Writing everything from scratch without AI"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q8",
+      "question": "How should you evaluate a new AI tool?",
+      "options": [
+        "Just try every new tool that comes out",
+        "Ignore all new tools and stick with what you know",
+        "Assess if it solves a real problem, saves time, has reasonable learning curve and cost",
+        "Only use it if everyone else is using it"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q9",
+      "question": "What's the recommended approach to AI-generated content?",
+      "options": [
+        "Never disclose that AI was used",
+        "Be transparent when appropriate and verify accuracy",
+        "Only use AI in secret",
+        "AI content doesn't need verification"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q10",
+      "question": "What should you do immediately after completing this course?",
+      "options": [
+        "Forget everything and go back to old methods",
+        "Wait a few months before trying anything",
+        "Set up AI stack, create custom instructions, use AI for 3 tasks tomorrow, share insights with team",
+        "Just get the certificate and stop learning"
+      ],
+      "correct": 2
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "courseSlug": "chatgpt-mastery",
+  "moduleNumber": 5,
+  "passPercentage": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What's the estimated weekly time savings from using ChatGPT for productivity tasks (according to the module)?",
+      "options": [
+        "5 hours per week",
+        "8 hours per week",
+        "12.5 hours per week",
+        "20 hours per week"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q2",
+      "question": "What is 'batch processing'?",
+      "options": [
+        "Processing data in large quantities",
+        "Grouping similar tasks together and completing them in one focused session",
+        "Working on multiple projects simultaneously",
+        "Using automation software"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q3",
+      "question": "When conducting research with ChatGPT, what should you request?",
+      "options": [
+        "Just ask general questions",
+        "Only ask for facts",
+        "Request overview, key findings, different perspectives, and practical applications",
+        "Copy and paste from websites"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "question": "What is 'deep work'?",
+      "options": [
+        "Working late into the night",
+        "Working on difficult problems",
+        "Focused, distraction-free work on cognitively demanding tasks",
+        "Working in a quiet office"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q5",
+      "question": "What's the recommended balance for weekly time allocation?",
+      "options": [
+        "100% meetings",
+        "Strategic 40%, Operational 30%, Meetings 20%, Buffer 10%",
+        "50% email, 50% work",
+        "Equal time for everything"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q6",
+      "question": "What should a good SOP (Standard Operating Procedure) include?",
+      "options": [
+        "Just the basic steps",
+        "Only who is responsible",
+        "Purpose, responsibilities, procedure, quality checks, and troubleshooting",
+        "Whatever seems relevant"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q7",
+      "question": "How should you prioritize your daily tasks?",
+      "options": [
+        "Do easiest tasks first",
+        "Work on whatever comes up",
+        "Identify top 3 priorities and schedule deep work when energy is highest",
+        "Respond to emails all day"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q8",
+      "question": "What's the purpose of a time audit?",
+      "options": [
+        "To bill clients accurately",
+        "To analyze how time was spent vs. how it should be spent for optimal productivity",
+        "To track employee hours",
+        "To prove you're working hard"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q9",
+      "question": "When organizing meeting notes with ChatGPT, what's most important?",
+      "options": [
+        "Detailed discussion summary",
+        "Action items with owner and due date",
+        "List of attendees",
+        "Meeting duration"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q10",
+      "question": "What should you do when making complex decisions with ChatGPT?",
+      "options": [
+        "Just ask for the answer",
+        "Flip a coin",
+        "Create a decision matrix, evaluate pros/cons, analyze scenarios, get data-driven recommendation",
+        "Ask your friends instead"
+      ],
+      "correct": 2
+    }
+  ]
+}
