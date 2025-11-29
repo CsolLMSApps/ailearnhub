@@ -1,0 +1,117 @@
+{
+  "courseSlug": "chatgpt-mastery",
+  "moduleNumber": 3,
+  "passPercentage": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What are the 6 components every business email should have?",
+      "options": [
+        "Subject, greeting, opening, body, action item, closing",
+        "To, from, date, subject, message, signature",
+        "Hello, introduction, request, thanks, goodbye, name",
+        "Header, footer, content, images, links, attachments"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "q2",
+      "question": "What's the ideal subject line formula for business emails?",
+      "options": [
+        "Make it as short as possible",
+        "[Topic] - [Action Needed] - [Deadline/Urgency]",
+        "Just write what the email is about",
+        "Use emojis to stand out"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q3",
+      "question": "When is the BEST time to send a follow-up email after no response?",
+      "options": [
+        "Within 24 hours",
+        "After 2 weeks",
+        "5-7 days after the initial email",
+        "Never follow up, it's unprofessional"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "question": "What's the '3-Sentence Rule' for business emails?",
+      "options": [
+        "Every email must be exactly 3 sentences long",
+        "If you can't explain it in 3 sentences, you need a meeting not an email",
+        "Use only 3-word sentences",
+        "Write 3 drafts before sending"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q5",
+      "question": "When addressing a customer complaint, what should come FIRST in your email?",
+      "options": [
+        "An explanation of what went wrong",
+        "The solution you're offering",
+        "Empathy and acknowledgment of their frustration",
+        "Company policy details"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q6",
+      "question": "What's the estimated time savings per week using ChatGPT for business communication (according to the module)?",
+      "options": [
+        "2 hours per week",
+        "5 hours per week",
+        "9 hours per week",
+        "15 hours per week"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q7",
+      "question": "For meeting notes, what's the MOST important section to include?",
+      "options": [
+        "Who attended the meeting",
+        "Action items with person responsible and due date",
+        "Detailed discussion summary",
+        "Next meeting time"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q8",
+      "question": "What's the recommended approach for emotional emails (when you're upset)?",
+      "options": [
+        "Send immediately while emotions are fresh",
+        "Never send emotional emails",
+        "Have ChatGPT draft it, save as draft, review in 24 hours",
+        "Write it yourself without AI help"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q9",
+      "question": "When requesting budget approval from an executive, what should you focus on?",
+      "options": [
+        "How hard you've been working",
+        "Data-driven justification and expected ROI",
+        "Why you deserve the budget",
+        "Technical details of implementation"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q10",
+      "question": "What's a common mistake when writing business emails?",
+      "options": [
+        "Being too specific",
+        "Using active voice",
+        "Burying the lead (not getting to the point quickly)",
+        "Including a clear call-to-action"
+      ],
+      "correct": 2
+    }
+  ]
+}
