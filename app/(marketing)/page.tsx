@@ -5,66 +5,57 @@ import { CheckCircle2, Clock, Users, Award, BookOpen, TrendingUp } from 'lucide-
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-700 text-white py-20 px-4">
+      <section className="bg-[#212121] text-white py-20 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Master AI & ChatGPT in Hours, Not Months
+              <h1 className="mb-6 text-5xl leading-tight font-normal">
+                Master AI & ChatGPT
               </h1>
-              <p className="text-xl mb-8 text-blue-100">
-                Professional courses designed for busy people. Learn AI tools that save 10+ hours weekly. 
-                Start today for just $19.
+              <p className="mb-8 text-gray-300 text-lg leading-8">
+                Professional courses designed for busy people. Learn AI tools that save 10+ hours weekly.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-6">
-                  Browse Courses
+                <Link href="/courses">
+                  <Button className="bg-[#FF6F00] hover:bg-[#E65100] text-white px-8 py-3 text-base font-medium">
+                    Browse courses
+                  </Button>
+                </Link>
+                <Button variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-3 text-base font-medium">
+                  Learn more
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-6">
-                  Learn More
-                </Button>
-              </div>
-              <div className="mt-8 flex items-center gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span>No technical background needed</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span>Immediate results</span>
-                </div>
               </div>
             </div>
             <div className="hidden md:block">
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                      <BookOpen className="w-6 h-6" />
+              <div className="bg-[#424242]/30 backdrop-blur-sm rounded p-8 border border-gray-700">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#FF6F00]/20 rounded flex items-center justify-center flex-shrink-0">
+                      <BookOpen className="w-6 h-6 text-[#FF6F00]" />
                     </div>
                     <div>
-                      <div className="font-semibold">2 Launch Courses</div>
-                      <div className="text-sm text-blue-100">7+ hours of content</div>
+                      <div className="text-base font-medium">2 Launch Courses</div>
+                      <div className="text-gray-400 text-sm">7+ hours of content</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
-                      <Users className="w-6 h-6" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#FF6F00]/20 rounded flex items-center justify-center flex-shrink-0">
+                      <Users className="w-6 h-6 text-[#FF6F00]" />
                     </div>
                     <div>
-                      <div className="font-semibold">Expert Instruction</div>
-                      <div className="text-sm text-blue-100">Practical, real-world focused</div>
+                      <div className="text-base font-medium">Expert Instruction</div>
+                      <div className="text-gray-400 text-sm">Practical, real-world focused</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center">
-                      <Award className="w-6 h-6" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#FF6F00]/20 rounded flex items-center justify-center flex-shrink-0">
+                      <Award className="w-6 h-6 text-[#FF6F00]" />
                     </div>
                     <div>
-                      <div className="font-semibold">Certificates Included</div>
-                      <div className="text-sm text-blue-100">Showcase your skills</div>
+                      <div className="text-base font-medium">Certificates Included</div>
+                      <div className="text-gray-400 text-sm">Showcase your skills</div>
                     </div>
                   </div>
                 </div>
@@ -75,24 +66,24 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 bg-gray-50 border-b">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">7+</div>
-              <div className="text-gray-600">Hours of Content</div>
+      <section className="py-12 bg-gray-50 border-b border-gray-200">
+        <div className="container mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-[#212121] mb-1 text-4xl font-normal">7+</div>
+              <div className="text-[#757575] text-sm">Hours of content</div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600 mb-2">130</div>
-              <div className="text-gray-600">Quiz Questions</div>
+            <div>
+              <div className="text-[#212121] mb-1 text-4xl font-normal">130</div>
+              <div className="text-[#757575] text-sm">Quiz questions</div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">90+</div>
-              <div className="text-gray-600">Templates</div>
+            <div>
+              <div className="text-[#212121] mb-1 text-4xl font-normal">90+</div>
+              <div className="text-[#757575] text-sm">Templates</div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600 mb-2">$19</div>
-              <div className="text-gray-600">Early Bird Pricing</div>
+            <div>
+              <div className="text-[#FF6F00] mb-1 text-4xl font-normal">$19</div>
+              <div className="text-[#757575] text-sm">Early bird pricing</div>
             </div>
           </div>
         </div>
