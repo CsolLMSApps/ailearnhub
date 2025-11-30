@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#212121"/>
+  
+  <!-- AI Letters in Orange -->
+  <!-- Letter A -->
+  <path d="M150 350 L200 200 L250 350 M170 300 L230 300" stroke="#FF6F00" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Letter I -->
+  <rect x="280" y="200" width="24" height="150" fill="#FF6F00" rx="4"/>
+  
+  <!-- Brain/Circuit nodes pattern -->
+  <circle cx="340" cy="220" r="8" fill="#FF6F00"/>
+  <circle cx="380" cy="240" r="8" fill="#FF6F00"/>
+  <circle cx="360" cy="280" r="8" fill="#FF6F00"/>
+  <circle cx="400" cy="300" r="8" fill="#FF6F00"/>
+  
+  <!-- Connecting lines for circuit/neural network effect -->
+  <line x1="340" y1="220" x2="380" y2="240" stroke="#FF6F00" stroke-width="3" opacity="0.6"/>
+  <line x1="380" y1="240" x2="360" y2="280" stroke="#FF6F00" stroke-width="3" opacity="0.6"/>
+  <line x1="360" y1="280" x2="400" y2="300" stroke="#FF6F00" stroke-width="3" opacity="0.6"/>
+  
+  <!-- Small accent dots for tech feel -->
+  <circle cx="320" cy="260" r="4" fill="#FF8F00"/>
+  <circle cx="390" cy="260" r="4" fill="#FF8F00"/>
+  <circle cx="350" cy="320" r="4" fill="#FF8F00"/>
+</svg>
