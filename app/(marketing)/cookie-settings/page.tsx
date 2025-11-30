@@ -5,6 +5,17 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
+// Type-safe gtag function
+const updateConsent = (analytics: boolean, marketing: boolean) => {
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    const gtag = (window as any).gtag;
+    gtag('consent', 'update', {
+      analytics_storage: analytics ? 'granted' : 'denied',
+      ad_storage: marketing ? 'granted' : 'denied'
+    });
+  }
+};
+
 export default function CookieSettingsPage() {
   const [analytics, setAnalytics] = useState(true)
   const [marketing, setMarketing] = useState(false)
@@ -12,7 +23,6 @@ export default function CookieSettingsPage() {
 
   useEffect(() => {
     // Load saved preferences
-    const consent = localStorage.getItem('cookieConsent')
     const saved = localStorage.getItem('cookiePreferences')
     
     if (saved) {
@@ -33,13 +43,7 @@ export default function CookieSettingsPage() {
     localStorage.setItem('cookiePreferences', JSON.stringify(prefs))
     localStorage.setItem('cookieConsent', 'customized')
     
-    // Update Google Analytics consent
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
-        analytics_storage: analytics ? 'granted' : 'denied',
-        ad_storage: marketing ? 'granted' : 'denied'
-      })
-    }
+    updateConsent(analytics, marketing);
     
     alert('Your cookie preferences have been saved!')
   }
@@ -58,12 +62,7 @@ export default function CookieSettingsPage() {
     localStorage.setItem('cookiePreferences', JSON.stringify(prefs))
     localStorage.setItem('cookieConsent', 'accepted')
     
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
-        analytics_storage: 'granted',
-        ad_storage: 'granted'
-      })
-    }
+    updateConsent(true, true);
     
     alert('All cookies accepted!')
   }
@@ -82,12 +81,7 @@ export default function CookieSettingsPage() {
     localStorage.setItem('cookiePreferences', JSON.stringify(prefs))
     localStorage.setItem('cookieConsent', 'declined')
     
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
-        analytics_storage: 'denied',
-        ad_storage: 'denied'
-      })
-    }
+    updateConsent(false, false);
     
     alert('All optional cookies rejected!')
   }

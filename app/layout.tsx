@@ -1,45 +1,32 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/constants'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
+import CookieConsent from '@/components/CookieConsent'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: {
-    default: SITE_NAME,
-    template: `%s | ${SITE_NAME}`,
+  title: 'AI Learn Hub - Master AI & ChatGPT',
+  description: 'Professional AI courses for everyone. Learn ChatGPT, AI automation, and more in hours, not months.',
+  keywords: 'AI courses, ChatGPT training, AI education, prompt engineering, AI for beginners',
+  authors: [{ name: 'AI Learn Hub' }],
+  icons: {
+    icon: '/logo-icon.svg',
+    apple: '/logo-icon.svg',
   },
-  description: SITE_DESCRIPTION,
-  keywords: ['AI courses', 'ChatGPT training', 'AI learning', 'prompt engineering', 'AI automation'],
-  authors: [{ name: 'Srikanth Merianda' }],
-  creator: 'AI Learn Hub',
-  publisher: 'AI Learn Hub',
-  metadataBase: new URL(SITE_URL),
   openGraph: {
-    type: 'website',
+    title: 'AI Learn Hub - Master AI & ChatGPT',
+    description: 'Professional AI courses for everyone',
+    url: 'https://ailearnhub.io',
+    siteName: 'AI Learn Hub',
     locale: 'en_US',
-    url: SITE_URL,
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    siteName: SITE_NAME,
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    creator: '@DFWITJOBS1',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    title: 'AI Learn Hub - Master AI & ChatGPT',
+    description: 'Professional AI courses for everyone',
   },
 }
 
@@ -49,9 +36,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={inter.className}>
+        <GoogleAnalytics />
         {children}
+        <CookieConsent />
       </body>
     </html>
   )
