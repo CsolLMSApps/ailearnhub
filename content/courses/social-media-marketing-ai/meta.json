@@ -1,0 +1,310 @@
+{
+  "id": "social-media-marketing-ai",
+  "slug": "social-media-marketing-ai",
+  "title": "Social Media Marketing with AI",
+  "shortDescription": "Master AI-powered social media marketing strategies, tools, and automation to grow your brand and drive results across all platforms.",
+  "longDescription": "Transform your social media marketing with the power of AI. This comprehensive course teaches you how to leverage ChatGPT, AI design tools, analytics platforms, and automation to create engaging content, build loyal communities, and drive measurable results. Perfect for marketers, entrepreneurs, content creators, and agencies looking to scale their social media impact without burning out. Learn proven strategies used by top brands and influencers to dominate social media using cutting-edge AI tools.",
+  "instructor": "Srikanth Merianda",
+  "level": "intermediate",
+  "category": "Marketing",
+  "subcategory": "Social Media Marketing",
+  "language": "English",
+  "totalModules": 6,
+  "totalHours": 2.7,
+  "estimatedMinutes": 160,
+  "featured": true,
+  "isPublished": true,
+  "price": {
+    "usd": 2900,
+    "cad": 3900,
+    "gbp": 2500,
+    "aud": 4400,
+    "inr": 99900
+  },
+  "currency": {
+    "usd": "$29",
+    "cad": "CA$39",
+    "gbp": "£25",
+    "aud": "AU$44",
+    "inr": "â‚¹999"
+  },
+  "modules": [
+    {
+      "moduleNumber": 1,
+      "title": "AI for Social Media Strategy",
+      "description": "Master AI tools for audience research, content planning, and platform-specific strategies. Learn to create 90-day growth plans and content calendars that drive engagement.",
+      "estimatedMinutes": 25,
+      "topics": [
+        "AI tools landscape (ChatGPT, Jasper, Copy.ai, Canva AI)",
+        "Audience research and persona development",
+        "Content calendar automation",
+        "Platform-specific strategies (Instagram, LinkedIn, Twitter, Facebook)",
+        "90-day growth strategy framework"
+      ],
+      "learningObjectives": [
+        "Identify and use the right AI tools for social media marketing",
+        "Conduct AI-powered audience research",
+        "Create automated content calendars",
+        "Develop platform-specific growth strategies"
+      ],
+      "hasQuiz": true,
+      "quizQuestions": 10,
+      "passingScore": 70
+    },
+    {
+      "moduleNumber": 2,
+      "title": "AI-Powered Content Creation",
+      "description": "Learn to create compelling captions, hashtag strategies, and repurpose content across platforms using AI. Master viral content frameworks and platform-specific optimization.",
+      "estimatedMinutes": 30,
+      "topics": [
+        "Caption writing formulas (Hook + Value + CTA + Hashtags)",
+        "Platform-specific content strategies",
+        "Hashtag research and optimization",
+        "Content repurposing (1 piece → 10+ formats)",
+        "Viral content frameworks"
+      ],
+      "learningObjectives": [
+        "Write high-converting captions using AI",
+        "Develop platform-specific content strategies",
+        "Research and use hashtags effectively",
+        "Repurpose content efficiently across platforms"
+      ],
+      "hasQuiz": true,
+      "quizQuestions": 10,
+      "passingScore": 70
+    },
+    {
+      "moduleNumber": 3,
+      "title": "Visual Content & AI Design Tools",
+      "description": "Master AI image generation, Canva AI features, and video creation. Learn to create stunning visuals that match platform requirements and drive engagement.",
+      "estimatedMinutes": 25,
+      "topics": [
+        "AI image generation (DALL-E, Midjourney, Stable Diffusion)",
+        "Perfect image prompt formulas",
+        "Canva AI features (Magic Write, Magic Design, Magic Edit)",
+        "Platform-specific visual formats",
+        "AI video creation basics"
+      ],
+      "learningObjectives": [
+        "Generate professional images using AI tools",
+        "Master Canva AI for rapid design",
+        "Create platform-optimized visual content",
+        "Produce simple AI-powered videos"
+      ],
+      "hasQuiz": true,
+      "quizQuestions": 10,
+      "passingScore": 70
+    },
+    {
+      "moduleNumber": 4,
+      "title": "AI for Social Media Analytics",
+      "description": "Use AI to analyze performance data, track metrics, run A/B tests, and calculate ROI. Learn predictive analytics and competitor analysis strategies.",
+      "estimatedMinutes": 30,
+      "topics": [
+        "AI-powered data analysis",
+        "Engagement metrics and performance tracking",
+        "A/B testing frameworks with AI",
+        "ROI calculation and optimization",
+        "Predictive analytics for content planning",
+        "Automated competitor analysis"
+      ],
+      "learningObjectives": [
+        "Analyze social media data using AI",
+        "Track and optimize key performance metrics",
+        "Run effective A/B tests",
+        "Calculate and improve marketing ROI",
+        "Use predictive analytics for planning"
+      ],
+      "hasQuiz": true,
+      "quizQuestions": 10,
+      "passingScore": 70
+    },
+    {
+      "moduleNumber": 5,
+      "title": "AI-Powered Community Management",
+      "description": "Automate comment responses, integrate customer service AI, monitor sentiment, and manage crises. Build engaged communities that scale.",
+      "estimatedMinutes": 25,
+      "topics": [
+        "Automated comment response systems",
+        "AI-assisted customer service",
+        "Sentiment analysis and monitoring",
+        "Crisis management protocols",
+        "Community building strategies",
+        "Content moderation with AI"
+      ],
+      "learningObjectives": [
+        "Automate responses while maintaining authenticity",
+        "Integrate AI into customer service workflows",
+        "Monitor and analyze brand sentiment",
+        "Handle crises effectively with AI assistance",
+        "Build and scale engaged communities"
+      ],
+      "hasQuiz": true,
+      "quizQuestions": 10,
+      "passingScore": 70
+    },
+    {
+      "moduleNumber": 6,
+      "title": "Advanced AI Marketing Tactics",
+      "description": "Master influencer outreach, ad optimization, multi-platform campaigns, CRM integration, and advanced analytics. Prepare for the future of AI marketing.",
+      "estimatedMinutes": 25,
+      "topics": [
+        "Influencer outreach automation",
+        "AI-powered ad copy optimization",
+        "Multi-platform campaign management",
+        "Email and CRM integration",
+        "Advanced analytics and attribution",
+        "Future trends in AI marketing"
+      ],
+      "learningObjectives": [
+        "Automate and scale influencer partnerships",
+        "Optimize ad campaigns using AI testing",
+        "Manage cohesive multi-platform campaigns",
+        "Integrate social media with email and CRM",
+        "Master advanced attribution models",
+        "Prepare for emerging AI marketing technologies"
+      ],
+      "hasQuiz": true,
+      "quizQuestions": 10,
+      "passingScore": 70
+    }
+  ],
+  "deliverables": [
+    "100+ social media caption templates",
+    "50+ hashtag sets for different goals and platforms",
+    "30+ AI image generation prompts",
+    "20+ content calendar templates",
+    "Video script templates for Reels, TikTok, YouTube Shorts",
+    "Analytics report templates",
+    "Crisis management playbook",
+    "Influencer outreach templates",
+    "Email-social integration workflows",
+    "Completion certificate with verification"
+  ],
+  "prerequisites": [
+    "Basic social media platform knowledge",
+    "Free ChatGPT account (recommended)",
+    "Active social media account to practice with",
+    "No prior AI experience required"
+  ],
+  "targetAudience": [
+    "Social media managers and coordinators",
+    "Digital marketers and marketing managers",
+    "Content creators and influencers",
+    "Small business owners and entrepreneurs",
+    "Marketing agency professionals",
+    "Freelance social media specialists",
+    "Anyone looking to scale their social media impact with AI"
+  ],
+  "skills": [
+    "AI-Powered Content Creation",
+    "Social Media Strategy",
+    "Content Marketing",
+    "Analytics and Data Analysis",
+    "Community Management",
+    "Influencer Marketing",
+    "Marketing Automation",
+    "Crisis Management",
+    "Ad Copy Optimization",
+    "Multi-Platform Campaign Management"
+  ],
+  "tools": [
+    "ChatGPT",
+    "Claude AI",
+    "Gemini",
+    "DALL-E",
+    "Midjourney",
+    "Canva AI",
+    "Google Analytics",
+    "Meta Business Suite",
+    "Hootsuite",
+    "Buffer",
+    "Sprout Social"
+  ],
+  "keywords": [
+    "social media marketing",
+    "ai social media",
+    "chatgpt social media",
+    "ai content creation",
+    "social media automation",
+    "ai marketing course",
+    "social media strategy",
+    "content marketing ai",
+    "ai for instagram",
+    "ai for tiktok",
+    "social media analytics",
+    "influencer marketing",
+    "community management",
+    "marketing automation"
+  ],
+  "seo": {
+    "metaTitle": "Social Media Marketing with AI Course - Master AI-Powered Social Media | AI Learn Hub",
+    "metaDescription": "Learn to dominate social media using AI tools like ChatGPT, Canva AI, and automation platforms. Create content 10x faster, analyze performance, and grow your audience. Perfect for marketers and entrepreneurs. Enroll now for $29!",
+    "ogImage": "/images/courses/social-media-marketing-ai-og.jpg",
+    "canonical": "https://ailearnhub.io/courses/social-media-marketing-ai"
+  },
+  "testimonials": [
+    {
+      "name": "Coming Soon",
+      "role": "Student",
+      "text": "Course launching soon. Be one of the first students!",
+      "rating": 5,
+      "verified": false
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Do I need any AI experience to take this course?",
+      "answer": "No! This course is designed for beginners. We start with AI basics and guide you through every tool and technique step-by-step."
+    },
+    {
+      "question": "What platforms does this course cover?",
+      "answer": "We cover all major platforms: Instagram, Facebook, TikTok, LinkedIn, Twitter/X, Pinterest, and YouTube. You'll learn platform-specific strategies for each."
+    },
+    {
+      "question": "Do I need paid AI tools to complete this course?",
+      "answer": "No! While we show premium tools, all core lessons can be completed with free tools like ChatGPT, Canva Free, and built-in platform analytics."
+    },
+    {
+      "question": "How long does it take to complete?",
+      "answer": "The course is 2.7 hours of video content, but we recommend spending 1-2 weeks to practice and implement what you learn as you go."
+    },
+    {
+      "question": "Will I get a certificate?",
+      "answer": "Yes! After completing all modules and passing the quizzes (70% score), you'll receive a verified completion certificate you can share on LinkedIn."
+    },
+    {
+      "question": "Is this course updated for 2024-2025?",
+      "answer": "Absolutely! This course was created in late 2024 and includes the latest AI tools, platform algorithm changes, and current best practices."
+    },
+    {
+      "question": "Can I use this for my business or clients?",
+      "answer": "Yes! Everything you learn can be applied to your own business, personal brand, or client work. All templates and frameworks are yours to use commercially."
+    },
+    {
+      "question": "What if I'm not satisfied?",
+      "answer": "We offer a 30-day money-back guarantee. If you're not happy with the course for any reason, just contact us for a full refund."
+    }
+  ],
+  "whatYouWillLearn": [
+    "Create engaging social media content 10x faster using AI",
+    "Develop data-driven social media strategies that drive results",
+    "Generate professional visuals and videos with AI design tools",
+    "Analyze performance data and optimize campaigns for better ROI",
+    "Automate community management while maintaining authenticity",
+    "Build and execute multi-platform campaigns efficiently",
+    "Leverage influencer marketing and partnership programs",
+    "Master advanced analytics and attribution models",
+    "Future-proof your marketing skills with emerging AI technologies"
+  ],
+  "courseDifficulty": "Intermediate",
+  "lastUpdated": "2024-11-30",
+  "createdAt": "2024-11-30",
+  "version": "1.0",
+  "certificate": {
+    "available": true,
+    "requiresQuizzes": true,
+    "passingScore": 70,
+    "verifiable": true
+  }
+}

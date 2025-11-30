@@ -1,0 +1,61 @@
+# AI Learn Hub - Robots.txt
+# Updated: November 30, 2024
+
+# Allow all bots to crawl public pages
+User-agent: *
+Allow: /
+Allow: /courses
+Allow: /courses/*
+Allow: /pricing
+Allow: /about
+
+# Disallow private/protected pages
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /learn
+Disallow: /learn/*
+Disallow: /api
+Disallow: /api/*
+
+# Disallow auth pages (users don't need to find these via search)
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# Allow legal pages (for transparency)
+Allow: /terms
+Allow: /privacy
+Allow: /refund-policy
+Allow: /cookie-policy
+Allow: /cookie-settings
+Allow: /affiliate-agreement
+
+# Sitemap location
+Sitemap: https://ailearnhub.io/sitemap.xml
+
+# Specific bot rules (optional - all bots currently allowed)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block bad bots (known scrapers/spammers)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Crawl-delay (polite crawling)
+Crawl-delay: 1
