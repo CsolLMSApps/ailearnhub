@@ -1,14 +1,22 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 
-export default async function CoursePage({ params }: { params: { slug: string } }) {
+// Next.js 15.5+ requires async params
+export default async function CoursePage({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}) {
+  // Await params (Next.js 15.5+ requirement)
+  const { slug } = await params
+  
   const supabase = await createServerSupabaseClient()
   
   // Fetch course by slug
   const { data: course, error } = await supabase
     .from('courses')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('is_published', true)
     .single()
   
