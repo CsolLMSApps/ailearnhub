@@ -3,7 +3,7 @@ import { CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
-export default function SocialMediaMarketingAIPage() {
+export default function EmailMarketingAIPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -12,37 +12,37 @@ export default function SocialMediaMarketingAIPage() {
           <nav className="text-sm mb-6">
             <Link href="/courses" className="hover:underline">Courses</Link>
             <span className="mx-2">/</span>
-            <span>Social Media Marketing with AI</span>
+            <span>Email Marketing with AI</span>
           </nav>
           
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Social Media Marketing with AI
+            Email Marketing with AI
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 text-white/90">
-            Master AI-powered social media marketing to 10x your content creation, engagement, and ROI
+            Transform your email marketing with AI to boost open rates, conversions, and revenue
           </p>
           
           <div className="flex flex-wrap gap-6 text-lg mb-8">
             <div className="flex items-center gap-2">
-              <span className="font-semibold">6 modules</span>
+              <span className="font-semibold">5 modules</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold">3 hours</span>
+              <span className="font-semibold">2 hours</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold">Intermediate</span>
+              <span className="font-semibold">Beginner</span>
             </div>
           </div>
           
           <div className="flex items-baseline gap-3 mb-8">
-            <span className="text-5xl font-bold">$29</span>
+            <span className="text-5xl font-bold">$19</span>
             <span className="text-xl">USD</span>
           </div>
           
           <Link href="/dashboard">
             <Button size="lg" className="bg-white text-[#FF6F00] hover:bg-gray-100 text-lg px-8 py-6">
-              Enroll Now - $29
+              Enroll Now - $19
             </Button>
           </Link>
         </div>
@@ -56,43 +56,43 @@ export default function SocialMediaMarketingAIPage() {
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-6 h-6 text-[#FF6F00] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[#212121] font-medium mb-1">AI-Powered Strategy Development</h3>
-                <p className="text-[#424242] text-sm leading-6">Create data-driven social media strategies using AI for audience analysis and content planning</p>
+                <h3 className="text-[#212121] font-medium mb-1">AI-Powered Campaign Strategy</h3>
+                <p className="text-[#424242] text-sm leading-6">Build data-driven email strategies using AI for audience segmentation and campaign planning</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-6 h-6 text-[#FF6F00] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[#212121] font-medium mb-1">Content Creation at Scale</h3>
-                <p className="text-[#424242] text-sm leading-6">Generate engaging captions, hashtags, and posts for all major platforms in minutes</p>
+                <h3 className="text-[#212121] font-medium mb-1">Subject Line Optimization</h3>
+                <p className="text-[#424242] text-sm leading-6">Generate high-converting subject lines that boost open rates by 40%+ using proven AI formulas</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-6 h-6 text-[#FF6F00] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[#212121] font-medium mb-1">Visual Content Generation</h3>
-                <p className="text-[#424242] text-sm leading-6">Master AI image generation tools like DALL-E, Midjourney, and Canva AI for stunning visuals</p>
+                <h3 className="text-[#212121] font-medium mb-1">Personalized Email Content</h3>
+                <p className="text-[#424242] text-sm leading-6">Create hyper-personalized email sequences at scale with AI-powered copywriting</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-6 h-6 text-[#FF6F00] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[#212121] font-medium mb-1">Analytics & Performance Optimization</h3>
-                <p className="text-[#424242] text-sm leading-6">Use AI to analyze engagement data, predict trends, and optimize your content strategy</p>
+                <h3 className="text-[#212121] font-medium mb-1">Automated Workflows</h3>
+                <p className="text-[#424242] text-sm leading-6">Build intelligent email sequences with AI-driven triggers and timing optimization</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-6 h-6 text-[#FF6F00] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[#212121] font-medium mb-1">Automated Community Management</h3>
-                <p className="text-[#424242] text-sm leading-6">Implement AI-powered tools for responding to comments, messages, and building engagement</p>
+                <h3 className="text-[#212121] font-medium mb-1">Performance Analytics</h3>
+                <p className="text-[#424242] text-sm leading-6">Leverage AI to analyze campaign performance, predict trends, and optimize results</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-6 h-6 text-[#FF6F00] mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-[#212121] font-medium mb-1">Advanced Marketing Automation</h3>
-                <p className="text-[#424242] text-sm leading-6">Build multi-platform campaigns, automate workflows, and scale your social media presence</p>
+                <h3 className="text-[#212121] font-medium mb-1">Advanced Techniques</h3>
+                <p className="text-[#424242] text-sm leading-6">Master A/B testing, re-engagement campaigns, and revenue-generating email strategies</p>
               </div>
             </div>
           </div>
@@ -106,8 +106,20 @@ export default function SocialMediaMarketingAIPage() {
           <div className="space-y-4">
             <Card className="border border-gray-200">
               <CardContent className="p-6">
-                <h3 className="text-[#212121] font-medium mb-2">Module 1: AI for Social Media Strategy</h3>
-                <p className="text-[#424242] text-sm mb-2">Learn AI tools landscape, audience research with AI, and create data-driven content calendars</p>
+                <h3 className="text-[#212121] font-medium mb-2">Module 1: AI Email Marketing Foundations</h3>
+                <p className="text-[#424242] text-sm mb-2">Master AI tools for email marketing, audience analysis, and campaign planning strategies</p>
+                <div className="flex items-center gap-4 text-xs text-[#757575]">
+                  <span>20 minutes</span>
+                  <span>•</span>
+                  <span>10 quiz questions</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-gray-200">
+              <CardContent className="p-6">
+                <h3 className="text-[#212121] font-medium mb-2">Module 2: Subject Lines That Convert</h3>
+                <p className="text-[#424242] text-sm mb-2">Generate high-converting subject lines with AI using proven formulas and testing strategies</p>
                 <div className="flex items-center gap-4 text-xs text-[#757575]">
                   <span>25 minutes</span>
                   <span>•</span>
@@ -118,8 +130,8 @@ export default function SocialMediaMarketingAIPage() {
 
             <Card className="border border-gray-200">
               <CardContent className="p-6">
-                <h3 className="text-[#212121] font-medium mb-2">Module 2: AI-Powered Content Creation</h3>
-                <p className="text-[#424242] text-sm mb-2">Master caption writing, hashtag strategies, and platform-specific content with 20+ AI prompts</p>
+                <h3 className="text-[#212121] font-medium mb-2">Module 3: AI-Powered Email Copywriting</h3>
+                <p className="text-[#424242] text-sm mb-2">Create persuasive email content at scale with AI templates for every campaign type</p>
                 <div className="flex items-center gap-4 text-xs text-[#757575]">
                   <span>30 minutes</span>
                   <span>•</span>
@@ -130,8 +142,8 @@ export default function SocialMediaMarketingAIPage() {
 
             <Card className="border border-gray-200">
               <CardContent className="p-6">
-                <h3 className="text-[#212121] font-medium mb-2">Module 3: Visual Content & AI Design Tools</h3>
-                <p className="text-[#424242] text-sm mb-2">Generate stunning images with DALL-E and Midjourney, master Canva AI for brand-aligned visuals</p>
+                <h3 className="text-[#212121] font-medium mb-2">Module 4: Email Automation & Sequences</h3>
+                <p className="text-[#424242] text-sm mb-2">Build intelligent automated workflows with AI-driven personalization and timing</p>
                 <div className="flex items-center gap-4 text-xs text-[#757575]">
                   <span>25 minutes</span>
                   <span>•</span>
@@ -142,34 +154,10 @@ export default function SocialMediaMarketingAIPage() {
 
             <Card className="border border-gray-200">
               <CardContent className="p-6">
-                <h3 className="text-[#212121] font-medium mb-2">Module 4: AI for Social Media Analytics</h3>
-                <p className="text-[#424242] text-sm mb-2">Leverage AI for data analysis, A/B testing, ROI tracking, and predictive analytics</p>
+                <h3 className="text-[#212121] font-medium mb-2">Module 5: Analytics & Optimization</h3>
+                <p className="text-[#424242] text-sm mb-2">Master AI analytics, A/B testing, and advanced optimization strategies for maximum ROI</p>
                 <div className="flex items-center gap-4 text-xs text-[#757575]">
-                  <span>30 minutes</span>
-                  <span>•</span>
-                  <span>10 quiz questions</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-gray-200">
-              <CardContent className="p-6">
-                <h3 className="text-[#212121] font-medium mb-2">Module 5: AI-Powered Community Management</h3>
-                <p className="text-[#424242] text-sm mb-2">Automate comment responses, customer service, and engagement with AI assistance</p>
-                <div className="flex items-center gap-4 text-xs text-[#757575]">
-                  <span>25 minutes</span>
-                  <span>•</span>
-                  <span>10 quiz questions</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-gray-200">
-              <CardContent className="p-6">
-                <h3 className="text-[#212121] font-medium mb-2">Module 6: Advanced AI Marketing Tactics</h3>
-                <p className="text-[#424242] text-sm mb-2">Influencer outreach automation, ad copy optimization, and multi-platform campaign management</p>
-                <div className="flex items-center gap-4 text-xs text-[#757575]">
-                  <span>25 minutes</span>
+                  <span>20 minutes</span>
                   <span>•</span>
                   <span>10 quiz questions</span>
                 </div>
@@ -186,7 +174,7 @@ export default function SocialMediaMarketingAIPage() {
           <ul className="space-y-4 max-w-2xl">
             <li className="flex items-center text-sm text-[#424242]">
               <span className="text-[#FF6F00] mr-2">✓</span>
-              3 hours of focused, practical training
+              2 hours of focused, practical training
             </li>
             <li className="flex items-center text-sm text-[#424242]">
               <span className="text-[#FF6F00] mr-2">✓</span>
@@ -194,15 +182,15 @@ export default function SocialMediaMarketingAIPage() {
             </li>
             <li className="flex items-center text-sm text-[#424242]">
               <span className="text-[#FF6F00] mr-2">✓</span>
-              100+ social media caption templates
+              50+ subject line templates
             </li>
             <li className="flex items-center text-sm text-[#424242]">
               <span className="text-[#FF6F00] mr-2">✓</span>
-              50+ hashtag sets for different goals
+              30+ email copy templates
             </li>
             <li className="flex items-center text-sm text-[#424242]">
               <span className="text-[#FF6F00] mr-2">✓</span>
-              30+ AI image generation prompts
+              Campaign workflow blueprints
             </li>
             <li className="flex items-center text-sm text-[#424242]">
               <span className="text-[#FF6F00] mr-2">✓</span>
