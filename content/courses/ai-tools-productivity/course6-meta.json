@@ -1,0 +1,87 @@
+{
+  "id": "ai-tools-productivity",
+  "slug": "ai-tools-productivity",
+  "title": "AI Tools for Productivity",
+  "shortDescription": "Save 10-20 hours per week with AI. Master ChatGPT, Canva, automation tools, and build systems that multiply your output without working harder.",
+  "longDescription": "Transform how you work with AI-powered productivity. This practical course shows you exactly which AI tools to use for writing, design, automation, and more—plus how to integrate them into seamless workflows that save 10-20 hours every week. Learn to leverage ChatGPT for writing, Canva AI for visuals, automation platforms like Zapier, and build complete productivity systems that compound over time. Perfect for professionals, entrepreneurs, and anyone who wants to accomplish more in less time. By the end, you'll have a personalized AI productivity stack saving you hundreds of hours per year while improving output quality.",
+  "level": "beginner",
+  "category": "Productivity",
+  "totalModules": 5,
+  "totalHours": 2,
+  "price": {
+    "usd": 1900,
+    "cad": 2500,
+    "gbp": 1600,
+    "aud": 2800,
+    "inr": 64900
+  },
+  "featured": false,
+  "modules": [
+    {
+      "number": 1,
+      "title": "AI Productivity Revolution",
+      "description": "Understand the AI productivity landscape, identify your bottlenecks, and build your AI tool stack for maximum time savings.",
+      "estimatedMinutes": 25
+    },
+    {
+      "number": 2,
+      "title": "AI Writing Tools Mastery",
+      "description": "Master ChatGPT, Claude, and specialized writing AI. Create reusable templates and workflows for all your content needs.",
+      "estimatedMinutes": 25
+    },
+    {
+      "number": 3,
+      "title": "AI Design & Visual Tools",
+      "description": "Generate professional images with Midjourney/DALL-E, create graphics with Canva AI, and produce videos in minutes.",
+      "estimatedMinutes": 20
+    },
+    {
+      "number": 4,
+      "title": "AI Automation & Workflows",
+      "description": "Connect AI tools with Zapier/Make, automate repetitive tasks, and build no-code workflows that run 24/7.",
+      "estimatedMinutes": 20
+    },
+    {
+      "number": 5,
+      "title": "Productivity Systems & Mastery",
+      "description": "Build complete AI productivity systems, measure ROI, avoid common pitfalls, and scale to 2-3x productivity.",
+      "estimatedMinutes": 15
+    }
+  ],
+  "deliverables": [
+    "AI Tool Stack Builder (personalized recommendations)",
+    "50+ Prompt Templates Library",
+    "Automation Workflow Templates (10+ scenarios)",
+    "ROI Calculator & Time Tracking Sheets",
+    "Weekly Visual Content System",
+    "Meeting Intelligence Automation",
+    "Complete Productivity Roadmap",
+    "Brand Consistency Guide",
+    "100+ Image Prompt Examples",
+    "Completion Certificate"
+  ],
+  "targetAudience": [
+    "Busy professionals",
+    "Entrepreneurs and solopreneurs",
+    "Content creators",
+    "Marketing professionals",
+    "Managers and executives",
+    "Anyone overwhelmed by workload"
+  ],
+  "seoMetadata": {
+    "metaTitle": "AI Tools for Productivity - Save 10-20 Hours/Week | AI Learn Hub",
+    "metaDescription": "Master ChatGPT, Canva AI, automation tools. Build systems that save 10-20 hours/week. 50+ templates included. 2-3x your productivity. Enroll for $19!",
+    "keywords": [
+      "ai productivity tools",
+      "chatgpt productivity",
+      "ai automation",
+      "productivity course",
+      "ai tools course",
+      "save time with ai",
+      "ai workflow automation",
+      "canva ai tutorial",
+      "midjourney course",
+      "zapier ai automation"
+    ]
+  }
+}

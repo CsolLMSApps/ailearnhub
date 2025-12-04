@@ -1,0 +1,131 @@
+{
+  "id": "email-marketing-ai",
+  "slug": "email-marketing-ai",
+  "title": "Email Marketing with AI",
+  "shortDescription": "Master AI-powered email marketing to boost opens, clicks, and conversions. Learn strategy, copywriting, segmentation, testing, and automation.",
+  "longDescription": "Transform your email marketing with AI. This comprehensive course teaches you how to leverage ChatGPT and AI tools to create high-performing email campaigns that drive real business results. Perfect for marketers, business owners, and entrepreneurs who want to maximize email ROI. Learn proven strategies for writing compelling copy, segmenting audiences, A/B testing, and building automated workflows that convert on autopilot. By the end of this course, you'll have the skills to generate 320% more revenue from email, recover abandoned carts, and build subscriber relationships that last. Includes 100+ email templates, subject line swipe files, and AI prompts to accelerate your success.",
+  "level": "beginner",
+  "category": "Marketing",
+  "totalModules": 5,
+  "totalHours": 2,
+  "price": {
+    "usd": 1900,
+    "cad": 2500,
+    "gbp": 1600,
+    "aud": 2800,
+    "inr": 64900
+  },
+  "featured": true,
+  "modules": [
+    {
+      "number": 1,
+      "title": "Email Marketing Strategy with AI",
+      "description": "Build data-driven email strategies using AI tools. Master audience research, segmentation, and campaign planning for maximum ROI.",
+      "estimatedMinutes": 25,
+      "learningObjectives": [
+        "Understand email marketing fundamentals and AI's role",
+        "Choose the right AI tools for your business",
+        "Create detailed customer avatars with ChatGPT",
+        "Design strategic campaign plans using AI frameworks",
+        "Implement the 70-20-10 content balance"
+      ]
+    },
+    {
+      "number": 2,
+      "title": "AI-Powered Email Writing",
+      "description": "Write subject lines and body copy that convert using AI. Master proven frameworks, CTAs, and personalization techniques.",
+      "estimatedMinutes": 25,
+      "learningObjectives": [
+        "Generate high-converting subject lines with AI",
+        "Use AIDA, PAS, and BAB copywriting frameworks",
+        "Craft irresistible CTAs that drive clicks",
+        "Personalize emails beyond first name",
+        "Optimize copy for mobile and readability"
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Segmentation & Personalization",
+      "description": "Target the right people with the right message. Learn RFM segmentation, behavioral targeting, and dynamic content.",
+      "estimatedMinutes": 25,
+      "learningObjectives": [
+        "Implement advanced segmentation strategies",
+        "Use RFM (Recency, Frequency, Monetary) scoring",
+        "Set up behavioral triggers and targeting",
+        "Create dynamic personalized content blocks",
+        "Leverage AI for predictive segmentation"
+      ]
+    },
+    {
+      "number": 4,
+      "title": "A/B Testing & Optimization",
+      "description": "Systematically test and improve email performance. Learn what to test, how to analyze results, and scale winners.",
+      "estimatedMinutes": 20,
+      "learningObjectives": [
+        "Design effective A/B tests with statistical significance",
+        "Test subject lines, CTAs, and email copy",
+        "Analyze results and declare winners confidently",
+        "Use AI to accelerate testing cycles",
+        "Implement multivariate testing strategies"
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Email Automation Workflows",
+      "description": "Build automated sequences that convert 24/7. Master welcome series, cart recovery, and advanced workflow strategies.",
+      "estimatedMinutes": 25,
+      "learningObjectives": [
+        "Create essential automation workflows",
+        "Recover 15-30% of abandoned carts",
+        "Design post-purchase upsell sequences",
+        "Build win-back campaigns for inactive subscribers",
+        "Use AI to optimize workflow performance"
+      ]
+    }
+  ],
+  "deliverables": [
+    "100+ Email Templates (subject lines, body copy, CTAs)",
+    "AI Prompts Master Library (100+ ChatGPT prompts)",
+    "Subject Line Swipe File (500+ proven examples)",
+    "Workflow Templates Library (15+ automation workflows)",
+    "Segmentation Strategy Playbook",
+    "A/B Testing Tracker & Calculator",
+    "Email Marketing Checklist",
+    "Lead Scoring Model Template",
+    "RFM Segmentation Calculator",
+    "Completion Certificate"
+  ],
+  "prerequisites": [
+    "Basic understanding of email marketing (helpful but not required)",
+    "Access to an email marketing platform (Mailchimp, HubSpot, etc.)",
+    "ChatGPT account (free tier works)",
+    "Email list or plan to build one",
+    "Willingness to test and experiment"
+  ],
+  "targetAudience": [
+    "Marketing professionals",
+    "Business owners and entrepreneurs",
+    "E-commerce store owners",
+    "Content creators and coaches",
+    "B2B sales and marketing teams",
+    "Anyone looking to improve email ROI"
+  ],
+  "seoMetadata": {
+    "metaTitle": "Email Marketing with AI Course - Master AI-Powered Email Campaigns | AI Learn Hub",
+    "metaDescription": "Learn to write high-converting emails with AI. Master segmentation, automation, and testing. 100+ templates included. Boost email ROI by 320%. Enroll now for $19!",
+    "keywords": [
+      "email marketing course",
+      "ai email marketing",
+      "chatgpt email marketing",
+      "email marketing automation",
+      "email copywriting course",
+      "email marketing strategy",
+      "ai marketing course",
+      "email segmentation course",
+      "ab testing email",
+      "email marketing for beginners",
+      "email automation course",
+      "email marketing ai tools"
+    ]
+  }
+}
