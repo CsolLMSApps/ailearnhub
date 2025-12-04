@@ -1,185 +1,164 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle2 } from 'lucide-react'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const supabase = await createServerSupabaseClient()
+  
+  // Fetch all published courses from database
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('is_published', true)
+    .order('created_at', { ascending: true })
+  
+  if (error) {
+    console.error('Error fetching courses:', error)
+  }
+
   return (
-    <div className="flex flex-col">
-      {/* Header */}
-      <section className="bg-[#212121] text-white py-16 px-6">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h1 className="mb-4 text-5xl leading-tight font-normal">Simple, Transparent Pricing</h1>
-          <p className="text-gray-300 text-lg leading-8 max-w-2xl mx-auto">
-            Early bird pricing available now. Pay once, learn forever.
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Choose Your Learning Path
+          </h1>
+          <p className="text-xl text-gray-600">
+            Professional AI courses at accessible prices
+          </p>
+          <p className="text-lg text-gray-500 mt-2">
+            All courses include lifetime access • Certificate • 30-day guarantee
           </p>
         </div>
-      </section>
 
-      {/* Pricing Cards */}
-      <section className="py-20 px-6 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Course 1 */}
-            <Card className="border-2 border-[#FF6F00] relative">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FF6F00] text-white px-4 py-1 text-sm font-medium">
-                Most Popular
+        {/* Course Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {courses?.map((course) => (
+            <div
+              key={course.id}
+              className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow border-2 border-transparent hover:border-[#FF6F00]"
+            >
+              {/* Featured Badge */}
+              {course.featured && (
+                <div className="bg-[#FF6F00] text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-4">
+                  POPULAR
+                </div>
+              )}
+
+              {/* Course Title */}
+              <div className="mb-4">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {course.title}
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  {course.short_description}
+                </p>
               </div>
-              <CardHeader className="text-center pb-8 pt-8">
-                <CardTitle className="text-2xl font-medium text-[#212121] mb-2">
-                  ChatGPT Mastery for Professionals
-                </CardTitle>
-                <CardDescription className="text-base text-[#424242]">
-                  Complete professional training
-                </CardDescription>
-                <div className="mt-6">
-                  <div className="text-[#757575] line-through text-lg">$29</div>
-                  <div className="text-[#FF6F00] text-5xl font-normal">$19</div>
-                  <div className="text-[#757575] text-sm mt-2">One-time payment • Lifetime access</div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-4 mb-8">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">7 comprehensive modules (4 hours)</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">70 quiz questions with instant feedback</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">50+ prompt templates & business emails</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">Certificate of completion</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">Lifetime access to all updates</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">30-day money-back guarantee</span>
-                  </li>
-                </ul>
-                <Link href="/courses/chatgpt-mastery">
-                  <Button className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-base font-medium py-6">
-                    Enroll now
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
 
-            {/* Course 2 */}
-            <Card className="border border-gray-200">
-              <CardHeader className="text-center pb-8 pt-12">
-                <CardTitle className="text-2xl font-medium text-[#212121] mb-2">
-                  AI for Beginners
-                </CardTitle>
-                <CardDescription className="text-base text-[#424242]">
-                  Perfect starting point
-                </CardDescription>
-                <div className="mt-6">
-                  <div className="text-[#757575] line-through text-lg">$29</div>
-                  <div className="text-[#FF6F00] text-5xl font-normal">$19</div>
-                  <div className="text-[#757575] text-sm mt-2">One-time payment • Lifetime access</div>
+              {/* Price */}
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-[#FF6F00]">
+                    ${(course.price_usd / 100).toFixed(0)}
+                  </span>
+                  <span className="text-gray-500 text-sm">USD</span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-4 mb-8">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">6 beginner-friendly modules (3 hours)</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">60 quiz questions with instant feedback</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">40+ templates for daily use</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">Certificate of completion</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">Lifetime access to all updates</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#FF6F00] mt-0.5 flex-shrink-0" />
-                    <span className="text-[#424242] text-base">30-day money-back guarantee</span>
-                  </li>
-                </ul>
-                <Link href="/courses/ai-for-beginners">
-                  <Button className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-base font-medium py-6">
-                    Enroll now
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+              </div>
+
+              {/* Features */}
+              <div className="mb-6 space-y-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#FF6F00]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>{course.total_modules} Comprehensive Modules</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#FF6F00]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>{course.total_hours} Hours of Content</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#FF6F00]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="capitalize">{course.level} Level</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#FF6F00]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Certificate of Completion</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#FF6F00]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Lifetime Access</span>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <a
+                href={`/courses/${course.slug}`}
+                className="block w-full bg-[#FF6F00] hover:bg-[#E65100] text-white font-semibold py-3 px-4 rounded-lg text-center transition-colors"
+              >
+                View Course
+              </a>
+            </div>
+          ))}
+        </div>
+
+        {/* Bundle Option */}
+        <div className="bg-gradient-to-r from-[#FF6F00] to-[#E65100] rounded-lg p-8 text-white shadow-2xl">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-4">🎓 Complete AI Mastery Bundle</h2>
+            <p className="text-xl mb-6">Get all 6 courses and save $34</p>
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="text-2xl line-through opacity-75">$133</div>
+              <div className="text-6xl font-bold">$99</div>
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-6 text-sm">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span>34 Modules • 16 Hours • All Certificates</span>
+            </div>
+            <button className="bg-white text-[#FF6F00] font-bold py-4 px-12 rounded-lg hover:bg-gray-100 transition-colors text-lg shadow-lg">
+              Get Complete Bundle
+            </button>
+            <p className="text-sm mt-4 opacity-90">Limited time offer • 30-day money-back guarantee</p>
           </div>
         </div>
-      </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-gray-50 px-6">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-[#212121] mb-12 text-3xl font-normal text-center">Frequently Asked Questions</h2>
-          
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-[#212121] text-lg font-medium mb-2">What's included in the price?</h3>
-              <p className="text-[#424242] text-base leading-7">
-                Everything! One-time payment gives you lifetime access to all course materials, quizzes, templates, 
-                and future updates. No hidden fees or subscriptions.
+        {/* FAQ Section */}
+        <div className="mt-16 max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="font-bold text-lg mb-2">What's included in each course?</h3>
+              <p className="text-gray-600">
+                Each course includes comprehensive video lessons, downloadable resources, quizzes, 
+                templates, and a certificate of completion. You get lifetime access to all content.
               </p>
             </div>
-
-            <div>
-              <h3 className="text-[#212121] text-lg font-medium mb-2">Do you offer refunds?</h3>
-              <p className="text-[#424242] text-base leading-7">
-                Yes! We offer a 30-day money-back guarantee. If you've completed less than 50% of the course 
-                and aren't satisfied, we'll refund your purchase, no questions asked.
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="font-bold text-lg mb-2">What if I'm not satisfied?</h3>
+              <p className="text-gray-600">
+                We offer a 30-day money-back guarantee. If you're not completely satisfied, 
+                contact us for a full refund, no questions asked.
               </p>
             </div>
-
-            <div>
-              <h3 className="text-[#212121] text-lg font-medium mb-2">Can I buy both courses together?</h3>
-              <p className="text-[#424242] text-base leading-7">
-                Yes! Purchase them individually now, or contact us for bundle pricing if you want both courses.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-[#212121] text-lg font-medium mb-2">Is this a one-time payment or subscription?</h3>
-              <p className="text-[#424242] text-base leading-7">
-                One-time payment only. No recurring charges. You own the course forever.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-[#212121] text-lg font-medium mb-2">Do you accept international payments?</h3>
-              <p className="text-[#424242] text-base leading-7">
-                Yes! We accept all major credit cards and process payments in multiple currencies 
-                (USD, CAD, GBP, AUD, INR) through Stripe.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-[#212121] text-lg font-medium mb-2">Will I get a certificate?</h3>
-              <p className="text-[#424242] text-base leading-7">
-                Yes! Upon completing all modules and passing all quizzes (70% required), you'll receive 
-                a professional certificate you can share on LinkedIn and with employers.
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="font-bold text-lg mb-2">Do I need prior experience?</h3>
+              <p className="text-gray-600">
+                Our courses range from beginner to intermediate levels. Check each course description 
+                for specific prerequisites. Most courses are designed for beginners.
               </p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }
