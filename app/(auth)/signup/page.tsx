@@ -1,141 +1,151 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { createClient } from '@/lib/supabase/client'
 
 export default function SignupPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  })
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setError('')
     setLoading(true)
+    setError(null)
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+      const supabase = createClient()
+
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
         options: {
           data: {
-            full_name: fullName,
+            full_name: formData.name,
           },
         },
       })
 
-      if (error) throw error
+      if (signUpError) {
+        setError(signUpError.message)
+        setLoading(false)
+        return
+      }
 
-      // Redirect to dashboard after successful signup
-      router.push('/dashboard')
+      if (data.user) {
+        router.push('/dashboard')
+        router.refresh()
+      }
     } catch (err: any) {
-      setError(err.message || 'Failed to create account')
-    } finally {
+      setError(err.message || 'An error occurred during signup')
       setLoading(false)
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    })
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <Link href="/" className="flex justify-center">
-            <span className="text-3xl font-bold text-[#FF6F00]">AI Learn Hub</span>
-          </Link>
-          <h2 className="mt-6 text-center text-3xl font-bold text-[#212121]">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-[#757575]">
-            Already have an account?{' '}
-            <Link href="/auth/login" className="font-medium text-[#FF6F00] hover:text-[#E65100]">
-              Sign in
-            </Link>
-          </p>
-        </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSignup}>
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12 bg-gray-50">
+      <Card className="w-full max-w-md border border-gray-200">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-medium text-[#212121]">Create your account</CardTitle>
+          <CardDescription className="text-[#424242]">
+            Start learning AI today
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-              {error}
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
-          
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="fullName" className="text-[#212121]">Full Name</Label>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-medium text-[#212121]">Full name</Label>
               <Input
-                id="fullName"
-                name="fullName"
+                id="name"
                 type="text"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="mt-1"
                 placeholder="John Doe"
+                className="border-gray-300"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                disabled={loading}
               />
             </div>
-            
-            <div>
-              <Label htmlFor="email" className="text-[#212121]">Email address</Label>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium text-[#212121]">Email</Label>
               <Input
                 id="email"
-                name="email"
                 type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1"
                 placeholder="you@example.com"
+                className="border-gray-300"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={loading}
               />
             </div>
-            
-            <div>
-              <Label htmlFor="password" className="text-[#212121]">Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sm font-medium text-[#212121]">Password</Label>
               <Input
                 id="password"
-                name="password"
                 type="password"
-                autoComplete="new-password"
+                placeholder="••••••••"
+                className="border-gray-300"
+                value={formData.password}
+                onChange={handleChange}
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1"
-                placeholder="Minimum 6 characters"
+                disabled={loading}
                 minLength={6}
               />
+              <p className="text-xs text-[#757575]">At least 6 characters</p>
             </div>
+            <Button 
+              type="submit" 
+              className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-medium"
+              disabled={loading}
+            >
+              {loading ? 'Creating account...' : 'Create account'}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-[#424242]">
+            Already have an account?{' '}
+            <Link href="/auth/login" className="text-[#FF6F00] hover:text-[#E65100] font-medium">
+              Sign in
+            </Link>
           </div>
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white py-3"
-          >
-            {loading ? 'Creating account...' : 'Sign up'}
-          </Button>
-
-          <p className="text-center text-xs text-[#757575]">
-            By signing up, you agree to our{' '}
-            <Link href="/terms" className="text-[#FF6F00] hover:underline">
+          <div className="mt-6 text-center text-xs text-[#757575]">
+            By creating an account, you agree to our{' '}
+            <Link href="/terms" className="text-[#FF6F00] hover:text-[#E65100]">
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link href="/privacy" className="text-[#FF6F00] hover:underline">
+            <Link href="/privacy" className="text-[#FF6F00] hover:text-[#E65100]">
               Privacy Policy
             </Link>
-          </p>
-        </form>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
