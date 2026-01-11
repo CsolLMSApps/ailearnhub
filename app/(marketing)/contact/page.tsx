@@ -1,5 +1,5 @@
 // app/(marketing)/contact/page.tsx
-// Contact page with smart form
+// Contact page with smart form - FIXED TypeScript error
 
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import AuthenticatedLayout from '@/components/layouts/AuthenticatedLayout'
@@ -10,9 +10,9 @@ export default async function ContactPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   // For logged-in users, use authenticated layout
-  if (user) {
+  if (user && user.email) {
     return (
-      <AuthenticatedLayout user={user}>
+      <AuthenticatedLayout user={{ email: user.email, user_metadata: user.user_metadata }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Contact Us</h1>
@@ -22,7 +22,7 @@ export default async function ContactPage() {
           </div>
           <ContactForm 
             defaultName={user.user_metadata?.full_name || ''}
-            defaultEmail={user.email || ''}
+            defaultEmail={user.email}
             isAuthenticated={true}
           />
         </div>
