@@ -1,5 +1,5 @@
 // app/(marketing)/courses/page.tsx
-// Courses listing - uses shared layout for logged-in users
+// Courses listing - FIXED TypeScript error
 
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
@@ -16,10 +16,10 @@ export default async function CoursesPage() {
     .eq('is_published', true)
     .order('created_at', { ascending: false })
 
-  // If user is logged in, use authenticated layout
-  if (user) {
+  // If user is logged in AND has email, use authenticated layout
+  if (user && user.email) {
     return (
-      <AuthenticatedLayout user={user}>
+      <AuthenticatedLayout user={{ email: user.email, user_metadata: user.user_metadata }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
