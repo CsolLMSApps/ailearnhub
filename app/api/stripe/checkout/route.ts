@@ -1,17 +1,14 @@
 // app/api/stripe/checkout/route.ts
-// Stripe Checkout Session Creation
-
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: '2023-10-16',
 })
 
 export async function POST(request: NextRequest) {
   try {
-    // Get authenticated user
     const supabase = await createServerSupabaseClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -19,11 +16,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get request body
     const body = await request.json()
     const { courseSlug, currency = 'usd' } = body
 
-    // Get course details from database
     const { data: course, error: courseError } = await supabase
       .from('courses')
       .select('*')
@@ -35,7 +30,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Course not found' }, { status: 404 })
     }
 
-    // Check if user already purchased this course
     const { data: existingPurchase } = await supabase
       .from('purchases')
       .select('id')
@@ -51,7 +45,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get the appropriate Price ID based on course slug
     const priceIdMap: Record<string, string | undefined> = {
       'chatgpt-mastery': process.env.STRIPE_PRICE_CHATGPT_MASTERY,
       'ai-for-beginners': process.env.STRIPE_PRICE_AI_BEGINNERS,
@@ -70,7 +63,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',

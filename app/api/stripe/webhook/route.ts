@@ -1,15 +1,12 @@
 // app/api/stripe/webhook/route.ts
-// Stripe Webhook Handler - Processes payment completions
-
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: '2023-10-16',
 })
 
-// Use service role key for admin operations
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -39,15 +36,12 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Handle the checkout.session.completed event
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
 
     try {
       const userId = session.metadata?.userId
       const courseId = session.metadata?.courseId
-      const courseSlug = session.metadata?.courseSlug
-      const userEmail = session.metadata?.userEmail || session.customer_email
 
       if (!userId || !courseId) {
         console.error('Missing metadata in webhook:', session.metadata)
@@ -57,7 +51,6 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // 1. Create purchase record
       const { error: purchaseError } = await supabase
         .from('purchases')
         .insert({
@@ -72,10 +65,8 @@ export async function POST(request: NextRequest) {
 
       if (purchaseError) {
         console.error('Purchase insert error:', purchaseError)
-        // Don't fail the webhook, just log it
       }
 
-      // 2. Create initial progress record
       const { error: progressError } = await supabase
         .from('progress')
         .insert({
@@ -88,11 +79,7 @@ export async function POST(request: NextRequest) {
 
       if (progressError) {
         console.error('Progress insert error:', progressError)
-        // Don't fail the webhook, just log it
       }
-
-      // 3. Send confirmation email (optional - implement with Resend)
-      // await sendPurchaseConfirmationEmail(userEmail, courseSlug)
 
       console.log(`✅ Purchase completed: User ${userId} bought course ${courseId}`)
 
@@ -107,9 +94,5 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Handle other event types if needed
   return NextResponse.json({ received: true })
 }
-
-// Disable body parsing, need raw body for signature verification
-export const runtime = 'nodejs'
