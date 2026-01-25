@@ -1,6 +1,3 @@
-// app/api/progress/complete-module/route.ts
-// API route to mark a module as complete and update progress
-
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
@@ -81,12 +78,12 @@ export async function POST(request: Request) {
     }
 
     // Update existing progress
-    const completedModules = progress.completed_modules || []
+    const completedModules: number[] = progress.completed_modules || []
     
     // Add module if not already completed
     if (!completedModules.includes(moduleNumber)) {
       completedModules.push(moduleNumber)
-      completedModules.sort((a, b) => a - b) // Keep sorted
+      completedModules.sort((a: number, b: number) => a - b) // Keep sorted - FIXED TYPE
     }
 
     // Calculate completion percentage
