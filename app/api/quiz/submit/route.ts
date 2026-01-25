@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const { courseSlug, moduleNumber, answers } = await request.json()
+    const { slug, moduleNumber, answers } = await request.json()
     const supabase = await createServerSupabaseClient()
 
     // Get authenticated user
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const { data: course, error: courseError } = await supabase
       .from('courses')
       .select('id, slug, title')
-      .eq('slug', courseSlug)
+      .eq('slug', slug)
       .single()
 
     if (courseError || !course) {
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
       percentage,
       passed,
       attempt_number: attemptNumber,
-      courseSlug,
+      slug,
       moduleNumber
     })
 

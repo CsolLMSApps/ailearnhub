@@ -62,7 +62,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </div>
             <div className="flex items-center gap-4">
               <div className="text-4xl font-bold">${price}</div>
-              <EnrollButton courseSlug={slug} />
+              <EnrollButton slug={slug} />
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 <p className="text-gray-600">One-time payment</p>
               </div>
 
-              <EnrollButton courseSlug={slug} fullWidth />
+              <EnrollButton slug={slug} fullWidth />
 
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <h3 className="font-bold mb-4">This course includes:</h3>

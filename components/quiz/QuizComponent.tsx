@@ -13,7 +13,7 @@ interface Question {
 }
 
 interface QuizComponentProps {
-  courseSlug: string
+  slug: string
   moduleNumber: number
   questions: Question[]
   passPercentage?: number
@@ -21,7 +21,7 @@ interface QuizComponentProps {
 }
 
 export function QuizComponent({ 
-  courseSlug, 
+  slug, 
   moduleNumber, 
   questions, 
   passPercentage = 70,
@@ -60,7 +60,7 @@ export function QuizComponent({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          courseSlug,
+          slug,
           moduleNumber,
           answers: userAnswers
         })

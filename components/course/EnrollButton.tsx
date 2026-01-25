@@ -7,11 +7,11 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface EnrollButtonProps {
-  courseSlug: string
+  slug: string
   fullWidth?: boolean
 }
 
-export default function EnrollButton({ courseSlug, fullWidth = false }: EnrollButtonProps) {
+export default function EnrollButton({ slug, fullWidth = false }: EnrollButtonProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -28,7 +28,7 @@ export default function EnrollButton({ courseSlug, fullWidth = false }: EnrollBu
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          courseSlug,
+          slug,
           currency: 'usd',
         }),
       })

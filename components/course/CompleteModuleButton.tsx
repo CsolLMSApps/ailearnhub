@@ -10,14 +10,14 @@ interface CompleteModuleButtonProps {
   courseId: string
   moduleNumber: number
   nextModuleNumber?: number
-  courseSlug: string
+  slug: string
 }
 
 export default function CompleteModuleButton({
   courseId,
   moduleNumber,
   nextModuleNumber,
-  courseSlug,
+  slug,
 }: CompleteModuleButtonProps) {
   const router = useRouter()
   const [isCompleting, setIsCompleting] = useState(false)
@@ -48,10 +48,10 @@ export default function CompleteModuleButton({
 
       // If there's a next module, navigate to it
       if (nextModuleNumber) {
-        router.push(`/learn/${courseSlug}/module/${nextModuleNumber}`)
+        router.push(`/learn/${slug}/module/${nextModuleNumber}`)
       } else {
         // Last module completed - go back to course overview
-        router.push(`/learn/${courseSlug}`)
+        router.push(`/learn/${slug}`)
       }
     } catch (error: any) {
       console.error('Error completing module:', error)

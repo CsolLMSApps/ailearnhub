@@ -294,7 +294,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 </div>
 
                 <QuizComponent
-                  courseSlug={slug}
+                  slug={slug}
                   moduleNumber={moduleNumber}
                   questions={quiz.questions.questions || quiz.questions}
                   passPercentage={quiz.pass_percentage}

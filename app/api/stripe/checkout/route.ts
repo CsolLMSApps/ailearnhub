@@ -17,12 +17,12 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { courseSlug, currency = 'usd' } = body
+    const { slug, currency = 'usd' } = body
 
     const { data: course, error: courseError } = await supabase
       .from('courses')
       .select('*')
-      .eq('slug', courseSlug)
+      .eq('slug', slug)
       .eq('is_published', true)
       .single()
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       'ai-tools-productivity': process.env.STRIPE_PRICE_AI_PRODUCTIVITY,
     }
 
-    const priceId = priceIdMap[courseSlug]
+    const priceId = priceIdMap[slug]
 
     if (!priceId) {
       return NextResponse.json(
@@ -73,12 +73,12 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&course=${courseSlug}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/courses/${courseSlug}?purchase=cancelled`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&course=${slug}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/courses/${slug}?purchase=cancelled`,
       metadata: {
         userId: user.id,
         courseId: course.id,
-        courseSlug: courseSlug,
+        slug: slug,
         userEmail: user.email || '',
       },
     })

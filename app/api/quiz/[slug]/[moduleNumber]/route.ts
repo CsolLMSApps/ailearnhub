@@ -3,10 +3,10 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ courseSlug: string; moduleNumber: string }> }
+  { params }: { params: Promise<{ slug: string; moduleNumber: string }> }
 ) {
   try {
-    const { courseSlug, moduleNumber } = await params
+    const { slug, moduleNumber } = await params
     const supabase = await createServerSupabaseClient()
 
     // Get authenticated user
@@ -19,7 +19,7 @@ export async function GET(
     const { data: course, error: courseError } = await supabase
       .from('courses')
       .select('id, slug, title')
-      .eq('slug', courseSlug)
+      .eq('slug', slug)
       .single()
 
     if (courseError || !course) {
@@ -65,7 +65,7 @@ export async function GET(
       quiz: quiz.questions,
       passPercentage: quiz.pass_percentage,
       previousAttempt: previousResults?.[0] || null,
-      courseSlug,
+      slug,
       moduleNumber: parseInt(moduleNumber)
     })
 

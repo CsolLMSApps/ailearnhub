@@ -9,7 +9,7 @@ interface ResultsSummaryProps {
     percentage: number
     passed: boolean
     attempt_number: number
-    courseSlug: string
+    slug: string
   }
   questions: any[]
   userAnswers: { [key: string]: number }
@@ -24,7 +24,7 @@ export function ResultsSummary({
   passPercentage,
   onRetry
 }: ResultsSummaryProps) {
-  const { score, total_questions, percentage, passed, attempt_number, courseSlug } = results
+  const { score, total_questions, percentage, passed, attempt_number, slug } = results
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -54,7 +54,7 @@ export function ResultsSummary({
           </p>
 
           <p className="text-gray-600">
-            {passed 
+            {passed
               ? 'You can now proceed to the next module.'
               : `You need ${passPercentage}% to pass. Don't worry, you can retry as many times as needed!`
             }
@@ -124,7 +124,7 @@ export function ResultsSummary({
           </button>
         )}
         <a
-          href={`/learn/${courseSlug}`}
+          href={`/learn/${slug}`}
           className="px-8 py-3 border-2 border-[#FF6F00] text-[#FF6F00] rounded-lg hover:bg-[#FF6F00] hover:text-white transition-colors font-bold inline-block"
         >
           Back to Course
