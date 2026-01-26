@@ -1,0 +1,17 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#FF6F00"/>
+  <g transform="translate(100, 100)">
+    <!-- Center node -->
+    <circle cx="0" cy="0" r="15" fill="white" stroke="white" stroke-width="3"/>
+    <!-- Surrounding nodes -->
+    <circle cx="-40" cy="-40" r="12" fill="white"/>
+    <circle cx="40" cy="-40" r="12" fill="white"/>
+    <circle cx="-40" cy="40" r="12" fill="white"/>
+    <circle cx="40" cy="40" r="12" fill="white"/>
+    <!-- Connection lines -->
+    <line x1="0" y1="0" x2="-40" y2="-40" stroke="white" stroke-width="2"/>
+    <line x1="0" y1="0" x2="40" y2="-40" stroke="white" stroke-width="2"/>
+    <line x1="0" y1="0" x2="-40" y2="40" stroke="white" stroke-width="2"/>
+    <line x1="0" y1="0" x2="40" y2="40" stroke="white" stroke-width="2"/>
+  </g>
+</svg>

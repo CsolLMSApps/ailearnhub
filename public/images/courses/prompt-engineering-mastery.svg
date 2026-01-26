@@ -1,0 +1,16 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#FF6F00"/>
+  <g transform="translate(100, 100)">
+    <!-- Terminal window -->
+    <rect x="-55" y="-40" width="110" height="80" rx="5" fill="white"/>
+    <!-- Terminal header -->
+    <rect x="-55" y="-40" width="110" height="12" rx="5" fill="#212121"/>
+    <circle cx="-45" cy="-34" r="2" fill="#FF6F00"/>
+    <circle cx="-38" cy="-34" r="2" fill="#FFB300"/>
+    <circle cx="-31" cy="-34" r="2" fill="#00C853"/>
+    <!-- Terminal content -->
+    <text x="-45" y="-10" font-family="monospace" font-size="14" fill="#212121">&gt; prompt_</text>
+    <text x="-45" y="10" font-family="monospace" font-size="14" fill="#212121">&gt; engineer</text>
+    <text x="-45" y="30" font-family="monospace" font-size="14" fill="#FF6F00">&gt; AI ✓</text>
+  </g>
+</svg>

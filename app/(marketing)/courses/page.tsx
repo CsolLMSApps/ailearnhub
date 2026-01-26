@@ -1,7 +1,8 @@
 // app/(marketing)/courses/page.tsx
-// Courses listing - FIXED: Removed duplicate header for anonymous users
+// Courses listing page with custom SVG icons
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import AuthenticatedLayout from '@/components/layouts/AuthenticatedLayout'
 
@@ -37,8 +38,14 @@ export default async function CoursesPage() {
                 href={`/courses/${course.slug}`}
                 className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
               >
-                <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center">
-                  <div className="text-white text-6xl">🎓</div>
+                <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                  <Image
+                    src={`/images/courses/${course.slug}.svg`}
+                    alt={course.title}
+                    width={200}
+                    height={200}
+                    className="w-32 h-32"
+                  />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -93,8 +100,14 @@ export default async function CoursesPage() {
               href={`/courses/${course.slug}`}
               className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
             >
-              <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center">
-                <div className="text-white text-6xl">🎓</div>
+              <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                <Image
+                  src={`/images/courses/${course.slug}.svg`}
+                  alt={course.title}
+                  width={200}
+                  height={200}
+                  className="w-32 h-32"
+                />
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">

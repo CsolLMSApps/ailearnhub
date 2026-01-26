@@ -1,0 +1,14 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#FF6F00"/>
+  <g transform="translate(100, 80)">
+    <!-- Lightbulb -->
+    <ellipse cx="0" cy="0" rx="30" ry="35" fill="white"/>
+    <rect x="-15" y="30" width="30" height="5" rx="2" fill="white"/>
+    <rect x="-12" y="37" width="24" height="3" rx="1" fill="white"/>
+    <rect x="-8" y="42" width="16" height="8" rx="2" fill="white"/>
+    <!-- Sparkles -->
+    <circle cx="-40" cy="-10" r="4" fill="white"/>
+    <circle cx="40" cy="-10" r="4" fill="white"/>
+    <circle cx="0" cy="-50" r="4" fill="white"/>
+  </g>
+</svg>

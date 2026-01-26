@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#FF6F00"/>
+  <g transform="translate(100, 100)">
+    <!-- Wrench -->
+    <rect x="-40" y="-5" width="50" height="10" rx="5" fill="white" transform="rotate(-45 -15 0)"/>
+    <circle cx="-40" cy="0" r="8" fill="white"/>
+    <!-- Gear -->
+    <circle cx="25" cy="10" r="20" fill="white"/>
+    <circle cx="25" cy="10" r="10" fill="#FF6F00"/>
+    <rect x="23" y="-12" width="4" height="6" fill="white"/>
+    <rect x="23" y="26" width="4" height="6" fill="white"/>
+    <rect x="3" y="8" width="6" height="4" fill="white"/>
+    <rect x="41" y="8" width="6" height="4" fill="white"/>
+  </g>
+</svg>
