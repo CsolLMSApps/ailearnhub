@@ -8,6 +8,15 @@ export async function proxy(request: NextRequest) {
     },
   })
 
+  // Legal page redirects for SEO/compatibility
+  if (request.nextUrl.pathname === '/terms-of-service') {
+    return NextResponse.redirect(new URL('/terms', request.url), 301)
+  }
+  
+  if (request.nextUrl.pathname === '/privacy-policy') {
+    return NextResponse.redirect(new URL('/privacy', request.url), 301)
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
