@@ -66,15 +66,9 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Auth routes - redirect if already logged in
-  if (
-    request.nextUrl.pathname.startsWith('/auth/login') ||
-    request.nextUrl.pathname.startsWith('/auth/signup')
-  ) {
-    if (user) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-  }
+  // REMOVED: Auto-redirect for authenticated users on /auth/login or /auth/signup
+  // This allows login page to handle redirect parameter correctly
+  // Anonymous users can now: enroll → login → return to course page
 
   return response
 }
