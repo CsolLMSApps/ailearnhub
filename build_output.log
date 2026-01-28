@@ -1,0 +1,58 @@
+
+> ailearnhub@1.0.0 build
+> next build
+
+⚠ `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.js to protect your application from malicious users.
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.5s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/27) ...
+  Generating static pages using 11 workers (6/27) 
+  Generating static pages using 11 workers (13/27) 
+  Generating static pages using 11 workers (20/27) 
+✓ Generating static pages using 11 workers (27/27) in 324.3ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /about
+├ ƒ /affiliate-agreement
+├ ƒ /api/contact
+├ ƒ /api/health
+├ ƒ /api/progress/complete-module
+├ ƒ /api/quiz/[slug]/[moduleNumber]
+├ ƒ /api/quiz/submit
+├ ƒ /api/stripe/checkout
+├ ƒ /api/stripe/webhook
+├ ƒ /auth/callback
+├ ○ /auth/login
+├ ƒ /auth/signout
+├ ○ /auth/signup
+├ ƒ /contact
+├ ƒ /cookie-policy
+├ ƒ /cookie-settings
+├ ƒ /courses
+├ ƒ /courses/[slug]
+├ ƒ /dashboard
+├ ƒ /learn/[slug]/module/[number]
+├ ○ /login
+├ ƒ /pricing
+├ ƒ /privacy
+├ ƒ /refund-policy
+├ ○ /robots.txt
+├ ○ /signup
+├ ○ /sitemap.xml
+├ ƒ /status
+└ ƒ /terms
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
