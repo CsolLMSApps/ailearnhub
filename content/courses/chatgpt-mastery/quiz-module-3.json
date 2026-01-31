@@ -3,115 +3,15 @@
   "moduleNumber": 3,
   "passPercentage": 70,
   "questions": [
-    {
-      "id": "q1",
-      "question": "What are the 6 components every business email should have?",
-      "options": [
-        "Subject, greeting, opening, body, action item, closing",
-        "To, from, date, subject, message, signature",
-        "Hello, introduction, request, thanks, goodbye, name",
-        "Header, footer, content, images, links, attachments"
-      ],
-      "correct": 0
-    },
-    {
-      "id": "q2",
-      "question": "What's the ideal subject line formula for business emails?",
-      "options": [
-        "Make it as short as possible",
-        "[Topic] - [Action Needed] - [Deadline/Urgency]",
-        "Just write what the email is about",
-        "Use emojis to stand out"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q3",
-      "question": "When is the BEST time to send a follow-up email after no response?",
-      "options": [
-        "Within 24 hours",
-        "After 2 weeks",
-        "5-7 days after the initial email",
-        "Never follow up, it's unprofessional"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q4",
-      "question": "What's the '3-Sentence Rule' for business emails?",
-      "options": [
-        "Every email must be exactly 3 sentences long",
-        "If you can't explain it in 3 sentences, you need a meeting not an email",
-        "Use only 3-word sentences",
-        "Write 3 drafts before sending"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q5",
-      "question": "When addressing a customer complaint, what should come FIRST in your email?",
-      "options": [
-        "An explanation of what went wrong",
-        "The solution you're offering",
-        "Empathy and acknowledgment of their frustration",
-        "Company policy details"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q6",
-      "question": "What's the estimated time savings per week using ChatGPT for business communication (according to the module)?",
-      "options": [
-        "2 hours per week",
-        "5 hours per week",
-        "9 hours per week",
-        "15 hours per week"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q7",
-      "question": "For meeting notes, what's the MOST important section to include?",
-      "options": [
-        "Who attended the meeting",
-        "Action items with person responsible and due date",
-        "Detailed discussion summary",
-        "Next meeting time"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q8",
-      "question": "What's the recommended approach for emotional emails (when you're upset)?",
-      "options": [
-        "Send immediately while emotions are fresh",
-        "Never send emotional emails",
-        "Have ChatGPT draft it, save as draft, review in 24 hours",
-        "Write it yourself without AI help"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q9",
-      "question": "When requesting budget approval from an executive, what should you focus on?",
-      "options": [
-        "How hard you've been working",
-        "Data-driven justification and expected ROI",
-        "Why you deserve the budget",
-        "Technical details of implementation"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q10",
-      "question": "What's a common mistake when writing business emails?",
-      "options": [
-        "Being too specific",
-        "Using active voice",
-        "Burying the lead (not getting to the point quickly)",
-        "Including a clear call-to-action"
-      ],
-      "correct": 2
-    }
+    {"id": "q1", "question": "What's the first step when writing a professional email with AI?", "options": ["Just tell ChatGPT to write an email", "Provide the key points, recipient context, desired tone, and any constraints", "Copy a random email template", "Ask ChatGPT to guess what you want"], "correct": 1, "explanation": "Giving ChatGPT specific context — who the recipient is, what the key message is, and the desired tone — produces far more useful drafts than vague instructions."},
+    {"id": "q2", "question": "How should you handle a customer complaint using AI?", "options": ["Ignore the complaint", "Use AI to draft an empathetic response that acknowledges the issue and offers a solution, then personalize it", "Have AI send the response directly", "Blame the customer in the response"], "correct": 1, "explanation": "AI can draft a solid empathetic response framework, but you should always personalize it with specific details about the customer's situation before sending."},
+    {"id": "q3", "question": "What's the best way to use AI for meeting follow-ups?", "options": ["AI attends meetings for you", "Provide bullet-point notes and ask AI to structure them into a professional summary with action items", "Skip follow-ups entirely", "Only for external meetings"], "correct": 1, "explanation": "AI excels at transforming messy meeting notes into structured summaries with clear action items, owners, and deadlines — saving teams significant time on post-meeting communication."},
+    {"id": "q4", "question": "When writing a proposal with AI, what should you provide?", "options": ["Nothing — let AI figure it out", "The problem you're solving, your solution approach, target audience, pricing, and any unique selling points", "Only the title", "A random paragraph"], "correct": 1, "explanation": "The more business context you give AI — the problem, your solution, competitive advantages, and pricing — the more compelling and accurate the proposal draft will be."},
+    {"id": "q5", "question": "How can AI improve your Slack or Teams messages?", "options": ["AI monitors all your messages automatically", "Help you draft clear, concise messages for complex topics that might be misunderstood in text", "Replace all team communication", "Only for formal announcements"], "correct": 1, "explanation": "Text-based communication is prone to misunderstanding. AI can help you rephrase ambiguous messages clearly, strike the right tone, and ensure your intent is communicated effectively."},
+    {"id": "q6", "question": "What makes an AI-drafted business communication effective?", "options": ["Using as many buzzwords as possible", "Clear structure, appropriate tone for the audience, specific action items, and personalization", "Making it as long as possible", "Avoiding any specific details"], "correct": 1, "explanation": "Effective business communication balances professionalism with clarity. The best AI-drafted messages have a logical structure, match the audience's expectations, and include clear next steps."},
+    {"id": "q7", "question": "How should you use AI for negotiation emails?", "options": ["Have AI negotiate for you completely", "Draft multiple versions with different approaches (collaborative, firm, creative) and choose the best fit", "Never use AI for negotiations", "Only for salary negotiations"], "correct": 1, "explanation": "Generating multiple draft versions with different tones and strategies gives you options to pick the approach that best fits your negotiation context and relationship."},
+    {"id": "q8", "question": "What's a common mistake when using AI for professional writing?", "options": ["Being too specific about requirements", "Sending AI output without reviewing and personalizing it — missing context only you would know", "Asking for too many revisions", "Using AI at all"], "correct": 1, "explanation": "AI doesn't know your company culture, relationships, or specific context. Always review, add personal details, and adjust tone before sending any AI-drafted professional communication."},
+    {"id": "q9", "question": "How can AI help you write a performance review for a team member?", "options": ["AI can evaluate employees automatically", "Provide specific achievements, areas for growth, and examples — AI structures them into a professional review format", "Skip performance reviews", "Only for HR departments"], "correct": 1, "explanation": "AI helps organize your observations into a structured, constructive review. You provide the substance (achievements, growth areas, examples); AI helps with the professional framing and language."},
+    {"id": "q10", "question": "What's the best practice when using AI for important business communications?", "options": ["Trust AI completely and hit send immediately", "Use AI as a drafting tool, then apply your expertise, verify accuracy, and personalize before sending", "Never use AI for important messages", "Only use AI for internal emails"], "correct": 1, "explanation": "For important communications, AI is best used as a drafting assistant. Your review adds the human judgment, context awareness, and relationship knowledge that make the final message truly effective."}
   ]
 }

@@ -3,115 +3,15 @@
   "moduleNumber": 4,
   "passPercentage": 70,
   "questions": [
-    {
-      "id": "q1",
-      "question": "What's the recommended approach for creating long blog posts with ChatGPT?",
-      "options": [
-        "Request the entire post in one prompt",
-        "Create an outline first, then expand sections sequentially",
-        "Write it yourself without AI",
-        "Copy content from other sources"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q2",
-      "question": "For LinkedIn posts, what's the recommended length?",
-      "options": [
-        "50-100 words",
-        "250-300 words",
-        "500+ words",
-        "As short as possible"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q3",
-      "question": "What should every great blog post include?",
-      "options": [
-        "Compelling headline, hook, structure, takeaways, and CTA",
-        "Just a title and body text",
-        "Lots of images and videos",
-        "As many keywords as possible"
-      ],
-      "correct": 0
-    },
-    {
-      "id": "q4",
-      "question": "What's 'content repurposing'?",
-      "options": [
-        "Copying other people's content",
-        "Reposting the same content everywhere",
-        "Adapting one piece of content into multiple formats for different platforms",
-        "Updating old content with new dates"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q5",
-      "question": "What's the estimated time to create a blog post with ChatGPT (according to the module)?",
-      "options": [
-        "3 hours",
-        "1 hour",
-        "20 minutes",
-        "5 minutes"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q6",
-      "question": "For marketing copy, what should you focus on?",
-      "options": [
-        "Features of your product",
-        "Benefits and outcomes for the customer",
-        "Your company history",
-        "Technical specifications"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q7",
-      "question": "What's the best way to beat writer's block with ChatGPT?",
-      "options": [
-        "Give up and try later",
-        "Ask ChatGPT to write everything for you",
-        "Ask for multiple angles, outlines, and opening paragraphs to get unstuck",
-        "Force yourself to write without AI"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q8",
-      "question": "What's a common content creation mistake?",
-      "options": [
-        "Being too specific about your audience",
-        "Including clear takeaways",
-        "Writing generic content that tries to appeal to everyone",
-        "Using platform-specific formatting"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q9",
-      "question": "What's the recommended content mix for social media?",
-      "options": [
-        "100% promotional",
-        "40% educational, 30% inspirational, 20% behind-the-scenes, 10% promotional",
-        "Only share others' content",
-        "Post randomly without strategy"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q10",
-      "question": "What should you do with ChatGPT's first content draft?",
-      "options": [
-        "Publish it immediately",
-        "Iterate and refine with follow-up prompts",
-        "Delete it and start over",
-        "Never use AI content"
-      ],
-      "correct": 1
-    }
+    {"id": "q1", "question": "What's the most effective way to use AI for blog writing?", "options": ["Have AI write the entire blog in one prompt", "Use AI for outlining, drafting sections, and refining — then add your unique insights and voice", "Blogs don't benefit from AI", "Only professional writers can use AI for blogs"], "correct": 1, "explanation": "A collaborative approach works best: AI handles structure and first drafts, then you inject your personal expertise, real examples, and unique perspective that readers value."},
+    {"id": "q2", "question": "How can AI help create social media content calendars?", "options": ["AI posts automatically to your accounts", "Generate content ideas, captions, and hashtag suggestions organized by theme and platform", "Social media doesn't need planning", "Only for social media managers"], "correct": 1, "explanation": "AI can quickly generate weeks of content ideas organized by theme, suggest platform-appropriate captions, and recommend trending hashtags — a massive time saver for content planning."},
+    {"id": "q3", "question": "What makes AI-generated marketing copy effective?", "options": ["Using AI without any human review", "Giving AI your brand voice, target audience, key benefits, and a clear call-to-action, then refining the output", "Making copy as long as possible", "Ignoring the target audience"], "correct": 2, "explanation": "Effective marketing copy requires clear brand alignment and audience focus. Providing AI with your specific brand guidelines, audience pain points, and desired action produces much stronger drafts."},
+    {"id": "q4", "question": "How should you use AI for creating product descriptions?", "options": ["Copy AI output without changes", "Provide product features, benefits, target customer, and tone — then personalize AI's draft with real details", "Product descriptions don't matter", "AI can only write short descriptions"], "correct": 1, "explanation": "AI can quickly draft multiple product description versions. Personalizing them with real customer benefits, unique selling points, and brand-specific language makes them significantly more compelling."},
+    {"id": "q5", "question": "What's a good strategy for using AI to repurpose content?", "options": ["Just copy the same content everywhere", "Ask AI to transform a blog post into a tweet thread, email newsletter, LinkedIn post, and video script", "Content repurposing is a waste of time", "Only works for video content"], "correct": 1, "explanation": "Content repurposing multiplies the value of your work. AI can quickly adapt one piece of content into multiple formats — each optimized for its specific platform and audience."},
+    {"id": "q6", "question": "How can AI help with email marketing campaigns?", "options": ["AI sends campaigns automatically", "Draft subject lines, email body, segmented versions for different audiences, and A/B test variations", "Email marketing is outdated", "AI can only write one version"], "correct": 1, "explanation": "AI can generate multiple email variations quickly — different subject lines for testing, segmented body copy for different audiences, and follow-up sequences — dramatically accelerating campaign creation."},
+    {"id": "q7", "question": "What's the key to maintaining brand voice when using AI for content?", "options": ["Let AI define your brand voice", "Create a detailed brand voice guide and provide examples to AI, then review all outputs for consistency", "Brand voice doesn't matter online", "AI always matches your voice automatically"], "correct": 1, "explanation": "A documented brand voice guide with examples is essential. Share it with AI in your prompts, and always review outputs to ensure consistency with your established brand identity."},
+    {"id": "q8", "question": "How should you use AI for creating ad copy?", "options": ["Generate one version and use it everywhere", "Create multiple headline and body variations for different audiences, then test which performs best", "Ad copy doesn't benefit from AI", "Only for large advertising budgets"], "correct": 1, "explanation": "Testing multiple ad variations is the foundation of effective advertising. AI can quickly generate dozens of headline and body combinations, giving you a strong pool to A/B test."},
+    {"id": "q9", "question": "What's a common pitfall when using AI for content creation?", "options": ["Being too detailed in your instructions", "Publishing AI-generated content without adding original insights, examples, or your unique perspective", "Using AI too rarely", "Asking for too many revisions"], "correct": 1, "explanation": "Generic AI content lacks the original insights and real experiences that make content valuable and trustworthy. Always layer in your expertise, personal examples, and unique angle."},
+    {"id": "q10", "question": "What's the most valuable use of AI in a content creation workflow?", "options": ["Replacing all human content creators", "Accelerating the ideation and drafting phases so you can focus on strategy, quality, and the creative decisions that truly matter", "Only for editing existing content", "AI is only useful for one type of content"], "correct": 1, "explanation": "AI's greatest value in content creation is eliminating the blank-page problem and speeding up drafts. This frees human creators to focus on strategy, differentiation, and the creative decisions that drive real results."}
   ]
 }

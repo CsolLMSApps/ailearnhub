@@ -3,115 +3,15 @@
   "moduleNumber": 5,
   "passPercentage": 70,
   "questions": [
-    {
-      "id": "q1",
-      "question": "What's the estimated weekly time savings from using ChatGPT for productivity tasks (according to the module)?",
-      "options": [
-        "5 hours per week",
-        "8 hours per week",
-        "12.5 hours per week",
-        "20 hours per week"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q2",
-      "question": "What is 'batch processing'?",
-      "options": [
-        "Processing data in large quantities",
-        "Grouping similar tasks together and completing them in one focused session",
-        "Working on multiple projects simultaneously",
-        "Using automation software"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q3",
-      "question": "When conducting research with ChatGPT, what should you request?",
-      "options": [
-        "Just ask general questions",
-        "Only ask for facts",
-        "Request overview, key findings, different perspectives, and practical applications",
-        "Copy and paste from websites"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q4",
-      "question": "What is 'deep work'?",
-      "options": [
-        "Working late into the night",
-        "Working on difficult problems",
-        "Focused, distraction-free work on cognitively demanding tasks",
-        "Working in a quiet office"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q5",
-      "question": "What's the recommended balance for weekly time allocation?",
-      "options": [
-        "100% meetings",
-        "Strategic 40%, Operational 30%, Meetings 20%, Buffer 10%",
-        "50% email, 50% work",
-        "Equal time for everything"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q6",
-      "question": "What should a good SOP (Standard Operating Procedure) include?",
-      "options": [
-        "Just the basic steps",
-        "Only who is responsible",
-        "Purpose, responsibilities, procedure, quality checks, and troubleshooting",
-        "Whatever seems relevant"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q7",
-      "question": "How should you prioritize your daily tasks?",
-      "options": [
-        "Do easiest tasks first",
-        "Work on whatever comes up",
-        "Identify top 3 priorities and schedule deep work when energy is highest",
-        "Respond to emails all day"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q8",
-      "question": "What's the purpose of a time audit?",
-      "options": [
-        "To bill clients accurately",
-        "To analyze how time was spent vs. how it should be spent for optimal productivity",
-        "To track employee hours",
-        "To prove you're working hard"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q9",
-      "question": "When organizing meeting notes with ChatGPT, what's most important?",
-      "options": [
-        "Detailed discussion summary",
-        "Action items with owner and due date",
-        "List of attendees",
-        "Meeting duration"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q10",
-      "question": "What should you do when making complex decisions with ChatGPT?",
-      "options": [
-        "Just ask for the answer",
-        "Flip a coin",
-        "Create a decision matrix, evaluate pros/cons, analyze scenarios, get data-driven recommendation",
-        "Ask your friends instead"
-      ],
-      "correct": 2
-    }
+    {"id": "q1", "question": "What does 'workflow automation with AI' mean in a professional context?", "options": ["Replacing all employees with robots", "Using AI to handle repetitive tasks like drafting, summarizing, and formatting — freeing you for higher-value work", "Only applicable to tech companies", "Automation only works with code"], "correct": 1, "explanation": "Professional workflow automation with AI means using it to handle time-consuming repetitive tasks — saving hours weekly so you can focus on strategy, relationships, and creative problem-solving."},
+    {"id": "q2", "question": "How can AI help with task prioritization?", "options": ["AI decides everything for you", "Analyze your task list, deadlines, and impact to suggest a prioritized order based on urgency and importance", "Task prioritization can't be helped by AI", "Only useful for managers"], "correct": 1, "explanation": "AI can apply frameworks like the Eisenhower Matrix to help you categorize tasks by urgency and importance, suggesting which to tackle first for maximum productivity."},
+    {"id": "q3", "question": "What's the best way to use AI for summarizing long documents?", "options": ["Have AI read it and memorize everything", "Paste the document and ask for a structured summary with key points, action items, and important details", "AI can only summarize short texts", "Summarizing isn't useful"], "correct": 1, "explanation": "AI can quickly distill lengthy reports, articles, or meeting transcripts into concise summaries with the key takeaways — saving you significant reading time while keeping you informed."},
+    {"id": "q4", "question": "How can AI help you prepare for important meetings?", "options": ["AI attends meetings for you", "Generate an agenda, prepare talking points, anticipate questions, and draft follow-up templates in advance", "Meeting prep doesn't benefit from AI", "Only for executive meetings"], "correct": 1, "explanation": "Pre-meeting AI preparation — creating agendas, anticipating likely questions, and drafting talking points — helps you walk into any meeting more confident and organized."},
+    {"id": "q5", "question": "What type of tasks benefit MOST from AI automation?", "options": ["Tasks requiring deep emotional intelligence", "Repetitive, text-based tasks like drafting, formatting, summarizing, and translating", "Only coding tasks", "Tasks that require real-time data only"], "correct": 1, "explanation": "AI shines on repetitive, text-based tasks where consistency and speed matter more than personal touch — drafting communications, formatting data, summarizing documents, and generating reports."},
+    {"id": "q6", "question": "How can AI help track and report on project progress?", "options": ["AI monitors projects automatically in real-time", "Help draft progress reports, create status update templates, and summarize completed milestones", "Project tracking doesn't need AI", "Only for large enterprise projects"], "correct": 1, "explanation": "AI can quickly transform raw project data and notes into polished progress reports and status updates — ensuring stakeholders stay informed without consuming your writing time."},
+    {"id": "q7", "question": "What's a practical time-saving technique when using AI daily?", "options": ["Spend hours crafting perfect prompts each time", "Create reusable prompt templates for your most common tasks and customize them quickly each time", "Never reuse prompts", "AI works best with long, unique prompts every time"], "correct": 1, "explanation": "Reusable prompt templates are a game-changer for productivity. Creating templates for your frequent tasks — and quickly customizing them — eliminates repetitive prompt-writing entirely."},
+    {"id": "q8", "question": "How should you integrate AI into an existing team workflow?", "options": ["Replace the entire workflow overnight", "Start with specific high-impact tasks, measure time savings, then gradually expand AI use across the team", "AI and team workflows don't mix", "Only the team leader should use AI"], "correct": 1, "explanation": "Gradual integration works best. Start by identifying where AI provides the clearest time savings, measure the impact, share results with the team, and then scale up systematically."},
+    {"id": "q9", "question": "What's the biggest productivity risk when using AI too much?", "options": ["AI is always beneficial with no downsides", "Over-reliance — losing the ability to think critically or perform tasks independently without AI assistance", "Using AI occasionally", "Only applies to beginners"], "correct": 1, "explanation": "Over-dependence on AI can erode critical thinking and independent problem-solving skills. Use AI as a tool to enhance your productivity, not as a crutch that replaces your own capabilities."},
+    {"id": "q10", "question": "What should you measure to prove AI is improving your productivity?", "options": ["Nothing — just trust that it helps", "Track time saved on specific tasks, quality of output, and reduction in revision cycles before and after implementing AI", "Productivity can't be measured", "Only measure revenue impact"], "correct": 1, "explanation": "Concrete metrics make the business case for AI adoption. Track hours saved on specific tasks, compare output quality before and after, and measure how many revision rounds your work needs."}
   ]
 }

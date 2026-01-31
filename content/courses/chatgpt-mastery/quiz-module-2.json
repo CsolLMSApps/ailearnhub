@@ -3,115 +3,15 @@
   "moduleNumber": 2,
   "passPercentage": 70,
   "questions": [
-    {
-      "id": "q1",
-      "question": "What are the 5 components of the Universal Prompt Formula?",
-      "options": [
-        "Role, Task, Context, Format, Tone",
-        "Subject, Verb, Object, Adjective, Adverb",
-        "Who, What, When, Where, Why",
-        "Input, Process, Output, Review, Revise"
-      ],
-      "correct": 0
-    },
-    {
-      "id": "q2",
-      "question": "Why is specifying a ROLE important in your prompt?",
-      "options": [
-        "It makes the prompt longer and more impressive",
-        "It influences the vocabulary, perspective, and depth of the response",
-        "It's not important, you can skip it",
-        "It only matters for creative writing tasks"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q3",
-      "question": "Which is an example of a SPECIFIC task (not vague)?",
-      "options": [
-        "Write an email",
-        "Make a list",
-        "Write a follow-up email to a potential client who requested a demo but didn't respond after the meeting",
-        "Explain this to me"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q4",
-      "question": "What is 'prompt chaining'?",
-      "options": [
-        "Using multiple AI tools at the same time",
-        "Breaking complex tasks into sequential prompts that build on each other",
-        "Copying the same prompt many times",
-        "Linking prompts together with special characters"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q5",
-      "question": "You want ChatGPT to practice a difficult conversation with you. Which technique should you use?",
-      "options": [
-        "Prompt chaining",
-        "Role-playing scenarios",
-        "Using constraints",
-        "Sequential refinement"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q6",
-      "question": "What's the benefit of using CONSTRAINTS in your prompts?",
-      "options": [
-        "They make prompts harder to write",
-        "They limit ChatGPT's capabilities",
-        "They force better, more creative, and focused output",
-        "They're only useful for poetry"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q7",
-      "question": "Which is a common prompt engineering MISTAKE?",
-      "options": [
-        "Being too specific about what you want",
-        "Iterating and refining the output",
-        "Accepting the first output even if it's not quite right",
-        "Providing context and examples"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q8",
-      "question": "You get a response that's close but not perfect. What should you do?",
-      "options": [
-        "Start a completely new conversation",
-        "Give up and write it yourself",
-        "Iterate with a follow-up prompt like 'This is close, but can you make it more concise?'",
-        "Use the exact same prompt again"
-      ],
-      "correct": 2
-    },
-    {
-      "id": "q9",
-      "question": "What does specifying FORMAT in your prompt accomplish?",
-      "options": [
-        "Makes the prompt look more professional",
-        "Saves time reformatting - you get usable output immediately",
-        "It's optional and doesn't really matter",
-        "Only works for creating tables"
-      ],
-      "correct": 1
-    },
-    {
-      "id": "q10",
-      "question": "For a project requiring a 10-page report, what's the BEST approach?",
-      "options": [
-        "Ask for the entire 10-page report in one prompt",
-        "Use prompt chaining: outline first, then expand each section sequentially",
-        "Give up because ChatGPT can't handle long content",
-        "Copy the same prompt 10 times for 10 pages"
-      ],
-      "correct": 1
-    }
+    {"id": "q1", "question": "What is the 'Role' element in the 5-part prompt formula?", "options": ["The topic of the prompt", "Telling ChatGPT to act as a specific expert or persona", "The desired output format", "The length of the response"], "correct": 1, "explanation": "Assigning a role (e.g., 'Act as a marketing expert') gives ChatGPT context and expertise frame, producing more targeted and relevant responses."},
+    {"id": "q2", "question": "What does 'prompt chaining' mean?", "options": ["Writing one very long prompt", "Breaking a complex task into a sequence of smaller prompts that build on each other", "Copying prompts from the internet", "Asking the same question multiple times"], "correct": 1, "explanation": "Prompt chaining breaks complex projects into manageable steps where each prompt builds on the previous output — like an assembly line for AI-generated content."},
+    {"id": "q3", "question": "Which prompt technique asks ChatGPT to think step by step?", "options": ["Zero-shot prompting", "Chain-of-thought prompting", "Few-shot prompting", "Role-play prompting"], "correct": 1, "explanation": "Chain-of-thought prompting instructs ChatGPT to reason through a problem step by step, which significantly improves accuracy on complex tasks like math or logic problems."},
+    {"id": "q4", "question": "What is a 'system prompt' or 'custom instruction'?", "options": ["A prompt you delete after using", "Persistent instructions that tell ChatGPT how to behave across all conversations", "A premium feature only", "A type of error message"], "correct": 1, "explanation": "Custom instructions set persistent preferences — like your preferred tone, expertise level, or output format — so you don't have to repeat them in every conversation."},
+    {"id": "q5", "question": "How does 'few-shot prompting' work?", "options": ["You only ask one question", "You provide 2-3 examples of the desired input/output pattern before your actual request", "It means using ChatGPT a few times per day", "You give ChatGPT partial information"], "correct": 1, "explanation": "Few-shot prompting teaches ChatGPT the exact pattern you want by showing examples first. This dramatically improves output consistency for repetitive tasks."},
+    {"id": "q6", "question": "What's the purpose of adding 'constraints' to a prompt?", "options": ["To make prompts shorter", "To limit and guide the response (e.g., word count, tone, format, scope)", "To confuse ChatGPT intentionally", "Constraints are not useful"], "correct": 1, "explanation": "Constraints narrow the output space, giving you more precise results. Without them, responses can be too broad, too long, or miss your intended purpose entirely."},
+    {"id": "q7", "question": "You want ChatGPT to write in a specific style. What's the best approach?", "options": ["Hope it guesses correctly", "Provide a style example or describe the tone, voice, and audience explicitly", "Just say 'write nicely'", "Style doesn't matter for AI"], "correct": 1, "explanation": "Explicit style guidance — whether through examples or detailed description of tone, voice, and audience — is the most reliable way to get consistent, on-brand output."},
+    {"id": "q8", "question": "What is 'prompt iteration'?", "options": ["Writing the perfect prompt on the first try", "Refining your prompt based on ChatGPT's output until you get the desired result", "Deleting old prompts", "A ChatGPT pricing plan"], "correct": 1, "explanation": "Almost no one gets perfect output on the first try. Prompt iteration — reviewing the response and adjusting your prompt — is the core skill that separates beginners from power users."},
+    {"id": "q9", "question": "Which technique helps get more creative outputs from ChatGPT?", "options": ["Using very formal, rigid instructions", "Increasing the 'temperature' conceptually by asking for unconventional or diverse ideas", "Asking the same prompt repeatedly", "Only using simple one-word prompts"], "correct": 1, "explanation": "Asking for unconventional perspectives, diverse options, or creative alternatives pushes ChatGPT to generate more varied and innovative responses beyond its default patterns."},
+    {"id": "q10", "question": "What's the single most important prompt engineering skill?", "options": ["Memorizing all prompt templates", "Being specific about context, desired output, and constraints", "Using the longest prompts possible", "Never asking follow-up questions"], "correct": 1, "explanation": "Specificity is king. The more clearly you define what you want (context, format, tone, length, audience), the more accurately ChatGPT delivers it. Everything else builds on this foundation."}
   ]
 }
