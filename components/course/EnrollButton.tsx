@@ -46,7 +46,7 @@ export default function EnrollButton({ slug, fullWidth = false }: EnrollButtonPr
       if (!session) {
         // Not logged in - redirect to login with return URL
         const returnUrl = `/courses/${slug}`
-        router.push(`/auth/login?redirect=${encodeURIComponent(returnUrl)}&action=enroll`)
+        router.push(`/login?redirect=${encodeURIComponent(returnUrl)}&action=enroll`)
         return
       }
 
