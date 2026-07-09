@@ -71,7 +71,7 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/learn')
   ) {
     if (!user) {
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL('/auth/login', request.url))
     }
   }
 

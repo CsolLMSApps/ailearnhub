@@ -59,10 +59,9 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-medium text-[#212121] mb-4">5. Refund Policy</h2>
             <p className="text-base text-[#424242] leading-7 mb-4">
-              We offer a 30-day money-back guarantee. You may request a full refund within 30 days of purchase if:
+              We offer a 24-hour money-back guarantee. You may request a full refund within 24 hours of purchase if:
             </p>
             <ul className="list-disc pl-6 mb-4 text-[#424242]">
-              <li className="mb-2">You have completed less than 50% of the course content</li>
               <li className="mb-2">You are not satisfied with the course quality</li>
             </ul>
             <p className="text-base text-[#424242] leading-7">
