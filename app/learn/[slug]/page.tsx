@@ -210,13 +210,14 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
             {modules?.map((mod) => {
               const isDone = completedModules.includes(mod.module_number)
               const isCurrent = continueModule?.module_number === mod.module_number && !isCourseComplete
+              const isLast = mod.module_number === lastModuleNumber
 
               return (
                 <li key={mod.id}>
                   <Link
                     href={`/learn/${slug}/module/${mod.module_number}`}
                     className={`flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors ${
-                      isCurrent ? 'bg-orange-50' : ''
+                      isCurrent ? 'bg-orange-50' : isLast && !isCourseComplete ? 'bg-purple-50' : ''
                     }`}
                   >
                     {/* Status icon */}
@@ -225,6 +226,8 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
                         ? 'bg-green-100 text-green-700'
                         : isCurrent
                         ? 'bg-[#FF6F00] text-white'
+                        : isLast
+                        ? 'bg-purple-100 text-purple-700'
                         : 'bg-gray-100 text-gray-500'
                     }`}>
                       {isDone ? '✓' : mod.module_number}
@@ -235,22 +238,35 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
                       <p className={`font-semibold truncate ${isDone ? 'text-gray-500' : 'text-gray-900'}`}>
                         {mod.title}
                       </p>
-                      {mod.estimated_minutes && (
-                        <p className="text-xs text-gray-400 mt-0.5">
-                          ⏱ {mod.estimated_minutes} minutes
-                        </p>
-                      )}
+                      <div className="flex items-center gap-2 mt-0.5">
+                        {mod.estimated_minutes && (
+                          <p className="text-xs text-gray-400">⏱ {mod.estimated_minutes} minutes</p>
+                        )}
+                        {isLast && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
+                            🏆 Final Quiz
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Badge */}
                     <div className="shrink-0">
-                      {isDone ? (
+                      {isCourseComplete && isLast ? (
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                          ✅ Passed
+                        </span>
+                      ) : isDone ? (
                         <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                           Completed
                         </span>
                       ) : isCurrent ? (
                         <span className="text-xs bg-[#FF6F00] text-white px-2 py-1 rounded-full font-medium">
                           Continue →
+                        </span>
+                      ) : isLast ? (
+                        <span className="text-xs bg-purple-600 text-white px-2 py-1 rounded-full font-medium">
+                          Take Quiz →
                         </span>
                       ) : (
                         <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
@@ -263,6 +279,16 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
               )
             })}
           </ul>
+
+          {/* Quiz requirement notice at bottom of module list */}
+          {!isCourseComplete && (
+            <div className="px-6 py-4 bg-amber-50 border-t border-amber-100 flex items-center gap-3">
+              <span className="text-amber-500 text-xl">📝</span>
+              <p className="text-sm text-amber-800">
+                <span className="font-bold">Course Final Quiz required</span> — Complete all modules then pass the quiz on Module {lastModuleNumber} to earn your certificate (70% pass mark).
+              </p>
+            </div>
+          )}
         </div>
 
       </div>
