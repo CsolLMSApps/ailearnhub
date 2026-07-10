@@ -101,8 +101,6 @@ export function QuizComponent({
     return (
       <ResultsSummary
         results={quizResults}
-        questions={questions}
-        userAnswers={userAnswers}
         passPercentage={passPercentage}
         onRetry={handleRetry}
       />

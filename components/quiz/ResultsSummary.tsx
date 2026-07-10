@@ -1,7 +1,5 @@
 'use client'
 
-import { QuestionCard } from './QuestionCard'
-
 interface ResultsSummaryProps {
   results: {
     score: number
@@ -11,109 +9,88 @@ interface ResultsSummaryProps {
     attempt_number: number
     slug: string
   }
-  questions: any[]
-  userAnswers: { [key: string]: number }
   passPercentage: number
   onRetry: () => void
 }
 
 export function ResultsSummary({
   results,
-  questions,
-  userAnswers,
   passPercentage,
-  onRetry
+  onRetry,
 }: ResultsSummaryProps) {
   const { score, total_questions, percentage, passed, attempt_number, slug } = results
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Results Header */}
-      <div className={`rounded-lg p-8 mb-8 ${passed ? 'bg-green-50 border-2 border-green-500' : 'bg-red-50 border-2 border-red-500'}`}>
-        <div className="text-center">
+    <div className="max-w-2xl mx-auto">
+      {/* Result Header */}
+      <div className={`rounded-xl p-8 mb-6 text-center ${passed ? 'bg-green-50 border-2 border-green-500' : 'bg-red-50 border-2 border-red-400'}`}>
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${passed ? 'bg-green-500' : 'bg-red-500'}`}>
           {passed ? (
-            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
+            <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
           ) : (
-            <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </div>
-          )}
-
-          <h2 className={`text-3xl font-bold mb-2 ${passed ? 'text-green-900' : 'text-red-900'}`}>
-            {passed ? 'Congratulations! You Passed!' : 'Not Quite There Yet'}
-          </h2>
-
-          <p className={`text-lg mb-4 ${passed ? 'text-green-800' : 'text-red-800'}`}>
-            You scored {score} out of {total_questions} ({percentage}%)
-          </p>
-
-          <p className="text-gray-600">
-            {passed
-              ? 'You can now proceed to the next module.'
-              : `You need ${passPercentage}% to pass. Don't worry, you can retry as many times as needed!`
-            }
-          </p>
-
-          {attempt_number > 1 && (
-            <p className="text-sm text-gray-500 mt-2">
-              Attempt #{attempt_number}
-            </p>
+            <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           )}
         </div>
+
+        <h2 className={`text-3xl font-bold mb-2 ${passed ? 'text-green-900' : 'text-red-900'}`}>
+          {passed ? 'Congratulations! You Passed!' : 'Not Quite There Yet'}
+        </h2>
+
+        {attempt_number > 1 && (
+          <p className="text-sm text-gray-500 mb-3">Attempt #{attempt_number}</p>
+        )}
+
+        <p className={`text-base ${passed ? 'text-green-700' : 'text-red-700'}`}>
+          {passed
+            ? 'Great work! Your certificate is now available.'
+            : `You need ${passPercentage}% to pass. Review the modules and try again!`}
+        </p>
       </div>
 
-      {/* Score Breakdown */}
-      <div className="bg-white rounded-lg border-2 border-gray-200 p-6 mb-8">
-        <h3 className="text-xl font-bold mb-4">Score Breakdown</h3>
-        <div className="grid grid-cols-3 gap-4 text-center">
+      {/* Score — only numbers, no answer breakdown */}
+      <div className="bg-white rounded-xl border-2 border-gray-200 p-8 mb-6">
+        <h3 className="text-lg font-bold text-gray-900 text-center mb-6">Your Score</h3>
+        <div className="grid grid-cols-3 gap-6 text-center">
           <div>
-            <p className="text-3xl font-bold text-[#FF6F00]">{score}</p>
-            <p className="text-sm text-gray-600">Correct</p>
+            <p className="text-4xl font-bold text-green-600">{score}</p>
+            <p className="text-sm text-gray-500 mt-1">Correct</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-gray-400">{total_questions - score}</p>
-            <p className="text-sm text-gray-600">Incorrect</p>
+            <p className="text-4xl font-bold text-[#FF6F00]">{percentage}%</p>
+            <p className="text-sm text-gray-500 mt-1">Score</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-[#FF6F00]">{percentage}%</p>
-            <p className="text-sm text-gray-600">Final Score</p>
+            <p className="text-4xl font-bold text-red-400">{total_questions - score}</p>
+            <p className="text-sm text-gray-500 mt-1">Incorrect</p>
+          </div>
+        </div>
+
+        {/* Pass threshold indicator */}
+        <div className="mt-6">
+          <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <span>0%</span>
+            <span className="text-[#FF6F00] font-semibold">Pass: {passPercentage}%</span>
+            <span>100%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-3 relative">
+            <div
+              className={`h-3 rounded-full transition-all duration-700 ${passed ? 'bg-green-500' : 'bg-red-400'}`}
+              style={{ width: `${percentage}%` }}
+            />
+            {/* Pass line marker */}
+            <div
+              className="absolute top-0 h-3 w-0.5 bg-[#FF6F00]"
+              style={{ left: `${passPercentage}%` }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Review Answers */}
-      <div className="mb-8">
-        <h3 className="text-2xl font-bold mb-6">Review Your Answers</h3>
-        <div className="space-y-6">
-          {questions.map((question, index) => (
-            <div key={question.id}>
-              <QuestionCard
-                question={question}
-                questionNumber={index + 1}
-                selectedAnswer={userAnswers[question.id]}
-                onSelectAnswer={() => {}}
-                showCorrect={true}
-                correctAnswer={question.correct}
-              />
-              {question.explanation && (
-                <div className="mt-3 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
-                  <p className="text-sm text-blue-900">
-                    <strong>Explanation:</strong> {question.explanation}
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Action Buttons */}
+      {/* Actions */}
       <div className="flex justify-center gap-4">
         {!passed && (
           <button
@@ -127,7 +104,7 @@ export function ResultsSummary({
           href={`/learn/${slug}`}
           className="px-8 py-3 border-2 border-[#FF6F00] text-[#FF6F00] rounded-lg hover:bg-[#FF6F00] hover:text-white transition-colors font-bold inline-block"
         >
-          Back to Course
+          {passed ? 'View Certificate →' : 'Back to Course'}
         </a>
       </div>
     </div>

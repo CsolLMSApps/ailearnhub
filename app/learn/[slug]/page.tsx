@@ -67,7 +67,21 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
   const completionPct = totalModules > 0
     ? Math.round((completedModules.length / totalModules) * 100)
     : 0
-  const isCourseComplete = completionPct === 100
+
+  // Certificate and completion banner only show when the FINAL QUIZ was actually passed.
+  // Visiting modules alone (auto-mark) is not enough.
+  const lastModuleNumber = modules?.[modules.length - 1]?.module_number
+  const { data: finalQuizPass } = await supabase
+    .from('quiz_results')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .eq('module_number', lastModuleNumber)
+    .eq('passed', true)
+    .limit(1)
+    .single()
+
+  const isCourseComplete = completionPct === 100 && !!finalQuizPass
 
   // Auto-create certificate when course is 100% complete.
   // Uses adminUpsert (service role key) to bypass RLS on the certificates table.
