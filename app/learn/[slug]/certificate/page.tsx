@@ -1,9 +1,15 @@
 // app/learn/[slug]/certificate/page.tsx
-// Printable / downloadable certificate of completion
+// Printable certificate of completion.
+// Uses adminFetch to bypass RLS on certificates table.
+// Print button is in CertificateActions (client component) — no event handlers here.
 
 import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { adminFetch } from '@/lib/supabase/admin'
+import { CertificateActions } from '@/components/CertificateActions'
 import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
 
 interface CertPageProps {
   params: Promise<{ slug: string }>
@@ -25,12 +31,11 @@ export default async function CertificatePage({ params }: CertPageProps) {
 
   if (!course) notFound()
 
-  const { data: certificate } = await supabase
-    .from('certificates')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('course_id', course.id)
-    .single()
+  // Use adminFetch to bypass RLS on certificates table
+  const { data: certificate } = await adminFetch(
+    'certificates',
+    `user_id=eq.${user.id}&course_id=eq.${course.id}&select=*&limit=1`
+  )
 
   if (!certificate) {
     return (
@@ -45,24 +50,15 @@ export default async function CertificatePage({ params }: CertPageProps) {
     )
   }
 
-  const issuedDate = new Date(certificate.issued_at).toLocaleDateString('en-US', {
+  const rawDate = certificate.issued_at || certificate.created_at || new Date().toISOString()
+  const issuedDate = new Date(rawDate).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
   })
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Print / Back bar — hidden when printing */}
-      <div className="print:hidden bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-        <Link href={`/learn/${slug}`} className="text-[#FF6F00] hover:underline text-sm font-medium">
-          ← Back to Course
-        </Link>
-        <button
-          onClick={() => window.print()}
-          className="px-5 py-2 bg-[#FF6F00] text-white rounded-lg font-semibold text-sm hover:bg-[#E65100] transition-colors"
-        >
-          ⬇ Download / Print Certificate
-        </button>
-      </div>
+      {/* Client component handles onClick → window.print() */}
+      <CertificateActions slug={slug} />
 
       {/* Certificate */}
       <div className="flex items-center justify-center py-10 print:py-0">
@@ -77,7 +73,7 @@ export default async function CertificatePage({ params }: CertPageProps) {
           <div className="absolute bottom-4 left-4 w-10 h-10 border-b-4 border-l-4 border-[#FF6F00]" />
           <div className="absolute bottom-4 right-4 w-10 h-10 border-b-4 border-r-4 border-[#FF6F00]" />
 
-          {/* Logo / Brand */}
+          {/* Brand */}
           <p className="text-[#FF6F00] font-bold text-lg tracking-widest uppercase mb-6">
             AILearnHub.IO
           </p>
@@ -95,10 +91,7 @@ export default async function CertificatePage({ params }: CertPageProps) {
             {certificate.student_name}
           </h1>
 
-          {/* Body */}
-          <p className="text-gray-600 text-base mb-2">
-            has successfully completed the course
-          </p>
+          <p className="text-gray-600 text-base mb-2">has successfully completed the course</p>
           <h2 className="text-2xl font-bold text-[#FF6F00] mb-6">
             {certificate.course_title}
           </h2>
@@ -117,14 +110,12 @@ export default async function CertificatePage({ params }: CertPageProps) {
             </div>
           </div>
 
-          {/* Signature line */}
           <div className="mt-10 border-t border-gray-300 pt-4 w-48 mx-auto">
             <p className="text-xs text-gray-400">AILearnHub.IO</p>
           </div>
         </div>
       </div>
 
-      {/* Print styles */}
       <style>{`
         @media print {
           body { margin: 0; padding: 0; }
