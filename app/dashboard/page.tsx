@@ -86,6 +86,9 @@ export default async function DashboardPage() {
               <Link href="/" className="flex items-center">
                 <span className="text-2xl font-bold text-[#FF6F00]">AI Learn Hub</span>
               </Link>
+              <Link href="/" className="hidden sm:inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#FF6F00] transition-colors">
+                ← Home
+              </Link>
               <nav className="hidden md:flex gap-6">
                 <Link href="/dashboard" className="text-[#FF6F00] font-medium border-b-2 border-[#FF6F00] pb-1">
                   Dashboard

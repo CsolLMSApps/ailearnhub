@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 
 export default async function PricingPage() {
@@ -17,6 +18,9 @@ export default async function PricingPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">← Back to Home</Link>
+        </div>
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">

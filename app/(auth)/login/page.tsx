@@ -61,7 +61,12 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12 bg-gray-50">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12 bg-gray-50">
+      <div className="w-full max-w-md mb-4">
+        <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
+          ← Back to Home
+        </Link>
+      </div>
       <Card className="w-full max-w-md border border-gray-200">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-medium text-[#212121]">Welcome back</CardTitle>

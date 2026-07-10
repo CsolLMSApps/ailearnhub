@@ -1,10 +1,17 @@
 // app/(marketing)/refund-policy/page.tsx
 // Fixed: removed inline header/footer — marketing layout handles them
 
+import Link from 'next/link'
+
 export default function RefundPolicyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
+            ← Back to Home
+          </Link>
+        </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Refund Policy</h1>
         
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 space-y-6">

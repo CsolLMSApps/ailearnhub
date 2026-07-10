@@ -22,6 +22,11 @@ export default async function CoursesPage() {
     return (
       <AuthenticatedLayout user={{ email: user.email, user_metadata: user.user_metadata }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="mb-4">
+            <Link href="/dashboard" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
+              ← Back to Dashboard
+            </Link>
+          </div>
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Explore Our Courses
@@ -93,6 +98,11 @@ export default async function CoursesPage() {
 
       {/* Courses Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
+            ← Back to Home
+          </Link>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses?.map((course) => (
             <Link

@@ -3,6 +3,7 @@
 // PATCHED: Added FALLBACK_MODULES so curriculum always renders even if DB is empty
 
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import EnrollButton from '@/components/course/EnrollButton'
 
@@ -167,6 +168,14 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Back nav */}
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-3">
+        <div className="max-w-7xl mx-auto">
+          <Link href="/courses" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
+            ← Back to Courses
+          </Link>
+        </div>
+      </div>
       {/* Hero */}
       <div className="bg-gradient-to-r from-[#FF6F00] to-[#E65100] text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

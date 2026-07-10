@@ -1,7 +1,13 @@
+import Link from 'next/link'
 export default function PrivacyPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <div className="container mx-auto max-w-4xl px-6 py-12">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
+            ← Back to Home
+          </Link>
+        </div>
         <h1 className="text-4xl font-normal text-[#212121] mb-8">Privacy Policy</h1>
         <div className="prose prose-gray max-w-none">
           <p className="text-sm text-[#757575] mb-8">Last Updated: November 29, 2024</p>

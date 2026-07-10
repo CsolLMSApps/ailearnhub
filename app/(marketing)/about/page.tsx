@@ -5,6 +5,11 @@ import { Award, BookOpen, Users, TrendingUp } from 'lucide-react'
 export default function AboutPage() {
   return (
     <div className="flex flex-col">
+      <div className="bg-white px-6 py-3 border-b border-gray-100">
+        <div className="container mx-auto max-w-6xl">
+          <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">← Back to Home</Link>
+        </div>
+      </div>
       {/* Header */}
       <section className="bg-[#212121] text-white py-16 px-6">
         <div className="container mx-auto max-w-6xl">
