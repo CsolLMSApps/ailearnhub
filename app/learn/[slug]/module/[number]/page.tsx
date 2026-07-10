@@ -1,6 +1,6 @@
 // app/learn/[slug]/module/[number]/page.tsx
-// Module content viewer with integrated quiz system
-// PATCHED: Navigation gated behind quiz pass requirement
+// Modules 1–(N-1): read freely, no quiz gate.
+// Last module only: shows Course Final Quiz (10 questions covering all modules).
 
 import { notFound, redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
@@ -21,13 +21,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
   const moduleNumber = parseInt(number)
   const supabase = await createServerSupabaseClient()
 
-  // Get authenticated user
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    redirect('/login')
-  }
+  if (!user) redirect('/login')
 
-  // Get course
   const { data: course } = await supabase
     .from('courses')
     .select('*')
@@ -35,11 +31,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
     .eq('is_published', true)
     .single()
 
-  if (!course) {
-    notFound()
-  }
+  if (!course) notFound()
 
-  // Check if user purchased course
   const { data: purchase } = await supabase
     .from('purchases')
     .select('id')
@@ -48,11 +41,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
     .eq('status', 'completed')
     .single()
 
-  if (!purchase) {
-    redirect(`/courses/${slug}`)
-  }
+  if (!purchase) redirect(`/courses/${slug}`)
 
-  // Get module content
   const { data: module } = await supabase
     .from('course_modules')
     .select('*')
@@ -60,18 +50,14 @@ export default async function ModulePage({ params }: ModulePageProps) {
     .eq('module_number', moduleNumber)
     .single()
 
-  if (!module) {
-    notFound()
-  }
+  if (!module) notFound()
 
-  // Get all modules for navigation
   const { data: allModules } = await supabase
     .from('course_modules')
     .select('id, module_number, title')
     .eq('course_id', course.id)
     .order('module_number', { ascending: true })
 
-  // Get user progress
   const { data: progress } = await supabase
     .from('progress')
     .select('*')
@@ -81,36 +67,40 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   const isCompleted = progress?.completed_modules?.includes(moduleNumber) || false
 
-  // Get quiz for this module — adminFetch bypasses RLS on quizzes table
-  const { data: quiz } = await adminFetch(
-    'quizzes',
-    `course_id=eq.${course.id}&module_number=eq.${moduleNumber}&select=*&limit=1`
-  )
-
-  // Get user's best quiz result for this module
-  const { data: quizResult } = await supabase
-    .from('quiz_results')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('course_id', course.id)
-    .eq('module_number', moduleNumber)
-    .eq('passed', true)
-    .order('percentage', { ascending: false })
-    .limit(1)
-    .single()
-
-  const hasPassedQuiz = !!quizResult
-
-  // Determine if user can proceed to next module:
-  // - If a quiz exists for this module, user MUST have passed it
-  // - If no quiz exists (safe fallback), allow navigation
-  const canProceedToNext = quiz ? hasPassedQuiz : true
-
-  // Find previous and next modules
   const currentIndex = allModules?.findIndex((m: { module_number: number }) => m.module_number === moduleNumber) ?? -1
-  const previousModule = currentIndex > 0 ? allModules?.[currentIndex - 1] : null
-  const nextModule = currentIndex < (allModules?.length ?? 0) - 1 ? allModules?.[currentIndex + 1] : null
   const isLastModule = currentIndex === (allModules?.length ?? 0) - 1
+  const previousModule = currentIndex > 0 ? allModules?.[currentIndex - 1] : null
+  const nextModule = !isLastModule ? allModules?.[currentIndex + 1] : null
+
+  // Only fetch the quiz on the last module — it's the Course Final Quiz
+  let quiz: any = null
+  let quizResult: any = null
+  let hasPassedQuiz = false
+
+  if (isLastModule) {
+    const { data: fetchedQuiz } = await adminFetch(
+      'quizzes',
+      `course_id=eq.${course.id}&module_number=eq.${moduleNumber}&select=*&limit=1`
+    )
+    quiz = fetchedQuiz
+
+    const { data: fetchedResult } = await supabase
+      .from('quiz_results')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('course_id', course.id)
+      .eq('module_number', moduleNumber)
+      .eq('passed', true)
+      .order('percentage', { ascending: false })
+      .limit(1)
+      .single()
+
+    quizResult = fetchedResult
+    hasPassedQuiz = !!quizResult
+  }
+
+  // Modules 1–(N-1): always unlocked. Last module: gated behind quiz pass.
+  const canProceedToNext = isLastModule ? (quiz ? hasPassedQuiz : true) : true
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,14 +145,15 @@ export default async function ModulePage({ params }: ModulePageProps) {
                     ✅ Completed
                   </span>
                 )}
+                {isLastModule && (
+                  <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-bold">
+                    Final Module
+                  </span>
+                )}
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {module.title}
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900">{module.title}</h1>
               {module.estimated_minutes && (
-                <p className="text-gray-500 mt-1">
-                  ⏱️ {module.estimated_minutes} minutes
-                </p>
+                <p className="text-gray-500 mt-1">⏱️ {module.estimated_minutes} minutes</p>
               )}
             </div>
 
@@ -189,9 +180,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   ol: ({ children }) => (
                     <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700">{children}</ol>
                   ),
-                  li: ({ children }) => (
-                    <li className="ml-4">{children}</li>
-                  ),
+                  li: ({ children }) => <li className="ml-4">{children}</li>,
                   pre: ({ children }) => (
                     <pre className="bg-gray-50 border border-gray-200 rounded-lg my-4 overflow-x-auto max-w-full">
                       {children}
@@ -220,38 +209,40 @@ export default async function ModulePage({ params }: ModulePageProps) {
               </ReactMarkdown>
             </div>
 
-            {/* Quiz Section — only renders if quiz exists in DB */}
-            {quiz && (
-              <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8">
+            {/* Course Final Quiz — only on last module */}
+            {isLastModule && quiz && (
+              <div className="bg-gradient-to-br from-orange-50 to-white rounded-xl border-2 border-[#FF6F00] p-8 mb-8">
                 <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                    Module Quiz
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="inline-block px-3 py-1 bg-[#FF6F00] text-white rounded-full text-sm font-bold">
+                      🏆 Course Final Quiz
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    Test Your Knowledge
                   </h2>
                   <p className="text-gray-600">
-                    Test your knowledge! You need {quiz.pass_percentage}% to pass and complete this module.
+                    10 questions covering all 5 modules. Score {quiz.pass_percentage}% or higher to earn your certificate.
                   </p>
 
                   {hasPassedQuiz && (
                     <div className="mt-4 p-4 bg-green-50 border-l-4 border-green-500 rounded">
                       <p className="text-green-800 font-medium">
-                        ✅ You&apos;ve already passed this quiz with {quizResult.percentage}%!
+                        ✅ You passed with {quizResult.percentage}%! Your certificate is ready.
                       </p>
-                      <p className="text-green-700 text-sm mt-1">
-                        You can retake it to improve your score.
-                      </p>
+                      <p className="text-green-700 text-sm mt-1">You can retake to improve your score.</p>
                     </div>
                   )}
 
                   {!hasPassedQuiz && (
                     <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
                       <p className="text-blue-800 font-medium">
-                        📝 Complete the quiz below to finish this module
+                        📝 Complete all modules first, then pass this quiz to earn your certificate.
                       </p>
                     </div>
                   )}
                 </div>
 
-                {/* onPass removed — QuizComponent handles refresh internally via useRouter */}
                 <QuizComponent
                   slug={slug}
                   moduleNumber={moduleNumber}
@@ -261,16 +252,16 @@ export default async function ModulePage({ params }: ModulePageProps) {
               </div>
             )}
 
-            {/* Quiz required warning */}
-            {quiz && !hasPassedQuiz && (
+            {/* Lock notice on last module if quiz not passed */}
+            {isLastModule && quiz && !hasPassedQuiz && (
               <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-amber-800 font-medium text-sm">
-                  🔒 Complete the quiz above to unlock the next module
+                  🔒 Pass the Course Final Quiz above to complete the course and get your certificate
                 </p>
               </div>
             )}
 
-            {/* Navigation Buttons */}
+            {/* Navigation */}
             <div className="flex items-center justify-between">
               {previousModule ? (
                 <Link
@@ -300,21 +291,12 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   </button>
                 )
               ) : nextModule ? (
-                canProceedToNext ? (
-                  <Link
-                    href={`/learn/${slug}/module/${nextModule.module_number}`}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors font-bold"
-                  >
-                    Next Module →
-                  </Link>
-                ) : (
-                  <button
-                    disabled
-                    className="flex items-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-bold"
-                  >
-                    🔒 Pass Quiz to Continue
-                  </button>
-                )
+                <Link
+                  href={`/learn/${slug}/module/${nextModule.module_number}`}
+                  className="flex items-center gap-2 px-6 py-3 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors font-bold"
+                >
+                  Next Module →
+                </Link>
               ) : (
                 <div />
               )}
