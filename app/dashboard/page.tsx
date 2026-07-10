@@ -3,6 +3,7 @@
 
 import { redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { adminFetchAll } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -44,6 +45,22 @@ export default async function DashboardPage() {
     .select('*')
     .eq('user_id', user.id)
 
+  // Fetch certificates (bypasses RLS with service role key)
+  const { data: certificates } = await adminFetchAll(
+    'certificates',
+    `user_id=eq.${user.id}&select=course_id`
+  )
+  const certCourseIds = new Set((certificates || []).map((c: any) => c.course_id))
+
+  // Fetch all passed quiz results for the user (one query for all courses)
+  // quiz_results rows are readable by authenticated users for their own data
+  const { data: passedQuizzes } = await supabase
+    .from('quiz_results')
+    .select('course_id')
+    .eq('user_id', user.id)
+    .eq('passed', true)
+  const passedQuizCourseIds = new Set((passedQuizzes || []).map((q: any) => q.course_id))
+
   // Calculate overall completion
   const totalModulesAcrossAllCourses = purchases?.reduce((sum: number, p: any) => {
     return sum + (p.courses?.total_modules || 0)
@@ -53,9 +70,11 @@ export default async function DashboardPage() {
     return sum + (prog.completed_modules?.length || 0)
   }, 0) || 0
 
-  const overallCompletion = totalModulesAcrossAllCourses > 0 
+  const overallCompletion = totalModulesAcrossAllCourses > 0
     ? Math.round((totalCompletedModules / totalModulesAcrossAllCourses) * 100)
     : 0
+
+  const certificatesEarned = certCourseIds.size
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -125,10 +144,10 @@ export default async function DashboardPage() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Modules Completed</p>
-                <p className="text-3xl font-bold text-gray-900">{totalCompletedModules}</p>
+                <p className="text-gray-600 text-sm">Certificates Earned</p>
+                <p className="text-3xl font-bold text-gray-900">{certificatesEarned}</p>
               </div>
-              <div className="text-4xl">✅</div>
+              <div className="text-4xl">🏆</div>
             </div>
           </div>
         </div>
@@ -143,12 +162,19 @@ export default async function DashboardPage() {
               {purchases.map((purchase: any) => {
                 const course = purchase.courses
                 const progress = progressData?.find((p: any) => p.course_id === course.id)
-                
+                const pct = progress?.completion_percentage || 0
+                const isComplete = certCourseIds.has(course.id)
+                const quizPassed = passedQuizCourseIds.has(course.id)
+                // All modules visited but quiz not yet passed
+                const quizRequired = pct === 100 && !quizPassed
+
                 return (
                   <Link
                     key={purchase.id}
-                    href={`/learn/${course.slug}/module/1`}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                    href={`/learn/${course.slug}`}
+                    className={`bg-white rounded-lg shadow-sm border-2 overflow-hidden hover:shadow-md transition-shadow ${
+                      isComplete ? 'border-green-400' : quizRequired ? 'border-amber-400' : 'border-gray-200'
+                    }`}
                   >
                     <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
                       <Image
@@ -158,6 +184,17 @@ export default async function DashboardPage() {
                         height={200}
                         className="w-32 h-32"
                       />
+                      {/* Status badge on image */}
+                      {isComplete && (
+                        <div className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          🏆 Completed
+                        </div>
+                      )}
+                      {quizRequired && (
+                        <div className="absolute top-3 right-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          📝 Quiz Required
+                        </div>
+                      )}
                     </div>
                     <div className="p-6">
                       <h3 className="text-lg font-bold text-gray-900 mb-2">
@@ -169,20 +206,26 @@ export default async function DashboardPage() {
                       <div className="mb-3">
                         <div className="flex items-center justify-between text-sm mb-1">
                           <span className="text-gray-600">Progress</span>
-                          <span className="font-medium text-[#FF6F00]">
-                            {progress?.completion_percentage || 0}%
+                          <span className={`font-medium ${isComplete ? 'text-green-600' : 'text-[#FF6F00]'}`}>
+                            {pct}%
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-[#FF6F00] h-2 rounded-full transition-all"
-                            style={{ width: `${progress?.completion_percentage || 0}%` }}
+                            className={`h-2 rounded-full transition-all ${isComplete ? 'bg-green-500' : 'bg-[#FF6F00]'}`}
+                            style={{ width: `${pct}%` }}
                           />
                         </div>
                       </div>
-                      <div className="flex items-center justify-between text-sm text-gray-500 pt-3 border-t border-gray-100">
-                        <span>{course.total_modules} modules</span>
-                        <span className="text-[#FF6F00] font-medium">Continue →</span>
+                      <div className="flex items-center justify-between text-sm pt-3 border-t border-gray-100">
+                        <span className="text-gray-500">{course.total_modules} modules</span>
+                        {isComplete ? (
+                          <span className="text-green-600 font-medium">View Certificate →</span>
+                        ) : quizRequired ? (
+                          <span className="text-amber-600 font-bold">Take Final Quiz →</span>
+                        ) : (
+                          <span className="text-[#FF6F00] font-medium">Continue →</span>
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -251,51 +294,4 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                 </Link>
-              ))}
-            </div>
-          </section>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-[#212121] text-white mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4 text-[#FF6F00]">AI Learn Hub</h3>
-              <p className="text-gray-400 text-sm">
-                Master AI skills with practical, hands-on courses designed for professionals.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Courses</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/courses" className="hover:text-[#FF6F00]">Browse All</Link></li>
-                <li><Link href="/courses" className="hover:text-[#FF6F00]">Beginner</Link></li>
-                <li><Link href="/courses" className="hover:text-[#FF6F00]">Advanced</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/about" className="hover:text-[#FF6F00]">About</Link></li>
-                <li><Link href="/terms" className="hover:text-[#FF6F00]">Terms</Link></li>
-                <li><Link href="/privacy" className="hover:text-[#FF6F00]">Privacy</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="mailto:support@ailearnhub.io" className="hover:text-[#FF6F00]">Contact</a></li>
-                <li><Link href="/refund-policy" className="hover:text-[#FF6F00]">Refunds</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  )
-}
+      

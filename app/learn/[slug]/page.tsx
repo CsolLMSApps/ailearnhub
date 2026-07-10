@@ -253,19 +253,4 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
                           Continue →
                         </span>
                       ) : (
-                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
-                          Start
-                        </span>
-                      )}
-                    </div>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  )
-}
+                        <span className="text-xs bg-gray-100 text-gray-500 p
