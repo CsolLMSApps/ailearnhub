@@ -281,21 +281,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
               )}
 
               {isLastModule ? (
-                canProceedToNext ? (
-                  <Link
-                    href={`/learn/${slug}`}
-                    className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold"
-                  >
-                    Complete Course →
-                  </Link>
-                ) : (
-                  <button
-                    disabled
-                    className="flex items-center gap-2 px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-bold"
-                  >
-                    🔒 Pass Quiz to Complete
-                  </button>
-                )
+                // No navigation button on last module — user must pass the quiz above.
+                // After passing, ResultsSummary shows "View Certificate →".
+                <div />
               ) : nextModule ? (
                 <Link
                   href={`/learn/${slug}/module/${nextModule.module_number}`}

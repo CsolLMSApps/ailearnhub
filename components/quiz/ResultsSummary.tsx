@@ -100,11 +100,19 @@ export function ResultsSummary({
             Retry Quiz
           </button>
         )}
+        {passed && (
+          <a
+            href={`/learn/${slug}`}
+            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold inline-block"
+          >
+            🏆 View My Certificate →
+          </a>
+        )}
         <a
           href={`/learn/${slug}`}
-          className="px-8 py-3 border-2 border-[#FF6F00] text-[#FF6F00] rounded-lg hover:bg-[#FF6F00] hover:text-white transition-colors font-bold inline-block"
+          className="px-8 py-3 border-2 border-gray-300 text-gray-600 rounded-lg hover:border-[#FF6F00] hover:text-[#FF6F00] transition-colors font-bold inline-block"
         >
-          {passed ? 'View Certificate →' : 'Back to Course'}
+          Back to Course
         </a>
       </div>
     </div>
