@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { adminFetch } from '@/lib/supabase/admin'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,13 +24,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Course not found' }, { status: 404 })
     }
 
-    // Get quiz with correct answers
-    const { data: quiz, error: quizError } = await supabase
-      .from('quizzes')
-      .select('*')
-      .eq('course_id', course.id)
-      .eq('module_number', moduleNumber)
-      .single()
+    // Get quiz with correct answers — adminFetch bypasses RLS on quizzes table
+    const { data: quiz, error: quizError } = await adminFetch(
+      'quizzes',
+      `course_id=eq.${course.id}&module_number=eq.${moduleNumber}&select=*&limit=1`
+    )
 
     if (quizError || !quiz) {
       return NextResponse.json({ error: 'Quiz not found' }, { status: 404 })

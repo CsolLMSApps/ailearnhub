@@ -7,6 +7,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { QuizComponent } from '@/components/quiz/QuizComponent'
+import { adminFetch } from '@/lib/supabase/admin'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -80,13 +81,11 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   const isCompleted = progress?.completed_modules?.includes(moduleNumber) || false
 
-  // Get quiz for this module
-  const { data: quiz } = await supabase
-    .from('quizzes')
-    .select('*')
-    .eq('course_id', course.id)
-    .eq('module_number', moduleNumber)
-    .single()
+  // Get quiz for this module — use adminFetch to bypass RLS on quizzes table
+  const { data: quiz } = await adminFetch(
+    'quizzes',
+    `course_id=eq.${course.id}&module_number=eq.${moduleNumber}&select=*&limit=1`
+  )
 
   // Get user's best quiz result for this module
   const { data: quizResult } = await supabase
