@@ -7,6 +7,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { QuizComponent } from '@/components/quiz/QuizComponent'
+import { AutoMarkVisited } from '@/components/AutoMarkVisited'
 import { adminFetch } from '@/lib/supabase/admin'
 import Link from 'next/link'
 
@@ -104,6 +105,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Auto-mark non-final modules as complete on visit */}
+      {!isLastModule && <AutoMarkVisited slug={slug} moduleNumber={moduleNumber} />}
+
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-6 py-4">
