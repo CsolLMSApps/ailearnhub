@@ -194,18 +194,18 @@ export default async function ModulePage({ params }: ModulePageProps) {
                     <li className="ml-4">{children}</li>
                   ),
                   pre: ({ children }) => (
-                    <pre className="bg-gray-900 rounded-lg my-4 overflow-x-auto max-w-full">
+                    <pre className="bg-gray-50 border border-gray-200 rounded-lg my-4 overflow-x-auto max-w-full">
                       {children}
                     </pre>
                   ),
                   code: ({ children, className }) => {
                     const isInline = !className
                     return isInline ? (
-                      <code className="bg-gray-100 text-[#FF6F00] px-1 py-0.5 rounded text-sm font-mono break-all">
+                      <code className="bg-orange-50 text-[#FF6F00] px-1 py-0.5 rounded text-sm font-mono break-all">
                         {children}
                       </code>
                     ) : (
-                      <code className="block text-gray-100 p-4 text-sm font-mono whitespace-pre-wrap break-words">
+                      <code className="block text-gray-800 p-4 text-sm font-mono whitespace-pre-wrap break-words">
                         {children}
                       </code>
                     )

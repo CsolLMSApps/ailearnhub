@@ -5,6 +5,14 @@ import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
+// Generate a unique certificate number
+function generateCertNumber(userId: string, courseId: string): string {
+  const ts = Date.now().toString(36).toUpperCase()
+  const uid = userId.replace(/-/g, '').substring(0, 6).toUpperCase()
+  const cid = courseId.replace(/-/g, '').substring(0, 4).toUpperCase()
+  return `AIH-${ts}-${uid}-${cid}`
+}
+
 interface CourseLearnPageProps {
   params: Promise<{ slug: string }>
 }
@@ -53,20 +61,46 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
     .eq('course_id', course.id)
     .single()
 
-  // Get certificate if course is completed
-  const { data: certificate } = await supabase
-    .from('certificates')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('course_id', course.id)
-    .single()
-
   const completedModules: number[] = progress?.completed_modules || []
   const totalModules = modules?.length || 0
   const completionPct = totalModules > 0
     ? Math.round((completedModules.length / totalModules) * 100)
     : 0
   const isCourseComplete = completionPct === 100
+
+  // Auto-create certificate if course just completed and no certificate yet
+  let certificate = null
+  if (isCourseComplete) {
+    const { data: existingCert } = await supabase
+      .from('certificates')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('course_id', course.id)
+      .single()
+
+    if (existingCert) {
+      certificate = existingCert
+    } else {
+      // Create certificate automatically
+      const studentName = user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email?.split('@')[0] || 'Student'
+
+      const { data: newCert } = await supabase
+        .from('certificates')
+        .insert({
+          user_id: user.id,
+          course_id: course.id,
+          certificate_number: generateCertNumber(user.id, course.id),
+          student_name: studentName,
+          course_title: course.title,
+        })
+        .select()
+        .single()
+
+      certificate = newCert
+    }
+  }
 
   // First incomplete module for "Continue" button
   const nextIncomplete = modules?.find(m => !completedModules.includes(m.module_number))
@@ -136,24 +170,26 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
               You've mastered all {totalModules} modules. Outstanding work!
             </p>
 
-            {certificate ? (
-              <div className="inline-block bg-white border-2 border-green-400 rounded-lg px-8 py-6">
-                <div className="text-4xl mb-2">🏆</div>
-                <p className="font-bold text-gray-900 text-lg">Certificate of Completion</p>
-                <p className="text-gray-600 text-sm mt-1">Certificate #{certificate.certificate_number}</p>
-                <p className="text-gray-500 text-xs mt-1">
+            {certificate && (
+              <div className="bg-white border-2 border-green-400 rounded-xl px-8 py-6 max-w-md mx-auto">
+                <div className="text-4xl mb-3">🏆</div>
+                <p className="font-bold text-gray-900 text-xl mb-1">Certificate of Completion</p>
+                <p className="text-gray-700 font-medium">{certificate.student_name}</p>
+                <p className="text-gray-500 text-sm mt-1">{certificate.course_title}</p>
+                <p className="text-gray-400 text-xs mt-2 font-mono">#{certificate.certificate_number}</p>
+                <p className="text-gray-400 text-xs mt-1">
                   Issued {new Date(certificate.issued_at).toLocaleDateString('en-US', {
                     year: 'numeric', month: 'long', day: 'numeric'
                   })}
                 </p>
-              </div>
-            ) : (
-              <div className="inline-block bg-white border-2 border-green-300 rounded-lg px-8 py-6">
-                <div className="text-4xl mb-2">🏆</div>
-                <p className="font-bold text-gray-900 text-lg">Certificate of Completion</p>
-                <p className="text-gray-500 text-sm mt-2">
-                  Your certificate is being generated. Check back shortly.
-                </p>
+                <div className="mt-5 flex gap-3 justify-center">
+                  <Link
+                    href={`/learn/${slug}/certificate`}
+                    className="px-5 py-2 bg-[#FF6F00] text-white rounded-lg font-semibold text-sm hover:bg-[#E65100] transition-colors"
+                  >
+                    View & Download Certificate
+                  </Link>
+                </div>
               </div>
             )}
           </div>
