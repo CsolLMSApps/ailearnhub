@@ -100,8 +100,10 @@ export default async function ModulePage({ params }: ModulePageProps) {
     hasPassedQuiz = !!quizResult
   }
 
-  // Modules 1–(N-1): always unlocked. Last module: gated behind quiz pass.
-  const canProceedToNext = isLastModule ? (quiz ? hasPassedQuiz : true) : true
+  // Modules 1–(N-1): always unlocked.
+  // Last module: ALWAYS requires quiz pass — even if quiz fails to load.
+  // Removing the (quiz ? ... : true) bypass that unlocked the button when quiz was null.
+  const canProceedToNext = isLastModule ? hasPassedQuiz : true
 
   return (
     <div className="min-h-screen bg-gray-50">
