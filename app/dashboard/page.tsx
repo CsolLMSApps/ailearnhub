@@ -165,8 +165,11 @@ export default async function DashboardPage() {
                 const pct = progress?.completion_percentage || 0
                 const isComplete = certCourseIds.has(course.id)
                 const quizPassed = passedQuizCourseIds.has(course.id)
-                // All modules visited but quiz not yet passed
-                const quizRequired = pct === 100 && !quizPassed
+                // Last module only completes when quiz is passed, so at (N-1)/N modules
+                // done the user is ready for the final quiz. E.g. 4/5 = 80%.
+                const totalMods = course.total_modules || 0
+                const completedCount = totalMods > 0 ? Math.round(pct / 100 * totalMods) : 0
+                const quizRequired = completedCount >= totalMods - 1 && totalMods > 0 && !quizPassed && !isComplete
 
                 return (
                   <Link
