@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   
   if (authError || !user) {
-    redirect('/auth/login')
+    redirect('/login')
   }
 
   // Get user's purchased courses

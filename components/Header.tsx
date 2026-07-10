@@ -89,13 +89,13 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  href="/auth/login"
+                  href="/login"
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
                   Login
                 </Link>
                 <Link
-                  href="/auth/signup"
+                  href="/signup"
                   className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#E65100] transition-colors"
                 >
                   Sign Up

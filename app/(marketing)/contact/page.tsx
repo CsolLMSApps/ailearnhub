@@ -80,9 +80,9 @@ export default function ContactPage() {
               <Link href="/contact" className="text-[#FF6F00] font-medium">Contact</Link>
             </nav>
             <div className="flex gap-4">
-              <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
+              <Link href="/login" className="text-gray-600 hover:text-gray-900">Login</Link>
               <Link 
-                href="/auth/signup"
+                href="/signup"
                 className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#E65100] transition-colors"
               >
                 Sign Up

@@ -123,7 +123,7 @@ function LoginForm() {
           <div className="mt-6 text-center text-sm text-[#424242]">
             Don't have an account?{' '}
             <Link 
-              href={redirect !== '/dashboard' ? `/auth/signup?redirect=${encodeURIComponent(redirect)}` : '/auth/signup'}
+              href={redirect !== '/dashboard' ? `/signup?redirect=${encodeURIComponent(redirect)}` : '/signup'}
               className="text-[#FF6F00] hover:text-[#E65100] font-medium"
             >
               Sign up
