@@ -1,0 +1,12 @@
+// app/auth/signout/route.ts
+// Handles sign-out and redirects to login
+
+import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { NextResponse } from 'next/server'
+
+export async function GET(request: Request) {
+  const supabase = await createServerSupabaseClient()
+  await supabase.auth.signOut()
+  const url = new URL(request.url)
+  return NextResponse.redirect(new URL('/login', url.origin))
+}

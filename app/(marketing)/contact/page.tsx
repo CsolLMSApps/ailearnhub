@@ -66,32 +66,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-[#FF6F00]">AI Learn Hub</span>
-            </Link>
-            <nav className="hidden md:flex gap-6">
-              <Link href="/courses" className="text-gray-600 hover:text-gray-900">Courses</Link>
-              <Link href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
-              <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
-              <Link href="/contact" className="text-[#FF6F00] font-medium">Contact</Link>
-            </nav>
-            <div className="flex gap-4">
-              <Link href="/login" className="text-gray-600 hover:text-gray-900">Login</Link>
-              <Link 
-                href="/signup"
-                className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#E65100] transition-colors"
-              >
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#FF6F00] to-[#E65100] text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
