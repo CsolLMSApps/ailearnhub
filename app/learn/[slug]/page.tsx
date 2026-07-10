@@ -1,0 +1,230 @@
+// app/learn/[slug]/page.tsx
+// Course overview page — shows all modules, progress, and completion certificate
+
+import { redirect, notFound } from 'next/navigation'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+
+interface CourseLearnPageProps {
+  params: Promise<{ slug: string }>
+}
+
+export default async function CourseLearnPage({ params }: CourseLearnPageProps) {
+  const { slug } = await params
+  const supabase = await createServerSupabaseClient()
+
+  // Auth check
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  // Get course
+  const { data: course } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('slug', slug)
+    .eq('is_published', true)
+    .single()
+
+  if (!course) notFound()
+
+  // Check purchase
+  const { data: purchase } = await supabase
+    .from('purchases')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .eq('status', 'completed')
+    .single()
+
+  if (!purchase) redirect(`/courses/${slug}`)
+
+  // Get all modules
+  const { data: modules } = await supabase
+    .from('course_modules')
+    .select('id, module_number, title, estimated_minutes')
+    .eq('course_id', course.id)
+    .order('module_number', { ascending: true })
+
+  // Get user progress
+  const { data: progress } = await supabase
+    .from('progress')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .single()
+
+  // Get certificate if course is completed
+  const { data: certificate } = await supabase
+    .from('certificates')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .single()
+
+  const completedModules: number[] = progress?.completed_modules || []
+  const totalModules = modules?.length || 0
+  const completionPct = totalModules > 0
+    ? Math.round((completedModules.length / totalModules) * 100)
+    : 0
+  const isCourseComplete = completionPct === 100
+
+  // First incomplete module for "Continue" button
+  const nextIncomplete = modules?.find(m => !completedModules.includes(m.module_number))
+  const continueModule = nextIncomplete ?? modules?.[0]
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/dashboard" className="text-[#FF6F00] hover:underline text-sm font-medium">
+            ← Back to Dashboard
+          </Link>
+          <span className="text-sm text-gray-500 font-medium">
+            {completedModules.length}/{totalModules} modules complete
+          </span>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 py-10">
+
+        {/* Course Hero */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <span className="inline-block px-3 py-1 bg-orange-100 text-[#FF6F00] text-sm font-semibold rounded-full mb-3">
+                {course.category}
+              </span>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{course.title}</h1>
+              <p className="text-gray-500 text-sm">
+                {totalModules} modules · {course.total_hours || Math.ceil(totalModules * 0.7)} hours
+              </p>
+            </div>
+            {continueModule && (
+              <Link
+                href={`/learn/${slug}/module/${continueModule.module_number}`}
+                className="shrink-0 px-6 py-3 bg-[#FF6F00] text-white rounded-lg font-semibold hover:bg-[#E65100] transition-colors"
+              >
+                {completedModules.length === 0 ? 'Start Learning →' : 'Continue Learning →'}
+              </Link>
+            )}
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-6">
+            <div className="flex justify-between text-sm text-gray-600 mb-2">
+              <span>Your Progress</span>
+              <span className="font-semibold text-[#FF6F00]">{completionPct}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div
+                className="bg-[#FF6F00] h-3 rounded-full transition-all duration-500"
+                style={{ width: `${completionPct}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 🎉 Completion Banner */}
+        {isCourseComplete && (
+          <div className="bg-green-50 border-2 border-green-400 rounded-xl p-8 mb-6 text-center">
+            <div className="text-5xl mb-4">🎉</div>
+            <h2 className="text-2xl font-bold text-green-800 mb-2">
+              Congratulations! You've completed this course!
+            </h2>
+            <p className="text-green-700 mb-6">
+              You've mastered all {totalModules} modules. Outstanding work!
+            </p>
+
+            {certificate ? (
+              <div className="inline-block bg-white border-2 border-green-400 rounded-lg px-8 py-6">
+                <div className="text-4xl mb-2">🏆</div>
+                <p className="font-bold text-gray-900 text-lg">Certificate of Completion</p>
+                <p className="text-gray-600 text-sm mt-1">Certificate #{certificate.certificate_number}</p>
+                <p className="text-gray-500 text-xs mt-1">
+                  Issued {new Date(certificate.issued_at).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                  })}
+                </p>
+              </div>
+            ) : (
+              <div className="inline-block bg-white border-2 border-green-300 rounded-lg px-8 py-6">
+                <div className="text-4xl mb-2">🏆</div>
+                <p className="font-bold text-gray-900 text-lg">Certificate of Completion</p>
+                <p className="text-gray-500 text-sm mt-2">
+                  Your certificate is being generated. Check back shortly.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Module List */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100">
+            <h2 className="text-lg font-bold text-gray-900">Course Modules</h2>
+          </div>
+
+          <ul className="divide-y divide-gray-100">
+            {modules?.map((mod) => {
+              const isDone = completedModules.includes(mod.module_number)
+              const isCurrent = continueModule?.module_number === mod.module_number && !isCourseComplete
+
+              return (
+                <li key={mod.id}>
+                  <Link
+                    href={`/learn/${slug}/module/${mod.module_number}`}
+                    className={`flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors ${
+                      isCurrent ? 'bg-orange-50' : ''
+                    }`}
+                  >
+                    {/* Status icon */}
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-sm font-bold ${
+                      isDone
+                        ? 'bg-green-100 text-green-700'
+                        : isCurrent
+                        ? 'bg-[#FF6F00] text-white'
+                        : 'bg-gray-100 text-gray-500'
+                    }`}>
+                      {isDone ? '✓' : mod.module_number}
+                    </div>
+
+                    {/* Title */}
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-semibold truncate ${isDone ? 'text-gray-500' : 'text-gray-900'}`}>
+                        {mod.title}
+                      </p>
+                      {mod.estimated_minutes && (
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          ⏱ {mod.estimated_minutes} minutes
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Badge */}
+                    <div className="shrink-0">
+                      {isDone ? (
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                          Completed
+                        </span>
+                      ) : isCurrent ? (
+                        <span className="text-xs bg-[#FF6F00] text-white px-2 py-1 rounded-full font-medium">
+                          Continue →
+                        </span>
+                      ) : (
+                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                          Start
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  )
+}

@@ -168,7 +168,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
             </div>
 
             {/* Module Content */}
-            <div className="prose max-w-none mb-8">
+            <div className="prose max-w-none mb-8 overflow-hidden">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -193,14 +193,19 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   li: ({ children }) => (
                     <li className="ml-4">{children}</li>
                   ),
+                  pre: ({ children }) => (
+                    <pre className="bg-gray-900 rounded-lg my-4 overflow-x-auto max-w-full">
+                      {children}
+                    </pre>
+                  ),
                   code: ({ children, className }) => {
                     const isInline = !className
                     return isInline ? (
-                      <code className="bg-gray-100 text-[#FF6F00] px-1 py-0.5 rounded text-sm font-mono">
+                      <code className="bg-gray-100 text-[#FF6F00] px-1 py-0.5 rounded text-sm font-mono break-all">
                         {children}
                       </code>
                     ) : (
-                      <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm font-mono my-4">
+                      <code className="block text-gray-100 p-4 text-sm font-mono whitespace-pre-wrap break-words">
                         {children}
                       </code>
                     )
