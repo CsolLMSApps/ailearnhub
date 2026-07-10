@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Calculate score
     const questions = quiz.questions.questions || quiz.questions
     let score = 0
-    
+
     questions.forEach((question: any) => {
       if (answers[question.id] === question.correct) {
         score++
@@ -84,7 +84,6 @@ export async function POST(request: NextRequest) {
 
     // If passed, update or create progress record
     if (passed) {
-      // Get total modules count first
       const { count: totalModules } = await supabase
         .from('course_modules')
         .select('*', { count: 'exact', head: true })
@@ -92,7 +91,6 @@ export async function POST(request: NextRequest) {
 
       const total = totalModules || 1
 
-      // Get current progress
       const { data: progress } = await supabase
         .from('progress')
         .select('*')
@@ -101,7 +99,6 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (!progress) {
-        // No progress record yet — create one with this module completed
         const completionPercentage = Math.round((1 / total) * 100)
         await supabase
           .from('progress')
@@ -115,7 +112,6 @@ export async function POST(request: NextRequest) {
             completed_at: completionPercentage === 100 ? new Date().toISOString() : null,
           })
       } else {
-        // Progress exists — add module if not already completed
         const existing: number[] = progress.completed_modules || []
         if (!existing.includes(moduleNumber)) {
           const updatedModules = [...existing, moduleNumber].sort((a: number, b: number) => a - b)

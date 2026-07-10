@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { QuestionCard } from './QuestionCard'
 import { ResultsSummary } from './ResultsSummary'
 
@@ -17,16 +18,15 @@ interface QuizComponentProps {
   moduleNumber: number
   questions: Question[]
   passPercentage?: number
-  onPass?: () => void
 }
 
-export function QuizComponent({ 
-  slug, 
-  moduleNumber, 
-  questions, 
+export function QuizComponent({
+  slug,
+  moduleNumber,
+  questions,
   passPercentage = 70,
-  onPass 
 }: QuizComponentProps) {
+  const router = useRouter()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [userAnswers, setUserAnswers] = useState<{ [key: string]: number }>({})
   const [showResults, setShowResults] = useState(false)
@@ -74,9 +74,9 @@ export function QuizComponent({
       setQuizResults(results)
       setShowResults(true)
 
-      // If passed, notify parent component
-      if (results.passed && onPass) {
-        onPass()
+      // If passed, refresh the server component so progress + nav update
+      if (results.passed) {
+        router.refresh()
       }
 
     } catch (error) {

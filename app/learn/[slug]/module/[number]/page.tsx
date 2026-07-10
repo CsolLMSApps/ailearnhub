@@ -81,7 +81,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   const isCompleted = progress?.completed_modules?.includes(moduleNumber) || false
 
-  // Get quiz for this module — use adminFetch to bypass RLS on quizzes table
+  // Get quiz for this module — adminFetch bypasses RLS on quizzes table
   const { data: quiz } = await adminFetch(
     'quizzes',
     `course_id=eq.${course.id}&module_number=eq.${moduleNumber}&select=*&limit=1`
@@ -103,7 +103,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   // Determine if user can proceed to next module:
   // - If a quiz exists for this module, user MUST have passed it
-  // - If no quiz exists (shouldn't happen but safe fallback), allow navigation
+  // - If no quiz exists (safe fallback), allow navigation
   const canProceedToNext = quiz ? hasPassedQuiz : true
 
   // Find previous and next modules
@@ -230,18 +230,18 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   <p className="text-gray-600">
                     Test your knowledge! You need {quiz.pass_percentage}% to pass and complete this module.
                   </p>
-                  
+
                   {hasPassedQuiz && (
                     <div className="mt-4 p-4 bg-green-50 border-l-4 border-green-500 rounded">
                       <p className="text-green-800 font-medium">
-                        ✅ You've already passed this quiz with {quizResult.percentage}%!
+                        ✅ You&apos;ve already passed this quiz with {quizResult.percentage}%!
                       </p>
                       <p className="text-green-700 text-sm mt-1">
                         You can retake it to improve your score.
                       </p>
                     </div>
                   )}
-                  
+
                   {!hasPassedQuiz && (
                     <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
                       <p className="text-blue-800 font-medium">
@@ -251,20 +251,17 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   )}
                 </div>
 
+                {/* onPass removed — QuizComponent handles refresh internally via useRouter */}
                 <QuizComponent
                   slug={slug}
                   moduleNumber={moduleNumber}
                   questions={quiz.questions.questions || quiz.questions}
                   passPercentage={quiz.pass_percentage}
-                  onPass={() => {
-                    // Refresh page to show updated progress
-                    window.location.reload()
-                  }}
                 />
               </div>
             )}
 
-            {/* Quiz required warning — shows when quiz exists but not yet passed */}
+            {/* Quiz required warning */}
             {quiz && !hasPassedQuiz && (
               <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-amber-800 font-medium text-sm">
@@ -275,7 +272,6 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
             {/* Navigation Buttons */}
             <div className="flex items-center justify-between">
-              {/* Previous — always allowed */}
               {previousModule ? (
                 <Link
                   href={`/learn/${slug}/module/${previousModule.module_number}`}
@@ -287,9 +283,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 <div />
               )}
 
-              {/* Next / Complete — GATED behind quiz pass */}
               {isLastModule ? (
-                // Last module: show "Complete Course" only if quiz passed (or no quiz)
                 canProceedToNext ? (
                   <Link
                     href={`/learn/${slug}`}
@@ -306,7 +300,6 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   </button>
                 )
               ) : nextModule ? (
-                // Not last module: show "Next Module" only if quiz passed (or no quiz)
                 canProceedToNext ? (
                   <Link
                     href={`/learn/${slug}/module/${nextModule.module_number}`}
