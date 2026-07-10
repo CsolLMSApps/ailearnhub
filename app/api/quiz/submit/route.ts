@@ -124,4 +124,29 @@ export async function POST(request: NextRequest) {
               current_module: moduleNumber,
               completion_percentage: completionPercentage,
               last_accessed: new Date().toISOString(),
-     
+              completed_at: completionPercentage === 100 ? new Date().toISOString() : null,
+            })
+            .eq('user_id', user.id)
+            .eq('course_id', course.id)
+        }
+      }
+    }
+
+    return NextResponse.json({
+      score,
+      total_questions: totalQuestions,
+      percentage,
+      passed,
+      attempt_number: attemptNumber,
+      slug,
+      moduleNumber
+    })
+
+  } catch (error: any) {
+    console.error('Quiz submission error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
