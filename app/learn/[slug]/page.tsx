@@ -3,6 +3,7 @@
 
 import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { adminFetch, adminUpsert } from '@/lib/supabase/admin'
 import Link from 'next/link'
 
 // Generate a unique certificate number
@@ -68,38 +69,28 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
     : 0
   const isCourseComplete = completionPct === 100
 
-  // Auto-create certificate if course just completed and no certificate yet
+  // Auto-create certificate when course is 100% complete.
+  // Uses adminUpsert (service role key) to bypass RLS on the certificates table.
   let certificate = null
   if (isCourseComplete) {
-    const { data: existingCert } = await supabase
-      .from('certificates')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('course_id', course.id)
-      .single()
+    const studentName =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      user.email?.split('@')[0] ||
+      'Student'
 
-    if (existingCert) {
-      certificate = existingCert
-    } else {
-      // Create certificate automatically
-      const studentName = user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        user.email?.split('@')[0] || 'Student'
-
-      const { data: newCert } = await supabase
-        .from('certificates')
-        .insert({
-          user_id: user.id,
-          course_id: course.id,
-          certificate_number: generateCertNumber(user.id, course.id),
-          student_name: studentName,
-          course_title: course.title,
-        })
-        .select()
-        .single()
-
-      certificate = newCert
-    }
+    const { data: cert } = await adminUpsert(
+      'certificates',
+      {
+        user_id: user.id,
+        course_id: course.id,
+        certificate_number: generateCertNumber(user.id, course.id),
+        student_name: studentName,
+        course_title: course.title,
+      },
+      'user_id,course_id'
+    )
+    certificate = cert
   }
 
   // First incomplete module for "Continue" button
