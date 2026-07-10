@@ -83,8 +83,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to save results' }, { status: 500 })
     }
 
-    // If passed, check if we should auto-complete the module
+    // If passed, update or create progress record
     if (passed) {
+      // Get total modules count first
+      const { count: totalModules } = await supabase
+        .from('course_modules')
+        .select('*', { count: 'exact', head: true })
+        .eq('course_id', course.id)
+
+      const total = totalModules || 1
+
       // Get current progress
       const { data: progress } = await supabase
         .from('progress')
@@ -93,29 +101,39 @@ export async function POST(request: NextRequest) {
         .eq('course_id', course.id)
         .single()
 
-      if (progress && !progress.completed_modules.includes(moduleNumber)) {
-        // Add module to completed list
-        const updatedModules = [...progress.completed_modules, moduleNumber].sort((a: number, b: number) => a - b)
-        
-        // Get total modules for percentage calculation
-        const { count } = await supabase
-          .from('course_modules')
-          .select('*', { count: 'exact', head: true })
-          .eq('course_id', course.id)
-
-        const completionPercentage = Math.round((updatedModules.length / (count || 1)) * 100)
-
-        // Update progress
+      if (!progress) {
+        // No progress record yet — create one with this module completed
+        const completionPercentage = Math.round((1 / total) * 100)
         await supabase
           .from('progress')
-          .update({
-            completed_modules: updatedModules,
+          .insert({
+            user_id: user.id,
+            course_id: course.id,
+            completed_modules: [moduleNumber],
+            current_module: moduleNumber,
             completion_percentage: completionPercentage,
             last_accessed: new Date().toISOString(),
-            completed_at: completionPercentage === 100 ? new Date().toISOString() : null
+            completed_at: completionPercentage === 100 ? new Date().toISOString() : null,
           })
-          .eq('user_id', user.id)
-          .eq('course_id', course.id)
+      } else {
+        // Progress exists — add module if not already completed
+        const existing: number[] = progress.completed_modules || []
+        if (!existing.includes(moduleNumber)) {
+          const updatedModules = [...existing, moduleNumber].sort((a: number, b: number) => a - b)
+          const completionPercentage = Math.round((updatedModules.length / total) * 100)
+
+          await supabase
+            .from('progress')
+            .update({
+              completed_modules: updatedModules,
+              current_module: moduleNumber,
+              completion_percentage: completionPercentage,
+              last_accessed: new Date().toISOString(),
+              completed_at: completionPercentage === 100 ? new Date().toISOString() : null,
+            })
+            .eq('user_id', user.id)
+            .eq('course_id', course.id)
+        }
       }
     }
 
