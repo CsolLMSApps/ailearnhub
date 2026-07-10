@@ -4,6 +4,7 @@
 
 import { notFound, redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { createAdminSupabaseClient } from '@/lib/supabase/admin'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { QuizComponent } from '@/components/quiz/QuizComponent'
@@ -80,8 +81,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   const isCompleted = progress?.completed_modules?.includes(moduleNumber) || false
 
-  // Get quiz for this module
-  const { data: quiz } = await supabase
+  // Get quiz using admin client (bypasses RLS — auth+purchase already verified above)
+  const adminSupabase = createAdminSupabaseClient()
+  const { data: quiz } = await adminSupabase
     .from('quizzes')
     .select('*')
     .eq('course_id', course.id)
@@ -89,7 +91,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
     .single()
 
   // Get user's best quiz result for this module
-  const { data: quizResult } = await supabase
+  const { data: quizResult } = await adminSupabase
     .from('quiz_results')
     .select('*')
     .eq('user_id', user.id)

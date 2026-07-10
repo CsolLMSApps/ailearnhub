@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { createAdminSupabaseClient } from '@/lib/supabase/admin'
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +25,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Get quiz with correct answers
-    const { data: quiz, error: quizError } = await supabase
+    // Use admin client for quiz fetch (bypasses RLS — auth+purchase verified above)
+    const adminSupabase = createAdminSupabaseClient()
+    const { data: quiz, error: quizError } = await adminSupabase
       .from('quizzes')
       .select('*')
       .eq('course_id', course.id)
