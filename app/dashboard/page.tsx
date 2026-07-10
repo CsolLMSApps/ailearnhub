@@ -220,6 +220,23 @@ export default async function DashboardPage() {
                           />
                         </div>
                       </div>
+
+                      {/* Final Quiz status row — always visible so users know a quiz exists */}
+                      <div className={`flex items-center justify-between text-xs px-3 py-2 rounded-lg mb-3 ${
+                        isComplete
+                          ? 'bg-green-50 text-green-700'
+                          : quizRequired
+                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                          : 'bg-gray-50 text-gray-500'
+                      }`}>
+                        <span className="font-medium">
+                          {isComplete ? '✅ Final Quiz Passed' : '📝 Course Final Quiz'}
+                        </span>
+                        <span className="font-bold">
+                          {isComplete ? 'Passed' : quizRequired ? 'Pending →' : 'Required to complete'}
+                        </span>
+                      </div>
+
                       <div className="flex items-center justify-between text-sm pt-3 border-t border-gray-100">
                         <span className="text-gray-500">{course.total_modules} modules</span>
                         {isComplete ? (
