@@ -1,17 +1,20 @@
 // middleware.ts
-// Required by @supabase/ssr to refresh auth tokens on every request.
-// Without this, getSession() returns null after the access token expires
-// (default: 1 hour), causing the admin guard to redirect to /login.
+// Merged from proxy.ts — Next.js 16 only allows one middleware file.
+// Handles: SEO redirects, auth protection for /dashboard + /learn,
+// and session refresh for /admin (so AdminAuthGuard gets a valid token).
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  })
+  // SEO redirects
+  if (request.nextUrl.pathname === '/terms-of-service')
+    return NextResponse.redirect(new URL('/terms', request.url), 301)
+  if (request.nextUrl.pathname === '/privacy-policy')
+    return NextResponse.redirect(new URL('/privacy', request.url), 301)
+
+  const reqHeaders = new Headers(request.headers)
+  let response = NextResponse.next({ request: { headers: reqHeaders } })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,46 +25,45 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          // Update request cookies so server components see the refreshed token
-          request.cookies.set({ name, value, ...options } as any)
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          // Write refreshed token to the response so the browser gets updated cookies
-          response.cookies.set({ name, value, ...options } as any)
+          const parts = (reqHeaders.get('cookie') ?? '')
+            .split(';')
+            .filter(c => !c.trim().startsWith(`${name}=`))
+          parts.push(`${name}=${value}`)
+          reqHeaders.set('cookie', parts.join('; '))
+          response = NextResponse.next({ request: { headers: reqHeaders } })
+          response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options } as any)
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({ name, value: '', ...options } as any)
+          const parts = (reqHeaders.get('cookie') ?? '')
+            .split(';')
+            .filter(c => !c.trim().startsWith(`${name}=`))
+          reqHeaders.set('cookie', parts.join('; '))
+          response = NextResponse.next({ request: { headers: reqHeaders } })
+          response.cookies.set({ name, value: '', ...options })
         },
       },
     }
   )
 
-  // Refresh the session — this is the key call.
-  // If the access token is expired, Supabase will use the refresh token to get a new one
-  // and write updated cookies to the response.
-  await supabase.auth.getUser()
+  const path = request.nextUrl.pathname
+
+  if (path.startsWith('/admin')) {
+    // Refresh the session so AdminAuthGuard always gets a valid token.
+    // Do NOT redirect here — let AdminAuthGuard handle the email-based access check.
+    await supabase.auth.getUser()
+    return response
+  }
+
+  if (path.startsWith('/dashboard') || path.startsWith('/learn')) {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return NextResponse.redirect(new URL('/login', request.url))
+  }
 
   return response
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico
-     * - public folder assets
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
