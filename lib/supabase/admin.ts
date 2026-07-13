@@ -81,6 +81,53 @@ export async function adminFetchAll(
   }
 }
 
+/** DELETE a user from Supabase Auth (service role only) */
+export async function adminDeleteUser(userId: string): Promise<{ error: Error | null }> {
+  const { url, key } = getConfig()
+  if (!url || !key) return { error: new Error('Missing Supabase config') }
+  try {
+    const res = await fetch(`${url}/auth/v1/admin/users/${userId}`, {
+      method: 'DELETE',
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    })
+    if (!res.ok) return { error: new Error(`HTTP ${res.status}`) }
+    return { error: null }
+  } catch (err: any) {
+    return { error: err }
+  }
+}
+
+/** CREATE a new user via Supabase Auth Admin API (service role only) */
+export async function adminCreateUser(
+  email: string,
+  password: string,
+  fullName?: string
+): Promise<{ data: any; error: Error | null }> {
+  const { url, key } = getConfig()
+  if (!url || !key) return { data: null, error: new Error('Missing Supabase config') }
+  try {
+    const res = await fetch(`${url}/auth/v1/admin/users`, {
+      method: 'POST',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: fullName ? { full_name: fullName } : {},
+      }),
+    })
+    const json = await res.json()
+    if (!res.ok) return { data: null, error: new Error(json.message ?? `HTTP ${res.status}`) }
+    return { data: json, error: null }
+  } catch (err: any) {
+    return { data: null, error: err }
+  }
+}
+
 /** UPSERT a row and return it (mimics .upsert().select().single()) */
 export async function adminUpsert(
   table: string,
