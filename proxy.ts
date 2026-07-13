@@ -1,20 +1,22 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com')
-  .split(',').map(e => e.trim().toLowerCase())
+const ADMIN_EMAILS = (
+  process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com'
+).split(',').map(e => e.trim().toLowerCase())
 
 export async function proxy(request: NextRequest) {
   // SEO redirects
-  if (request.nextUrl.pathname === '/terms-of-service') {
+  if (request.nextUrl.pathname === '/terms-of-service')
     return NextResponse.redirect(new URL('/terms', request.url), 301)
-  }
-  if (request.nextUrl.pathname === '/privacy-policy') {
+  if (request.nextUrl.pathname === '/privacy-policy')
     return NextResponse.redirect(new URL('/privacy', request.url), 301)
-  }
 
-  // Standard Supabase session refresh (unchanged from original)
-  let response = NextResponse.next({ request: { headers: request.headers } })
+  // Mutable headers — we update the Cookie header here when Supabase refreshes
+  // a token, so server components (admin layout) see the fresh token.
+  const reqHeaders = new Headers(request.headers)
+
+  let response = NextResponse.next({ request: { headers: reqHeaders } })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,13 +27,23 @@ export async function proxy(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
+          // Keep the Cookie header fresh for downstream server components
+          const parts = (reqHeaders.get('cookie') ?? '')
+            .split(';')
+            .filter(c => !c.trim().startsWith(`${name}=`))
+          parts.push(`${name}=${value}`)
+          reqHeaders.set('cookie', parts.join('; '))
+
+          response = NextResponse.next({ request: { headers: reqHeaders } })
           response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
+          const parts = (reqHeaders.get('cookie') ?? '')
+            .split(';')
+            .filter(c => !c.trim().startsWith(`${name}=`))
+          reqHeaders.set('cookie', parts.join('; '))
+
+          response = NextResponse.next({ request: { headers: reqHeaders } })
           response.cookies.set({ name, value: '', ...options })
         },
       },
@@ -41,38 +53,21 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const path = request.nextUrl.pathname
-  const isAdminPage = path.startsWith('/admin')
-  const isAdminApi = path.startsWith('/api/admin')
-  const isAdminArea = isAdminPage || isAdminApi
-  const isProtected = path.startsWith('/dashboard') || path.startsWith('/learn') || isAdminArea
 
-  // Not authenticated
-  if (isProtected && !user) {
-    if (isAdminApi) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Require login for protected routes
+  if (
+    path.startsWith('/dashboard') ||
+    path.startsWith('/learn') ||
+    path.startsWith('/admin')
+  ) {
+    if (!user) return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Admin area — verify email, then inject x-admin-email header for server components + API routes
-  if (isAdminArea && user) {
-    if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) {
-      if (isAdminApi) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  // Admin routes: also verify the email
+  if (path.startsWith('/admin')) {
+    if (!ADMIN_EMAILS.includes(user!.email?.toLowerCase() ?? '')) {
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
-
-    // Build new request headers with x-admin-email added
-    const reqHeaders = new Headers(request.headers)
-    reqHeaders.set('x-admin-email', user.email ?? '')
-
-    // Build response with updated request headers
-    const adminResponse = NextResponse.next({ request: { headers: reqHeaders } })
-
-    // Copy ONLY the refreshed auth cookies (with all their original attributes)
-    // from the supabase-updated `response` — do NOT copy raw request cookies
-    response.cookies.getAll().forEach((cookie) => {
-      adminResponse.cookies.set(cookie)
-    })
-
-    return adminResponse
   }
 
   return response

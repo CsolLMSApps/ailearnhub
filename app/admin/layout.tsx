@@ -1,17 +1,24 @@
 // app/admin/layout.tsx
-// AUTH GUARD is handled entirely in proxy.ts — only admin emails reach this layout.
-// We read the verified email from the x-admin-email header set by the proxy.
+// proxy.ts already blocks unauthenticated and non-admin users before this runs.
+// Layout uses getSession() to read the verified local JWT (no extra API call).
 
 import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const headersList = await headers()
-  const userEmail = headersList.get('x-admin-email')
+const ADMIN_EMAILS = (
+  process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com'
+).split(',').map(e => e.trim().toLowerCase())
 
-  // Proxy sets this header only for verified admins — if missing, not authorised
-  if (!userEmail) redirect('/login')
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createServerSupabaseClient()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
+
+  if (!user) redirect('/login')
+  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) redirect('/dashboard')
+
+  const userEmail = user.email ?? ''
 
   const navLinks = [
     { href: '/admin', label: '📊 Overview' },
@@ -24,7 +31,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Admin Header */}
       <header className="bg-[#212121] text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -37,16 +43,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
             <div className="flex items-center gap-4">
               <span className="text-gray-400 text-sm hidden sm:block">{userEmail}</span>
-              <Link
-                href="/dashboard"
-                className="text-sm text-gray-300 hover:text-white transition-colors"
-              >
+              <Link href="/dashboard" className="text-sm text-gray-300 hover:text-white transition-colors">
                 ← Back to Dashboard
               </Link>
-              <Link
-                href="/auth/signout"
-                className="text-sm text-gray-300 hover:text-red-400 transition-colors"
-              >
+              <Link href="/auth/signout" className="text-sm text-gray-300 hover:text-red-400 transition-colors">
                 Sign Out
               </Link>
             </div>
@@ -54,10 +54,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
       </header>
 
-      {/* Sidebar + Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
-          {/* Sidebar Nav */}
           <aside className="w-48 shrink-0">
             <nav className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               {navLinks.map((link) => (
@@ -71,11 +69,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               ))}
             </nav>
           </aside>
-
-          {/* Page Content */}
-          <main className="flex-1 min-w-0">
-            {children}
-          </main>
+          <main className="flex-1 min-w-0">{children}</main>
         </div>
       </div>
     </div>
