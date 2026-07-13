@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
-import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 
+// Keep in sync with proxy.ts
 const ADMIN_EMAILS = [
   'srikanth@ctekksolutions.net',
   'shuchitha@shiroapps.com',
@@ -18,13 +19,14 @@ const navLinks = [
 ]
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createServerSupabaseClient()
+  // The proxy (proxy.ts / middleware) verifies the user via Supabase and stamps
+  // their email into the x-user-email request header. We trust that header here
+  // because the proxy strips any incoming x-user-email before setting its own.
+  const headersList = await headers()
+  const userEmail = headersList.get('x-user-email')
 
-  // getUser() matches exactly what the dashboard uses — verified to work.
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/login')
-  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) redirect('/dashboard')
+  if (!userEmail) redirect('/login')
+  if (!ADMIN_EMAILS.includes(userEmail.toLowerCase())) redirect('/dashboard')
 
   return (
     <div className="min-h-screen bg-gray-50">
