@@ -1,26 +1,17 @@
 // app/admin/layout.tsx
-// SERVER-SIDE AUTH GUARD — only admin emails can access.
-// Everyone else is silently redirected to /dashboard with no hint admin exists.
+// AUTH GUARD is handled entirely in proxy.ts — only admin emails reach this layout.
+// We read the verified email from the x-admin-email header set by the proxy.
 
 import { redirect } from 'next/navigation'
-import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com')
-  .split(',').map(e => e.trim().toLowerCase())
-
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createServerSupabaseClient()
+  const headersList = await headers()
+  const userEmail = headersList.get('x-admin-email')
 
-  // Use getSession() to read the local cookie — proxy already validated it
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-
-  // Not logged in → login
-  if (!user) redirect('/login')
-
-  // Not an admin → silently back to dashboard (no 403, no hint)
-  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) redirect('/dashboard')
+  // Proxy sets this header only for verified admins — if missing, not authorised
+  if (!userEmail) redirect('/login')
 
   const navLinks = [
     { href: '/admin', label: '📊 Overview' },
@@ -45,7 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-gray-400 text-sm hidden sm:block">{user.email}</span>
+              <span className="text-gray-400 text-sm hidden sm:block">{userEmail}</span>
               <Link
                 href="/dashboard"
                 className="text-sm text-gray-300 hover:text-white transition-colors"

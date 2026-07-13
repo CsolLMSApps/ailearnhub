@@ -1,21 +1,22 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  })
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com')
+  .split(',').map(e => e.trim().toLowerCase())
 
+export async function proxy(request: NextRequest) {
   // Legal page redirects for SEO/compatibility
   if (request.nextUrl.pathname === '/terms-of-service') {
     return NextResponse.redirect(new URL('/terms', request.url), 301)
   }
-  
   if (request.nextUrl.pathname === '/privacy-policy') {
     return NextResponse.redirect(new URL('/privacy', request.url), 301)
   }
+
+  // Build mutable request headers so server components can read proxy-set values
+  const requestHeaders = new Headers(request.headers)
+
+  let response = NextResponse.next({ request: { headers: requestHeaders } })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -26,38 +27,15 @@ export async function proxy(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          requestHeaders.set('cookie', `${name}=${value}`)
+          request.cookies.set({ name, value, ...options })
+          response = NextResponse.next({ request: { headers: requestHeaders } })
+          response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          request.cookies.set({ name, value: '', ...options })
+          response = NextResponse.next({ request: { headers: requestHeaders } })
+          response.cookies.set({ name, value: '', ...options })
         },
       },
     }
@@ -65,19 +43,30 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protected routes - require authentication
+  // Protected routes — redirect to login if not authenticated
   if (
     request.nextUrl.pathname.startsWith('/dashboard') ||
-    request.nextUrl.pathname.startsWith('/learn')
+    request.nextUrl.pathname.startsWith('/learn') ||
+    request.nextUrl.pathname.startsWith('/admin')
   ) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
   }
 
-  // REMOVED: Auto-redirect for authenticated users on /auth/login or /auth/signup
-  // This allows login page to handle redirect parameter correctly
-  // Anonymous users can now: enroll → login → return to course page
+  // Admin routes — redirect non-admins silently to dashboard
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!ADMIN_EMAILS.includes(user!.email?.toLowerCase() ?? '')) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+    // Pass verified email to admin layout via request header
+    requestHeaders.set('x-admin-email', user!.email ?? '')
+    response = NextResponse.next({ request: { headers: requestHeaders } })
+    // Copy any refreshed auth cookies to response
+    request.cookies.getAll().forEach(({ name, value }) => {
+      response.cookies.set(name, value)
+    })
+  }
 
   return response
 }
