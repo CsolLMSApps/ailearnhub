@@ -20,11 +20,8 @@ const navLinks = [
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createServerSupabaseClient()
 
-  // getSession() reads directly from the cookie — no Supabase network call.
-  // The proxy already refreshed the token if it was expired, so this cookie
-  // is always fresh by the time this layout runs.
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user ?? null
+  // getUser() matches exactly what the dashboard uses — verified to work.
+  const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) redirect('/login')
   if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) redirect('/dashboard')
