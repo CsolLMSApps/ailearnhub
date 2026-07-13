@@ -102,7 +102,9 @@ export default async function DashboardPage() {
               <div className="text-right hidden sm:block">
                 <div className="text-sm text-gray-600">{user.email}</div>
               </div>
-              {user.email === (process.env.ADMIN_EMAIL ?? 'srikanth@ctekksolutions.net') && (
+              {(process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com')
+                .split(',').map(e => e.trim().toLowerCase())
+                .includes(user.email?.toLowerCase() ?? '') && (
                 <Link
                   href="/admin"
                   className="text-sm font-semibold text-white bg-[#FF6F00] hover:bg-[#E65100] px-4 py-2 rounded-lg transition-colors"

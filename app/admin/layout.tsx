@@ -1,12 +1,13 @@
 // app/admin/layout.tsx
-// SERVER-SIDE AUTH GUARD — only srikanth@ctekksolutions.net can access.
+// SERVER-SIDE AUTH GUARD — only admin emails can access.
 // Everyone else is silently redirected to /dashboard with no hint admin exists.
 
 import { redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'srikanth@ctekksolutions.net'
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com')
+  .split(',').map(e => e.trim().toLowerCase())
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createServerSupabaseClient()
@@ -15,8 +16,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Not logged in → login
   if (!user) redirect('/login')
 
-  // Not the admin → silently back to dashboard (no 403, no hint)
-  if (user.email !== ADMIN_EMAIL) redirect('/dashboard')
+  // Not an admin → silently back to dashboard (no 403, no hint)
+  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) redirect('/dashboard')
 
   const navLinks = [
     { href: '/admin', label: '📊 Overview' },
