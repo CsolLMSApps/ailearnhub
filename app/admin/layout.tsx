@@ -11,7 +11,10 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,s
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createServerSupabaseClient()
-  const { data: { user } } = await supabase.auth.getUser()
+
+  // Use getSession() to read the local cookie — proxy already validated it
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
 
   // Not logged in → login
   if (!user) redirect('/login')
