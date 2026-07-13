@@ -7,6 +7,13 @@ import { adminFetchAll } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import Image from 'next/image'
 
+// Keep in sync with components/admin/AdminAuthGuard.tsx
+const ADMIN_EMAILS = [
+  'srikanth@ctekksolutions.net',
+  'shuchitha@shiroapps.com',
+  'info@shirotechnologies.com',
+]
+
 export default async function DashboardPage() {
   const supabase = await createServerSupabaseClient()
   
@@ -102,9 +109,7 @@ export default async function DashboardPage() {
               <div className="text-right hidden sm:block">
                 <div className="text-sm text-gray-600">{user.email}</div>
               </div>
-              {(process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com')
-                .split(',').map(e => e.trim().toLowerCase())
-                .includes(user.email?.toLowerCase() ?? '') && (
+              {ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '') && (
                 <Link
                   href="/admin"
                   className="text-sm font-semibold text-white bg-[#FF6F00] hover:bg-[#E65100] px-4 py-2 rounded-lg transition-colors"
