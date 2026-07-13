@@ -34,6 +34,28 @@ export async function adminFetch(
   }
 }
 
+/** Fetch all auth users via Supabase Auth Admin API (service role only) */
+export async function adminFetchUsers(): Promise<{ data: any[]; error: Error | null }> {
+  const { url, key } = getConfig()
+  if (!url || !key) return { data: [], error: new Error('Missing Supabase config') }
+
+  try {
+    const res = await fetch(`${url}/auth/v1/admin/users?per_page=1000`, {
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    })
+    if (!res.ok) return { data: [], error: new Error(`HTTP ${res.status}`) }
+    const json = await res.json()
+    return { data: json.users ?? [], error: null }
+  } catch (err: any) {
+    return { data: [], error: err }
+  }
+}
+
 /** GET all rows matching query (no .single() — returns full array) */
 export async function adminFetchAll(
   table: string,
