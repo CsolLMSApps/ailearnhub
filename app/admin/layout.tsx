@@ -1,10 +1,9 @@
 // app/admin/layout.tsx
-// Auth is handled entirely by proxy.ts (which calls getUser() once and stamps
-// x-verified-admin on the request). This layout just reads that header —
-// no second Supabase call, no token expiry risk here.
+// Auth is fully handled by proxy.ts — it calls getUser() once per request,
+// checks the admin email list, and redirects to /login or /dashboard if needed.
+// By the time this layout renders, the request is already verified as an admin.
+// No Supabase call needed here.
 
-import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
 import Link from 'next/link'
 
 const navLinks = [
@@ -16,16 +15,7 @@ const navLinks = [
   { href: '/admin/quiz-results', label: '📝 Quiz Results' },
 ]
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  // proxy.ts already verified the user is an admin before this layout runs.
-  // If x-verified-admin is missing, someone bypassed the proxy — redirect to login.
-  const headersList = await headers()
-  const adminEmail = headersList.get('x-verified-admin')
-
-  if (!adminEmail) {
-    redirect('/login')
-  }
-
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-[#212121] text-white shadow-lg">
