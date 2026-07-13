@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
-// Keep in sync with app/dashboard/page.tsx
-const ADMIN_EMAILS = [
-  'srikanth@ctekksolutions.net',
-  'shuchitha@shiroapps.com',
-  'info@shirotechnologies.com',
-]
+// We intentionally do NOT use the browser Supabase client here.
+// The browser client (createBrowserClient from @supabase/ssr) cannot reliably
+// read the session after a server-side token refresh because the refreshed
+// cookies may not be accessible via document.cookie.
+//
+// Instead we call /api/admin/check-auth which uses the server Supabase client
+// (reads cookies from the HTTP request — always works).
 
 export default function AdminAuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -18,44 +18,23 @@ export default function AdminAuthGuard({ children }: { children: React.ReactNode
   useEffect(() => {
     let mounted = true
 
-    async function checkAccess() {
-      try {
-        const supabase = createClient()
-
-        // Step 1: getSession() — reads from browser storage (localStorage/cookies).
-        // Fast, no network call. Works when the browser client stored the session at login.
-        const { data: { session } } = await supabase.auth.getSession()
-        let email = session?.user?.email
-
-        // Step 2: If storage returned nothing, fall back to getUser().
-        // This makes a network call to Supabase and works even when the session is
-        // only in server-side cookies (set by the proxy/middleware), which
-        // document.cookie can't read if they're HttpOnly.
-        if (!email) {
-          const { data: { user } } = await supabase.auth.getUser()
-          email = user?.email ?? undefined
-        }
-
+    fetch('/api/admin/check-auth')
+      .then(async (res) => {
         if (!mounted) return
-
-        if (!email) {
+        if (res.status === 401) {
           router.replace('/login')
-          return
-        }
-
-        if (!ADMIN_EMAILS.includes(email.toLowerCase())) {
+        } else if (res.status === 403) {
           router.replace('/dashboard')
-          return
+        } else if (res.ok) {
+          setChecked(true)
+        } else {
+          // Unexpected error — fail safe to login
+          router.replace('/login')
         }
-
-        setChecked(true)
-      } catch (err) {
-        console.error('[AdminAuthGuard] auth check failed:', err)
+      })
+      .catch(() => {
         if (mounted) router.replace('/login')
-      }
-    }
-
-    checkAccess()
+      })
 
     return () => {
       mounted = false
