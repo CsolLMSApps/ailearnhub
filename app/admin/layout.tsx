@@ -1,17 +1,11 @@
 // app/admin/layout.tsx
-// Server-side auth — same mechanism as dashboard/page.tsx which works reliably.
-// Previous client-side approach (AdminAuthGuard) failed because createBrowserClient
-// cannot read the session after server-side cookie refresh.
+// Auth is handled entirely by proxy.ts (which calls getUser() once and stamps
+// x-verified-admin on the request). This layout just reads that header —
+// no second Supabase call, no token expiry risk here.
 
 import { redirect } from 'next/navigation'
-import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
 import Link from 'next/link'
-
-const ADMIN_EMAILS = [
-  'srikanth@ctekksolutions.net',
-  'shuchitha@shiroapps.com',
-  'info@shirotechnologies.com',
-]
 
 const navLinks = [
   { href: '/admin', label: '📊 Overview' },
@@ -23,15 +17,13 @@ const navLinks = [
 ]
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createServerSupabaseClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  // proxy.ts already verified the user is an admin before this layout runs.
+  // If x-verified-admin is missing, someone bypassed the proxy — redirect to login.
+  const headersList = await headers()
+  const adminEmail = headersList.get('x-verified-admin')
 
-  if (!user) {
+  if (!adminEmail) {
     redirect('/login')
-  }
-
-  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) {
-    redirect('/dashboard')
   }
 
   return (
