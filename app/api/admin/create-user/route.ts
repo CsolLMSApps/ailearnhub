@@ -1,17 +1,26 @@
 import { NextResponse } from 'next/server'
-import { headers } from 'next/headers'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminCreateUser } from '@/lib/supabase/admin'
 
+const ADMIN_EMAILS = (
+  process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com'
+).split(',').map(e => e.trim().toLowerCase())
+
 export async function POST(request: Request) {
-  // proxy.ts sets x-admin-email for verified admins — trust it
-  const headersList = await headers()
-  const adminEmail = headersList.get('x-admin-email')
-  if (!adminEmail) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const supabase = await createServerSupabaseClient()
+  const { data: { session } } = await supabase.auth.getSession()
+  const email = session?.user?.email?.toLowerCase() ?? ''
 
-  const { email, password, fullName } = await request.json()
-  if (!email || !password) return NextResponse.json({ error: 'email and password required' }, { status: 400 })
+  if (!email || !ADMIN_EMAILS.includes(email)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
-  const { data, error } = await adminCreateUser(email, password, fullName)
+  const { email: newEmail, password, fullName } = await request.json()
+  if (!newEmail || !password) {
+    return NextResponse.json({ error: 'email and password required' }, { status: 400 })
+  }
+
+  const { data, error } = await adminCreateUser(newEmail, password, fullName)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   return NextResponse.json({ success: true, user: data })

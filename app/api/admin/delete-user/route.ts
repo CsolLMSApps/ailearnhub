@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server'
-import { headers } from 'next/headers'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminDeleteUser } from '@/lib/supabase/admin'
 
+const ADMIN_EMAILS = (
+  process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com'
+).split(',').map(e => e.trim().toLowerCase())
+
 export async function DELETE(request: Request) {
-  // proxy.ts sets x-admin-email for verified admins — trust it
-  const headersList = await headers()
-  const adminEmail = headersList.get('x-admin-email')
-  if (!adminEmail) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const supabase = await createServerSupabaseClient()
+  const { data: { session } } = await supabase.auth.getSession()
+  const email = session?.user?.email?.toLowerCase() ?? ''
+
+  if (!email || !ADMIN_EMAILS.includes(email)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const { userId } = await request.json()
   if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
