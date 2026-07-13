@@ -1,11 +1,5 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-
-const ADMIN_EMAILS = [
-  'srikanth@ctekksolutions.net',
-  'shuchitha@shiroapps.com',
-  'info@shirotechnologies.com',
-]
 
 export async function proxy(request: NextRequest) {
   // SEO redirects
@@ -14,54 +8,49 @@ export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname === '/privacy-policy')
     return NextResponse.redirect(new URL('/privacy', request.url), 301)
 
-  const requestHeaders = new Headers(request.headers)
-  const cookiesToSet: Array<{ name: string; value: string; options: CookieOptions }> = []
+  let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
-          const existing = requestHeaders.get('cookie') ?? ''
-          const updated = existing.split(';').map(s => s.trim()).filter(s => s && !s.startsWith(`${name}=`))
-          updated.push(`${name}=${value}`)
-          requestHeaders.set('cookie', updated.join('; '))
-          cookiesToSet.push({ name, value, options })
-        },
-        remove(name: string, options: CookieOptions) {
-          const existing = requestHeaders.get('cookie') ?? ''
-          const updated = existing.split(';').map(s => s.trim()).filter(s => s && !s.startsWith(`${name}=`))
-          requestHeaders.set('cookie', updated.join('; '))
-          cookiesToSet.push({ name, value: '', options })
+        setAll(cookiesToSet) {
+          // Update the request cookies so server components can read them
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          // Create a new response that forwards the updated request
+          supabaseResponse = NextResponse.next({ request })
+          // Also set them on the response so the browser gets updated cookies
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          )
         },
       },
     }
   )
 
-  // Refresh session — this is the ONLY job of the proxy.
-  // getSession() reads from cookies directly (no network call to Supabase).
-  // If the access token is expired it uses the refresh token to get a new one.
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user ?? null
+  // Refresh session if expired — IMPORTANT: do NOT add early returns between
+  // createServerClient and getUser(), as that breaks the cookie refresh flow.
+  const { data: { user } } = await supabase.auth.getUser()
 
   const path = request.nextUrl.pathname
 
   // Protect /dashboard and /learn — redirect to login if not signed in.
-  // /admin is NOT protected here — the admin layout handles its own auth check
-  // so a proxy failure never blocks the entire admin panel.
+  // /admin is handled by the admin layout itself.
   if ((path.startsWith('/dashboard') || path.startsWith('/learn')) && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const loginUrl = new URL('/login', request.url)
+    const redirectResponse = NextResponse.redirect(loginUrl)
+    // Forward any refreshed cookies to the redirect response
+    supabaseResponse.cookies.getAll().forEach(cookie => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    return redirectResponse
   }
 
-  const response = NextResponse.next({ request: { headers: requestHeaders } })
-  for (const { name, value, options } of cookiesToSet) {
-    response.cookies.set(name, value, options as any)
-  }
-  return response
+  return supabaseResponse
 }
 
 export const config = {
