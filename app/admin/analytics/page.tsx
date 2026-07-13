@@ -91,11 +91,11 @@ export default async function AdminAnalyticsPage() {
           <p className="text-xs text-indigo-200 mt-1">Completed purchases</p>
         </div>
         <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg">
-          <p className="text-xs font-semibold text-emerald-100 uppercase tracking-wide">Avg Order Value</p>
+          <p className="text-xs font-semibold text-emerald-100 uppercase tracking-wide">Avg Monthly Revenue</p>
           <p className="text-3xl font-bold mt-1">
-            ${purchases?.length ? ((totalRevenue / 100) / purchases.length).toFixed(2) : '0.00'}
+            ${monthKeys.length ? ((totalRevenue / 100) / monthKeys.length).toFixed(2) : '0.00'}
           </p>
-          <p className="text-xs text-emerald-200 mt-1">Per purchase</p>
+          <p className="text-xs text-emerald-200 mt-1">Per month avg</p>
         </div>
         <div className={`bg-gradient-to-br rounded-2xl p-5 text-white shadow-lg ${revTrend >= 0 ? 'from-blue-500 to-blue-600' : 'from-red-500 to-red-600'}`}>
           <p className="text-xs font-semibold text-blue-100 uppercase tracking-wide">MoM Growth</p>
