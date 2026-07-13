@@ -1,10 +1,12 @@
-// app/admin/layout.tsx
-// Auth is fully handled by proxy.ts — it calls getUser() once per request,
-// checks the admin email list, and redirects to /login or /dashboard if needed.
-// By the time this layout renders, the request is already verified as an admin.
-// No Supabase call needed here.
-
+import { redirect } from 'next/navigation'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+
+const ADMIN_EMAILS = [
+  'srikanth@ctekksolutions.net',
+  'shuchitha@shiroapps.com',
+  'info@shirotechnologies.com',
+]
 
 const navLinks = [
   { href: '/admin', label: '📊 Overview' },
@@ -15,7 +17,18 @@ const navLinks = [
   { href: '/admin/quiz-results', label: '📝 Quiz Results' },
 ]
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createServerSupabaseClient()
+
+  // getSession() reads directly from the cookie — no Supabase network call.
+  // The proxy already refreshed the token if it was expired, so this cookie
+  // is always fresh by the time this layout runs.
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
+
+  if (!user) redirect('/login')
+  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) redirect('/dashboard')
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-[#212121] text-white shadow-lg">
