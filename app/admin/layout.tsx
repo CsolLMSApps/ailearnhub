@@ -1,22 +1,31 @@
 // app/admin/layout.tsx
-// Auth is 100% handled by proxy.ts before this layout ever runs.
-// proxy.ts redirects unauthenticated users to /login and non-admins to /dashboard.
-// This layout just renders — no duplicate auth check needed.
+// This is the SOLE auth gate for /admin. proxy.ts does NOT check /admin.
+// getUser() validates the JWT against Supabase's API — authoritative, not just a cookie read.
 
+import { redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
+const ADMIN_EMAILS = (
+  process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com'
+).split(',').map(e => e.trim().toLowerCase())
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  // Read email for display only — NOT an auth gate.
-  // If session can't be read for any reason, we still render (proxy already gated access).
-  let userEmail = ''
-  try {
-    const supabase = await createServerSupabaseClient()
-    const { data: { session } } = await supabase.auth.getSession()
-    userEmail = session?.user?.email ?? ''
-  } catch {
-    // silently continue — email display is cosmetic
+  const supabase = await createServerSupabaseClient()
+
+  // getUser() calls Supabase's Auth API — it validates the token remotely.
+  // This is more reliable than getSession() which only reads local cookies.
+  const { data: { user }, error } = await supabase.auth.getUser()
+
+  if (error || !user) {
+    redirect('/login')
   }
+
+  if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) {
+    redirect('/dashboard')
+  }
+
+  const userEmail = user.email ?? ''
 
   const navLinks = [
     { href: '/admin', label: '📊 Overview' },
@@ -40,9 +49,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               </span>
             </div>
             <div className="flex items-center gap-4">
-              {userEmail && (
-                <span className="text-gray-400 text-sm hidden sm:block">{userEmail}</span>
-              )}
+              <span className="text-gray-400 text-sm hidden sm:block">{userEmail}</span>
               <Link href="/dashboard" className="text-sm text-gray-300 hover:text-white transition-colors">
                 ← Back to Dashboard
               </Link>
