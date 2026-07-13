@@ -2,25 +2,19 @@
 
 import { useState, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createClient } from '@/lib/supabase/client'
+import { loginAction } from '@/app/actions/auth'
 
 function LoginForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
 
-  // Get redirect and action parameters
-  const redirect = searchParams?.get('redirect') || '/dashboard'
+  const redirectTo = searchParams?.get('redirect') || '/dashboard'
   const action = searchParams?.get('action')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,36 +22,18 @@ function LoginForm() {
     setLoading(true)
     setError(null)
 
-    try {
-      const supabase = createClient()
+    const formData = new FormData(e.currentTarget)
+    formData.set('redirectTo', redirectTo)
 
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      })
+    // loginAction runs on the server — sets cookies via HTTP response headers,
+    // then redirects. This guarantees cookies are readable by all server components.
+    const result = await loginAction(formData)
 
-      if (signInError) {
-        setError(signInError.message)
-        setLoading(false)
-        return
-      }
-
-      if (data.user) {
-        console.log('Login successful, redirecting to:', redirect)
-        router.push(redirect)
-        router.refresh()
-      }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during login')
+    // If we get here, loginAction returned an error (redirect would not return)
+    if (result?.error) {
+      setError(result.error)
       setLoading(false)
     }
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value
-    })
   }
 
   return (
@@ -81,11 +57,9 @@ function LoginForm() {
             </div>
           )}
 
-          {redirect !== '/dashboard' && action === 'enroll' && (
+          {redirectTo !== '/dashboard' && action === 'enroll' && (
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-sm text-blue-600">
-                Please sign in to continue with enrollment
-              </p>
+              <p className="text-sm text-blue-600">Please sign in to continue with enrollment</p>
             </div>
           )}
 
@@ -94,11 +68,10 @@ function LoginForm() {
               <Label htmlFor="email" className="text-sm font-medium text-[#212121]">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="you@example.com"
                 className="border-gray-300"
-                value={formData.email}
-                onChange={handleChange}
                 required
                 disabled={loading}
               />
@@ -107,17 +80,16 @@ function LoginForm() {
               <Label htmlFor="password" className="text-sm font-medium text-[#212121]">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="••••••••"
                 className="border-gray-300"
-                value={formData.password}
-                onChange={handleChange}
                 required
                 disabled={loading}
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-medium"
               disabled={loading}
             >
@@ -127,8 +99,8 @@ function LoginForm() {
 
           <div className="mt-6 text-center text-sm text-[#424242]">
             Don't have an account?{' '}
-            <Link 
-              href={redirect !== '/dashboard' ? `/signup?redirect=${encodeURIComponent(redirect)}` : '/signup'}
+            <Link
+              href={redirectTo !== '/dashboard' ? `/signup?redirect=${encodeURIComponent(redirectTo)}` : '/signup'}
               className="text-[#FF6F00] hover:text-[#E65100] font-medium"
             >
               Sign up
