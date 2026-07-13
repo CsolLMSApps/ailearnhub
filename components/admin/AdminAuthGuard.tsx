@@ -16,7 +16,11 @@ export default function AdminAuthGuard({ children }: { children: React.ReactNode
   useEffect(() => {
     async function verify() {
       const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
+
+      // getSession() reads from browser storage — no network call, always works.
+      // getUser() makes an API call which can fail if Supabase is slow.
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
 
       if (!user) {
         router.replace('/login')
@@ -39,7 +43,7 @@ export default function AdminAuthGuard({ children }: { children: React.ReactNode
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF6F00] mx-auto mb-3" />
-          <p className="text-sm text-gray-500">Loading admin panel...</p>
+          <p className="text-sm text-gray-500">Loading...</p>
         </div>
       </div>
     )

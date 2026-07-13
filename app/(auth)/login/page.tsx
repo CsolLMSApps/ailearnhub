@@ -2,17 +2,19 @@
 
 import { useState, Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { loginAction } from '@/app/actions/auth'
+import { createClient } from '@/lib/supabase/client'
 
 function LoginForm() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState({ email: '', password: '' })
 
   const redirectTo = searchParams?.get('redirect') || '/dashboard'
   const action = searchParams?.get('action')
@@ -22,18 +24,31 @@ function LoginForm() {
     setLoading(true)
     setError(null)
 
-    const formData = new FormData(e.currentTarget)
-    formData.set('redirectTo', redirectTo)
+    try {
+      const supabase = createClient()
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      })
 
-    // loginAction runs on the server — sets cookies via HTTP response headers,
-    // then redirects. This guarantees cookies are readable by all server components.
-    const result = await loginAction(formData)
+      if (signInError) {
+        setError(signInError.message)
+        setLoading(false)
+        return
+      }
 
-    // If we get here, loginAction returned an error (redirect would not return)
-    if (result?.error) {
-      setError(result.error)
+      if (data.user) {
+        // Use window.location for a hard redirect so the browser sends all fresh cookies
+        window.location.href = redirectTo
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during login')
       setLoading(false)
     }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value })
   }
 
   return (
@@ -56,22 +71,21 @@ function LoginForm() {
               <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
-
           {redirectTo !== '/dashboard' && action === 'enroll' && (
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
               <p className="text-sm text-blue-600">Please sign in to continue with enrollment</p>
             </div>
           )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-[#212121]">Email</Label>
               <Input
                 id="email"
-                name="email"
                 type="email"
                 placeholder="you@example.com"
                 className="border-gray-300"
+                value={formData.email}
+                onChange={handleChange}
                 required
                 disabled={loading}
               />
@@ -80,10 +94,11 @@ function LoginForm() {
               <Label htmlFor="password" className="text-sm font-medium text-[#212121]">Password</Label>
               <Input
                 id="password"
-                name="password"
                 type="password"
                 placeholder="••••••••"
                 className="border-gray-300"
+                value={formData.password}
+                onChange={handleChange}
                 required
                 disabled={loading}
               />
@@ -96,7 +111,6 @@ function LoginForm() {
               {loading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
-
           <div className="mt-6 text-center text-sm text-[#424242]">
             Don't have an account?{' '}
             <Link
