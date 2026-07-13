@@ -1,6 +1,9 @@
-// proxy.ts — Next.js 16 middleware (alternative to middleware.ts)
-// Handles: SEO redirects, auth protection for /dashboard + /learn,
-// and session token refresh for /admin (so AdminAuthGuard always gets a valid token).
+// proxy.ts — Next.js 16 middleware
+// Calls getUser() on EVERY request to validate + refresh the Supabase session.
+// This is required so that ALL server components (dashboard, admin, learn, etc.)
+// receive correctly-formatted, fresh cookies — not just protected routes.
+// Without this global refresh, createServerClient in server components cannot
+// read the raw browser-set cookies from createBrowserClient.
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
@@ -12,8 +15,9 @@ export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname === '/privacy-policy')
     return NextResponse.redirect(new URL('/privacy', request.url), 301)
 
-  const reqHeaders = new Headers(request.headers)
-  let response = NextResponse.next({ request: { headers: reqHeaders } })
+  let response = NextResponse.next({
+    request: { headers: request.headers },
+  })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,32 +28,37 @@ export async function proxy(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          const parts = (reqHeaders.get('cookie') ?? '')
-            .split(';')
-            .filter(c => !c.trim().startsWith(`${name}=`))
-          parts.push(`${name}=${value}`)
-          reqHeaders.set('cookie', parts.join('; '))
-          response = NextResponse.next({ request: { headers: reqHeaders } })
-          response.cookies.set({ name, value, ...options })
+          // Update the request's cookie jar so server components see refreshed token
+          request.cookies.set({ name, value, ...options } as any)
+          response = NextResponse.next({
+            request: { headers: request.headers },
+          })
+          response.cookies.set({ name, value, ...options } as any)
         },
         remove(name: string, options: CookieOptions) {
-          const parts = (reqHeaders.get('cookie') ?? '')
-            .split(';')
-            .filter(c => !c.trim().startsWith(`${name}=`))
-          reqHeaders.set('cookie', parts.join('; '))
-          response = NextResponse.next({ request: { headers: reqHeaders } })
-          response.cookies.set({ name, value: '', ...options })
+          request.cookies.set({ name, value: '', ...options } as any)
+          response = NextResponse.next({
+            request: { headers: request.headers },
+          })
+          response.cookies.set({ name, value: '', ...options } as any)
         },
       },
     }
   )
 
+  // Validate + refresh session for every request.
+  // The returned user is used for route protection below.
+  const { data: { user } } = await supabase.auth.getUser()
+
   const path = request.nextUrl.pathname
 
+  // Protect /dashboard and /learn — server-redirect if not authenticated
   if (path.startsWith('/dashboard') || path.startsWith('/learn')) {
-    const { data: { user } } = await supabase.auth.getUser()
     if (!user) return NextResponse.redirect(new URL('/login', request.url))
   }
+
+  // /admin auth is handled server-side in app/admin/layout.tsx
+  // (email allowlist check in addition to authentication)
 
   return response
 }
