@@ -46,14 +46,6 @@ export async function proxy(request: NextRequest) {
 
   const path = request.nextUrl.pathname
 
-  if (path.startsWith('/admin')) {
-    // Refresh session cookies so AdminAuthGuard's onAuthStateChange
-    // always receives a valid (non-expired) token. No redirect here —
-    // the client-side guard handles the admin email check.
-    await supabase.auth.getUser()
-    return response
-  }
-
   if (path.startsWith('/dashboard') || path.startsWith('/learn')) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return NextResponse.redirect(new URL('/login', request.url))
