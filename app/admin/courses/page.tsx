@@ -1,6 +1,7 @@
-// app/admin/courses/page.tsx — Course analytics
+// app/admin/courses/page.tsx — Course analytics + course creation
 
 import { adminFetchAll } from '@/lib/supabase/admin'
+import CreateCourseForm from '@/components/admin/CreateCourseForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,8 +49,10 @@ export default async function AdminCoursesPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Courses</h1>
-        <p className="text-sm text-gray-500 mt-1">{courseStats.length} published courses</p>
+        <p className="text-sm text-gray-500 mt-1">{courseStats.length} courses</p>
       </div>
+
+      <CreateCourseForm />
 
       <div className="space-y-4">
         {courseStats.map((c: any) => (
