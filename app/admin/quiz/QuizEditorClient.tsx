@@ -24,6 +24,13 @@ const BLANK_QUESTION: Question = {
 const LABELS = ['A', 'B', 'C', 'D']
 const initialState = { error: undefined, success: undefined }
 
+function normaliseQuestions(q: any): Question[] {
+  if (!q) return []
+  if (Array.isArray(q)) return q
+  if (Array.isArray(q.questions)) return q.questions
+  return []
+}
+
 /* ── Component ─────────────────────────────────────────────────────────────── */
 export default function QuizEditorClient({
   courses,
@@ -46,7 +53,7 @@ export default function QuizEditorClient({
   const [selectedCourseId, setSelectedCourseId]   = useState(defaultCourseId)
   const [selectedModule,   setSelectedModule]     = useState<number | null>(defaultModuleNumber)
   const [passPercentage,   setPassPercentage]     = useState(existingQuiz?.pass_percentage ?? 70)
-  const [questions,        setQuestions]          = useState<Question[]>(existingQuiz?.questions ?? [])
+  const [questions,        setQuestions]          = useState<Question[]>(normaliseQuestions(existingQuiz?.questions))
 
   // Question editor panel
   const [editingIdx, setEditingIdx] = useState<number | null>(null) // null = none, questions.length = new
@@ -54,7 +61,7 @@ export default function QuizEditorClient({
 
   // Sync when navigated to a different module
   useEffect(() => {
-    setQuestions(existingQuiz?.questions ?? [])
+    setQuestions(normaliseQuestions(existingQuiz?.questions))
     setPassPercentage(existingQuiz?.pass_percentage ?? 70)
     setEditingIdx(null)
     setDraft(null)

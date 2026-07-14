@@ -33,7 +33,19 @@ export default async function AdminQuizPage({ searchParams }: Props) {
         'quizzes',
         `course_id=eq.${courseId}&module_number=eq.${moduleNumber}&select=*&limit=1`
       )
-      existingQuiz = quizData[0] ?? null
+      const raw = quizData[0] ?? null
+      if (raw) {
+        // Normalise questions: DB may return a nested { questions: [...] } object
+        const q = raw.questions
+        existingQuiz = {
+          ...raw,
+          questions: Array.isArray(q)
+            ? q
+            : Array.isArray(q?.questions)
+              ? q.questions
+              : [],
+        }
+      }
     }
   }
 
