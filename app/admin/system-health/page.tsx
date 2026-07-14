@@ -17,231 +17,278 @@ interface HealthData {
   services: ServiceResult[]
 }
 
-const C = {
-  healthy:      '#00ff88',
-  degraded:     '#fbbf24',
-  down:         '#ff3b3b',
-  unconfigured: '#475569',
+// ── Per-service brand identity ─────────────────────────────────────────────────
+const BRAND: Record<string, { color: string; glow: string; label: string; icon: string }> = {
+  'Supabase Database': { color: '#3ECF8E', glow: '#3ECF8E40', label: 'Supabase DB',    icon: '🗄️' },
+  'Supabase Auth':     { color: '#3ECF8E', glow: '#3ECF8E40', label: 'Supabase Auth',  icon: '🔐' },
+  'Stripe API':        { color: '#635BFF', glow: '#635BFF40', label: 'Stripe API',     icon: '💳' },
+  'Stripe Webhooks':   { color: '#7C5BF7', glow: '#7C5BF740', label: 'Stripe Hooks',  icon: '🔔' },
+  'UptimeRobot':       { color: '#38BDF8', glow: '#38BDF840', label: 'UptimeRobot',   icon: '📡' },
+  'Resend Email':      { color: '#FF6C37', glow: '#FF6C3740', label: 'Resend Email',  icon: '✉️' },
+  'Environment Variables': { color: '#F59E0B', glow: '#F59E0B40', label: 'Env Vars', icon: '⚙️' },
 }
 
-const LABEL: Record<string, string> = {
-  healthy: 'Healthy', degraded: 'Degraded', down: 'Down', unconfigured: 'Not Set Up',
-}
+const STATUS_COLOR = { healthy: '#22c55e', degraded: '#f59e0b', down: '#ef4444', unconfigured: '#475569' }
+const STATUS_LABEL = { healthy: 'Healthy', degraded: 'Degraded', down: 'Down', unconfigured: 'Not Set Up' }
 
-const ICON: Record<string, string> = {
-  'Supabase Database': '🗄️', 'Supabase Auth': '🔐',
-  'Stripe API': '💳', 'Stripe Webhooks': '🔔',
-  'UptimeRobot': '📡', 'Resend Email': '✉️',
-  'Environment Variables': '⚙️',
-}
-
-// ── ECG scanning heartbeat (main banner) ──────────────────────────────────────
-function HeartbeatCanvas({ overallStatus }: { overallStatus: string }) {
-  const ref = useRef<HTMLCanvasElement>(null)
-  const raf = useRef(0)
-  const scan = useRef(0)
-
-  useEffect(() => {
-    const c = ref.current; if (!c) return
-    const ctx = c.getContext('2d')!
-    const W = c.width, H = c.height, mid = H / 2
-    const color = overallStatus === 'healthy' ? C.healthy : overallStatus === 'degraded' ? C.degraded : C.down
-
-    // Fill dark base once
-    ctx.fillStyle = 'rgba(5,10,20,1)'
-    ctx.fillRect(0, 0, W, H)
-
-    // ECG waveform function: returns y offset for given x position in beat cycle
-    const ecg = (t: number): number => {
-      const p = t % 1
-      if (p < 0.05) return 0
-      if (p < 0.10) return -(p - 0.05) / 0.05 * H * 0.08   // P wave
-      if (p < 0.15) return -H * 0.08 + (p - 0.10) / 0.05 * H * 0.08
-      if (p < 0.20) return -(p - 0.15) / 0.05 * H * 0.4    // Q dip
-      if (p < 0.22) return -H * 0.4 - (p - 0.20) / 0.02 * H * 0.25 // R spike up
-      if (p < 0.24) return -H * 0.65 + (p - 0.22) / 0.02 * H * 0.75 // R spike down
-      if (p < 0.28) return H * 0.1 - (p - 0.24) / 0.04 * H * 0.1   // S wave
-      if (p < 0.45) return (p - 0.28) / 0.17 * H * 0.12             // ST segment rise
-      if (p < 0.60) return H * 0.12 - (p - 0.45) / 0.15 * H * 0.12 // T wave
-      return 0
-    }
-
-    const draw = () => {
-      // Trailing fade
-      ctx.fillStyle = 'rgba(5,10,20,0.18)'
-      ctx.fillRect(0, 0, W, H)
-
-      // Erase ahead of scan
-      ctx.fillStyle = 'rgba(5,10,20,0.92)'
-      ctx.fillRect(scan.current, 0, 50, H)
-
-      // Grid dots
-      ctx.fillStyle = 'rgba(255,255,255,0.035)'
-      for (let x = 0; x < W; x += 30) for (let y = 0; y < H; y += 16) {
-        ctx.beginPath(); ctx.arc(x, y, 0.8, 0, Math.PI * 2); ctx.fill()
-      }
-
-      // Draw ECG line at scan head
-      const x = scan.current
-      const t = x / W * 4 // 4 beat cycles across width
-      const dy = overallStatus === 'down' ? (Math.random() - 0.5) * H * 0.04 : ecg(t) * (overallStatus === 'degraded' ? 0.5 : 1)
-      const y = mid + dy
-
-      // Glow halo
-      const g = ctx.createRadialGradient(x, y, 0, x, y, 28)
-      g.addColorStop(0, color + 'aa'); g.addColorStop(1, color + '00')
-      ctx.fillStyle = g
-      ctx.beginPath(); ctx.arc(x, y, 28, 0, Math.PI * 2); ctx.fill()
-
-      // Bright dot
-      ctx.fillStyle = color
-      ctx.shadowColor = color; ctx.shadowBlur = 12
-      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill()
-      ctx.shadowBlur = 0
-
-      scan.current = (scan.current + 2.5) % W
-      raf.current = requestAnimationFrame(draw)
-    }
-    draw()
-    return () => cancelAnimationFrame(raf.current)
-  }, [overallStatus])
-
-  return <canvas ref={ref} width={900} height={90} className="w-full" style={{ borderRadius: 12 }} />
-}
-
-// ── Per-service animated waveform ─────────────────────────────────────────────
-function SignalCanvas({ status, latencyMs }: { status: keyof typeof C, latencyMs?: number }) {
+// ── Canvas: Live signal wave per service ──────────────────────────────────────
+function SignalWave({ status, latencyMs, color, glow }: {
+  status: ServiceResult['status']; latencyMs?: number; color: string; glow: string
+}) {
   const ref = useRef<HTMLCanvasElement>(null)
   const raf = useRef(0)
   const phase = useRef(Math.random() * Math.PI * 2)
-  const noiseCache = useRef(Array.from({ length: 400 }, () => (Math.random() - 0.5)))
+  const noise = useRef(Array.from({ length: 512 }, () => (Math.random() - 0.5)))
 
   useEffect(() => {
     const c = ref.current; if (!c) return
     const ctx = c.getContext('2d')!
-    const W = c.width, H = c.height, mid = H / 2
-    const color = C[status]
+    const W = c.width, H = c.height, cy = H / 2
 
-    // Drive amplitude from real latency: lower ms = taller wave
-    const latFactor = latencyMs ? Math.max(0.2, 1 - latencyMs / 1200) : 0.65
-    const amp = status === 'healthy' ? H * 0.4 * latFactor
-              : status === 'degraded' ? H * 0.22
-              : status === 'unconfigured' ? H * 0.06
-              : H * 0.03   // flatline
+    const latFactor = latencyMs ? Math.max(0.2, 1 - latencyMs / 1400) : 0.6
+    const amp = status === 'healthy' ? H * 0.36 * latFactor
+              : status === 'degraded' ? H * 0.2
+              : status === 'unconfigured' ? H * 0.07
+              : H * 0.025
+    const speed = status === 'healthy' ? 0.065 : status === 'degraded' ? 0.028 : 0.01
 
-    const speed = status === 'healthy' ? 0.075
-                : status === 'degraded' ? 0.03
-                : status === 'unconfigured' ? 0.012
-                : 0.005
+    const drawLine = (alpha: number, lw: number, blur: number) => {
+      ctx.globalAlpha = alpha
+      ctx.lineWidth = lw
+      ctx.shadowBlur = blur
+      ctx.shadowColor = color
+      ctx.strokeStyle = color
+      ctx.beginPath()
+      for (let x = 0; x <= W; x += 1.5) {
+        const n = noise.current[Math.floor(x) % 512]!
+        let y: number
+        if (status === 'down') {
+          const s = W * 0.5, d = Math.abs(x - s)
+          y = d < 16 ? cy - H * 0.44 * Math.exp(-(d * d) / 12) + (d > 6 ? H * 0.18 * Math.exp(-((d - 10) ** 2) / 5) : 0) : cy + n * H * 0.025
+        } else if (status === 'unconfigured') {
+          if (Math.floor(x / 10) % 2 === 0) { ctx.moveTo(x, cy); continue }
+          y = cy
+        } else {
+          const t = (x / W) * Math.PI * 2 * 3.2
+          const noiseAmt = status === 'degraded' ? n * amp * 0.55 : n * amp * 0.04
+          y = cy - Math.sin(t + phase.current) * amp - Math.sin(t * 1.9 + phase.current * 0.6) * amp * 0.22 - noiseAmt
+        }
+        x <= 1.5 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+    }
 
     const draw = () => {
       ctx.clearRect(0, 0, W, H)
 
-      // Subtle dot grid
-      ctx.fillStyle = 'rgba(255,255,255,0.03)'
-      for (let x = 0; x < W; x += 20) for (let y = H * 0.25; y < H; y += H * 0.25) {
-        ctx.beginPath(); ctx.arc(x, y, 0.6, 0, Math.PI * 2); ctx.fill()
-      }
-
-      // Glow pass
-      ctx.save()
-      ctx.shadowColor = color; ctx.shadowBlur = 14
-      ctx.strokeStyle = color + '40'; ctx.lineWidth = 5
-      ctx.beginPath()
-      for (let x = 0; x <= W; x += 2) {
-        const noise = status === 'degraded' ? noiseCache.current[x % noiseCache.current.length]! * amp * 0.45 : 0
-        let y: number
-        if (status === 'down') {
-          const spike = W * 0.5
-          const d = Math.abs(x - spike)
-          y = d < 14 ? mid - H * 0.48 * Math.exp(-(d * d) / 10) : mid + (noiseCache.current[x % 400]! * H * 0.02)
-        } else if (status === 'unconfigured') {
-          y = mid + Math.sin(x * 0.03 + phase.current) * amp
-        } else {
-          const t = (x / W) * Math.PI * 2 * 3.5
-          y = mid - Math.sin(t + phase.current) * amp - Math.sin(t * 2 + phase.current * 0.7) * amp * 0.18 - noise
-        }
-        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
-      }
-      ctx.stroke()
-      ctx.restore()
-
-      // Sharp line pass
-      ctx.strokeStyle = color; ctx.lineWidth = 1.5
-      ctx.shadowColor = color; ctx.shadowBlur = 5
-      ctx.beginPath()
-      for (let x = 0; x <= W; x += 2) {
-        const noise = status === 'degraded' ? noiseCache.current[x % noiseCache.current.length]! * amp * 0.45 : 0
-        let y: number
-        if (status === 'down') {
-          const spike = W * 0.5, d = Math.abs(x - spike)
-          y = d < 14 ? mid - H * 0.48 * Math.exp(-(d * d) / 10) : mid + (noiseCache.current[x % 400]! * H * 0.02)
-        } else if (status === 'unconfigured') {
-          y = mid + Math.sin(x * 0.03 + phase.current) * amp
-        } else {
-          const t = (x / W) * Math.PI * 2 * 3.5
-          y = mid - Math.sin(t + phase.current) * amp - Math.sin(t * 2 + phase.current * 0.7) * amp * 0.18 - noise
-        }
-        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
-      }
-      ctx.stroke()
+      // Fine grid
+      ctx.globalAlpha = 1
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)'
+      ctx.lineWidth = 1
       ctx.shadowBlur = 0
+      for (let x = 0; x < W; x += 32) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke() }
+      for (let y = 0; y < H; y += H / 4) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke() }
 
-      // Dashed style for unconfigured
-      if (status === 'unconfigured') {
-        ctx.setLineDash([6, 10])
-        ctx.strokeStyle = color; ctx.lineWidth = 1
-        ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(W, mid); ctx.stroke()
-        ctx.setLineDash([])
-      }
+      // Glow halo
+      drawLine(0.18, 8, 24)
+      // Mid glow
+      drawLine(0.35, 4, 10)
+      // Sharp line
+      drawLine(1, 1.2, 4)
 
+      ctx.globalAlpha = 1
+      ctx.shadowBlur = 0
       phase.current += speed
       raf.current = requestAnimationFrame(draw)
     }
     draw()
     return () => cancelAnimationFrame(raf.current)
-  }, [status, latencyMs])
+  }, [status, latencyMs, color])
 
-  return <canvas ref={ref} width={380} height={56} className="w-full" />
+  return <canvas ref={ref} width={420} height={70} className="w-full" />
 }
 
-// ── Animated stat counter ─────────────────────────────────────────────────────
-function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const [n, setN] = useState(0)
+// ── Canvas: ECG master display ────────────────────────────────────────────────
+function MasterECG({ services }: { services: ServiceResult[] }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  const raf = useRef(0)
+  const head = useRef(0)
+  const phaseRef = useRef(0)
+
   useEffect(() => {
-    let cur = 0; const step = Math.max(1, Math.ceil(to / 28))
-    const id = setInterval(() => { cur = Math.min(cur + step, to); setN(cur); if (cur >= to) clearInterval(id) }, 22)
-    return () => clearInterval(id)
-  }, [to])
-  return <>{n}{suffix}</>
+    const c = ref.current; if (!c) return
+    const ctx = c.getContext('2d')!
+    const W = c.width, H = c.height, cy = H / 2
+
+    // Build a colored gradient across services
+    const colorStops = services
+      .filter(s => s.status !== 'unconfigured')
+      .map((s, i, arr) => ({ pos: i / Math.max(arr.length - 1, 1), color: BRAND[s.name]?.color ?? '#22c55e' }))
+
+    ctx.fillStyle = '#0D0D0D'
+    ctx.fillRect(0, 0, W, H)
+
+    const ecg = (t: number) => {
+      const p = ((t % 1) + 1) % 1
+      if (p < 0.06) return 0
+      if (p < 0.12) return -(p - 0.06) / 0.06 * H * 0.07
+      if (p < 0.17) return -H * 0.07 + (p - 0.12) / 0.05 * H * 0.07
+      if (p < 0.22) return -(p - 0.17) / 0.05 * H * 0.38
+      if (p < 0.245) return -H * 0.38 - (p - 0.22) / 0.025 * H * 0.22
+      if (p < 0.27) return -H * 0.60 + (p - 0.245) / 0.025 * H * 0.70
+      if (p < 0.32) return H * 0.10 - (p - 0.27) / 0.05 * H * 0.10
+      if (p < 0.50) return (p - 0.32) / 0.18 * H * 0.10
+      if (p < 0.64) return H * 0.10 - (p - 0.50) / 0.14 * H * 0.10
+      return 0
+    }
+
+    const draw = () => {
+      // Fade tail
+      ctx.fillStyle = 'rgba(13,13,13,0.16)'
+      ctx.fillRect(0, 0, W, H)
+
+      // Erase ahead
+      ctx.fillStyle = '#0D0D0D'
+      ctx.fillRect(head.current, 0, 55, H)
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)'
+      ctx.lineWidth = 1; ctx.shadowBlur = 0
+      for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke() }
+      ;[0.25, 0.5, 0.75].forEach(r => { ctx.beginPath(); ctx.moveTo(0, H * r); ctx.lineTo(W, H * r); ctx.stroke() })
+
+      const x = head.current
+      const t = x / W * 5
+      const dy = ecg(t)
+      const y = cy + dy
+
+      // Build gradient color at this x position
+      const prog = x / W
+      let col = '#22c55e'
+      if (colorStops.length >= 2) {
+        for (let i = 0; i < colorStops.length - 1; i++) {
+          const a = colorStops[i]!, b = colorStops[i + 1]!
+          if (prog >= a.pos && prog <= b.pos) {
+            const t2 = (prog - a.pos) / (b.pos - a.pos)
+            const c1 = parseInt(a.color.slice(1), 16), c2 = parseInt(b.color.slice(1), 16)
+            const r = Math.round(((c1 >> 16) & 255) * (1 - t2) + ((c2 >> 16) & 255) * t2)
+            const g = Math.round(((c1 >> 8) & 255) * (1 - t2) + ((c2 >> 8) & 255) * t2)
+            const b2 = Math.round((c1 & 255) * (1 - t2) + (c2 & 255) * t2)
+            col = `rgb(${r},${g},${b2})`
+            break
+          }
+        }
+      }
+
+      // Radial glow at head
+      const g2 = ctx.createRadialGradient(x, y, 0, x, y, 32)
+      g2.addColorStop(0, col + 'cc'); g2.addColorStop(1, col + '00')
+      ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(x, y, 32, 0, Math.PI * 2); ctx.fill()
+
+      // Trail line
+      ctx.strokeStyle = col; ctx.lineWidth = 2
+      ctx.shadowColor = col; ctx.shadowBlur = 10
+      ctx.beginPath(); ctx.moveTo(Math.max(0, x - 3), cy + ecg((Math.max(0, x - 3)) / W * 5))
+      ctx.lineTo(x, y); ctx.stroke()
+
+      // Bright dot
+      ctx.fillStyle = '#fff'; ctx.shadowColor = col; ctx.shadowBlur = 16
+      ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI * 2); ctx.fill()
+      ctx.shadowBlur = 0
+
+      // Side labels
+      ctx.fillStyle = 'rgba(255,255,255,0.12)'
+      ctx.font = '10px monospace'
+      ctx.fillText('mV', 6, 14)
+      ctx.fillText('0', 6, cy + 4)
+
+      head.current = (head.current + 2.2) % W
+      phaseRef.current += 0.01
+      raf.current = requestAnimationFrame(draw)
+    }
+    draw()
+    return () => cancelAnimationFrame(raf.current)
+  }, [services])
+
+  return <canvas ref={ref} width={900} height={110} className="w-full" style={{ borderRadius: 12 }} />
 }
 
-// ── Latency signal-strength bars (like WiFi indicator) ────────────────────────
-function SignalBars({ ms }: { ms: number }) {
-  const bars = 5
-  const lit = ms < 100 ? 5 : ms < 250 ? 4 : ms < 500 ? 3 : ms < 800 ? 2 : 1
-  const color = ms < 250 ? C.healthy : ms < 600 ? C.degraded : C.down
+// ── History sparkline (stores real latency over time) ─────────────────────────
+const latencyHistory: Record<string, number[]> = {}
+
+function Sparkline({ name, current, color }: { name: string; current?: number; color: string }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    if (current === undefined) return
+    if (!latencyHistory[name]) latencyHistory[name] = []
+    latencyHistory[name]!.push(current)
+    if (latencyHistory[name]!.length > 20) latencyHistory[name]!.shift()
+  }, [name, current])
+
+  useEffect(() => {
+    const c = ref.current; if (!c) return
+    const ctx = c.getContext('2d')!
+    const W = c.width, H = c.height
+    const hist = latencyHistory[name] ?? []
+    if (hist.length < 2) { ctx.clearRect(0, 0, W, H); return }
+
+    const max = Math.max(...hist, 100)
+    ctx.clearRect(0, 0, W, H)
+
+    // Fill under line
+    const grad = ctx.createLinearGradient(0, 0, 0, H)
+    grad.addColorStop(0, color + '40')
+    grad.addColorStop(1, color + '00')
+
+    ctx.beginPath()
+    hist.forEach((v, i) => {
+      const x = (i / (hist.length - 1)) * W
+      const y = H - (v / max) * H * 0.85 - 2
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+    })
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath()
+    ctx.fillStyle = grad; ctx.fill()
+
+    // Line
+    ctx.beginPath()
+    hist.forEach((v, i) => {
+      const x = (i / (hist.length - 1)) * W
+      const y = H - (v / max) * H * 0.85 - 2
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+    })
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5
+    ctx.shadowColor = color; ctx.shadowBlur = 5
+    ctx.stroke(); ctx.shadowBlur = 0
+  })
+
+  return <canvas ref={ref} width={80} height={28} />
+}
+
+// ── Latency ring ──────────────────────────────────────────────────────────────
+function LatencyRing({ ms, color }: { ms: number; color: string }) {
+  const pct = Math.min(100, (ms / 1000) * 100)
+  const r = 18, circ = 2 * Math.PI * r
+  const dash = (pct / 100) * circ
+
   return (
-    <div className="flex items-end gap-0.5 h-4">
-      {Array.from({ length: bars }).map((_, i) => (
-        <div
-          key={i}
-          className="w-1.5 rounded-sm transition-all"
-          style={{
-            height: `${40 + i * 15}%`,
-            background: i < lit ? color : 'rgba(255,255,255,0.1)',
-            boxShadow: i < lit ? `0 0 4px ${color}` : 'none',
-          }}
-        />
-      ))}
+    <div className="relative flex items-center justify-center" style={{ width: 48, height: 48 }}>
+      <svg width={48} height={48} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={24} cy={24} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={3} />
+        <circle cx={24} cy={24} r={r} fill="none" stroke={color} strokeWidth={3}
+          strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
+          style={{ filter: `drop-shadow(0 0 4px ${color})`, transition: 'stroke-dasharray 0.7s ease' }} />
+      </svg>
+      <span className="absolute text-xs font-bold tabular-nums" style={{ color, fontSize: 9 }}>{ms}ms</span>
     </div>
   )
 }
 
 // ── Service card ──────────────────────────────────────────────────────────────
-function ServiceCard({ svc, index }: { svc: ServiceResult; index: number }) {
+function ServiceCard({ svc, idx }: { svc: ServiceResult; idx: number }) {
   const [open, setOpen] = useState(false)
-  const color = C[svc.status]
+  const brand = BRAND[svc.name] ?? { color: '#94a3b8', glow: '#94a3b820', label: svc.name, icon: '🔧' }
+  const statusColor = STATUS_COLOR[svc.status]
   const hasDetails = !!svc.details && Object.keys(svc.details).length > 0
 
   return (
@@ -249,141 +296,176 @@ function ServiceCard({ svc, index }: { svc: ServiceResult; index: number }) {
       onClick={() => hasDetails && setOpen(v => !v)}
       className={`rounded-2xl overflow-hidden transition-all duration-300 ${hasDetails ? 'cursor-pointer' : ''}`}
       style={{
-        background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
-        border: `1px solid ${color}28`,
-        boxShadow: open ? `0 0 40px ${color}12, inset 0 1px 0 ${color}15` : `inset 0 1px 0 rgba(255,255,255,0.05)`,
-        transform: open ? 'scale(1.005)' : 'scale(1)',
-        opacity: 0, animation: `fadeUp 0.4s ${index * 65}ms ease both`,
+        background: 'linear-gradient(145deg, #111116 0%, #0D0D12 100%)',
+        border: `1px solid rgba(255,255,255,0.07)`,
+        boxShadow: open ? `0 0 0 1px ${brand.color}30, 0 8px 32px ${brand.glow}` : `0 1px 0 rgba(255,255,255,0.05)`,
+        opacity: 0,
+        animation: `cardIn 0.4s ${idx * 60}ms cubic-bezier(0.16,1,0.3,1) both`,
       }}
     >
-      {/* Top bar — colored glow line */}
-      <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${color}88, transparent)` }} />
+      {/* Colored top edge */}
+      <div style={{ height: 2, background: `linear-gradient(90deg, ${brand.color}00, ${brand.color}, ${brand.color}00)` }} />
 
-      {/* Header row */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-1">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-base" style={{ background: `${color}15` }}>
-            {ICON[svc.name] ?? '🔧'}
+      {/* Header */}
+      <div className="flex items-start justify-between px-4 pt-4 pb-1">
+        <div className="flex items-center gap-3">
+          {/* Icon bubble */}
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0"
+            style={{ background: brand.glow, boxShadow: `inset 0 0 0 1px ${brand.color}25` }}>
+            {brand.icon}
           </div>
           <div>
-            <p className="text-xs font-bold text-white leading-tight">{svc.name}</p>
-            <p className="text-xs truncate max-w-[160px]" style={{ color: `${color}80` }}>{svc.message}</p>
+            <p className="text-sm font-bold text-white leading-tight">{brand.label}</p>
+            <p className="text-xs mt-0.5 truncate max-w-[180px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              {svc.message}
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {svc.responseTimeMs !== undefined && <SignalBars ms={svc.responseTimeMs} />}
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: `${color}18`, color, border: `1px solid ${color}35` }}>
-            {LABEL[svc.status]}
-          </span>
-          {hasDetails && <span className="text-xs opacity-40 text-white">{open ? '▲' : '▼'}</span>}
+        <div className="flex flex-col items-end gap-2 shrink-0 ml-2">
+          {/* Status pill */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+            style={{ background: `${statusColor}15`, border: `1px solid ${statusColor}30` }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: statusColor, boxShadow: `0 0 4px ${statusColor}` }} />
+            <span className="text-xs font-semibold" style={{ color: statusColor }}>{STATUS_LABEL[svc.status]}</span>
+          </div>
+          {hasDetails && (
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>{open ? '▲' : '▼'}</span>
+          )}
         </div>
       </div>
 
-      {/* Live waveform */}
-      <div className="px-3 py-1">
-        <SignalCanvas status={svc.status} latencyMs={svc.responseTimeMs} />
+      {/* Waveform */}
+      <div className="px-3 py-2">
+        <SignalWave status={svc.status} latencyMs={svc.responseTimeMs} color={brand.color} glow={brand.glow} />
       </div>
 
-      {/* Latency gradient bar */}
+      {/* Footer: latency ring + sparkline + bar */}
       {svc.responseTimeMs !== undefined && (
-        <div className="px-4 pb-3">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-600">Latency</span>
-            <span className="text-xs font-mono tabular-nums" style={{ color }}>{svc.responseTimeMs}ms</span>
-          </div>
-          <div className="h-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
-            <div
-              className="h-full rounded-full"
-              style={{
-                width: `${Math.min(100, (svc.responseTimeMs / 800) * 100)}%`,
-                background: `linear-gradient(90deg, ${color}, ${color}66)`,
-                boxShadow: `0 0 6px ${color}`,
-                transition: 'width 0.7s ease',
-              }}
-            />
+        <div className="flex items-center gap-3 px-4 pb-4">
+          <LatencyRing ms={svc.responseTimeMs} color={brand.color} />
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>Response time</span>
+              <Sparkline name={svc.name} current={svc.responseTimeMs} color={brand.color} />
+            </div>
+            <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <div className="h-full rounded-full transition-all duration-700"
+                style={{
+                  width: `${Math.min(100, (svc.responseTimeMs / 800) * 100)}%`,
+                  background: `linear-gradient(90deg, ${brand.color}, ${brand.color}88)`,
+                  boxShadow: `0 0 8px ${brand.color}80`,
+                }} />
+            </div>
           </div>
         </div>
       )}
 
-      {/* Expanded details */}
+      {/* Expanded */}
       {open && svc.details && (
-        <div className="border-t px-4 py-3 space-y-2 text-xs" style={{ borderColor: `${color}18`, background: 'rgba(0,0,0,0.3)' }}>
-          {svc.name === 'Stripe Webhooks' && Array.isArray(svc.details.endpoints) && (
-            svc.details.endpoints.length === 0
-              ? <p className="text-gray-500">No webhooks registered.</p>
-              : svc.details.endpoints.map((ep: any, i: number) => (
-                  <div key={i} className="flex items-center justify-between rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                    <span className="font-mono text-gray-300 truncate max-w-[260px]">{ep.url}</span>
-                    <span className="ml-3 font-bold" style={{ color: ep.status === 'enabled' ? C.healthy : C.down }}>{ep.status}</span>
-                  </div>
-                ))
-          )}
-          {svc.name === 'Stripe API' && (
-            <div className="grid grid-cols-2 gap-2">
-              {Object.entries(svc.details).map(([k, v]) => (
-                <div key={k} className="rounded-lg px-2 py-1.5" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                  <p className="text-gray-500 capitalize">{k.replace(/([A-Z])/g, ' $1').trim()}</p>
-                  <p className="text-white font-semibold">{String(v)}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          {svc.name === 'UptimeRobot' && Array.isArray(svc.details.monitors) && (
-            svc.details.monitors.length === 0
-              ? <p className="text-gray-500">No monitors configured.</p>
-              : svc.details.monitors.map((m: any, i: number) => (
-                  <div key={i} className="flex items-center justify-between rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                    <div><p className="text-white font-medium">{m.name}</p><p className="text-gray-500 font-mono truncate max-w-[220px]">{m.url}</p></div>
-                    <div className="text-right ml-3">
-                      <p className="font-bold" style={{ color: m.status === 'up' ? C.healthy : C.down }}>{m.status}</p>
-                      <p className="text-gray-500">↑ {m.uptimeRatio}</p>
-                    </div>
-                  </div>
-                ))
-          )}
-          {svc.name === 'Resend Email' && Array.isArray(svc.details.domains) && svc.details.domains.map((d: any, i: number) => (
-            <div key={i} className="flex items-center justify-between rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
-              <span className="text-white font-medium">{d.name}</span>
-              <span className="font-bold" style={{ color: d.status === 'verified' ? C.healthy : C.degraded }}>{d.status}</span>
-            </div>
-          ))}
-          {svc.name === 'Supabase Database' && (
-            <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-lg px-2 py-1.5" style={{ background: 'rgba(255,255,255,0.04)' }}><p className="text-gray-500">Host</p><p className="text-white font-mono text-xs">{svc.details.host}</p></div>
-              <div className="rounded-lg px-2 py-1.5" style={{ background: 'rgba(255,255,255,0.04)' }}><p className="text-gray-500">Rows</p><p className="text-white font-bold">{svc.details.rowsReturned}</p></div>
-            </div>
-          )}
-          {svc.name === 'Supabase Auth' && (
-            <div className="rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
-              <p className="text-gray-500">Total registered users</p>
-              <p className="text-3xl font-black text-white mt-0.5">{svc.details.totalUsers}</p>
-            </div>
-          )}
-          {svc.name === 'Environment Variables' && (
-            <div className="space-y-1.5">
-              <p className="text-gray-500 uppercase tracking-widest text-xs mb-2">Required</p>
-              {svc.details.required?.map((v: any) => (
-                <div key={v.key} className="flex items-center gap-2">
-                  <span style={{ color: v.set ? C.healthy : C.down }}>{v.set ? '✓' : '✗'}</span>
-                  <span className="font-mono text-gray-300">{v.key}</span>
-                </div>
-              ))}
-              <p className="text-gray-500 uppercase tracking-widest text-xs mt-3 mb-2">Optional</p>
-              {svc.details.optional?.map((v: any) => (
-                <div key={v.key} className="flex items-center gap-2">
-                  <span style={{ color: v.set ? C.healthy : '#475569' }}>{v.set ? '✓' : '○'}</span>
-                  <span className="font-mono text-gray-400">{v.key}</span>
-                </div>
-              ))}
-            </div>
-          )}
+        <div className="border-t text-xs px-4 py-4 space-y-2" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)' }}>
+          <Row details={svc.details} name={svc.name} color={brand.color} />
         </div>
       )}
     </div>
   )
 }
 
-// ── Main page ─────────────────────────────────────────────────────────────────
+function Row({ details, name, color }: { details: Record<string, any>; name: string; color: string }) {
+  const pill = (text: string, good: boolean) => (
+    <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
+      style={{ background: good ? '#22c55e18' : '#ef444418', color: good ? '#22c55e' : '#ef4444' }}>
+      {text}
+    </span>
+  )
+  const box = (label: string, val: string) => (
+    <div className="rounded-xl px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <p style={{ color: 'rgba(255,255,255,0.3)' }}>{label}</p>
+      <p className="text-white font-semibold mt-0.5">{val}</p>
+    </div>
+  )
+
+  if (name === 'Stripe Webhooks' && Array.isArray(details.endpoints)) return (
+    <div className="space-y-2">
+      {details.endpoints.length === 0
+        ? <p style={{ color: 'rgba(255,255,255,0.3)' }}>No webhooks registered.</p>
+        : details.endpoints.map((ep: any, i: number) => (
+            <div key={i} className="flex items-center justify-between rounded-xl px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
+              <div>
+                <p className="font-mono text-white truncate max-w-[260px]">{ep.url}</p>
+                <p style={{ color: 'rgba(255,255,255,0.3)' }} className="mt-0.5">{ep.events} events · API {ep.apiVersion}</p>
+              </div>
+              {pill(ep.status, ep.status === 'enabled')}
+            </div>
+          ))}
+    </div>
+  )
+  if (name === 'Stripe API') return (
+    <div className="grid grid-cols-2 gap-2">
+      {Object.entries(details).map(([k, v]) => box(k.replace(/([A-Z])/g, ' $1').trim(), String(v)))}
+    </div>
+  )
+  if (name === 'UptimeRobot' && Array.isArray(details.monitors)) return (
+    <div className="space-y-2">
+      {details.monitors.length === 0
+        ? <p style={{ color: 'rgba(255,255,255,0.3)' }}>No monitors configured.</p>
+        : details.monitors.map((m: any, i: number) => (
+            <div key={i} className="flex items-center justify-between rounded-xl px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
+              <div><p className="font-semibold text-white">{m.name}</p><p className="font-mono mt-0.5 truncate max-w-[220px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{m.url}</p></div>
+              <div className="text-right ml-3">{pill(m.status, m.status === 'up')}<p className="mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>↑ {m.uptimeRatio}</p></div>
+            </div>
+          ))}
+    </div>
+  )
+  if (name === 'Resend Email' && Array.isArray(details.domains)) return (
+    <div className="space-y-2">
+      {details.domains.map((d: any, i: number) => (
+        <div key={i} className="flex items-center justify-between rounded-xl px-3 py-2" style={{ background: 'rgba(255,255,255,0.04)' }}>
+          <span className="text-white font-medium">{d.name}</span>
+          {pill(d.status, d.status === 'verified')}
+        </div>
+      ))}
+    </div>
+  )
+  if (name === 'Supabase Database') return (
+    <div className="grid grid-cols-2 gap-2">
+      {box('Host', details.host ?? '—')}
+      {box('Rows', String(details.rowsReturned ?? 0))}
+    </div>
+  )
+  if (name === 'Supabase Auth') return box('Total users', String(details.totalUsers ?? '—'))
+  if (name === 'Environment Variables') return (
+    <div className="space-y-1.5">
+      <p className="text-xs uppercase tracking-widest mb-2" style={{ color: 'rgba(255,255,255,0.2)' }}>Required</p>
+      {details.required?.map((v: any) => (
+        <div key={v.key} className="flex items-center gap-2">
+          <span style={{ color: v.set ? '#22c55e' : '#ef4444' }}>{v.set ? '✓' : '✗'}</span>
+          <span className="font-mono text-white opacity-70">{v.key}</span>
+        </div>
+      ))}
+      <p className="text-xs uppercase tracking-widest mt-3 mb-2" style={{ color: 'rgba(255,255,255,0.2)' }}>Optional</p>
+      {details.optional?.map((v: any) => (
+        <div key={v.key} className="flex items-center gap-2">
+          <span style={{ color: v.set ? '#22c55e' : '#475569' }}>{v.set ? '✓' : '○'}</span>
+          <span className="font-mono opacity-50 text-white">{v.key}</span>
+        </div>
+      ))}
+    </div>
+  )
+  return null
+}
+
+// ── Counter ───────────────────────────────────────────────────────────────────
+function Count({ to, suffix = '' }: { to: number; suffix?: string }) {
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    let cur = 0; const step = Math.max(1, Math.ceil(to / 30))
+    const id = setInterval(() => { cur = Math.min(cur + step, to); setN(cur); if (cur >= to) clearInterval(id) }, 20)
+    return () => clearInterval(id)
+  }, [to])
+  return <>{n}{suffix}</>
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function SystemHealthPage() {
   const [data, setData] = useState<HealthData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -394,11 +476,11 @@ export default function SystemHealthPage() {
     setLoading(true)
     try {
       const res = await fetch('/api/admin/system-health', { cache: 'no-store' })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (!res.ok) throw new Error(`${res.status}`)
       setData(await res.json())
       setLastChecked(new Date())
       setCountdown(30)
-    } catch { /* silently retry */ }
+    } catch { /* retry next tick */ }
     finally { setLoading(false) }
   }, [])
 
@@ -410,154 +492,141 @@ export default function SystemHealthPage() {
   }, [doFetch])
 
   const overall = data?.overallStatus ?? 'healthy'
-  const mainColor = overall === 'healthy' ? C.healthy : overall === 'degraded' ? C.degraded : C.down
+  const mainColor = overall === 'healthy' ? '#22c55e' : overall === 'degraded' ? '#f59e0b' : '#ef4444'
   const overallLabel = overall === 'healthy' ? 'All Systems Operational'
-    : overall === 'degraded' ? 'Partial Degradation Detected'
-    : 'System Issues Detected'
+    : overall === 'degraded' ? 'Partial Degradation'
+    : 'Issues Detected'
+
+  const statCards = data ? [
+    { label: 'Healthy',   n: data.services.filter(s => s.status === 'healthy').length,      color: '#22c55e', icon: '●' },
+    { label: 'Degraded',  n: data.services.filter(s => s.status === 'degraded').length,     color: '#f59e0b', icon: '◐' },
+    { label: 'Down',      n: data.services.filter(s => s.status === 'down').length,         color: '#ef4444', icon: '○' },
+    { label: 'Scan time', n: data.totalMs,                                                  color: '#818cf8', icon: '◷', suffix: 'ms' },
+  ] : []
 
   return (
     <>
       <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(12px) scale(0.98); }
+          to   { opacity: 1; transform: translateY(0)   scale(1);    }
         }
-        @keyframes pulse-ring {
-          0%   { transform: scale(1);   opacity: 0.6; }
-          100% { transform: scale(1.9); opacity: 0; }
-        }
-        @keyframes drift {
-          0%, 100% { transform: translateY(0px); }
-          50%       { transform: translateY(-8px); }
-        }
-        .pulse-ring::before {
-          content: '';
-          position: absolute;
-          inset: -8px;
-          border-radius: 9999px;
-          border: 2px solid currentColor;
-          animation: pulse-ring 1.8s ease-out infinite;
-        }
-        .pulse-ring::after {
-          content: '';
-          position: absolute;
-          inset: -18px;
-          border-radius: 9999px;
-          border: 1px solid currentColor;
-          animation: pulse-ring 1.8s 0.4s ease-out infinite;
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes tickerScroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
       `}</style>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(155deg, #050a14 0%, #0a0f1e 40%, #060b18 100%)', minHeight: '80vh' }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: '#0D0D0D', minHeight: '88vh' }}>
 
-        {/* ── Hero — ECG banner ─────────────────────────────────────────── */}
-        <div className="px-6 pt-8 pb-6 relative">
-          {/* Ambient radial glow behind ECG */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            background: `radial-gradient(ellipse 70% 60% at 50% 120%, ${mainColor}12 0%, transparent 70%)`,
-            transition: 'background 1s ease',
-          }} />
-
-          {/* Title row */}
-          <div className="flex items-center justify-between mb-5 relative z-10">
-            <div>
-              <div className="flex items-center gap-3">
-                {/* Pulsing orb */}
-                <div className="relative flex items-center justify-center pulse-ring" style={{ color: mainColor }}>
-                  <div className="w-3 h-3 rounded-full" style={{ background: mainColor, boxShadow: `0 0 12px ${mainColor}` }} />
-                </div>
-                <h1 className="text-xl font-black text-white tracking-tight">System Health</h1>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: `${mainColor}18`, color: mainColor, border: `1px solid ${mainColor}35` }}>
-                  {loading ? 'Checking…' : overallLabel}
-                </span>
-              </div>
-              {lastChecked && (
-                <p className="text-xs text-gray-600 mt-1.5 ml-6">
-                  Last scan {lastChecked.toLocaleTimeString()} · next in <span className="font-mono text-gray-500">{countdown}s</span>
-                </p>
-              )}
+        {/* ── Top bar ──────────────────────────────────────────────────── */}
+        <div style={{ background: '#111116', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+          className="flex items-center justify-between px-6 py-3">
+          <div className="flex items-center gap-3">
+            <div className="relative w-2.5 h-2.5">
+              <span className="absolute inset-0 rounded-full animate-ping" style={{ background: mainColor, opacity: 0.5 }} />
+              <span className="relative block w-2.5 h-2.5 rounded-full" style={{ background: mainColor, boxShadow: `0 0 8px ${mainColor}` }} />
             </div>
-            <button
-              onClick={doFetch}
-              disabled={loading}
-              className="text-xs font-semibold px-4 py-2 rounded-xl transition-all disabled:opacity-40"
-              style={{ background: `${mainColor}12`, color: mainColor, border: `1px solid ${mainColor}30` }}
-            >
-              {loading ? '⟳ Scanning…' : '⟳ Scan Now'}
+            <span className="text-sm font-bold text-white">System Health</span>
+            <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold"
+              style={{ background: `${mainColor}18`, color: mainColor, border: `1px solid ${mainColor}30` }}>
+              {loading ? 'Scanning…' : overallLabel}
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            {lastChecked && (
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                {lastChecked.toLocaleTimeString()} · <span className="font-mono">{countdown}s</span>
+              </span>
+            )}
+            <button onClick={doFetch} disabled={loading}
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all disabled:opacity-30"
+              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              {loading ? '⟳ Scanning' : '⟳ Refresh'}
             </button>
           </div>
+        </div>
 
-          {/* ECG canvas */}
-          <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${mainColor}18` }}>
-            <HeartbeatCanvas overallStatus={overall} />
+        {/* ── ECG + stats ───────────────────────────────────────────────── */}
+        <div className="px-6 pt-5 pb-4">
+          {/* ECG */}
+          <div className="rounded-2xl overflow-hidden mb-4" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
+            <MasterECG services={data?.services ?? []} />
           </div>
 
-          {/* Stats strip */}
-          {data && (
-            <div className="grid grid-cols-5 gap-2 mt-4">
-              {[
-                { label: 'Healthy',   val: data.services.filter(s => s.status === 'healthy').length,      color: C.healthy,      suffix: '' },
-                { label: 'Degraded',  val: data.services.filter(s => s.status === 'degraded').length,     color: C.degraded,     suffix: '' },
-                { label: 'Down',      val: data.services.filter(s => s.status === 'down').length,         color: C.down,         suffix: '' },
-                { label: 'Not Set',   val: data.services.filter(s => s.status === 'unconfigured').length, color: C.unconfigured, suffix: '' },
-                { label: 'Scan time', val: data.totalMs,                                                  color: '#818cf8',      suffix: 'ms' },
-              ].map(stat => (
-                <div key={stat.label} className="rounded-xl px-3 py-2.5 text-center" style={{ background: `${stat.color}0c`, border: `1px solid ${stat.color}20` }}>
-                  <p className="text-xl font-black tabular-nums" style={{ color: stat.color, textShadow: `0 0 12px ${stat.color}88` }}>
-                    <Counter to={stat.val} suffix={stat.suffix} />
+          {/* Stat cards */}
+          <div className="grid grid-cols-4 gap-3">
+            {statCards.map(s => (
+              <div key={s.label} className="rounded-xl px-4 py-3 flex items-center gap-3"
+                style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <span className="text-xl" style={{ color: s.color, textShadow: `0 0 10px ${s.color}` }}>{s.icon}</span>
+                <div>
+                  <p className="text-xl font-black tabular-nums text-white leading-none">
+                    <Count to={s.n} suffix={'suffix' in s ? (s as any).suffix : ''} />
                   </p>
-                  <p className="text-xs text-gray-600 mt-0.5">{stat.label}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>{s.label}</p>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Divider label ─────────────────────────────────────────────── */}
+        <div className="flex items-center gap-3 px-6 mb-4">
+          <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.05)' }} />
+          <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.15)' }}>
+            Live Service Signals
+          </span>
+          <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.05)' }} />
         </div>
 
         {/* ── Service grid ──────────────────────────────────────────────── */}
-        <div className="px-6 pb-8">
-          {/* Section label */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.06), transparent)' }} />
-            <span className="text-xs text-gray-600 uppercase tracking-widest font-semibold">Live Service Signals</span>
-            <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06))' }} />
-          </div>
-
-          {/* Skeleton */}
-          {loading && !data && (
+        <div className="px-6 pb-6">
+          {loading && !data ? (
             <div className="grid grid-cols-2 gap-3">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-36 rounded-2xl animate-pulse" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: `${i * 80}ms` }} />
+                <div key={i} className="h-40 rounded-2xl animate-pulse"
+                  style={{ background: '#111116', animationDelay: `${i * 80}ms` }} />
               ))}
             </div>
-          )}
-
-          {/* Cards */}
-          {data && (
+          ) : (
             <div className="grid grid-cols-2 gap-3">
-              {data.services.map((svc, i) => (
-                <ServiceCard key={svc.name} svc={svc} index={i} />
-              ))}
+              {data?.services.map((svc, i) => <ServiceCard key={svc.name} svc={svc} idx={i} />)}
             </div>
           )}
 
           {/* UptimeRobot nudge */}
           {data?.services.find(s => s.name === 'UptimeRobot' && s.status === 'unconfigured') && (
-            <div className="mt-4 rounded-2xl px-5 py-4 text-xs" style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', animation: 'fadeUp 0.4s 450ms ease both', opacity: 0 }}>
-              <p className="text-indigo-300 font-semibold mb-1">📡 Connect UptimeRobot for monitor signals</p>
-              <p className="text-indigo-500">
-                Add <code className="bg-indigo-900/40 px-1 rounded font-mono">UPTIMEROBOT_API_KEY</code> to <code className="bg-indigo-900/40 px-1 rounded font-mono">.env.local</code>.
-                Get it from{' '}
-                <a href="https://uptimerobot.com/dashboard" target="_blank" rel="noopener" className="text-indigo-300 underline">uptimerobot.com → My Settings → Main API Key</a>.
+            <div className="mt-4 rounded-2xl px-5 py-4 text-xs"
+              style={{ background: 'rgba(56,189,248,0.06)', border: '1px solid rgba(56,189,248,0.15)', animation: 'fadeIn 0.4s 500ms ease both', opacity: 0 }}>
+              <p className="font-semibold mb-1" style={{ color: '#38BDF8' }}>📡 Connect UptimeRobot</p>
+              <p style={{ color: 'rgba(56,189,248,0.6)' }}>
+                Add <code className="bg-sky-900/30 px-1 rounded font-mono">UPTIMEROBOT_API_KEY</code> to{' '}
+                <code className="bg-sky-900/30 px-1 rounded font-mono">.env.local</code> —{' '}
+                <a href="https://uptimerobot.com/dashboard" target="_blank" rel="noopener" className="underline" style={{ color: '#38BDF8' }}>
+                  get your key here
+                </a>
               </p>
             </div>
           )}
 
-          {/* Live ticker */}
-          <div className="flex items-center justify-center gap-2 mt-8">
-            <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ background: mainColor }} />
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.15)' }}>
-              Live · auto-scan every 30s · {data?.services.length ?? 0} services monitored
-            </span>
+          {/* Scrolling ticker */}
+          <div className="mt-6 overflow-hidden rounded-xl py-2" style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div className="flex gap-8 whitespace-nowrap text-xs" style={{ animation: 'tickerScroll 24s linear infinite', color: 'rgba(255,255,255,0.18)' }}>
+              {[...(data?.services ?? []), ...(data?.services ?? [])].map((s, i) => {
+                const b = BRAND[s.name]
+                return (
+                  <span key={i} className="flex items-center gap-1.5 shrink-0">
+                    <span style={{ color: b?.color ?? '#94a3b8', fontSize: 10 }}>●</span>
+                    <span className="font-medium" style={{ color: 'rgba(255,255,255,0.35)' }}>{b?.label ?? s.name}</span>
+                    <span style={{ color: STATUS_COLOR[s.status] }}>{STATUS_LABEL[s.status]}</span>
+                    {s.responseTimeMs !== undefined && <span>{s.responseTimeMs}ms</span>}
+                    <span className="opacity-30 mx-2">·</span>
+                  </span>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
