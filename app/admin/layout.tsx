@@ -1,9 +1,10 @@
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import Link from 'next/link'
+import { adminFetchAll } from '@/lib/supabase/admin'
 
-// Keep in sync with proxy.ts
-const ADMIN_EMAILS = [
+// Permanent superadmins — always have access regardless of the DB
+const SUPER_ADMIN_EMAILS = [
   'srikanth@ctekksolutions.net',
   'shuchitha@shiroapps.com',
   'info@shirotechnologies.com',
@@ -16,6 +17,7 @@ const navLinks = [
   { href: '/admin/courses', label: '📚 Courses' },
   { href: '/admin/purchases', label: '💳 Purchases' },
   { href: '/admin/quiz-results', label: '📝 Quiz Results' },
+  { href: '/admin/admin-access', label: '🔑 Admin Access' },
 ]
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +28,22 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const userEmail = headersList.get('x-user-email')
 
   if (!userEmail) redirect('/login')
-  if (!ADMIN_EMAILS.includes(userEmail.toLowerCase())) redirect('/dashboard')
+
+  const email = userEmail.toLowerCase()
+
+  // 1. Check permanent superadmin list first (no DB call needed)
+  let hasAccess = SUPER_ADMIN_EMAILS.includes(email)
+
+  // 2. If not a superadmin, check the dynamic admin_users table
+  if (!hasAccess) {
+    const { data } = await adminFetchAll(
+      'admin_users',
+      `email=eq.${encodeURIComponent(email)}&select=email`
+    )
+    hasAccess = data.length > 0
+  }
+
+  if (!hasAccess) redirect('/dashboard')
 
   return (
     <div className="min-h-screen bg-gray-50">

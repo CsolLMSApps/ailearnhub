@@ -2,277 +2,230 @@
 
 ## Introduction
 
-Learn how to leverage AI tools to create engaging social media content at scale while maintaining your brand voice and authenticity.
-
-## Learning Objectives
-
-By the end of this module, you will be able to:
-- Generate platform-specific content using AI
-- Create content calendars with AI assistance
-- Maintain consistent brand voice across all content
-- Use AI for image and video content ideation
-- Optimize content for each social platform
-
-## Content Strategy with AI
+Creating social media content at scale used to require a team — a copywriter, a designer, a video editor, and a strategist. In 2025, one person with the right AI tools can produce that same output. This module gives you the complete AI content creation workflow for social media.
 
-### Understanding Platform Requirements
-
-Different platforms have different content needs:
-- **Instagram**: Visual-first, short captions
-- **LinkedIn**: Professional, longer-form
-- **Twitter/X**: Concise, engaging, conversational
-- **Facebook**: Community-focused, varied formats
-- **TikTok**: Video-first, trending audio
-
-### AI Tools for Content Creation
-
-**Text Content:**
-- ChatGPT for captions and posts
-- Jasper for marketing copy
-- Copy.ai for variations
-
-**Visual Content:**
-- Midjourney for image generation
-- DALL-E for custom graphics
-- Canva AI for design
-
-**Video Content:**
-- Descript for editing
-- Runway ML for effects
-- Synthesia for AI presenters
-
-## Creating a Content Calendar
-
-### Step 1: Define Your Themes
-
-Example prompt:
-```
-Create a 30-day content calendar for a sustainable fashion brand.
-Include:
-- 3 educational posts per week
-- 2 product highlights
-- 1 behind-the-scenes
-- 1 user-generated content feature
-
-Platform: Instagram
-Tone: Authentic, inspiring, educational
-```
+---
 
-### Step 2: Generate Content in Batches
+**Duration:** 30 minutes
 
-Batch creation saves time:
-- Monday: Education week
-- Wednesday: Product features
-- Friday: Community engagement
-
-### Step 3: Customize and Schedule
+---
 
-Always:
-- Review AI output
-- Add personal touches
-- Include your brand voice
-- Schedule at optimal times
-
-## Platform-Specific Best Practices
-
-### Instagram
-
-**Caption Formula:**
-1. Hook (first line)
-2. Value/Story (2-3 paragraphs)
-3. Call to action
-4. Hashtags (10-15 relevant)
-
-Example AI prompt:
-```
-Write an Instagram caption for a photo of organic cotton t-shirts.
-Hook: Question about sustainable fashion
-Value: Benefits of organic cotton
-CTA: Shop the collection
-Tone: Friendly, eco-conscious
-Length: 150-200 words
-Include 12 relevant hashtags
-```
-
-### LinkedIn
-
-**Post Structure:**
-1. Professional insight
-2. Personal story/data
-3. Actionable takeaway
-4. Question for engagement
-
-### Twitter/X
-
-**Tweet Formula:**
-- Lead with value
-- Use line breaks
-- Include relevant hashtag
-- End with question or CTA
+## What You'll Learn
 
-## Maintaining Brand Voice
+- Write high-performing social media copy for every major platform using AI
+- Create professional visual content without a designer
+- Produce short-form video content with AI assistance
+- Build a content repurposing system that multiplies every piece of content
+- Maintain brand consistency at scale
 
-### Creating a Brand Voice Guide
+---
 
-Include in your AI prompts:
-- Tone descriptors (friendly, professional, witty)
-- Words to use/avoid
-- Sentence structure preferences
-- Emoji usage guidelines
+## 2.1 Writing Platform-Specific Copy with AI
 
-Example:
-```
-Brand Voice: Friendly, approachable, expert but not condescending
-Use: We, you, let's
-Avoid: Obviously, simply, just
-Emoji: Sparingly, 1-2 per post max
-```
-
-### Consistency Checks
+Each platform has its own content language. What performs on LinkedIn fails on TikTok. AI can generate platform-appropriate copy if you give it the right specifications.
 
-Review checklist:
-- [ ] Does it sound like our brand?
-- [ ] Is the tone appropriate?
-- [ ] Would our target audience engage?
-- [ ] Does it align with our values?
-
-## Content Variation Techniques
+### LinkedIn Copy
 
-### The 3-2-1 Method
-
-From one piece of content, create:
-- 3 social posts
-- 2 graphics
-- 1 video/reel
-
-Example:
-Blog post → LinkedIn article + Instagram carousel + Twitter thread
-
-### Repurposing Framework
-
-1. Long-form (blog, video)
-2. Medium (social posts, infographics)
-3. Micro (quotes, tips, stats)
-
-## AI Image Generation for Social
-
-### Midjourney Prompts for Social Media
-
-**Product Photography Style:**
-```
-Professional product photo, [product description],
-studio lighting, clean background,
-commercial photography, high-end,
---ar 4:5 (Instagram) or 16:9 (LinkedIn)
-```
-
-**Lifestyle Content:**
-```
-Lifestyle photo of [scene], natural lighting,
-authentic moment, diverse people,
-real photography style, candid
---ar 4:5
-```
-
-### DALL-E for Quick Graphics
-
-Best for:
-- Abstract concepts
-- Custom illustrations
-- Infographic elements
-- Background images
-
-## Video Content with AI
-
-### Short-Form Video Ideas
-
-Using AI for scripts:
-```
-Create a 30-second Instagram Reel script about:
-[Your topic]
-Include: Hook, value, CTA
-Format: On-screen text points
-```
-
-### AI Video Tools
-
-**Descript**: For editing existing footage
-- Auto-transcription
-- Remove filler words
-- Create captions
-
-**Runway ML**: For effects and enhancements
-- Green screen removal
-- Style transfer
-- Object removal
-
-## Content Analytics Integration
-
-### What to Track
-
-- Engagement rate
-- Best performing topics
-- Optimal posting times
-- Content format preferences
-
-### Using AI for Analysis
-
-Prompt example:
-```
-Analyze this engagement data and suggest:
-1. Best performing content themes
-2. Optimal posting schedule
-3. Content improvements
-[Paste your analytics data]
-```
-
-## Practical Exercise
-
-### Exercise: Create a Week of Content
-
-Using AI:
-1. Generate 7 post ideas
-2. Write captions for each
-3. Create image prompts
-4. Schedule strategically
-
-**Template Prompt:**
-```
-Create 7 social media posts for [brand/business]
-Platform: [Instagram/LinkedIn/etc]
-Audience: [description]
-Goals: [awareness/engagement/sales]
-Include: Captions, hashtags, image ideas, posting times
-```
-
-## Summary
-
-Key takeaways:
-- AI accelerates content creation
-- Maintain your unique voice
-- Create platform-specific content
-- Batch and schedule efficiently
-- Always review and customize AI output
-
-## Resources
-
-**AI Tools:**
-- ChatGPT (text)
-- Midjourney (images)
-- Canva AI (design)
-- Later or Buffer (scheduling)
-
-**Best Practices:**
-- Create brand voice guide
-- Build template library
-- Schedule content in advance
-- Monitor performance
-- Iterate based on data
-
-## Next Steps
-
-In Module 3, we'll explore:
-- AI-powered audience targeting
-- Engagement optimization
-- Community management automation
-- Performance analytics
+LinkedIn in 2025 rewards personal storytelling, specific insights, and content that sparks discussion.
+
+**High-performing LinkedIn post formula:**
+1. **Hook line** — one sentence that makes someone stop scrolling
+2. **The gap** — expand on why this matters
+3. **The insight or story** — your actual point, with specifics
+4. **The proof** — example, data, or experience
+5. **CTA or takeaway** — what should the reader do or think?
+
+**Prompt:**
+> Write a LinkedIn post for a [role] in [industry] about [topic/experience/lesson].
+> My hook should be contrarian or surprising: [your angle].
+> Include: a specific example or number that makes the point concrete.
+> Tone: direct and conversational — like talking to a smart colleague, not a marketing automation tool.
+> Length: 180–250 words. No hashtag spam. No generic CTA like "what do you think?"
+
+### Instagram Captions
+
+Instagram captions should complement the visual and drive a specific action (save, comment, share, click link in bio).
+
+**Prompt:**
+> Write 3 Instagram caption options for a post about [topic].
+> Visual: [describe the image or Reel]
+> Audience: [describe]
+> Goal: [drive saves / drive comments / drive link clicks]
+> Tone: [casual / educational / motivational / storytelling]
+> Length: under 100 words. End with a specific, action-oriented CTA.
+
+### TikTok and Reels Scripts
+
+Short-form video hooks are critical — you have 1–2 seconds before someone scrolls.
+
+**Script prompt:**
+> Write a 30–60 second TikTok/Reels script about [topic].
+> Hook (first 2 seconds): start with a bold statement, surprising fact, or a question that creates pattern interrupt.
+> Body: deliver the main value clearly and quickly — no filler.
+> CTA: [follow for more / comment your answer / share this if...]
+> Tone: [energetic / educational / POV / storytelling]
+> Write the full spoken script with visual cues in brackets.
+
+### X (Twitter) Threads
+
+> Write a 5-tweet thread about [topic]. 
+> Tweet 1: hook — should be so interesting it makes someone click "show more"
+> Tweets 2–4: one key insight per tweet, with a specific example
+> Tweet 5: summary and CTA
+> Each tweet under 280 characters. No filler.
+
+---
+
+## 2.2 AI Image Creation for Social Media
+
+Great social media content is visual first. AI image generation has made professional-quality visuals accessible to anyone.
+
+### Tools and When to Use Each
+
+**DALL-E 3 (via ChatGPT):**
+- Best for: images with text, following precise descriptions, quick iterations
+- Integrated into ChatGPT Plus — no extra tool needed
+- Prompt tip: describe exactly what you see, not the emotion you want
+
+**Midjourney:**
+- Best for: high-quality artistic, lifestyle, and brand photography-style images
+- Access via Discord or midjourney.com
+- Produces the most consistently stunning results
+
+**Adobe Firefly:**
+- Best for: commercial use where you need guaranteed copyright safety
+- Integrated into Photoshop and Adobe Express
+- Strong for brand-consistent imagery with specific style controls
+
+**Canva AI (Magic Design + Text to Image):**
+- Best for: non-designers who want a complete design workflow
+- Generates images AND places them in pre-designed templates
+
+### Writing Image Prompts That Work
+
+**Formula:** Subject + Setting + Style + Lighting + Mood + Format
+
+**Weak:** *"A woman using a laptop"*
+
+**Strong:** *"A young professional woman working at a standing desk in a bright modern co-working space, warm afternoon window light, plants in background, relaxed and focused expression, editorial photography style, wide format 16:9"*
+
+**Platform-specific format tips:**
+- Instagram feed: 1:1 square or 4:5 portrait
+- Instagram Stories / Reels cover: 9:16 vertical
+- LinkedIn: 1200 x 628px (roughly 1.91:1 landscape)
+- Twitter/X: 16:9 landscape or 1:1 square
+
+---
+
+## 2.3 AI Video Creation
+
+Short-form video is the dominant content format in 2025. AI has dramatically lowered the barrier to production.
+
+### Approaches to AI Video
+
+**Option 1 — AI-Assisted (you on camera):** Use AI to write the script and add AI tools in post-production (captions, editing, b-roll). Fastest, most authentic.
+
+**Option 2 — AI Avatar Video:** Use HeyGen or Synthesia to generate a presenter video from your script. No camera required. Used widely for tutorials, training, and product demos.
+
+**Option 3 — Fully AI-Generated Video:** Use Runway Gen-3, Kling, or Sora to generate video from text prompts. Best for b-roll, abstract content, and visual storytelling.
+
+### Caption and Hook Generation with AI
+
+For existing video, paste a transcript and ask:
+> Here's the transcript of a [X] minute video about [topic]. Generate: (1) 5 hook options for the first 3 seconds of a Reels/TikTok cut, (2) 3 caption options for the Instagram post, (3) suggested on-screen text overlays for 3 key moments.
+
+### CapCut AI — The All-in-One Video Tool
+
+CapCut (free) has strong AI features specifically for social media video:
+- Auto-captions with multiple styles
+- AI background removal
+- AI script-to-video (basic)
+- Template-based editing for Reels/TikTok
+- Auto-clipping for longer videos
+
+---
+
+## 2.4 Design at Scale with Canva AI
+
+Canva's AI features in 2025 make it the most practical design tool for social media marketers who aren't designers.
+
+**Key AI features in Canva:**
+- **Magic Design:** Describe what you want and Canva generates a complete design
+- **Text to Image:** Generate custom images within Canva layouts
+- **Magic Write:** AI copywriting inside your design
+- **Magic Resize:** Automatically reformat any design for every platform
+- **Brand Kit:** Upload your colours, fonts, and logo — Canva applies them automatically
+
+**Workflow:**
+1. Set up your Brand Kit (colours, fonts, logo)
+2. Start with a template or Magic Design
+3. Adjust copy with Magic Write
+4. Generate custom images with Text to Image if stock photos aren't right
+5. Resize for every platform with Magic Resize
+6. Export and schedule
+
+---
+
+## 2.5 Content Repurposing — The Multiplier Effect
+
+The most efficient content creators aren't making more content — they're getting more out of every piece of content they make.
+
+**The repurposing framework:**
+
+**Start with one long-form "pillar" piece:**
+- A blog post, YouTube video, podcast episode, or webinar
+
+**Extract for social:**
+> I've written/recorded [content description]. Here's the transcript/text [paste]. 
+> Repurpose this into:
+> - 5 LinkedIn posts (one per main point)
+> - 3 Instagram carousels (with slide-by-slide breakdown)
+> - 5 short TikTok/Reels hooks and scripts
+> - 3 tweet-length insights
+> - 1 newsletter section intro
+> - 1 YouTube Shorts script
+
+**One blog post → 15+ pieces of social content.** This is the content efficiency that AI makes possible.
+
+---
+
+## 2.6 Maintaining Brand Voice at Scale
+
+When AI is generating content, brand consistency requires deliberate management.
+
+**Build a brand voice brief for ChatGPT:**
+> Our brand voice is: [describe — e.g., "direct and confident, never corporate, uses simple language, slightly irreverent, data-driven but human"]
+> Words we use: [list your vocabulary]
+> Words we NEVER use: [list — e.g., delve, robust, transformative, game-changing, leverage as a verb]
+> Our tone for [platform]: [describe any platform-specific adjustments]
+> Examples of content that represents our voice: [paste 2–3 examples]
+>
+> Save this as context and use it for all content you generate for us.
+
+Put this in a Custom GPT or a ChatGPT Project for your brand — then every conversation in that project starts with this context automatically.
+
+**Review before publishing:**
+Always read AI-generated content aloud. If it sounds like "marketing copy" rather than a human talking, edit it until it doesn't.
+
+---
+
+## Key Takeaways
+
+- Each platform needs its own **copy format** — what works on LinkedIn fails on TikTok
+- The **short-form video hook** (first 2 seconds) is the most important line of copy you write
+- **AI image tools** (DALL-E 3, Midjourney, Firefly) make professional visuals accessible without a designer
+- **Canva AI** (Magic Design, Magic Resize, Brand Kit) is the most practical all-in-one design tool for marketers
+- **Repurposing** is the highest-efficiency content strategy — one pillar piece becomes 15+ social posts
+- Build a **brand voice brief** and put it in a Custom GPT or Project — consistency at scale requires systematic management
+
+---
+
+## Quick Check
+
+1. What are the 5 parts of a high-performing LinkedIn post structure?
+2. What's the difference in use cases between DALL-E 3, Midjourney, and Adobe Firefly?
+3. How many pieces of social content should you be able to extract from one long-form pillar piece?
+
+---
+
+*Next up: Module 3 — AI-Driven Audience Targeting & Engagement*

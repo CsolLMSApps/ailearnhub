@@ -3,328 +3,162 @@
 
 ---
 
-## Let's Get Hands-On!
+## What You'll Learn
 
-Now that you understand what AI is, it's time to actually USE it. This module is 100% practical—by the end, you'll have ChatGPT working for you!
-
-**By the end of this module:**
-- ✅ Know how to access ChatGPT
-- ✅ Have your first successful conversation
-- ✅ Complete 5 simple tasks with AI
-- ✅ Feel confident using ChatGPT daily
-
-Let's dive in! 🚀
+By the end of this module, you will be able to:
+- Set up and navigate ChatGPT, Claude, or Gemini confidently
+- Write your first effective prompts and get useful responses
+- Understand the difference between free and paid AI tiers in 2025
+- Use memory, custom instructions, and Projects features
 
 ---
 
-## How to Access ChatGPT
+## 2.1 Choosing Your AI Tool
 
-### Option 1: Free Version (chat.openai.com)
-1. Go to **chat.openai.com**
-2. Click "Sign up"
-3. Use email or Google/Microsoft account
-4. Verify email
-5. Start chatting!
+In 2025, you have more high-quality AI options than ever. Here's how to choose:
 
-**What you get:**
-- ✅ Unlimited conversations
-- ✅ GPT-3.5 (fast, capable)
-- ✅ Perfect for learning
-- ❌ Slower during peak times
+**ChatGPT (OpenAI)**
+- Best for: general use, coding, image generation (DALL-E), data analysis
+- Free tier: GPT-4o with usage limits
+- Paid (Plus, $20/month): higher limits, voice mode, advanced data analysis, GPT-4o and o3 access
+- Best feature: GPTs (custom AI assistants), Projects for organising conversations
 
-### Option 2: ChatGPT Plus ($20/month)
-- Faster responses
-- GPT-4 access (smarter)
-- Access during busy times
-- New features first
+**Claude (Anthropic)**
+- Best for: long documents, nuanced writing, research, following complex instructions
+- Free tier: Claude 3.5 Sonnet with daily limits
+- Paid (Pro, $20/month): Claude 3.7 Sonnet and Opus 4 access, Projects, extended thinking mode
+- Best feature: 200,000+ token context window — can read an entire book in one go
 
-**Recommendation:** Start with free version, upgrade later if needed.
+**Gemini (Google DeepMind)**
+- Best for: Google Workspace integration, real-time search, multimodal tasks
+- Free tier: Gemini 1.5 Flash
+- Paid (Advanced, $19.99/month): Gemini Ultra, Deep Research, integration with Gmail/Docs/Sheets
+- Best feature: Deep Research — AI that independently researches a topic and produces a detailed report
 
----
-
-## Your First Conversation
-
-### The Interface
-When you open ChatGPT, you'll see:
-- **Text box at bottom:** Where you type
-- **Send button:** Submit your message
-- **New chat button:** Start fresh conversation
-- **History sidebar:** Past conversations
-
-**That's it! Super simple.**
+**Recommendation for beginners:** Start with ChatGPT (free tier). It has the largest user community, the most tutorials, and a straightforward interface. You can always try others once you're comfortable.
 
 ---
 
-### Try This Right Now
+## 2.2 Setting Up Your Account
 
-**Copy and paste this into ChatGPT:**
-```
-Hello! I'm new to AI. Can you explain in simple terms what you can help me with?
-```
+### ChatGPT Setup (Step by Step)
 
-**What happens:**
-- ChatGPT introduces itself
-- Lists what it can do
-- Asks how to help
+1. Go to **chat.openai.com** and click "Sign up"
+2. Create an account with email, Google, or Apple login
+3. Verify your email address
+4. You now have access to GPT-4o on the free tier
 
-**Key lesson:** Just ask! ChatGPT is conversational.
+**First things to configure:**
 
----
+- **Custom Instructions** (Settings → Personalization → Custom Instructions): Tell ChatGPT who you are and how you like responses. Example: *"I'm a small business owner in retail. Explain things in plain English without technical jargon. Keep responses concise and action-focused."*
+- **Memory** (Settings → Personalization → Memory): When enabled, ChatGPT remembers things across conversations. You can tell it your preferences, your job, your goals — and it carries that context forward.
 
-## 5 Simple Tasks (Try Each One!)
+### Navigating the Interface
 
-### Task 1: Get an Explanation
-**You:** 
-```
-Explain how email works like I'm 10 years old
-```
-
-**What you learn:** ChatGPT simplifies complex topics
+- **Sidebar:** Your conversation history, organised by date
+- **Projects:** Group related conversations together (like a folder system)
+- **Model selector:** Switch between GPT-4o (fast, capable) and o3 (slower but stronger at reasoning)
+- **Attachment button:** Upload files, images, or documents
+- **Voice button:** Speak your prompt and hear a spoken response
+- **Canvas:** A collaborative writing and coding workspace
 
 ---
 
-### Task 2: Generate Ideas
-**You:**
-```
-Give me 5 ideas for a birthday gift for my mom who loves gardening
-```
+## 2.3 Your First Prompt
 
-**What you learn:** AI is great for brainstorming
+A prompt is simply what you type to the AI. The quality of your prompt directly determines the quality of the response.
 
----
+**Weak prompt:**
+> Help me write an email.
 
-### Task 3: Write Something
-**You:**
-```
-Write a short thank you email to my coworker who helped me yesterday
-```
+**Strong prompt:**
+> I need to write a professional email to a client who missed our scheduled call without notice. The tone should be polite but firm. I want to express mild frustration without being rude, request a rescheduled time, and confirm they're still interested in moving forward. Keep it under 150 words.
 
-**What you learn:** ChatGPT writes for you!
+The difference: the strong prompt gives **role**, **context**, **tone**, **goal**, and **constraints**. You'll learn more about this in the ChatGPT Mastery course — but even these basics will dramatically improve your results.
 
----
+### Try It Now
 
-### Task 4: Summarize
-**You:**
-```
-Summarize this in 3 bullet points:
-[Paste any article or text]
-```
+Open ChatGPT and try this prompt:
+> I'm completely new to AI. In 3 bullet points, explain the most useful things someone like me should use AI for in daily life. Keep each point to one sentence.
 
-**What you learn:** AI condenses information
+Notice how specific the prompt is — and how specific the response will be.
 
 ---
 
-### Task 5: Plan Something
-**You:**
-```
-Help me plan a healthy weekly meal plan with easy recipes
-```
+## 2.4 Understanding the Conversation Format
 
-**What you learn:** AI can organize and plan
+ChatGPT works in **turns** — you send a message, it responds, you reply, it responds again. This back-and-forth is powerful because you can:
 
----
+**Refine:** *"That's good, but make the opening line more engaging"*
 
-## How to Ask Good Questions
+**Expand:** *"Can you elaborate on point 2 with a specific example?"*
 
-### ❌ Vague (Poor Results):
-- "Tell me about food"
-- "Help me"
-- "Write something"
+**Change direction:** *"Actually, let's approach this differently — make it more formal"*
 
-### ✅ Specific (Great Results):
-- "Explain the health benefits of salmon in simple terms"
-- "Help me write a birthday card message for my best friend"
-- "Write a 100-word product description for noise-canceling headphones"
+**Ask follow-up questions:** *"Why did you choose that structure?"*
 
-**The more specific, the better!**
+Think of it like working with a very capable assistant — the conversation is how you direct their work.
 
----
+### Context Window Limits
 
-## Common Beginner Mistakes
+Every conversation has a **context window** — the amount of text the AI can "see" at once. In 2025:
+- GPT-4o: 128,000 tokens (~100,000 words)
+- Claude: 200,000+ tokens (~150,000+ words)
+- Gemini 1.5 Pro: 1 million tokens
 
-### Mistake 1: Treating It Like Google
-- ❌ "What's the weather today?"
-- ✅ "Give me ideas for indoor activities on a rainy day"
-
-**Why:** ChatGPT generates answers, doesn't search the web
+In practice, you'll rarely hit these limits. But for very long projects, use Projects or split work across conversations.
 
 ---
 
-### Mistake 2: Giving Up Too Soon
-If the first answer isn't perfect:
-- ❌ "This doesn't work"
-- ✅ "Can you make this shorter and more casual?"
+## 2.5 Free vs Paid — What's Actually Worth It?
 
-**Keep conversing until you get what you need!**
+| Feature | Free | Paid (~$20/month) |
+|---|---|---|
+| Model quality | Good (GPT-4o mini / Gemini Flash) | Excellent (GPT-4o, o3, Claude Opus) |
+| Usage limits | Moderate daily cap | Much higher, sometimes unlimited |
+| Image generation | Limited or none | Full access |
+| File uploads | Limited | Generous |
+| Voice mode | Basic | Advanced (natural conversation) |
+| Memory | Basic | Full cross-conversation memory |
+| Projects | Limited | Full |
+| Plugins/tools | Limited | Full web search, code execution |
 
----
-
-### Mistake 3: Not Being Clear
-- ❌ "Make it better"
-- ✅ "Make it more professional and under 100 words"
-
-**Tell ChatGPT exactly what you want!**
-
----
-
-## Practice Exercises
-
-**Try these 3 prompts:**
-
-1. **Personal:**
-```
-Help me write a grocery list for healthy meals this week
-```
-
-2. **Work:**
-```
-Draft an email to my boss requesting next Friday off
-```
-
-3. **Learning:**
-```
-Teach me 5 basic Spanish phrases for travel
-```
-
-**Do these NOW before continuing!**
+**Should you pay?** If you're using AI for work — yes. The time saved in a week easily outweighs $20/month. Start free, then upgrade once you've built a habit.
 
 ---
 
-## Quick Tips for Success
+## 2.6 What to Do When AI Gets It Wrong
 
-### Tip 1: Start a New Chat for New Topics
-- Don't mix topics in one conversation
-- Fresh chat = fresh context
+AI makes mistakes. Here's how to handle them:
 
-### Tip 2: Give Feedback
-- "That's good, but make it shorter"
-- "Perfect! Now do the same for [X]"
+**Hallucinations:** The AI states something incorrect with confidence. Always verify statistics, quotes, names, and facts before using them. Paste a specific fact into a search engine or authoritative source.
 
-### Tip 3: Save Good Results
-- Copy useful outputs
-- Build your own template library
+**Misunderstood intent:** The AI answered something you didn't ask. Restate your prompt more specifically, or say: *"That's not quite what I meant. What I actually need is..."*
 
-### Tip 4: Experiment Freely
-- You can't break it!
-- Try wild ideas
-- Learn by doing
+**Too generic:** The response could apply to anyone. Add more specific context — your industry, your audience, your specific situation.
 
----
+**Too long or too short:** Add *"Please respond in under 100 words"* or *"Please give me a thorough, detailed response with examples."*
 
-## What ChatGPT Can Do for Beginners
-
-### Writing Help:
-- Emails (personal & work)
-- Messages and texts
-- Social media posts
-- Letters and cards
-
-### Learning:
-- Explain topics simply
-- Answer questions
-- Teach new skills
-- Language practice
-
-### Planning:
-- Meal plans
-- Trip itineraries
-- To-do lists
-- Gift ideas
-
-### Fun:
-- Jokes and riddles
-- Story ideas
-- Game suggestions
-- Creative projects
-
----
-
-## Limitations to Know
-
-**ChatGPT CANNOT:**
-- Access the internet (in free version)
-- Know current events after its training
-- Remember you between conversations (unless you tell it)
-- Do math perfectly every time (double-check calculations)
-- Replace professional advice (medical, legal, financial)
-
-**ChatGPT CAN:**
-- Generate text instantly
-- Explain things clearly
-- Help with writing tasks
-- Brainstorm ideas
-- Organize information
-
----
-
-## Your Daily AI Habit
-
-**Start with this routine:**
-
-**Morning:**
-- Ask ChatGPT to help plan your day
-- Get breakfast ideas
-- Draft any emails you need
-
-**During Day:**
-- Quick questions when stuck
-- Help writing messages
-- Explain things you don't understand
-
-**Evening:**
-- Reflect on day (ask for journal prompts)
-- Plan tomorrow
-- Learn something new
-
-**Time commitment:** 5-10 minutes  
-**Time saved:** 30+ minutes
+**Not the right tone:** Say *"Rewrite this in a more casual/professional/enthusiastic tone."*
 
 ---
 
 ## Key Takeaways
 
-🎯 **What You Learned:**
-1. How to access and set up ChatGPT
-2. The interface is simple: type and send!
-3. Be specific in your requests
-4. Keep conversing until you get what you need
-5. 5 practical tasks you can do immediately
-6. Common mistakes and how to avoid them
-
-🚀 **Immediate Actions:**
-- Create your ChatGPT account (if you haven't)
-- Complete the 3 practice exercises
-- Try one AI task tomorrow
-- Build confidence through daily use
+- The three main AI tools in 2025 are **ChatGPT, Claude, and Gemini** — all excellent, each with strengths
+- Set up **Custom Instructions and Memory** so AI learns your preferences from day one
+- Strong prompts include **context, goal, tone, and constraints** — the more specific, the better
+- AI conversations are iterative — refine, expand, and redirect until you get exactly what you need
+- Free tiers work well for learning; **paid tiers** unlock significantly better models and features for work use
 
 ---
 
-## Glossary
+## Quick Check
 
-**Prompt:** Your message/question to ChatGPT. The input you provide.
-
-**Conversation:** The back-and-forth exchange with ChatGPT. Each chat has its own conversation.
-
-**Token:** A unit of text ChatGPT processes (roughly 4 characters). Free version has limits per conversation.
-
-**Context:** What ChatGPT remembers within a conversation. It forgets when you start a new chat.
+1. What's the difference between ChatGPT's "Projects" and regular conversations?
+2. Write one weak prompt and one strong version of the same prompt
+3. Name two things you'd do if an AI response isn't what you needed
 
 ---
 
-## Coming Up in Module 3
-
-Next: **AI for Everyday Life**
-
-You'll learn:
-- Practical daily uses at home
-- Meal planning and recipes
-- Health and fitness help
-- Learning and hobbies
-- Entertainment ideas
-
-**You're now ready to use ChatGPT—let's make it part of your daily life!** 💪
-
----
-
-**Module 2 Complete!** 🎉  
-Quiz time, then we'll explore everyday AI uses!
+*Next up: Module 3 — AI for Everyday Life*

@@ -1,267 +1,209 @@
 # Module 3: AI Design & Visual Tools
 
-**Duration:** 20 minutes  
-**Learning Objectives:**
-- Master AI image generation (Midjourney, DALL-E, Stable Diffusion)
-- Create professional graphics with Canva AI
-- Generate videos with AI tools
-- Build brand-consistent visual content
-- Scale visual content production
+**Duration:** 20 minutes
 
 ---
 
-## Introduction
+## What You'll Learn
 
-Visual content takes hours to create manually or costs hundreds to outsource. AI tools now let you generate professional images, graphics, and videos in minutes. This module shows you how to leverage AI for all your visual content needs.
-
----
-
-## 1. AI Image Generation Tools (5 minutes)
-
-### Midjourney ($30/month)
-**Best for:** Artistic, high-quality images  
-**Strengths:** Best image quality, creative control, community  
-**Use cases:** Marketing visuals, concept art, social media, presentations
-
-**How to use Midjourney:**
-```
-/imagine prompt: [YOUR DESCRIPTION]
-
-Example:
-/imagine professional business team meeting in modern office, natural lighting, diverse group, collaborative atmosphere, photorealistic, Canon EOS R5 --ar 16:9 --v 6
-
-Parameters:
---ar 16:9 (aspect ratio)
---v 6 (version)
---s 50 (stylize value)
---q 2 (quality)
-```
-
-### DALL-E 3 (via ChatGPT Plus $20/month)
-**Best for:** Quick iterations, precise prompts, integrated workflow  
-**Strengths:** Natural language understanding, faster, good quality  
-**Use cases:** Blog headers, social graphics, quick mockups
-
-### Stable Diffusion (Free/Self-hosted)
-**Best for:** Budget-conscious, technical users  
-**Strengths:** Free, customizable, no limits  
-**Use cases:** Bulk generation, experimentation
-
-### Leonardo.ai ($12/month)
-**Best for:** Game assets, consistent characters  
-**Strengths:** Training custom models, consistent style  
-**Use cases:** Gaming, branded content, character design
-
-**Choosing Your Tool:**
-- Best quality: Midjourney
-- Easiest: DALL-E (ChatGPT)
-- Most control: Stable Diffusion
-- Best value: Leonardo.ai
+- Use AI image generation tools for professional-quality visuals
+- Apply Canva AI for complete design workflows
+- Create presentations with AI tools
+- Use AI for video production and editing
+- Know when to use AI visuals vs. human design
 
 ---
 
-## 2. Canva AI Features (5 minutes)
+## 3.1 The Design Democratisation
 
-### Magic Design
-- Upload 1-2 images or describe concept
-- AI generates 10+ design variations
-- Perfect for social posts, presentations, posters
+AI has eliminated the most significant bottleneck in content production: design.
 
-### Magic Write
-- AI copywriting inside Canva
-- Headlines, captions, descriptions
-- Brand voice matching
+Before AI, creating professional visuals required either a designer, expensive stock photo subscriptions, or hours of learning design tools. In 2025, anyone can produce professional-quality images, graphics, and video from text descriptions in minutes.
 
-### Text to Image
-- Generate images without leaving Canva
-- Integrated into workflow
-- Good for illustrations, backgrounds
-
-### Magic Edit
-- Remove objects from photos
-- Change backgrounds
-- Add/modify elements
-
-### Magic Expand
-- Extend image borders
-- Perfect for repurposing square images to landscape
-
-**Canva AI Workflow:**
-1. Start with template or blank
-2. Use Magic Design for instant layouts
-3. Magic Write for copy
-4. Text to Image for custom graphics
-5. Magic Edit for refinements
-6. Export and publish
+This doesn't replace designers for strategic, brand-defining creative work. But for the day-to-day content production — blog post images, social media graphics, presentation slides, video backgrounds, ad creatives — AI is now the faster, cheaper, and often better option.
 
 ---
 
-## 3. AI Video Tools (5 minutes)
+## 3.2 AI Image Generation Tools
 
-### Runway ML ($12-76/month)
-**Features:** Text-to-video, image-to-video, video editing  
-**Use cases:** Marketing videos, social content, animations
+### DALL-E 3 (via ChatGPT)
 
-### Descript ($24/month)
-**Features:** AI video editing, overdub, remove filler words  
-**Use cases:** Podcasts, interviews, tutorials, webinars
+**Best for:** Quick, precise image creation where you need to follow specific instructions
+**Access:** Built into ChatGPT Plus ($20/month)
+**Key advantage:** ChatGPT can improve your image prompt before generating — ask it to "refine this image prompt for DALL-E: [description]"
 
-### Pictory ($23/month)
-**Features:** Blog post to video, script to video, auto-captions  
-**Use cases:** Content repurposing, social videos, explainers
+**Strong use cases:**
+- Images with specific text elements (DALL-E 3 handles text in images better than competitors)
+- Precise compositional requirements
+- Quick iteration within a ChatGPT workflow
+- Reference image modifications ("make this image look like [style]")
 
-### Synthesia ($30/month)
-**Features:** AI avatars, 120+ languages, no camera needed  
-**Use cases:** Training videos, presentations, multilingual content
+### Midjourney
 
-### Invideo ($25/month)
-**Features:** Text to video, 5000+ templates  
-**Use cases:** YouTube, social media, ads
+**Best for:** High-quality artistic and photorealistic images
+**Access:** Midjourney.com; from $10/month
+**Quality:** Consistently produces the highest quality outputs for artistic and lifestyle content
 
-**Video Workflow Example:**
-1. Write script with ChatGPT
-2. Generate voiceover with ElevenLabs
-3. Create video in Pictory/Runway
-4. Edit in Descript
-5. Add captions and export
+**Strong use cases:**
+- Brand photography style images
+- Marketing and advertising creative
+- Artistic and editorial visual content
+- Style exploration (give me this scene in 8 different artistic styles)
 
-**Time:** 30-45 minutes vs. 4-6 hours manually
+**Prompting tip for Midjourney:**
+> [Subject description], [setting/environment], [lighting], [mood/atmosphere], [camera/lens style], [art style reference] --ar [aspect ratio] --v 6
 
----
+### Adobe Firefly
 
-## 4. Prompt Engineering for Visuals (3 minutes)
+**Best for:** Commercial use with guaranteed copyright safety; integration with Adobe tools
+**Access:** Free tier in Adobe Express; integrated in Photoshop/Illustrator (Adobe subscription required)
+**Key advantage:** Trained exclusively on licensed content — safe for commercial use without copyright concerns
 
-### The Image Prompt Formula
+**Strong use cases:**
+- Any commercial project where IP rights matter
+- Extending or modifying existing photographs in Photoshop (Generative Fill)
+- Brand-consistent imagery using Photoshop's style controls
+- Removing objects, extending backgrounds, replacing elements in photos
 
-**Structure:**
-```
-[SUBJECT] + [STYLE] + [COMPOSITION] + [LIGHTING] + [DETAILS] + [CAMERA/QUALITY]
-```
+### Stable Diffusion / FLUX
 
-**Example:**
-```
-Subject: Professional woman entrepreneur
-Style: Modern photography, business casual
-Composition: Portrait, office background, natural pose
-Lighting: Soft natural window light, bright and airy
-Details: Confident smile, laptop visible, plants in background
-Camera: Shot on Canon EOS R5, 85mm lens, f/2.8, sharp focus
-
-Full prompt:
-"Professional woman entrepreneur in modern office, business casual attire, portrait composition with soft natural window lighting, confident smile, laptop visible in background, indoor plants, shot on Canon EOS R5 with 85mm lens at f/2.8, photorealistic, high detail, bright and airy aesthetic --ar 3:2"
-```
-
-### Style Descriptors Library
-
-**Photography Styles:**
-- Photorealistic, documentary, candid
-- Editorial, fashion, commercial
-- Cinematic, film noir, vintage
-- Minimalist, clean, modern
-
-**Artistic Styles:**
-- Watercolor, oil painting, digital art
-- Sketch, pencil drawing, ink illustration
-- 3D render, isometric, low poly
-- Abstract, geometric, surreal
-
-**Lighting:**
-- Golden hour, blue hour, studio lighting
-- Natural light, dramatic shadows
-- Soft diffused, harsh direct
-- Neon, moody, high-key, low-key
-
-### Common Mistakes
-
-❌ Too vague: "A nice office"
-✅ Specific: "Modern open-plan office with glass walls, standing desks, indoor plants, natural lighting, minimal Scandinavian design"
-
-❌ Conflicting styles: "Photorealistic cartoon"
-✅ Consistent: "Photorealistic portrait" OR "Digital cartoon illustration"
+**Best for:** Power users who want free, unlimited, local generation
+**Access:** Open source; free; requires a capable GPU to run locally, or accessible via platforms like Replicate
+**Quality:** FLUX (released 2024) produces quality rivalling Midjourney at zero cost
 
 ---
 
-## 5. Building Visual Content Systems (2 minutes)
+## 3.3 Canva AI — The All-in-One Design Platform
 
-### The Weekly Visual Content System
+Canva in 2025 is the most practical AI design tool for non-designers. Its AI features are integrated throughout the platform.
 
-**Monday: Plan**
-- Content calendar review
-- Identify visual needs
-- Batch image requirements
+**Key AI features in Canva:**
 
-**Tuesday: Generate**
-- 30 minutes: Generate all images for week
-- Use consistent prompts for brand cohesion
-- Over-generate (create 3x what you need)
+**Magic Design:** Describe what you want and Canva generates a complete design — not just an image, but a fully laid-out graphic with text, imagery, and brand elements.
+> *Use case: "Create a LinkedIn post graphic announcing our new product launch. Brand colours: [hex codes]. Headline: [text]."*
 
-**Wednesday: Design**
-- Import into Canva
-- Apply templates
-- Add text and branding
+**Text to Image:** Generate custom images directly inside your Canva canvas. No switching tools.
 
-**Thursday: Video**
-- Convert best-performing images to video
-- Add motion and text
-- Generate social video clips
+**Magic Write:** AI copywriting directly in your designs. Prompt for headlines, captions, or body copy.
 
-**Friday: Review & Schedule**
-- Final quality check
-- Schedule posts
-- Archive assets
+**Magic Resize:** One click resizes any design for every platform and format. Create once, resize everywhere.
 
-**Result:** Week of visual content in 3-4 hours vs. 15-20 hours
+**Background Remover:** AI removes image backgrounds instantly. One click, professional results.
 
-### Brand Consistency Framework
+**Brand Kit:** Upload your logo, brand colours, and fonts. Canva applies them automatically across all your designs.
 
-**Create your visual brand guide:**
-```
-Style: [photorealistic/illustrated/3D/etc.]
-Color palette: [hex codes]
-Mood: [professional/playful/luxurious/etc.]
-Common elements: [props, backgrounds, poses]
-Avoid: [what doesn't fit brand]
+**The complete non-designer workflow:**
+1. Set up Brand Kit with your brand assets
+2. Describe your design in Magic Design
+3. Adjust text with Magic Write
+4. Generate custom images if stock isn't right
+5. Resize for every platform with Magic Resize
+6. Export and use
 
-Midjourney base prompt:
-"[subject], [your brand style], [color palette], [mood], photorealistic --ar 16:9"
-```
+---
 
-**Save variations:**
-- Social square (1:1)
-- Social portrait (4:5)
-- Landscape (16:9)
-- Story/Reel (9:16)
+## 3.4 AI Presentation Tools
+
+### Gamma.app
+
+Gamma is the most impressive AI presentation tool in 2025. You describe your presentation in a paragraph and it generates a fully designed, beautifully formatted deck in under 60 seconds.
+
+**How to use Gamma:**
+1. Go to gamma.app → New AI Presentation
+2. Enter your topic and context (audience, number of slides, key points)
+3. Choose a design theme
+4. Review and edit the generated deck
+5. Export or share as a link
+
+**When to use Gamma vs. PowerPoint/Slides:**
+- Use Gamma when speed is the priority and you need a decent deck quickly
+- Use PowerPoint/Slides (with Copilot or Gemini) when you need precise brand control or complex animations
+
+### Microsoft Copilot in PowerPoint
+
+> "Create a presentation about [topic] using the information from [attached document]."
+> "Add 3 slides about [topic] to this presentation."
+> "Make this presentation more visually consistent."
+> "Summarise this presentation in 3 bullet points."
+
+### Beautiful.ai
+
+Beautiful.ai's "smart templates" automatically adjust slide layouts as you add content — elements reflow and reposition automatically. Less AI-native than Gamma but better for custom branded decks.
+
+---
+
+## 3.5 AI Video Tools
+
+### For Content Creation
+
+**Runway Gen-3 Alpha:** Professional-grade video generation from text or image prompts. Used widely in advertising and entertainment production.
+- Best for: b-roll footage, visual effects shots, stylised video content
+- Cost: from $12/month
+
+**Sora (OpenAI):** Available with ChatGPT Pro; generates realistic video from text prompts.
+- Best for: short clips from detailed descriptions
+- Quality: excellent realism, though still limited to short clips
+
+**CapCut AI:** The most practical tool for social media video creators.
+- Auto-captions, background removal, AI text-to-video, template-based editing
+- Free tier available; widely used for TikTok/Reels content
+
+**Pika Labs:** Fast, user-friendly video generation.
+- Best for: short social clips, image-to-video animation
+
+### For Presentations and Training
+
+**HeyGen:** Type your script, choose an AI avatar, generate a professional presenter-style video. No camera required.
+- Best for: training videos, product demos, tutorials where you need a face on camera but don't want to film
+- Cost: from $24/month
+
+**Synthesia:** Similar to HeyGen; widely used in enterprise for training content.
+- 160+ AI avatars, 120+ languages, slide integration
+- Cost: from $29/month
+
+### For Video Editing
+
+**Descript:** AI-powered video editor that works on the transcript.
+- Edit video by editing text — delete a word, the video clip is cut
+- AI removes filler words ("um", "uh") automatically
+- Overdub: AI voice clone can re-record lines in your own voice
+- Cost: Free tier; from $12/month paid
+
+---
+
+## 3.6 When to Use AI Visuals vs. Human Design
+
+**Use AI for:**
+- Day-to-day content production (blog images, social graphics, email headers)
+- Rapid prototyping and concept exploration
+- Volume production where speed matters more than perfection
+- Standard formats where AI quality is sufficient
+
+**Use human designers for:**
+- Brand identity work (logo, visual system, colour palette)
+- High-stakes campaigns where design is a competitive differentiator
+- Complex, custom creative that requires genuine artistic judgment
+- Work where the creative relationship with the designer adds value
 
 ---
 
 ## Key Takeaways
 
-✅ **Midjourney = best quality** - Worth $30/month  
-✅ **Canva AI = easiest workflow** - Design + AI in one  
-✅ **Video AI = huge time saver** - Descript + Runway combo  
-✅ **Prompts matter** - Specific = better results  
-✅ **Batch creation** - Do all visuals at once  
+- **DALL-E 3** for quick precise images; **Midjourney** for highest quality artistic/lifestyle; **Firefly** for commercial-safe
+- **Canva AI** (Magic Design + Resize + Write + Brand Kit) is the highest-ROI tool for non-designers creating content at scale
+- **Gamma.app** generates a complete presentation from a paragraph in under 60 seconds
+- **HeyGen/Synthesia** create professional presenter-led videos without filming — useful for training and demos
+- **Descript** lets you edit video by editing text — one of the most powerful productivity tools for video creators
+- Use AI for volume production; use human designers for brand identity and high-stakes creative work
 
 ---
 
-## Action Steps
+## Quick Check
 
-1. **Choose your image tool** - Start with Midjourney or DALL-E
-2. **Practice 10 prompts** - Refine your prompting skill
-3. **Set up Canva Pro** - Enable all AI features
-4. **Create brand guide** - Document your visual style
-5. **Test video tool** - Pictory or Descript trial
+1. When would you choose Adobe Firefly over Midjourney for an image generation project?
+2. What is Magic Resize in Canva and why does it save significant time?
+3. Describe a workflow where HeyGen would replace filming a video.
 
 ---
 
-## Resources Included
-
-📋 **Image Prompt Library (100+ examples)**  
-📋 **Style Guide Template**  
-📋 **Canva Workflow Checklists**  
-📋 **Video Creation Templates**  
-📋 **Brand Consistency Guide**  
-
----
-
-**Next Module:** AI Automation & Workflows - Connect tools, automate repetitive tasks, and build productivity systems that run on autopilot.
+*Next up: Module 4 — Automation Workflows with AI*

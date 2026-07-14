@@ -128,6 +128,32 @@ export async function adminCreateUser(
   }
 }
 
+/** DELETE rows from a table matching a query string (e.g. "email=eq.foo@bar.com") */
+export async function adminDeleteRow(
+  table: string,
+  queryParams: string
+): Promise<{ error: Error | null }> {
+  const { url, key } = getConfig()
+  if (!url || !key) return { error: new Error('Missing Supabase config') }
+  try {
+    const res = await fetch(`${url}/rest/v1/${table}?${queryParams}`, {
+      method: 'DELETE',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    if (!res.ok) {
+      const errBody = await res.text()
+      return { error: new Error(`HTTP ${res.status}: ${errBody}`) }
+    }
+    return { error: null }
+  } catch (err: any) {
+    return { error: err }
+  }
+}
+
 /** UPSERT a row and return it (mimics .upsert().select().single()) */
 export async function adminUpsert(
   table: string,

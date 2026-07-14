@@ -3,775 +3,220 @@
 
 ---
 
-## Supercharge Your Productivity with ChatGPT
+## What You'll Learn
 
-Welcome to Module 5! You've mastered communication and content—now let's optimize your entire workflow.
-
-**The goal:** Use ChatGPT to handle the busywork so you can focus on high-value work.
-
-By the end of this module, you'll:
-- ✅ Automate research that used to take hours
-- ✅ Process and organize data instantly
-- ✅ Manage projects more efficiently
-- ✅ Build personal productivity systems
-- ✅ Save 10+ hours per week on repetitive tasks
-
-Let's transform your workday! ⚡
+- Build personal productivity systems powered by ChatGPT
+- Use AI for planning, prioritisation, and decision-making
+- Automate repetitive thinking tasks with reusable prompts
+- Integrate ChatGPT into daily workflows using Projects, Memory, and the API
+- Measure and improve your output with AI assistance
 
 ---
 
-## Part 1: Research Acceleration
+## 5.1 The Productivity Leverage Point
 
-### Research Template (The Ultimate)
+Most people use ChatGPT as a search engine — asking one-off questions, getting one-off answers. This is like using a sports car to go to the corner shop. The real productivity gains come from using ChatGPT as a system — a set of recurring workflows that save significant time every single day.
 
-```
-RESEARCH TOPIC: [Your topic]
-
-TASK: Conduct comprehensive research and provide:
-
-1. OVERVIEW (150 words)
-   - Current state of [topic]
-   - Key trends
-   - Major players/stakeholders
-
-2. KEY FINDINGS (5-7 points)
-   - Most important insights
-   - Each with brief explanation
-   - Include data/stats where relevant
-
-3. DIFFERENT PERSPECTIVES
-   - Viewpoint A: [perspective]
-   - Viewpoint B: [alternative view]
-   - Consensus areas
-   - Debate areas
-
-4. PRACTICAL APPLICATIONS
-   - How this applies to [your context]
-   - 3-5 actionable takeaways
-   - Potential challenges
-
-5. FURTHER RESEARCH
-   - 3-5 areas needing deeper investigation
-   - Recommended sources/resources
-
-FORMAT: Well-structured with headers
-DEPTH: Intermediate (not surface-level, not academic)
-AUDIENCE: [Your role/industry]
-```
+In 2025, the top productivity gains from ChatGPT fall into four categories:
+1. **Thinking acceleration** — getting from zero to structured thought in minutes
+2. **Writing speed** — first drafts in 20% of the time
+3. **Research compression** — getting the key information without reading everything
+4. **Decision support** — thinking through complex choices systematically
 
 ---
 
-### Quick Research Techniques
+## 5.2 Daily Planning with ChatGPT
 
-**1. Competitive Analysis**
-```
-Analyze competitors in [industry/niche]:
+### Morning Planning Prompt
 
-COMPETITORS: [List 3-5 companies]
+> It's [day]. My schedule today: [list meetings/commitments]. My open time: [X hours]. 
+> My 3 most important outcomes for this week: [list].
+> My energy tends to be highest: [time of day].
+> Build me a realistic daily plan that prioritises deep work on my most important tasks, groups meetings together where possible, and includes buffer time. Flag any commitments that seem likely to overrun.
 
-FOR EACH, PROVIDE:
-- Business model
-- Key differentiators
-- Strengths
-- Weaknesses
-- Market positioning
-- Pricing strategy (if public)
+**For weekly planning:**
+> It's Sunday evening. Here are my commitments for the week: [list]. My top 3 goals: [list]. My available focus time: [estimate]. Build a weekly schedule that protects time for deep work on my most important priorities. Identify any conflicts or overloaded days.
 
-THEN CREATE:
-- Competitive matrix (table format)
-- Market gaps/opportunities
-- Recommendations for differentiation
+### End-of-Day Review
 
-Use publicly available information only.
-```
+> Here's what I planned to do today [paste plan] vs. what I actually did [paste actuals]. 
+> Help me: (1) identify the gap and what caused it, (2) figure out if my planning assumptions are realistic, (3) carry forward unfinished tasks with revised timing.
 
 ---
 
-**2. Market Research**
-```
-Research the market for [product/service]:
+## 5.3 Task and Project Management
 
-PROVIDE:
-- Market size (estimates)
-- Growth trends
-- Key demographics
-- Customer pain points (top 5)
-- Current solutions (3-5 competitors)
-- Market gaps
-- Entry barriers
-- Success factors
+### Breaking Down Projects
 
-Sources: Industry reports, public data, logical analysis
-Format: Executive summary style
-Length: 400-500 words
-```
+> I need to complete [project]. Deadline: [date]. Resources: [what I have].
+> Break this into: (1) phases with milestones, (2) specific tasks per phase with estimated time, (3) dependencies (what must happen before what), (4) the 3 highest-risk items I should tackle earliest.
 
----
+### Prioritisation When Everything Feels Urgent
 
-**3. Topic Deep Dive**
-```
-I need to quickly get up to speed on [complex topic].
+> Here's my task list: [paste list]. 
+> Help me prioritise using the Eisenhower matrix (urgent/important). 
+> Then identify: which tasks could be delegated, which could be batched, and which could be eliminated without meaningful consequence.
 
-EXPLAIN:
-- What it is (simple definition)
-- Why it matters
-- Key concepts (5-7 fundamentals)
-- Common misconceptions
-- Current debates/controversies
-- Real-world applications (3 examples)
-- Resources to learn more
+### Unblocking Yourself
 
-AUDIENCE: [Your level - beginner/intermediate]
-LENGTH: 600-800 words
-TONE: Educational, accessible
-```
+> I'm stuck on [task]. I've been avoiding it because [reason/fear/uncertainty]. 
+> Help me: (1) identify the real blocker, (2) break the first step into something I can do in under 10 minutes, (3) anticipate and address the thing I'm most worried about going wrong.
 
 ---
 
-## Part 2: Data Processing & Organization
+## 5.4 Research and Learning Workflows
 
-### Data Analysis Template
+### The 30-Minute Expert Method
 
-```
-Analyze this data and provide insights:
+When you need to get up to speed on a new topic fast:
 
-[Paste your data - CSV, table, or text]
+**Step 1 — Overview:**
+> Give me a structured overview of [topic]. Include: the core concepts I need to understand, the main debates or schools of thought, common misconceptions, and what has changed most recently (2024–2025).
 
-ANALYSIS NEEDED:
-1. Summary statistics (key metrics)
-2. Patterns and trends
-3. Anomalies or outliers
-4. Correlations (if applicable)
-5. Top 3 insights
-6. Actionable recommendations
+**Step 2 — Deep dive on gaps:**
+> From that overview, I'm least clear on [specific concept]. Explain it more deeply, with an analogy and a concrete example.
 
-FORMAT: 
-- Executive summary (3 sentences)
-- Detailed findings (bullet points)
-- Visual suggestions (what charts would help)
+**Step 3 — Test understanding:**
+> Quiz me on [topic] with 5 questions at the level of someone who has just read an intermediate introduction. After I answer, explain what I got right and where my understanding has gaps.
 
-CONTEXT: [What this data represents]
-AUDIENCE: [Who will use these insights]
-```
+**Step 4 — Application:**
+> How does [topic] apply specifically to [my context/industry/role]? What should someone in my position know or do differently?
 
----
+### Document Analysis
 
-### Organization Templates
+Upload a long document (report, contract, research paper) and use:
+> Summarise the key findings in 5 bullets. What are the most important implications for [my context]? What does this document recommend I do? Flag any claims or figures I should verify independently.
 
-**1. Meeting Notes → Action Items**
-```
-Convert these messy meeting notes into organized action items:
-
-[Paste raw notes]
-
-CREATE:
-1. KEY DECISIONS MADE (bullets)
-2. ACTION ITEMS TABLE:
-   | Task | Owner | Due Date | Priority | Status |
-3. OPEN QUESTIONS (need answers)
-4. NEXT STEPS (what happens next)
-
-Infer reasonable due dates and priorities based on context.
-Make it scannable and actionable.
-```
+For contracts:
+> Summarise the key obligations, rights, and risks in this contract. Highlight any unusual clauses, automatic renewal terms, or liability provisions I should flag for legal review.
 
 ---
 
-**2. Email Inbox Triage**
-```
-I have 50 emails. Help me prioritize:
+## 5.5 Decision-Making Support
 
-[Paste email subjects and senders, or brief descriptions]
+ChatGPT won't make decisions for you — but it's an excellent thinking partner for structuring decisions you're struggling with.
 
-CATEGORIZE AS:
-- URGENT: Needs response today
-- IMPORTANT: Respond this week
-- DELEGATE: Should forward to [team member]
-- ARCHIVE: FYI only, no action needed
-- DELETE: Spam/irrelevant
+### The Decision Framework Prompt
 
-For URGENT items, suggest response priority order.
-```
+> I need to make a decision about [topic]. 
+> Options: [list]
+> My priorities: [list in order]
+> My constraints: [list]
+> Time horizon: [short-term vs. long-term]
+> Walk me through each option against my priorities. Don't just list pros and cons — reason through the trade-offs specifically.
 
----
+### Pre-Mortem Analysis
 
-**3. Information Synthesis**
-```
-I've collected information from multiple sources. Synthesize it:
+> I'm planning to [decision/action]. Assume it's 12 months from now and it went badly wrong. 
+> What are the most likely causes of failure? What warning signs would I have missed? What would I wish I had done differently?
 
-SOURCE 1: [paste excerpt]
-SOURCE 2: [paste excerpt]
-SOURCE 3: [paste excerpt]
+This technique, borrowed from risk management, surfaces blind spots before you commit.
 
-SYNTHESIZE INTO:
-- Common themes (3-5)
-- Contradictions (if any)
-- Unique insights from each source
-- Overall conclusion (100 words)
-- Knowledge gaps (what's missing)
+### Forcing Function Prompts
 
-Remove redundancy, keep unique value from each.
-```
+> I've been going back and forth on [decision] for too long. Make the case for each option as strongly as possible. Then tell me what information I'm still missing that is actually decision-relevant — and distinguish it from information I'm seeking to delay the decision.
 
 ---
 
-## Part 3: Project Management
+## 5.6 ChatGPT Projects for Productivity Systems
 
-### Project Planning Template
+Projects (covered in Module 1) become a powerful productivity tool when used systematically.
 
-```
-ROLE: You are an experienced project manager.
+### Recommended Projects to Set Up
 
-PROJECT: [Name and description]
+**"Weekly Planning" Project**
+- Instructions: *"You are my strategic thinking partner for weekly and daily planning. You know that I'm a [role] with the following priorities: [list]. My working style: [describe]. When I share my task list, help me prioritise ruthlessly and protect time for my most important work."*
 
-CREATE PROJECT PLAN:
+**"Research" Project**
+- Instructions: *"I'll be uploading documents and asking questions about them. Always cite which part of the uploaded material your answer comes from. Flag any claims that seem unusual and should be verified."*
+- Upload: relevant background documents, research papers, or references you use repeatedly
 
-1. OBJECTIVES
-   - Primary goal
-   - Success criteria (measurable)
-   - Constraints (time, budget, resources)
-
-2. SCOPE
-   - In scope (what's included)
-   - Out of scope (what's not)
-   - Assumptions
-   - Dependencies
-
-3. PHASES (5-7 major stages)
-   For each phase:
-   - Name and goal
-   - Key deliverables
-   - Duration estimate
-   - Resources needed
-
-4. MILESTONES (8-10)
-   - Date (estimated)
-   - Deliverable
-   - Success criteria
-
-5. RISKS & MITIGATION
-   - Top 5 risks
-   - Probability (H/M/L)
-   - Impact (H/M/L)
-   - Mitigation strategy
-
-6. COMMUNICATION PLAN
-   - Stakeholders
-   - Update frequency
-   - Reporting format
-
-FORMAT: Professional, table format where appropriate
-TIMELINE: [Your project duration]
-TEAM SIZE: [If applicable]
-```
+**"[Client/Project Name]" Projects**
+- One project per major client or initiative
+- Upload: brief, context documents, previous outputs, style guides
+- Instructions: specific context about the client, their terminology, preferences, and constraints
 
 ---
 
-### Task Management
+## 5.7 Automating Repetitive Thinking
 
-**1. Daily Prioritization**
-```
-Help me prioritize my day:
+Many people spend hours per week on tasks that follow the same pattern every time. These are ideal for turning into prompt templates.
 
-TODAY'S TASKS:
-[List everything you need to do]
+**Examples of automatable thinking tasks:**
+- Summarising meeting transcripts → same structure every time
+- Writing status updates → same format every week
+- Responding to common email types → same logic applied to different specifics
+- Reviewing documents for risks → same checklist applied each time
 
-TODAY'S MEETINGS:
-[List scheduled meetings with times]
+**How to build a reusable prompt template:**
+1. Write the prompt that works well for a task you do repeatedly
+2. Replace specific details with [PLACEHOLDERS]
+3. Save in your prompt library (Notion, Apple Notes, or a Google Doc)
+4. When you need it, paste it, fill in the placeholders, send
 
-DEADLINES:
-[Any urgent deadlines]
-
-CREATE:
-1. TOP 3 PRIORITIES (must complete today)
-2. HOUR-BY-HOUR SCHEDULE
-   - Block deep work time
-   - Account for meetings
-   - Include breaks
-3. DELEGATE/DEFER LIST (tasks to move)
-4. QUICK WINS (tasks under 15 min - batch these)
-
-Consider: Energy levels (do hard tasks when fresh)
-```
-
----
-
-**2. Weekly Planning**
-```
-Plan my week based on these goals:
-
-WEEK GOALS: [Your objectives]
-RECURRING TASKS: [Regular commitments]
-PROJECTS: [Active projects]
-DEADLINES: [This week's deadlines]
-
-CREATE WEEKLY PLAN:
-
-MONDAY-FRIDAY:
-For each day, assign:
-- Theme/focus area
-- Top 3 priorities
-- Time blocks for deep work
-- Batch tasks (email, calls, admin)
-
-BALANCE:
-- Strategic work: 40%
-- Operational work: 30%
-- Meetings: 20%
-- Buffer time: 10%
-
-Flag potential overload days and suggest adjustments.
-```
+**Example — Weekly status report template:**
+> Write a weekly project status report.
+> Project: [PROJECT NAME]
+> Week ending: [DATE]
+> Status: [ON TRACK / AT RISK / DELAYED]
+> Accomplishments this week: [PASTE BULLET LIST]
+> Planned for next week: [PASTE BULLET LIST]
+> Risks or blockers: [PASTE OR "None"]
+> Format: professional, concise, max 1 page, use headers. Audience: senior stakeholders.
 
 ---
 
-**3. Project Status Update**
-```
-Generate project status update:
+## 5.8 The ChatGPT API for Power Users
 
-PROJECT: [Name]
-PERIOD: [This week/month]
+If you find yourself doing the same ChatGPT tasks repeatedly, the API lets you build lightweight automations without coding.
 
-DATA:
-- Tasks completed: [List]
-- Tasks in progress: [List]
-- Tasks blocked: [List with reasons]
-- Budget: $[spent] of $[total]
-- Timeline: [On track/At risk/Delayed]
+**No-code automation tools that use the ChatGPT API:**
+- **Zapier AI** — trigger ChatGPT actions from email, Slack, forms, or other apps
+- **Make.com** — visual automation builder with OpenAI integration
+- **Notion AI** — AI assistance built into your Notion workspace
 
-CREATE STATUS REPORT:
-
-1. EXECUTIVE SUMMARY (3 sentences)
-   - Overall status
-   - Key accomplishments
-   - Main concerns
-
-2. PROGRESS DETAILS
-   - Completed (with metrics)
-   - In progress (% complete)
-   - Upcoming (next 2 weeks)
-
-3. RISKS/ISSUES
-   - Current blockers
-   - Mitigation actions
-
-4. METRICS DASHBOARD
-   - Completion: X%
-   - Budget: X%
-   - Timeline: [Status]
-
-5. NEXT STEPS
-
-AUDIENCE: [Stakeholders/Executives]
-FORMAT: Scannable, uses colors/status indicators
-```
+**Example workflows:**
+- New email received with specific subject → ChatGPT summarises it → Summary posted to Slack
+- Form submission → ChatGPT generates personalised response draft → Saved to Google Docs
+- Weekly report data pasted into Zapier → ChatGPT formats it → Emailed to stakeholders
 
 ---
 
-## Part 4: Personal Productivity Systems
+## 5.9 Measuring Your AI Productivity Impact
 
-### Morning Routine Optimizer
+Track your ROI to stay motivated and identify where AI helps you most:
 
-```
-Optimize my morning routine:
+**Simple tracking system:**
+Keep a note for one week: every time you use ChatGPT, record: task type + estimated time saved + quality vs. doing it without AI.
 
-CURRENT ROUTINE:
-[Describe what you do each morning]
+**Common finding after one week:**
+Most people discover 60–80% of their ChatGPT usage falls into 3–4 task types. These are your highest-ROI areas — build robust templates and workflows around them.
 
-GOALS:
-- Start work focused and energized
-- Complete morning essentials
-- Time available: [Duration]
-
-CONSTRAINTS:
-[Family, commute, etc.]
-
-CREATE OPTIMIZED ROUTINE:
-- Time blocks (specific)
-- What to do in each block
-- Why (benefit)
-- Tips for consistency
-
-Include: Preparation the night before
-```
-
----
-
-### Learning & Development Plan
-
-```
-Create a 90-day learning plan:
-
-GOAL: Learn [skill/topic]
-CURRENT LEVEL: [Beginner/Intermediate]
-TIME AVAILABLE: [Hours per week]
-LEARNING STYLE: [Visual/Reading/Hands-on]
-
-CREATE PLAN:
-
-MONTH 1 (Foundation):
-- Week 1: [Topics and resources]
-- Week 2: [Topics and resources]
-- Week 3: [Topics and resources]
-- Week 4: [Topics and resources]
-- Practice projects: [2-3 ideas]
-
-MONTH 2 (Application):
-[Same structure]
-
-MONTH 3 (Mastery):
-[Same structure]
-
-INCLUDE:
-- Daily time commitment
-- Resources (courses, books, tutorials)
-- Practice exercises
-- Milestone checkpoints
-- How to measure progress
-```
-
----
-
-### Decision-Making Framework
-
-```
-Help me make this decision:
-
-DECISION: [What you're deciding]
-
-OPTIONS:
-- Option A: [Description]
-- Option B: [Description]
-- Option C: [If applicable]
-
-EVALUATION CRITERIA:
-1. [Criterion 1 - e.g., Cost]
-2. [Criterion 2 - e.g., Time]
-3. [Criterion 3 - e.g., Impact]
-4. [Criterion 4 - e.g., Risk]
-5. [Criterion 5 - e.g., Scalability]
-
-CONTEXT: [Relevant background]
-
-CREATE:
-1. DECISION MATRIX
-   - Rate each option 1-10 per criterion
-   - Weighted scores (if certain criteria matter more)
-
-2. PROS/CONS
-   - For each option
-
-3. BEST/WORST CASE SCENARIOS
-   - For top 2 options
-
-4. RECOMMENDATION
-   - Top choice and why
-   - Risks and mitigation
-   - Next steps
-
-Be objective, data-driven where possible.
-```
-
----
-
-## Part 5: Workflow Automation (Conceptual)
-
-### Process Documentation
-
-```
-Document this process for automation or delegation:
-
-PROCESS: [Name of process]
-CURRENT STATE: [How it's done now]
-FREQUENCY: [How often]
-TIME SPENT: [Per occurrence]
-
-CREATE DOCUMENTATION:
-
-1. STEP-BY-STEP PROCEDURE
-   - Each step numbered
-   - Inputs needed
-   - Expected output
-   - Decision points
-   - Edge cases
-
-2. AUTOMATION OPPORTUNITIES
-   - Which steps could be automated
-   - Tools that could help
-   - Estimated time savings
-
-3. DELEGATION CHECKLIST
-   - Prerequisites
-   - Resources needed
-   - Training required
-   - Quality checks
-
-4. EFFICIENCY IMPROVEMENTS
-   - Bottlenecks to address
-   - Steps to eliminate
-   - Parallel processing opportunities
-
-Make it detailed enough for someone else to execute.
-```
-
----
-
-### SOP (Standard Operating Procedure) Creation
-
-```
-Create an SOP for [process]:
-
-PROCESS DETAILS:
-- What: [What gets done]
-- Who: [Typical role]
-- When: [Frequency/triggers]
-- Why: [Purpose/goal]
-
-SOP FORMAT:
-
-1. PURPOSE & SCOPE
-2. RESPONSIBILITIES
-3. PREREQUISITES
-4. PROCEDURE (detailed steps)
-5. QUALITY CHECKS
-6. TROUBLESHOOTING
-7. REVISION HISTORY
-
-Make it clear enough for a new employee to follow.
-Length: 500-700 words
-```
-
----
-
-## Part 6: Productivity Hacks
-
-### Email Management
-
-**Batch Processing Template**
-```
-Create email response templates for these common scenarios:
-
-1. Meeting request (accept)
-2. Meeting request (decline politely)
-3. Information request
-4. Status update request
-5. Introduction request
-6. Feedback request
-7. "Circling back" on no response
-8. Saying no to requests
-
-For each: Subject line + 50-75 word response
-Tone: Professional, friendly, efficient
-```
-
----
-
-### Focus & Deep Work
-
-**Deep Work Session Planner**
-```
-Plan a deep work session for [task]:
-
-TASK: [What you're working on]
-GOAL: [Specific outcome]
-AVAILABLE TIME: [Duration]
-
-CREATE SESSION PLAN:
-
-BEFORE (10 min):
-- Setup needed
-- Materials gathered
-- Distractions eliminated
-
-DURING:
-- Break into [X] focused blocks
-- Each block: [Topic/milestone]
-- 5-min breaks between
-- Success criteria per block
-
-AFTER (10 min):
-- Document progress
-- Note blockers
-- Plan next session
-
-Include: Focus triggers, environment setup
-```
-
----
-
-### Meeting Efficiency
-
-**Meeting Improvement Prompt**
-```
-Evaluate this recurring meeting:
-
-MEETING: [Name/purpose]
-FREQUENCY: [How often]
-DURATION: [Current length]
-ATTENDEES: [Number and roles]
-CURRENT ISSUES: [Problems you've noticed]
-
-PROVIDE:
-1. Is this meeting necessary? (Yes/No + why)
-2. Could it be:
-   - Email instead?
-   - Shorter?
-   - Less frequent?
-   - Fewer attendees?
-
-3. OPTIMIZATION RECOMMENDATIONS:
-   - Ideal duration
-   - Ideal frequency
-   - Required attendees only
-   - Clear agenda format
-   - Decision-making process
-   - Follow-up system
-
-4. SAMPLE IMPROVED AGENDA
-
-Be honest about eliminating or optimizing.
-```
-
----
-
-## Part 7: Time Tracking & Analysis
-
-### Time Audit Template
-
-```
-Analyze how I spent my time this week:
-
-WEEK DATA:
-- Meetings: [Hours]
-- Email: [Hours]
-- Deep work: [Hours]
-- Admin tasks: [Hours]
-- Interruptions: [Hours]
-- [Other categories]
-
-PROVIDE:
-
-1. TIME ALLOCATION ANALYSIS
-   - Current percentages
-   - Ideal percentages (for my role)
-   - Gap analysis
-
-2. EFFICIENCY SCORE
-   - High-value activities: X%
-   - Medium-value: X%
-   - Low-value: X%
-
-3. RECOMMENDATIONS:
-   - What to increase
-   - What to decrease
-   - What to eliminate
-   - What to delegate
-   - What to batch
-
-4. ACTION PLAN:
-   - 3 changes to make next week
-   - Expected time savings
-
-GOAL: Maximize time on high-impact work
-```
-
----
-
-## Productivity Tools Integration
-
-### Tool Stack Optimizer
-
-```
-Optimize my productivity tool stack:
-
-CURRENT TOOLS:
-- [Tool 1]: Used for [purpose]
-- [Tool 2]: Used for [purpose]
-- [Tool 3]: Used for [purpose]
-
-PROBLEMS:
-- Tool overlap
-- Context switching
-- Data scattered
-
-ANALYZE:
-1. Redundancies (tools doing same thing)
-2. Gaps (needs not met)
-3. Integration opportunities
-4. Consolidation possibilities
-
-RECOMMEND:
-- Tools to keep
-- Tools to replace (with what)
-- Tools to add
-- Workflow improvements
-
-Consider: Learning curve, cost, integrations
-```
+**Signs you're using AI well:**
+- First drafts take under 5 minutes for common document types
+- You spend your time editing and thinking rather than typing from scratch
+- Recurring tasks have prompt templates — you don't rewrite the prompt each time
+- Your Projects have useful context that carries across conversations
 
 ---
 
 ## Key Takeaways
 
-🎯 **What You Learned:**
-1. Research acceleration techniques
-2. Data processing and organization
-3. Project management with AI
-4. Personal productivity systems
-5. Workflow automation concepts
-6. Time management optimization
-7. Focus and deep work strategies
-
-🚀 **Immediate Actions:**
-- Conduct one research project using templates (save 2-3 hours)
-- Set up morning routine optimization
-- Create weekly planning system
-- Automate 3 repetitive tasks this week
+- The biggest productivity gain comes from treating ChatGPT as a **system**, not a one-off tool
+- Use ChatGPT for **planning, prioritisation, research, and decision-making** — not just writing
+- **Projects** with custom instructions are your most powerful productivity setup
+- Build **reusable prompt templates** for tasks you do repeatedly — this is where time savings compound
+- The **pre-mortem** and **decision framework** prompts help you make better decisions faster
+- No-code automation tools (Zapier, Make) extend ChatGPT into your existing workflows
 
 ---
 
-## Time Savings Summary
+## Quick Check
 
-**Weekly Time Saved:**
-- Research: 5 hours → 1 hour = **4 hours saved**
-- Data organization: 3 hours → 30 min = **2.5 hours saved**
-- Planning/admin: 4 hours → 1 hour = **3 hours saved**
-- Email management: 5 hours → 2 hours = **3 hours saved**
-
-**TOTAL: 12.5 hours saved per week!**
+1. What are the 4 categories where ChatGPT creates the biggest productivity gains?
+2. Describe the "30-Minute Expert Method" — what are the 4 steps?
+3. What is a pre-mortem, and why is it useful as a ChatGPT prompt?
 
 ---
 
-## Glossary
-
-**Deep Work:** Focused, distraction-free work on cognitively demanding tasks. Produces high-value output.
-
-**Time Blocking:** Scheduling specific time periods for specific tasks or types of work.
-
-**Batch Processing:** Grouping similar tasks together and completing them in one focused session.
-
-**SOP (Standard Operating Procedure):** Documented step-by-step instructions for completing a process consistently.
-
-**Time Audit:** Analysis of how time was actually spent vs. how it should be spent for optimal productivity.
-
-**Automation:** Using tools/systems to complete repetitive tasks without manual intervention.
-
----
-
-## Coming Up in Module 6
-
-Next: **Advanced ChatGPT Techniques**
-
-Master-level skills:
-- Custom instructions and system prompts
-- Advanced reasoning and analysis
-- Code generation and debugging
-- Multi-step problem solving
-- ChatGPT API basics
-
-**You've optimized your workflow—now unlock advanced power!** 🚀
-
----
-
-**Module 5 Complete!** 🎉  
-Test your productivity knowledge!
+*Next up: Module 6 — Advanced ChatGPT Techniques*

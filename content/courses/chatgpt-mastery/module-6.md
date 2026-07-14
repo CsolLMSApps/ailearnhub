@@ -3,689 +3,231 @@
 
 ---
 
-## Unlock Master-Level ChatGPT Skills
+## What You'll Learn
 
-Welcome to Module 6! You've mastered the fundamentals—now it's time to become a true ChatGPT expert.
-
-**This module is for power users.** We're diving into advanced techniques that separate pros from beginners.
-
-By the end of this module, you'll:
-- ✅ Use custom instructions for consistent results
-- ✅ Apply advanced reasoning frameworks
-- ✅ Generate and debug code (even if you're not a programmer)
-- ✅ Solve multi-step complex problems
-- ✅ Understand ChatGPT limitations and work around them
-
-Let's unlock the advanced features! 🎓
+- Use system-level instructions and custom GPTs for specialised workflows
+- Apply advanced reasoning with o3 and structured chain-of-thought
+- Work with files, code, and data inside ChatGPT
+- Use ChatGPT as a research and analysis engine
+- Build multi-step workflows and agentic tasks
+- Understand ChatGPT's operator and computer use capabilities
 
 ---
 
-## Part 1: Custom Instructions & System Prompts
+## 6.1 System Prompts and Custom Instructions at Depth
 
-### What Are Custom Instructions?
+You've already set up basic Custom Instructions in Module 1. This section goes deeper: treating Custom Instructions like a system prompt — a persistent configuration layer that shapes every interaction.
 
-Custom instructions tell ChatGPT how to ALWAYS respond to you, without repeating instructions in every conversation.
+### Advanced Custom Instructions
 
-**Think of it like:** Setting your default preferences in any app—once set, it remembers.
+**Box 1 — Deep context:**
+Instead of just stating your role, include:
+- Your specific goals and what success looks like
+- Context that's always relevant (industry, tools you use, level of expertise)
+- Things ChatGPT consistently gets wrong that you want to prevent
+- Specific terminology or conventions for your field
 
----
+**Box 2 — Behavioural rules:**
+> - Lead with the most important point. Never bury it in the middle.
+> - If I ask for something and you're unsure of my intent, complete the task and then ask one clarifying question — don't ask before doing the work.
+> - When giving advice, be direct. Don't say "it depends" without immediately explaining the most important factor it depends on.
+> - If you think I'm approaching a problem the wrong way, tell me before answering my actual question.
+> - Never add unnecessary caveats. If something is risky, say so once — don't repeat it.
 
-### Setting Up Custom Instructions
+### Custom GPTs
 
-**In ChatGPT Settings:**
-1. Click your profile
-2. Select "Custom Instructions"
-3. Fill in two sections:
+Custom GPTs are specialised versions of ChatGPT you configure for a specific purpose. You can build one in under 10 minutes, and OpenAI's GPT Store has thousands built by others.
 
-**Section 1: What would you like ChatGPT to know about you?**
-```
-I am a [your role] at a [company type] company in [industry].
+**What you can configure:**
+- A custom name, description, and profile image
+- Specific instructions (similar to a detailed system prompt)
+- Uploaded knowledge files (your documents, style guides, SOPs)
+- Connected tools: web browsing, image generation, code interpreter, external APIs
 
-My main responsibilities:
-- [Responsibility 1]
-- [Responsibility 2]
-- [Responsibility 3]
+**When to build a Custom GPT instead of using a prompt template:**
+- When the task requires persistent knowledge files (product catalogue, brand guidelines, internal docs)
+- When you want to share a configured AI with your team
+- When the task is complex enough that a full system prompt in Custom Instructions would be too long
 
-My typical use cases for ChatGPT:
-- Business communication
-- Content creation
-- Research and analysis
-- Project planning
-
-My audience is typically: [describe]
-
-My goals: [What you're trying to achieve]
-```
-
-**Section 2: How would you like ChatGPT to respond?**
-```
-Response style:
-- Professional but conversational
-- Concise (avoid fluff)
-- Action-oriented (focus on what I can do)
-- Use specific examples over generic advice
-
-Formatting preferences:
-- Use bullet points for lists
-- Bold key terms
-- Keep paragraphs to 2-3 sentences max
-- Start with TL;DR for long responses
-
-Always:
-- Ask clarifying questions if ambiguous
-- Provide 2-3 options when appropriate
-- Include potential risks/considerations
-- Cite sources when making factual claims
-
-Never:
-- Use overly formal language
-- Apologize unnecessarily
-- Give generic advice
-```
-
-**Result:** Every conversation starts with this context!
+**Practical Custom GPT ideas:**
+- **Brand Voice GPT:** Trained on your style guide and past content examples — generates on-brand copy instantly
+- **Support GPT:** Trained on your FAQ and product documentation — drafts customer support replies
+- **Proposal GPT:** Trained on your service descriptions and case studies — drafts client proposals
+- **Research GPT:** With web browsing enabled — researches topics and returns structured summaries
 
 ---
 
-## Part 2: Advanced Reasoning Frameworks
+## 6.2 Working with the o3 Reasoning Model
 
-### Chain-of-Thought Prompting
+GPT-4o is excellent for most tasks. For complex reasoning, switch to o3.
 
-Force ChatGPT to "show its work" for better reasoning:
+**o3 excels at:**
+- Multi-step mathematical calculations
+- Complex logic problems and puzzles
+- Long research analysis requiring synthesis across many factors
+- Debugging complex code with non-obvious errors
+- Planning tasks with many dependencies and constraints
+- Evaluating arguments and identifying logical fallacies
 
-```
-Think through this problem step-by-step:
+**How o3 works differently:**
+o3 "thinks" before responding — you'll see a thinking indicator. It takes longer but produces significantly more reliable reasoning. For problems where getting the right answer matters more than getting a fast answer, o3 is the right tool.
 
-PROBLEM: [Your complex problem]
+**Prompt guidance for o3:**
+You don't need to ask it to "think step by step" — it does this automatically. Just describe the problem clearly and completely. Be more explicit about constraints and what "good" looks like.
 
-PROCESS:
-1. Break down the problem into components
-2. Analyze each component
-3. Consider dependencies and relationships
-4. Evaluate potential solutions
-5. Recommend best approach
-6. Explain your reasoning at each step
-
-Show your thinking process, not just the answer.
-```
-
-**When to use:** Complex decisions, analysis, strategy
-
----
-
-### Socratic Method
-
-Let ChatGPT guide you to answers through questions:
-
-```
-ROLE: You are a Socratic teacher helping me think through a problem.
-
-MY PROBLEM: [Describe your challenge]
-
-INSTRUCTIONS:
-- Don't give me the answer directly
-- Ask me probing questions that help me discover the solution
-- Build on my answers with deeper questions
-- Guide me to insights through dialogue
-- After 5-6 exchanges, summarize what I've discovered
-
-Start by asking me your first question.
-```
-
-**When to use:** Learning, critical thinking, exploring options
+**Example:**
+> I need to decide between hiring a full-time employee ($85K salary + benefits) vs. contracting with an agency ($12K/month) for our content function. 
+> Context: we're a 50-person SaaS company, our content needs are seasonal (heavy in Q1 and Q4), the full-time hire would need 3 months to onboard and start producing, we currently have one internal marketer.
+> Constraints: budget for content capped at $150K this year; we need content running at full capacity by March.
+> Analyse this decision fully — financial, operational, and strategic factors. Make a recommendation.
 
 ---
 
-### Six Thinking Hats Method
+## 6.3 File Analysis and the Code Interpreter
 
-Examine problems from multiple perspectives:
+ChatGPT Plus includes a Code Interpreter (also called "Advanced Data Analysis") that can read, process, and analyse files.
 
-```
-Analyze [decision/problem] using the Six Thinking Hats method:
+### What You Can Upload and Analyse
 
-WHITE HAT (Facts):
-- What data do we have?
-- What's missing?
-- Objective information only
+| File Type | What ChatGPT Can Do |
+|---|---|
+| CSV / Excel | Analyse data, create charts, run calculations, find trends |
+| PDF | Extract text, summarise, answer questions |
+| Word / PowerPoint | Summarise, edit, extract content |
+| Images | Describe, analyse charts/graphs, read text in images |
+| Code files | Review, debug, explain, refactor |
+| Audio (with voice features) | Transcribe, summarise |
 
-RED HAT (Emotions):
-- Gut reactions
-- Feelings about this
-- Intuitive responses
+### Data Analysis Workflow
 
-BLACK HAT (Caution):
-- Potential problems
-- Risks
-- Why this might fail
+Upload a spreadsheet or CSV:
+> Analyse this data. Give me: (1) summary statistics for each column, (2) key trends you notice, (3) any anomalies or outliers worth investigating, (4) your top 3 insights from a business perspective, (5) a chart showing [specific relationship].
 
-YELLOW HAT (Benefits):
-- Opportunities
-- Best case scenarios
-- Why this could work
+**For sales data:**
+> This is our sales data for the last 12 months. Which products are growing fastest? Which customers account for the top 20% of revenue? Which months show unusual patterns and why might that be?
 
-GREEN HAT (Creativity):
-- Alternatives
-- New ideas
-- Innovative approaches
+**For survey results:**
+> These are survey responses from our customers. Identify the most common themes in the open-text responses. Quantify the patterns. What are customers most satisfied with? What do they most want us to improve?
 
-BLUE HAT (Process):
-- Summary of all perspectives
-- Recommended next steps
-- Action plan
+### PDF and Document Analysis
 
-Spend equal time on each hat.
-```
+Upload a long report, contract, or document:
+> Summarise this document in 5 bullets. What are the key recommendations or decisions? What should I read in full vs. what can I skim?
+
+For multiple documents: upload all of them to a Project, then ask questions that draw across all of them.
 
 ---
 
-## Part 3: Code Generation & Debugging
+## 6.4 Code Generation and Technical Tasks
 
-### Code Generation for Non-Programmers
+You don't need to be a developer to use ChatGPT for code — and if you are a developer, AI dramatically accelerates your work.
 
-You don't need to be a developer to use ChatGPT for code:
+### Non-Developer Code Use Cases
 
-**Excel/Google Sheets Formula**
-```
-I need an Excel formula that:
-- [Describe what you want it to do]
-- Input data is in cells: [cell references]
-- Expected output: [description]
+**Excel/Sheets formulas:**
+> Write an Excel formula that: calculates the average of column C, but only for rows where column A says "UK" and column B is greater than $1,000.
 
-Provide:
-1. The formula
-2. Step-by-step explanation of how it works
-3. Example with sample data
-4. Common errors to avoid
-```
+**Data cleaning:**
+> Write a simple Python script that reads a CSV file called "customers.csv", removes rows where the email column is blank, removes duplicate email addresses, and saves the result as "customers_clean.csv".
 
----
+**Simple automations:**
+> Write a Google Apps Script that automatically sends a reminder email to anyone in this spreadsheet [describe columns] whose "Follow-up Date" column is today.
 
-**Simple Web Script**
-```
-Create a simple [type] script that:
-- Does: [functionality]
-- Inputs: [what user provides]
-- Outputs: [what it produces]
+### Developer Use Cases
 
-REQUIREMENTS:
-- Explain each section with comments
-- Keep it simple (I'm not a programmer)
-- Include instructions for how to run it
+For more complex tasks, use ChatGPT (or Claude — which often edges ahead for longer code tasks) with full context:
+> I'm building [describe what and in what language/framework]. Here's the current code [paste]. I need to add [feature]. Requirements: [list]. Constraints: [performance, compatibility, style guide]. Write the implementation.
 
-LANGUAGE: [JavaScript/Python/etc.]
-```
+**Debugging:**
+> Here's a function that should [do X] but instead [does Y]. Here's the error: [paste]. Here's the code: [paste]. What's the issue and how do I fix it?
+
+**Code review:**
+> Review this code for: bugs, security issues, performance problems, and clarity. Suggest specific improvements with examples.
 
 ---
 
-**Data Transformation**
-```
-I have data in this format:
-[Show example of current format]
+## 6.5 Advanced Research Workflows
 
-I need it in this format:
-[Show example of desired format]
+### Multi-Step Research
 
-Provide:
-1. Python/JavaScript code to transform it
-2. Explanation of what each part does
-3. How to run it (step-by-step)
-```
+For serious research, use a structured multi-prompt approach:
 
----
+**Prompt 1 — Landscape:**
+> Give me a structured overview of [topic]. Include: key concepts, main players/schools of thought, recent developments (2024–2025), and the most important debates.
 
-### Code Debugging
+**Prompt 2 — Deep dive:**
+> Now go deeper on [specific aspect I care most about]. What does the evidence say? What are the strongest counterarguments?
 
-**When code doesn't work:**
-```
-This code isn't working as expected:
+**Prompt 3 — Application:**
+> Given all of this, what are the most important implications for [my specific context]? What would you recommend I do or prioritise?
 
-CODE:
-[Paste your code]
+**Prompt 4 — Gaps and next steps:**
+> What did we not cover that I should research further? What are the most important things you're uncertain about in what you've told me?
 
-EXPECTED BEHAVIOR:
-[What should happen]
+### Using Gemini Deep Research as a Complement
 
-ACTUAL BEHAVIOR:
-[What's happening instead]
+For research tasks requiring current sources, consider combining tools:
+- **Gemini Deep Research** (Google One AI Premium) — runs a 20–30 minute autonomous research session, browses dozens of sources, produces a structured report with citations
+- **ChatGPT** — for analysis, synthesis, and applying the research to your specific situation
 
-ERROR MESSAGE (if any):
-[Paste error]
-
-HELP ME:
-1. Identify the bug
-2. Explain why it's happening
-3. Provide corrected code
-4. Explain the fix
-
-Assume I have basic programming knowledge.
-```
+This combination is more powerful than either tool alone.
 
 ---
 
-## Part 4: Multi-Step Problem Solving
+## 6.6 Agentic Tasks and Computer Use
 
-### Complex Problem Template
+In 2025, ChatGPT has begun supporting "agentic" tasks — multi-step sequences where the AI takes actions, not just generates text.
 
-```
-ROLE: You are a strategic problem solver.
+**ChatGPT Operator/Computer Use:**
+Available with ChatGPT Pro, this feature lets ChatGPT control a web browser on your behalf — clicking, typing, navigating, and completing tasks across websites.
 
-COMPLEX PROBLEM: [Detailed description]
+**Early use cases include:**
+- Filling in web forms from structured data
+- Extracting information from multiple websites into a document
+- Booking appointments or making purchases on approved sites
+- Navigating complex web interfaces to complete research
 
-SOLVE USING THIS FRAMEWORK:
-
-STEP 1: PROBLEM DEFINITION
-- Core issue (one sentence)
-- Root causes (3-5)
-- Stakeholders affected
-- Success criteria
-
-STEP 2: CONSTRAINTS
-- Budget limitations
-- Time constraints
-- Resource availability
-- Political/organizational factors
-
-STEP 3: SOLUTION OPTIONS (3-5)
-For each option:
-- Description
-- Pros and cons
-- Resource requirements
-- Risk level
-- Time to implement
-
-STEP 4: EVALUATION MATRIX
-- Score each option against criteria
-- Weight important factors
-
-STEP 5: RECOMMENDATION
-- Best option and why
-- Implementation roadmap
-- Risk mitigation
-- Quick wins
-
-STEP 6: ALTERNATIVE SCENARIOS
-- If recommendation fails, then what?
-- Plan B and Plan C
-
-Use data-driven logic throughout.
-```
+**Important caveats:**
+- Review every action before authorising it in Operator mode
+- Don't use for sensitive accounts (banking, healthcare) without understanding the security implications
+- The technology is powerful but still early — verify outputs
 
 ---
 
-### Scenario Planning
-
-```
-Create scenario plans for: [situation]
-
-CURRENT STATE: [Describe where you are now]
-GOAL: [Where you want to be]
-TIMEFRAME: [Duration]
-
-DEVELOP 3 SCENARIOS:
-
-1. BEST CASE (Optimistic)
-   - What has to go right
-   - Probability: X%
-   - Key indicators
-   - Action plan
-
-2. MOST LIKELY (Realistic)
-   - Expected path
-   - Probability: X%
-   - Key indicators
-   - Action plan
-
-3. WORST CASE (Pessimistic)
-   - What could go wrong
-   - Probability: X%
-   - Key indicators
-   - Contingency plan
-
-For each scenario:
-- Triggers to watch for
-- Decision points
-- Pivot strategies
-```
-
----
-
-## Part 5: Advanced Prompt Techniques
-
-### Perspective Shifting
-
-```
-Analyze [topic/decision] from these perspectives:
-
-1. YOUR COMPETITOR would say:
-2. YOUR CUSTOMER would say:
-3. YOUR INVESTOR would say:
-4. YOUR EMPLOYEE would say:
-5. AN INDUSTRY EXPERT would say:
-6. A CRITIC would say:
-
-For each perspective:
-- Main argument (100 words)
-- Supporting evidence
-- Concerns raised
-- Recommendations
-
-Then: Synthesize into balanced view
-```
-
----
-
-### Constraint-Based Thinking
-
-```
-Solve this challenge WITH constraints:
-
-CHALLENGE: [Your problem]
-
-CONSTRAINTS (must follow all):
-1. Budget: $[amount] maximum
-2. Time: [timeline]
-3. Team: [size/skills available]
-4. Cannot use: [forbidden solutions]
-5. Must maintain: [non-negotiables]
-
-CREATIVE CONSTRAINTS:
-- Solution must be [creative restriction]
-- Inspired by [unrelated industry/field]
-
-Often constraints force the BEST solutions.
-Provide 3 creative approaches that work within ALL constraints.
-```
-
----
-
-### Meta-Prompting
-
-Ask ChatGPT to improve your prompts:
-
-```
-I want to ask ChatGPT: [your intended question]
-
-Before answering, first:
-1. Analyze my question
-2. Identify ambiguities or missing context
-3. Suggest a better, more specific version of my prompt
-4. THEN answer using the improved prompt
-
-This helps me learn better prompting while getting a better answer.
-```
-
----
-
-## Part 6: Understanding Limitations
-
-### What ChatGPT Can't Do
-
-**Cannot:**
-- Browse the internet in real-time (unless using plugins)
-- Access personal data unless you provide it
-- Remember conversations unless explicitly told
-- Know events after training cutoff (check date in settings)
-- Execute actions outside the chat interface
-- Make subjective judgments about "best" without criteria
-
-**Workarounds:**
-```
-For real-time data:
-"Based on general patterns in [industry], what would typically..."
-
-For personal data:
-"Here's my data: [paste]. Now analyze..."
-
-For recent events:
-"Assuming [recent event] happened, how would..."
-```
-
----
-
-### Handling Hallucinations
-
-ChatGPT sometimes "hallucinates" (makes up information):
-
-**Prevention strategies:**
-```
-1. Request sources: "Cite your sources for these claims"
-
-2. Ask for confidence levels: "How confident are you in this information? (High/Medium/Low)"
-
-3. Cross-check critical facts: "What evidence supports this?"
-
-4. Use disclaimers: "If you're not certain, say 'Based on typical patterns...' rather than stating as fact"
-```
-
----
-
-### Token Limits
-
-Long conversations may lose early context:
-
-**Solution: Conversation management**
-```
-When conversation is long:
-"Summarize our conversation so far, highlighting:
-- Key decisions made
-- Important context to remember
-- Open questions remaining
-
-I'll use this summary to start a fresh conversation."
-```
-
----
-
-## Part 7: Advanced Use Cases
-
-### Competitive Intelligence
-
-```
-Analyze [Competitor] using SWOT framework:
-
-PUBLIC INFORMATION ONLY (websites, news, social media)
-
-STRENGTHS:
-- What they do well
-- Competitive advantages
-- Market position
-
-WEAKNESSES:
-- Vulnerabilities
-- Customer complaints
-- Gaps in offering
-
-OPPORTUNITIES (for us):
-- Market gaps they're not serving
-- Areas where we can differentiate
-- Their weaknesses we can exploit
-
-THREATS (from them):
-- Their innovations
-- Their strengths vs. our weaknesses
-- Market trends favoring them
-
-STRATEGIC RECOMMENDATIONS:
-- How to compete effectively
-- Where to focus our efforts
-- Defensive strategies
-```
-
----
-
-### Crisis Communication
-
-```
-URGENT: Need crisis communication plan for:
-
-SITUATION: [Describe crisis]
-STAKEHOLDERS: [Who's affected]
-SEVERITY: [High/Medium/Low]
-PUBLIC AWARENESS: [Is this public yet?]
-
-CREATE IMMEDIATE RESPONSE:
-
-1. HOLDING STATEMENT (100 words)
-   - Acknowledge situation
-   - Express concern/empathy
-   - Commit to transparency
-   - Next update timeline
-
-2. INTERNAL COMMUNICATION (200 words)
-   - What employees need to know
-   - How to respond to questions
-   - What NOT to say
-
-3. CUSTOMER COMMUNICATION (200 words)
-   - Direct address of their concerns
-   - Steps being taken
-   - Support available
-
-4. MEDIA TALKING POINTS
-   - 5 key messages
-   - Q&A (10 likely questions + answers)
-
-5. MONITORING PLAN
-   - What to track
-   - When to update
-
-TONE: [Serious, apologetic, transparent, action-oriented]
-```
-
----
-
-## Part 8: API & Integration Concepts
-
-### Understanding ChatGPT API (Basic)
-
-**What it enables:**
-- Integrate ChatGPT into your own tools
-- Automate workflows
-- Build custom applications
-
-**Basic concept:**
-```
-You send a "prompt" → API returns "completion"
-
-Example use cases:
-- Auto-generate product descriptions from specs
-- Summarize customer support tickets
-- Draft emails based on bullet points
-- Analyze data and create reports
-
-Technical requirements:
-- Basic programming knowledge
-- API key from OpenAI
-- Some coding ability (or hire developer)
-```
-
-**Simple API prompt structure:**
-```json
-{
-  "model": "gpt-4",
-  "messages": [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "What is AI?"}
-  ]
-}
-```
-
----
-
-## Advanced Tips from Power Users
-
-### Tip #1: Version Control Your Prompts
-Keep a document of your best prompts:
-- Date created
-- Use case
-- Prompt text
-- Performance notes
-- Iterations/improvements
-
----
-
-### Tip #2: A/B Test Your Prompts
-```
-Create 2 versions of this [content type]:
-
-VERSION A: [Approach 1]
-VERSION B: [Approach 2]
-
-For each version, create complete draft.
-I'll test which performs better.
-```
-
----
-
-### Tip #3: Combine Multiple Techniques
-```
-Use chain-of-thought + six thinking hats + constraint-based thinking
-to solve: [complex problem]
-
-This forces deep, multi-faceted analysis.
-```
-
----
-
-### Tip #4: Temperature Settings (if using API)
-- Temperature 0 = Deterministic, consistent
-- Temperature 0.7 = Balanced creativity
-- Temperature 1.0 = Maximum creativity
-
-Match to use case:
-- Technical docs: Low temperature
-- Creative writing: High temperature
+## 6.7 Evaluating and Improving ChatGPT's Outputs
+
+Advanced users don't just accept responses — they actively interrogate them.
+
+**Quality checks:**
+- `"Is there anything in your response that you're less confident about?"`
+- `"What are the strongest counterarguments to what you just said?"`
+- `"What assumptions are you making that might not apply to my situation?"`
+- `"Rate the quality of your own response on a scale of 1–10 and explain why."`
+
+**Improving outputs systematically:**
+- `"This is good but too generic. Add 3 specific examples from the [industry/context] that make it concrete."`
+- `"Rewrite this but with 30% fewer words. Don't cut any important ideas."`
+- `"The structure is right but the writing is flat. Rewrite with more energy and conviction."`
 
 ---
 
 ## Key Takeaways
 
-🎯 **What You Learned:**
-1. Custom instructions for personalized responses
-2. Advanced reasoning frameworks
-3. Code generation and debugging
-4. Multi-step problem solving
-5. ChatGPT limitations and workarounds
-6. Advanced prompt techniques
-7. Power user strategies
-
-🚀 **Immediate Actions:**
-- Set up your custom instructions
-- Try chain-of-thought prompting on next complex problem
-- Generate a simple script/formula for a task
-- Create your personal prompt library
+- **Custom GPTs** let you create specialised AI tools trained on your own knowledge and instructions
+- The **o3 model** is significantly better than GPT-4o for complex reasoning, analysis, and planning
+- **Code Interpreter** unlocks data analysis, file processing, and code generation from files you upload
+- **Multi-step research** workflows produce dramatically better outputs than single prompts
+- **Agentic features** (Operator, Computer Use) are beginning to let ChatGPT take actions, not just generate text
+- Always **interrogate outputs** — ask ChatGPT about its confidence, assumptions, and what it omitted
 
 ---
 
-## Glossary
+## Quick Check
 
-**Chain-of-Thought:** Prompting technique that asks ChatGPT to explain its reasoning step-by-step, improving complex problem-solving.
-
-**Hallucination:** When AI generates false information presented as fact. More common with factual claims than with creative or analytical tasks.
-
-**Token:** Unit of text (roughly 4 characters or ¾ word). ChatGPT has token limits per conversation and per response.
-
-**Temperature:** API setting controlling randomness/creativity. Lower = more predictable, higher = more creative.
-
-**System Prompt:** Instructions that set ChatGPT's behavior for an entire conversation (like custom instructions).
-
-**Meta-Prompting:** Using ChatGPT to improve your prompts before answering your actual question.
+1. When should you use o3 instead of GPT-4o?
+2. What are 3 things you can do with the Code Interpreter that don't require any coding knowledge?
+3. How would you use ChatGPT to critically evaluate its own response?
 
 ---
 
-## Coming Up in Module 7
-
-Final module: **Beyond ChatGPT - Your AI Toolkit**
-
-- Other AI tools worth knowing
-- When to use what tool
-- Building your AI stack
-- Future of AI tools
-- Staying updated
-
-**You're a ChatGPT expert—time to expand your AI toolkit!** 🛠️
-
----
-
-**Module 6 Complete!** 🎉  
-Final quiz coming up—test your advanced skills!
+*Next up: Module 7 — Beyond ChatGPT: Your AI Toolkit*

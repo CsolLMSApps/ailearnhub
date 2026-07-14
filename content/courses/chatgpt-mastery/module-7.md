@@ -3,613 +3,236 @@
 
 ---
 
-## Expand Your AI Arsenal
+## What You'll Learn
 
-Congratulations on mastering ChatGPT! But ChatGPT is just one tool in a growing AI ecosystem.
-
-**This final module** introduces you to other powerful AI tools and helps you build a complete AI toolkit.
-
-By the end of this module, you'll:
-- ✅ Know the best AI tools beyond ChatGPT
-- ✅ Understand when to use each tool
-- ✅ Build your personal AI stack
-- ✅ Stay updated on AI developments
-- ✅ Have a roadmap for continued learning
-
-Let's complete your AI education! 🛠️
+- Understand the AI landscape beyond ChatGPT in 2025
+- Know when to use Claude, Gemini, Perplexity, and other leading tools
+- Build a personal AI toolkit matched to your specific needs
+- Understand the agentic AI tools redefining professional workflows
+- Plan your continued AI learning from here
 
 ---
 
-## Part 1: The AI Landscape
+## 7.1 The AI Landscape in 2025
 
-### Categories of AI Tools
+ChatGPT is the most well-known AI tool — but not always the best tool for every job. In 2025, the major AI labs have each built strong models with distinct strengths. A power user has a small toolkit and knows when to reach for each.
 
-**1. Text Generation (Like ChatGPT)**
-- ChatGPT (OpenAI)
-- Claude (Anthropic)
-- Gemini (Google)
-- Llama (Meta - open source)
+**The major players:**
 
-**2. Image Generation**
-- DALL-E (OpenAI)
-- Midjourney
-- Stable Diffusion
-- Adobe Firefly
-
-**3. Video Generation**
-- Runway
-- Pika
-- Synthesia (AI avatars)
-
-**4. Audio/Voice**
-- ElevenLabs (voice cloning)
-- Descript (audio editing)
-- Whisper (transcription)
-
-**5. Code Assistants**
-- GitHub Copilot
-- Cursor
-- Replit AI
-
-**6. Productivity**
-- Notion AI
-- Grammarly
-- Jasper (marketing)
+| Company | Model | Strengths |
+|---|---|---|
+| OpenAI | GPT-4o, o3 | Versatility, ecosystem, plugins, image gen |
+| Anthropic | Claude 3.7, Claude 4 | Long documents, nuanced writing, safety, coding |
+| Google | Gemini 2.5 Pro/Flash | Google Workspace integration, real-time search, multimodal |
+| Perplexity AI | Perplexity | Research with citations, current information |
+| Meta | Llama 3.3, Llama 4 | Open source, privacy, self-hosting |
+| xAI | Grok 3 | Real-time X/Twitter data, less restricted |
 
 ---
 
-## Part 2: When to Use What Tool
+## 7.2 Claude — Best for Long and Nuanced Work
 
-### Decision Framework
+**Claude** (by Anthropic) is the tool most professionals reach for when ChatGPT doesn't quite get the nuance right.
 
-**Use ChatGPT when:**
-- General text generation
-- Analysis and reasoning
-- Conversation and brainstorming
-- Learning and explaining
-- Most business communication
+**Claude's standout strengths:**
+- **Long context:** Claude 3.7 handles 200,000 tokens (~150,000 words) — entire books, codebases, or research archives in a single session
+- **Writing quality:** Claude produces some of the most natural-sounding, well-structured prose of any AI
+- **Analytical depth:** Claude tends to give more measured, nuanced responses — important for research and complex analysis
+- **Coding:** Strong at code generation, debugging, and explaining complex systems
 
-**Use Claude when:**
-- Need longer context windows
-- Detailed analysis of documents
-- More nuanced conversations
-- Research-heavy tasks
+**When to choose Claude over ChatGPT:**
+- You're working with very long documents (full reports, contracts, books)
+- You need high-quality, human-sounding writing without heavy editing
+- You want a more thorough analytical response on a complex topic
+- You're working on a substantial coding project
 
-**Use Gemini when:**
-- Google ecosystem integration
-- Real-time web access needs
-- Multimodal tasks (text + images)
-
-**Use Image AI when:**
-- Creating visuals for content
-- Product mockups
-- Marketing materials
-- Concept visualization
-
-**Use Code AI when:**
-- Writing code faster
-- Debugging
-- Learning programming
-- Auto-completion
-
-**Use specialized tools when:**
-- Voice generation (ElevenLabs)
-- Video editing (Runway, Descript)
-- Specific workflows (Notion AI for docs)
+**Access:** claude.ai — free tier available; Pro at $20/month (same as ChatGPT Plus)
 
 ---
 
-## Part 3: Building Your AI Stack
+## 7.3 Gemini — Google's AI, Deep in Your Workflow
 
-### Starter Stack (Free/Low Cost)
+**Gemini** (Google DeepMind) is strongest when it's embedded in your existing Google tools.
 
-**Essential:**
-1. **ChatGPT Free** - Daily text tasks
-2. **Google Gemini** - Web research
-3. **Canva AI** - Basic design
-4. **Grammarly Free** - Writing assistance
+**Gemini's standout strengths:**
+- **Google Workspace integration:** Gemini is built into Gmail, Docs, Slides, Sheets, and Meet — AI assistance without switching apps
+- **Real-time search:** Gemini can search the web in real time, with current results, in every conversation
+- **Multimodal:** Strong at analysing images, videos, audio, and documents together
+- **Deep Research:** An autonomous research mode that spends 20–30 minutes browsing dozens of sources and produces a structured report
 
-**Cost:** $0/month  
-**Covers:** 80% of needs
+**When to choose Gemini:**
+- You live in Google Workspace (Gmail, Docs, Sheets, Drive)
+- You need current information with sources in your conversation
+- You want to run a deep research report on a topic
+- You're working with YouTube content (Gemini can analyse videos)
 
----
-
-### Professional Stack ($20-50/month)
-
-**Core Tools:**
-1. **ChatGPT Plus** ($20/mo)
-   - GPT-4 access
-   - Faster responses
-   - Priority access
-
-2. **Grammarly Premium** ($12/mo)
-   - Advanced writing help
-   - Tone detection
-   - Plagiarism checker
-
-3. **Canva Pro** ($13/mo)
-   - More templates
-   - Brand kit
-   - AI features
-
-**Optional Adds:**
-4. **Midjourney** ($10/mo) - Image generation
-5. **Claude Pro** ($20/mo) - If heavy research user
-
-**Total:** $20-55/month depending on needs
+**Access:** gemini.google.com — free with Google account; Gemini Advanced ($20/month) for the most capable model and workspace integration
 
 ---
 
-### Enterprise/Power User Stack ($100+/month)
+## 7.4 Perplexity — AI-Powered Research
 
-**For businesses or power users:**
-1. All professional tools above
-2. **GitHub Copilot** ($10/mo) - For developers
-3. **Jasper** ($49/mo) - Marketing content
-4. **Synthesia** ($30/mo) - Video creation
-5. **ElevenLabs** ($22/mo) - Voice generation
-6. **Custom APIs** - Build own integrations
+**Perplexity AI** isn't a general-purpose chatbot — it's specifically designed for research and knowledge retrieval with cited sources.
 
-**Total:** $100-200/month  
-**ROI:** If replacing human hours, easily justified
+**Why it's different:**
+Every answer cites its sources with numbered references. You can click through to verify. It searches the web in real time for every query.
 
----
+**Best use cases:**
+- Research questions where you need current, accurate information
+- Checking facts before including them in work
+- Getting an overview of a topic with sources you can read further
+- Monitoring news on a specific topic over time
 
-## Part 4: Tool-Specific Use Cases
+**Perplexity Pro features:** Upload documents, search specific domains, choose models (GPT-4o, Claude, or Perplexity's own models), get deeper research with "Deep Research" mode.
 
-### Image Generation: Quick Start
-
-**DALL-E 3 (via ChatGPT Plus):**
-```
-Prompt formula:
-[Subject] + [Style] + [Mood/Atmosphere] + [Technical details]
-
-Example:
-"A modern office workspace with plants, minimalist Scandinavian style, 
-bright and airy atmosphere, soft natural lighting, professional photography"
-
-Tips:
-- Be specific about style
-- Mention lighting and mood
-- Include composition details
-- Specify quality (photorealistic, illustration, etc.)
-```
-
-**Use for:**
-- Blog post headers
-- Social media graphics
-- Presentation visuals
-- Product mockups
-- Concept art
+**Access:** perplexity.ai — very generous free tier; Pro $20/month
 
 ---
 
-### Voice AI: ElevenLabs
+## 7.5 Microsoft Copilot — AI Built Into Office
 
-**What it does:**
-- Convert text to realistic speech
-- Clone your voice
-- Create audiobooks, podcasts, voiceovers
+If your organisation uses Microsoft 365, **Microsoft Copilot** brings AI directly into Word, Excel, PowerPoint, Outlook, and Teams.
 
-**Quick workflow:**
-```
-1. Write script in ChatGPT
-2. Paste into ElevenLabs
-3. Select voice
-4. Generate audio
-5. Download and use
+**Key capabilities:**
+- **Word:** Draft documents, summarise, rewrite, adjust tone
+- **Excel:** Generate formulas, analyse data, create charts from natural language
+- **PowerPoint:** Generate slide decks from prompts or documents; redesign existing decks
+- **Outlook:** Summarise email threads, draft replies, schedule meetings
+- **Teams:** Real-time meeting transcription and summary; action items extracted automatically
 
-Use cases:
-- Podcast intros
-- Video narration
-- Audiobook creation
-- Multi-language content
-```
+**Important:** Microsoft Copilot is enterprise-licensed — it requires Microsoft 365 Business or Enterprise (from ~$30/user/month). It is NOT included in standard Office 365 subscriptions. Check with your IT department.
 
 ---
 
-### Code Assistant: GitHub Copilot
+## 7.6 NotebookLM — AI for Your Own Documents
 
-**What it does:**
-- Auto-completes code as you type
-- Suggests entire functions
-- Explains code
-- Generates tests
+**NotebookLM** (Google, free) is one of the most underrated AI tools available. Upload your own documents — research papers, reports, books, meeting notes — and it creates a private AI assistant trained specifically on those materials.
 
-**For non-programmers:**
-- Still useful for Excel formulas
-- SQL queries
-- Simple scripts
-- Automation workflows
+**What makes it unique:**
+- All answers cite the specific source document and page
+- It never confuses information from your documents with general knowledge
+- The **Audio Overview** feature generates a podcast-style audio summary of your documents (surprisingly useful)
+- You can have multiple notebooks — one per project or research area
 
-**Works with ChatGPT:**
-```
-ChatGPT: Design the logic/algorithm
-Copilot: Writes the actual code
-Result: Faster development
-```
+**Best use cases:**
+- Academic research: upload papers, ask questions across all of them
+- Business intelligence: upload market reports, analyse trends
+- Learning: upload a book or course materials, ask questions to test understanding
+- Client research: upload everything about a client before a meeting
+
+**Access:** notebooklm.google.com — free
 
 ---
 
-## Part 5: AI Workflow Examples
+## 7.7 Specialist AI Tools by Category
 
-### Content Creation Workflow
+Beyond general AI assistants, specialist tools now exist for almost every category of task:
 
-**Goal:** Create complete blog post with visuals
+**Writing and editing:**
+- **Grammarly AI** — real-time grammar, clarity, and tone suggestions; integrates everywhere
+- **Hemingway Editor** — AI identifies complex sentences and passive voice; forces clarity
 
-**Steps:**
-1. **ChatGPT:** Generate outline and draft
-2. **ChatGPT:** Create article content
-3. **Grammarly:** Polish and check grammar
-4. **DALL-E:** Create header image
-5. **Canva:** Add text overlays, social graphics
-6. **ChatGPT:** Write social media promotions
+**Meetings and audio:**
+- **Otter.ai** — real-time transcription, AI summaries, action items; integrates with Zoom/Teams/Meet
+- **Fireflies.ai** — transcription plus searchable database of all your meetings; CRM integration
+- **Krisp** — AI noise cancellation for calls
 
-**Time:** 45 minutes  
-**Without AI:** 4-5 hours
+**Research:**
+- **Elicit** — AI research assistant specifically for academic papers
+- **Consensus** — searches peer-reviewed research and synthesises findings
 
----
+**Image generation:**
+- **Midjourney** — highest quality artistic and photorealistic images
+- **Adobe Firefly** — commercial-safe images; Photoshop integration
+- **FLUX** — open source; excellent quality; free to use
 
-### Marketing Campaign Workflow
+**Video:**
+- **Runway Gen-3** — professional AI video generation
+- **HeyGen** — AI avatar videos from scripts
+- **Descript** — AI-powered video editing (remove filler words, overdub audio)
 
-**Goal:** Launch product campaign
-
-**Steps:**
-1. **ChatGPT:** Brainstorm campaign concepts
-2. **ChatGPT:** Write ad copy variations
-3. **Midjourney:** Generate product visuals
-4. **ChatGPT:** Create email sequences
-5. **Canva:** Design landing page mockup
-6. **ChatGPT:** Develop content calendar
-
-**Time:** 2-3 hours  
-**Without AI:** 2-3 days
+**Coding:**
+- **GitHub Copilot** — AI code completion in your IDE
+- **Cursor** — AI-native code editor (ChatGPT integration built in)
 
 ---
 
-### Research & Analysis Workflow
+## 7.8 Building Your Personal AI Stack
 
-**Goal:** Comprehensive market research
+Most professionals need only 3–5 AI tools. More than that creates tool fatigue and you end up using none of them consistently.
 
-**Steps:**
-1. **Gemini:** Web research (real-time data)
-2. **ChatGPT:** Analyze and synthesize findings
-3. **ChatGPT:** Create competitor analysis
-4. **ChatGPT:** Generate strategic recommendations
-5. **ChatGPT:** Build presentation outline
-6. **Canva/Slides:** Create visual presentation
+**The minimum effective AI stack (most people):**
+1. **One general AI assistant** — ChatGPT, Claude, or Gemini (pick one primary)
+2. **One research tool** — Perplexity or Gemini with search
+3. **One document analysis tool** — NotebookLM or Claude for long documents
 
-**Time:** 3-4 hours  
-**Without AI:** 1-2 weeks
+**Add based on your role:**
+- Marketing/content: Midjourney or DALL-E 3 (image gen), Otter.ai (meetings)
+- Business: Microsoft 365 Copilot (if on M365), Fireflies.ai (meeting notes)
+- Developer: GitHub Copilot or Cursor
+- Creative: Adobe Firefly, Runway, ElevenLabs
 
----
-
-## Part 6: Staying Current with AI
-
-### Resources to Follow
-
-**Newsletters:**
-- Ben's Bites (daily AI news)
-- The Rundown AI (daily updates)
-- TLDR AI (weekly summary)
-
-**YouTube Channels:**
-- AI Explained
-- Matt Wolfe
-- The AI Advantage
-
-**Podcasts:**
-- AI Breakdown
-- Latent Space
-- Lex Fridman (AI episodes)
-
-**Communities:**
-- r/ChatGPT (Reddit)
-- AI Discord servers
-- LinkedIn AI groups
+**The integration principle:** The AI tools you already pay for (inside Microsoft 365, Google Workspace, Adobe Creative Cloud) are often the highest ROI — you're already paying for them and they're built into your existing workflow.
 
 ---
 
-### How to Evaluate New AI Tools
+## 7.9 Staying Ahead as AI Evolves
 
-**Framework:**
-```
-NEW TOOL: [Name]
+The tools you've learned in this course will look different in 12 months. Here's how to stay current without overwhelm:
 
-EVALUATE:
-1. What problem does it solve?
-   - Is this a real problem I have?
-   - How am I solving it now?
+**Follow 2–3 sources:**
+- *The Rundown AI* newsletter (daily, 5 minutes, therundown.ai)
+- *TLDR AI* (technical but accessible, free)
+- *Ethan Mollick's Substack* (One Useful Thing) — professor-level analysis on AI in work
 
-2. How much time would it save?
-   - Hours per week estimate
-   - Cost per hour saved
+**The monthly habit:**
+Once a month: check your main AI tools for new features. Try one new capability you haven't used. Update your prompt library if anything changes.
 
-3. What's the learning curve?
-   - Time to proficiency
-   - Worth the investment?
-
-4. What's the cost?
-   - Monthly/annual
-   - Free tier available?
-
-5. Integration with existing stack?
-   - Works with my current tools?
-   - Replaces something I'm using?
-
-DECISION: Try if saves >1 hour/week OR unique capability
-```
+**The mindset:**
+AI tools improve non-linearly. Something that couldn't do a task 6 months ago may now do it reliably. Revisit use cases you tried and abandoned.
 
 ---
 
-## Part 7: Future of AI Tools
+## Course Summary
 
-### Trends to Watch
+You've completed ChatGPT Mastery. Here's what you've built:
 
-**1. Multi-Modal AI**
-- Tools that handle text + image + audio + video
-- Example: Upload image, get text analysis + video + audio
-
-**2. Specialized Agents**
-- AI that completes entire workflows
-- Example: "Plan my vacation" → Does research, bookings, itinerary
-
-**3. Personal AI Assistants**
-- Learns your preferences over time
-- Proactive suggestions
-- Contextual awareness
-
-**4. Enterprise Integration**
-- AI embedded in all business tools
-- Salesforce, Excel, Slack with native AI
-
-**5. Open Source Explosion**
-- More powerful free models
-- Self-hosted options
-- Customizable AI
+| Module | Core Skill |
+|---|---|
+| 1: ChatGPT Quick Start | Interface, models, Custom Instructions, Memory, Projects |
+| 2: Prompt Engineering Mastery | CRAFT, chain-of-thought, few-shot, constraints, iteration |
+| 3: Business Communication Excellence | Emails, reports, presentations, meetings |
+| 4: Content Creation Accelerator | Blogs, social media, voice, repurposing |
+| 5: AI-Powered Productivity | Planning, research, decision-making, templates |
+| 6: Advanced ChatGPT Techniques | Custom GPTs, o3, Code Interpreter, agentic features |
+| 7: Beyond ChatGPT | Claude, Gemini, Perplexity, NotebookLM, your AI stack |
 
 ---
 
-### Preparing for AI Advances
+## Key Takeaways
 
-**Skills that remain valuable:**
-1. **Critical thinking** - Evaluating AI outputs
-2. **Creativity** - Unique ideas AI can enhance
-3. **Strategy** - Knowing what to ask AI to do
-4. **Domain expertise** - Deep knowledge AI lacks
-5. **Ethics & judgment** - Deciding when/how to use AI
-
-**The future worker:**
-- Knows AI deeply
-- Focuses on high-level thinking
-- Delegates execution to AI
-- Maintains human judgment
+- No single AI tool is best for everything — build a small stack and know when to switch
+- **Claude** for long documents and nuanced writing; **Gemini** for Google Workspace and current search; **Perplexity** for research with citations
+- **Microsoft Copilot** and **Google Workspace Gemini** deliver AI in your existing tools — often the highest ROI
+- **NotebookLM** is the best free tool for working with your own documents
+- Build your stack around 3–5 tools, not 15 — consistency beats breadth
+- AI tools improve rapidly — revisit abandoned use cases every few months
 
 ---
 
-## Part 8: Ethical AI Use
+## What to Study Next
 
-### Best Practices
-
-**1. Transparency**
-- Disclose AI-generated content when appropriate
-- Don't pass off AI work as entirely human
-
-**2. Accuracy**
-- Verify AI outputs, especially facts
-- Don't rely solely on AI for critical decisions
-
-**3. Privacy**
-- Don't input confidential/sensitive data
-- Know what data is stored/used
-
-**4. Bias Awareness**
-- AI reflects training data biases
-- Review and adjust outputs
-
-**5. Job Impact**
-- Use AI to enhance, not just replace
-- Reskill displaced workers
+- **Prompt Engineering Mastery** — go deep on techniques that work across all AI models
+- **AI for Social Media Marketing** — content systems, platform-specific workflows, analytics
+- **Email Marketing with AI** — segmentation, personalisation, automation
+- **AI Tools & Productivity** — automation workflows, no-code AI tools, Zapier and Make
 
 ---
 
-### When NOT to Use AI
+## Congratulations!
 
-**Avoid AI for:**
-- Medical diagnoses (see professionals)
-- Legal advice (see lawyers)
-- Financial decisions (without verification)
-- Emotional support (talk to humans)
-- Creative work claiming human originality
-- High-stakes decisions without human oversight
-
-**Use human judgment for:**
-- Ethical dilemmas
-- Relationship issues
-- Strategic pivots
-- Crisis management
-- Hiring/firing decisions
+You've completed **ChatGPT Mastery**. Take the final quiz to earn your certificate.
 
 ---
 
-## Part 9: Your AI Learning Roadmap
-
-### Next 30 Days
-
-**Week 1-2:**
-- Implement ChatGPT daily for 3 tasks minimum
-- Set up custom instructions
-- Try one new AI tool
-
-**Week 3-4:**
-- Build complete workflow using multiple AI tools
-- Create personal prompt library
-- Share AI learnings with team
-
----
-
-### Next 90 Days
-
-**Month 2:**
-- Experiment with image generation
-- Try voice AI for one project
-- Measure time savings (track hours)
-
-**Month 3:**
-- Teach others your AI techniques
-- Build AI into core workflows
-- Evaluate advanced tools for your needs
-
----
-
-### Next Year
-
-**Quarters 2-4:**
-- Stay updated on new AI releases
-- Specialize in AI for your industry
-- Consider API integrations
-- Become AI champion at your organization
-
----
-
-## Part 10: Course Completion
-
-### What You've Achieved
-
-🎓 **You've mastered:**
-1. ChatGPT fundamentals (Module 1)
-2. Prompt engineering (Module 2)
-3. Business communication (Module 3)
-4. Content creation (Module 4)
-5. Productivity optimization (Module 5)
-6. Advanced techniques (Module 6)
-7. AI ecosystem knowledge (Module 7)
-
-**Total:** 6 hours of training + 50+ templates + 100+ techniques
-
----
-
-### Your AI Toolkit
-
-**Core Skills:**
-- ✅ Write effective prompts that get results
-- ✅ Use ChatGPT for daily business tasks
-- ✅ Create content 10X faster
-- ✅ Automate repetitive work
-- ✅ Solve complex problems with AI
-- ✅ Navigate the AI landscape
-
-**Time Savings:**
-- Email: 80% faster
-- Content creation: 90% faster
-- Research: 75% faster
-- Planning: 70% faster
-
-**Estimated ROI: 10-15 hours saved per week!**
-
----
-
-## Final Recommendations
-
-### Immediate Actions (Next 24 Hours)
-
-1. **Set up your AI stack** (start with free tools)
-2. **Create custom instructions** in ChatGPT
-3. **Save your top 10 prompts** from this course
-4. **Use AI for 3 tasks** tomorrow
-5. **Share one insight** with your team
-
----
-
-### Building AI Muscle (Ongoing)
-
-**Daily:**
-- Use ChatGPT for at least 3 tasks
-- Refine one prompt
-
-**Weekly:**
-- Try one new technique
-- Share AI wins with others
-
-**Monthly:**
-- Evaluate new AI tools
-- Update your AI stack
-- Measure time savings
-
----
-
-## Bonus Resources
-
-### Templates Recap
-
-Throughout this course, you received:
-- ✅ 50+ prompt templates
-- ✅ 30 business email templates
-- ✅ 20 content creation templates
-- ✅ 10 productivity templates
-- ✅ 5 advanced reasoning frameworks
-
-**Access them all:** [Download template library]
-
----
-
-### Community & Support
-
-**Join the AI Learner Community:**
-- Share your wins and challenges
-- Get prompt feedback
-- Discover new tools
-- Network with other professionals
-
-**Continue Learning:**
-- Advanced courses coming soon
-- Industry-specific AI training
-- Live workshops and Q&A
-
----
-
-## Glossary
-
-**AI Stack:** The collection of AI tools you use regularly for different tasks.
-
-**Multi-Modal AI:** AI that can process and generate multiple types of content (text, images, audio, video).
-
-**AI Agent:** Autonomous AI that can complete complex tasks with minimal human intervention.
-
-**Open Source AI:** AI models that are freely available and can be modified or self-hosted.
-
-**Prompt Library:** Personal collection of effective prompts organized by use case.
-
-**ROI (Return on Investment):** Value gained (time saved, revenue increased) vs. cost of AI tools.
-
----
-
-## Congratulations! 🎉
-
-You've completed **ChatGPT Mastery for Professionals**!
-
-**You are now equipped to:**
-- Work smarter with AI every single day
-- Lead AI adoption in your organization
-- Stay current with AI developments
-- Build efficient AI workflows
-- Teach others about AI tools
-
-**Next steps:**
-1. Download your completion certificate
-2. Take the final quiz
-3. Apply what you've learned immediately
-4. Keep experimenting and learning
-
-**The AI revolution is here—and you're ready to lead it!** 🚀
-
----
-
-**Remember:** AI is a tool that amplifies your capabilities. The magic happens when you combine AI efficiency with human creativity, judgment, and expertise.
-
-**Thank you for learning with us. Now go transform your work with AI!**
-
----
-
-**Module 7 Complete!** 🎉  
-Take the final quiz to get your certificate!
+*Take the Course Final Quiz to earn your certificate.*

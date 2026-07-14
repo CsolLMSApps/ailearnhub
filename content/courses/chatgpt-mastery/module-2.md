@@ -1,787 +1,230 @@
 # Module 2: Prompt Engineering Mastery
-**Estimated Time: 45 minutes**
+**Estimated Time: 35 minutes**
 
 ---
 
-## From Good to Great: Master the Art of Prompting
+## What You'll Learn
 
-Welcome back! In Module 1, you learned the basics. Now we're going pro.
-
-**Prompt engineering** is the #1 skill that separates ChatGPT beginners from power users. It's the difference between:
-- ❌ Getting generic, useless responses
-- ✅ Getting exactly what you need, first try
-
-By the end of this module, you'll:
-- ✅ Master the 5-part prompt formula that always works
-- ✅ Chain prompts together for complex projects
-- ✅ Use advanced techniques like role-playing and constraints
-- ✅ Have 20+ proven templates ready to use
-
-Let's transform you into a prompt engineering expert! 🚀
+- Understand why prompt quality determines output quality
+- Apply a consistent framework to write prompts that work first time
+- Use advanced techniques: role prompting, chain-of-thought, few-shot examples
+- Recognise and fix the most common prompting mistakes
+- Build prompts for any task — writing, analysis, code, creativity
 
 ---
 
-## The Universal 5-Part Prompt Formula
+## 2.1 Why Prompts Matter So Much
 
-Every effective prompt has these 5 components:
+ChatGPT is capable of extraordinary outputs — but the output you get depends almost entirely on the input you give. Two people asking about the same topic can get wildly different results based purely on how they framed their question.
 
-### 1. **ROLE** (Who is ChatGPT?)
-### 2. **TASK** (What should it do?)
-### 3. **CONTEXT** (Why/when/where?)
-### 4. **FORMAT** (How should output look?)
-### 5. **TONE** (What style/voice?)
+Think of it this way: ChatGPT has a vast range of possible responses to any input. Your prompt is like a dial that steers toward the output you actually want. A vague prompt points the dial at the average of everything — which is usually mediocre. A precise prompt narrows in on exactly what you need.
 
-**Think of it like hiring someone:**
-- You wouldn't just say "Write something" to a new employee
-- You'd explain their role, the task, the context, expected format, and tone
-- ChatGPT is the same!
+The good news: effective prompting isn't a talent. It's a skill — one you can learn in an afternoon and refine over weeks.
 
 ---
 
-## The Formula in Action
+## 2.2 The CRAFT Framework
 
-### ❌ **Bad Prompt** (No Structure):
-```
-Write about marketing
-```
+Use CRAFT as a checklist for any important prompt:
 
-**Problem:** Too vague. ChatGPT doesn't know:
-- Marketing for what industry?
-- What type of content?
-- Who's the audience?
-- What format?
+**C — Context:** Who are you? What's the situation?
+**R — Role:** What role should ChatGPT play?
+**A — Action:** What exactly do you want it to do?
+**F — Format:** How should the output be structured?
+**T — Tone:** What's the voice, style, or audience?
 
----
+### CRAFT in Practice
 
-### ✅ **Good Prompt** (5-Part Formula):
-```
-ROLE: You are a healthcare marketing consultant with 10 years of experience.
+**Without CRAFT:**
+> Write something about employee feedback
 
-TASK: Write a LinkedIn post announcing our hospital's new telemedicine service.
+**With CRAFT:**
+> **Context:** I'm an HR manager at a 200-person tech company introducing a new 360-degree feedback process next quarter.
+> **Role:** Act as an experienced HR communications specialist.
+> **Action:** Write an internal announcement email introducing the new process, explaining how it works and addressing likely concerns employees will have.
+> **Format:** Professional email format. Subject line + 3–4 paragraphs. Under 300 words.
+> **Tone:** Warm, transparent, and reassuring — not corporate.
 
-CONTEXT: Our target audience is busy professionals aged 30-50 who value 
-convenience and quality healthcare. The service launches next week.
-
-FORMAT: 200-250 words. Include:
-- Attention-grabbing opening question
-- 3 key benefits
-- Clear call-to-action
-
-TONE: Professional yet warm and approachable. Emphasize innovation and 
-patient care.
-```
-
-**Result:** Specific, targeted, ready-to-publish content.
+The difference in output quality between these two prompts is dramatic.
 
 ---
 
-## Breaking Down Each Component
+## 2.3 Role Prompting
 
-### 1. ROLE: Set the Expertise
+Assigning ChatGPT a role is one of the highest-leverage techniques in prompting. It shifts the model's perspective, vocabulary, and approach to match the expertise you need.
 
-Tell ChatGPT what expert persona to adopt:
+**Basic role assignment:**
+> Act as a [role] and help me with [task].
 
 **Examples:**
-- "You are a senior financial analyst at a Fortune 500 company"
-- "You are an experienced healthcare administrator"
-- "You are a creative marketing director specializing in B2B tech"
-- "You are a patient educator explaining medical concepts simply"
+> Act as a senior UX designer and critique the navigation structure I'm about to describe.
 
-**Why it matters:** The role influences vocabulary, perspective, and depth of response.
+> You are an experienced secondary school science teacher. Explain photosynthesis to a Year 9 class that has already covered basic cell biology.
 
-**Pro Tip:** Match the role to your actual audience. If writing for executives, make ChatGPT a senior executive.
+> Act as a devil's advocate. I'm going to share a business idea and I want you to find the most significant flaws in my reasoning.
 
----
+**Stacked roles for complex tasks:**
+> You are an experienced investment analyst writing for an audience of non-specialist retail investors. Use clear language, avoid jargon, and explain any technical terms you use.
 
-### 2. TASK: Be Specific
-
-Don't just say "write" or "create" - be exact:
-
-**Vague Tasks:**
-- ❌ "Write an email"
-- ❌ "Make a list"
-- ❌ "Explain this"
-
-**Specific Tasks:**
-- ✅ "Write a follow-up email to a potential client who requested a demo but didn't respond after the meeting"
-- ✅ "Create a prioritized list of 10 cost-cutting measures for a mid-sized hospital facing budget constraints"
-- ✅ "Explain the concept of machine learning to a hospital board of directors with no technical background"
+The role shapes not just what ChatGPT says but how it prioritises and frames information.
 
 ---
 
-### 3. CONTEXT: Provide Background
+## 2.4 Chain-of-Thought Prompting
 
-Context is the secret sauce. The more relevant details, the better:
+For complex reasoning tasks — analysis, maths, logic, planning — asking ChatGPT to think step by step dramatically improves accuracy.
 
-**Key Context to Include:**
-- **Audience:** Who will read/use this?
-- **Situation:** What's happening? What led here?
-- **Constraints:** What limitations exist?
-- **Goal:** What outcome do you want?
-- **Timeline:** When is this needed?
+**Without chain-of-thought:**
+> Should I quit my job and start a business?
 
-**Example:**
-```
-CONTEXT: I'm presenting to our CFO next week about implementing AI tools 
-to reduce administrative workload. She's skeptical about ROI and concerned 
-about staff training time. Our team currently spends 15+ hours weekly on 
-manual data entry. Budget is $50K annually.
-```
+**With chain-of-thought:**
+> I'm considering leaving my job to start a business. Think through this step by step:
+> 1. What financial runway do I need before making this move?
+> 2. What are the early signs that a business idea is worth pursuing vs. not?
+> 3. What are the most common reasons first-time founders fail in the first year?
+> 4. Given all of this, what questions should I be able to answer before I resign?
+
+Alternatively, use the trigger phrase:
+> Think through this step by step before giving me your answer.
+
+Or with the o3 model, chain-of-thought reasoning happens automatically — the model "thinks" before responding.
 
 ---
 
-### 4. FORMAT: Specify the Output
+## 2.5 Few-Shot Prompting
 
-Tell ChatGPT exactly how you want the response structured:
+Show ChatGPT examples of what you want and it will match the pattern.
 
-**Format Options:**
-- Bullet points vs. paragraphs
-- Word count or character limit
-- Sections/headers required
-- Tables, lists, or prose
-- Email format vs. report vs. social post
+**The technique:**
+> Here are 3 examples of the style I want:
+>
+> Example 1: [paste example]
+> Example 2: [paste example]
+> Example 3: [paste example]
+>
+> Now write [your new task] in the same style.
+
+**Use cases:**
+- Matching your company's brand voice with examples of existing copy
+- Replicating a specific writing style (author, journalist, genre)
+- Generating consistent outputs across multiple items (product descriptions, social posts)
+- Teaching ChatGPT a format you've invented
+
+**Practical example:**
+> Here are 2 LinkedIn posts from our company page that represent our tone:
+>
+> [Post 1]
+> [Post 2]
+>
+> Write 3 new LinkedIn posts announcing our new AI-powered feature. Match the tone, length, and formatting of the examples above.
+
+---
+
+## 2.6 Constraints and Negative Instructions
+
+Telling ChatGPT what NOT to do is just as important as telling it what to do.
 
 **Examples:**
-```
-FORMAT: 
-- 5 bullet points, each 1-2 sentences
-- Table with columns: Strategy, Cost, Timeline, Expected ROI
-- Email format with subject line and signature placeholder
-- 3 paragraphs: Problem, Solution, Next Steps
-```
+> Write a product description for this running shoe. Do NOT use clichés like "game-changing", "revolutionary", or "next-level". Do NOT start with a question.
 
-**Why it matters:** Saves time reformatting. Get usable output immediately.
+> Explain machine learning to a senior executive. Do not use technical jargon. Do not assume any prior knowledge of statistics or programming. Keep it under 200 words.
 
----
+> Summarise this article. Do not include the author's personal opinions — only facts and findings.
 
-### 5. TONE: Set the Voice
-
-Tone dramatically changes how your message is received:
-
-**Tone Options:**
-- **Professional & Formal:** Board presentations, legal docs, executive comms
-- **Friendly & Conversational:** Team emails, newsletters, blog posts
-- **Empathetic & Caring:** Patient communications, HR messages
-- **Urgent & Direct:** Crisis communications, important alerts
-- **Technical & Precise:** Documentation, scientific writing
-- **Persuasive & Compelling:** Sales, marketing, fundraising
-
-**Pro Tip:** You can combine tones: "Professional yet approachable" or "Technical but accessible"
+**Format constraints that consistently improve outputs:**
+- `"Keep it under [X] words"`
+- `"Use exactly [X] bullet points"`
+- `"Format as a table with these columns: [A, B, C]"`
+- `"Start with the conclusion, then the reasoning"`
+- `"Give me only the [email/code/list] — no preamble"`
 
 ---
 
-## Advanced Technique #1: Prompt Chaining
+## 2.7 Iterative Prompting — The Conversation Is the Skill
 
-For complex projects, break them into a series of connected prompts:
+Most people write one prompt and accept whatever they get. Power users treat it as a dialogue.
 
-### Example: Creating a Comprehensive Report
+**The iterative loop:**
+1. Send your initial prompt
+2. Evaluate: What's good? What's missing? What's wrong?
+3. Refine with a follow-up prompt
+4. Repeat until the output is what you need
 
-**Prompt 1: Outline**
-```
-Create an outline for a 10-page report on implementing AI in healthcare 
-operations. Include 5 main sections with 3 subsections each.
-```
+**Powerful follow-up prompts:**
+- `"That's too long. Cut it by half, keeping only the most important points."`
+- `"The tone feels too formal. Rewrite it to sound more conversational."`
+- `"Give me 3 alternative versions of the opening paragraph."`
+- `"You missed [specific thing]. Add that and revise."`
+- `"Now make the argument stronger by adding specific data or examples."`
+- `"What did you leave out that you think is worth including?"`
 
-**Prompt 2: Expand Section 1**
-```
-Using the outline you created, write a detailed 500-word introduction 
-covering the first section. Focus on current challenges in healthcare 
-operations.
-```
-
-**Prompt 3: Add Data**
-```
-Add 5 relevant statistics to the introduction you just wrote. Include 
-realistic industry benchmarks for hospital operational efficiency.
-```
-
-**Prompt 4: Executive Summary**
-```
-Based on everything we've discussed, write a 200-word executive summary 
-that highlights key findings and recommendations.
-```
-
-**Why This Works:**
-- Breaks large tasks into manageable pieces
-- Maintains consistency across the conversation
-- Allows for iteration and refinement
-- ChatGPT "remembers" earlier context
+The last one is underrated. Asking ChatGPT what it omitted often surfaces valuable additions.
 
 ---
 
-## Advanced Technique #2: Role-Playing Scenarios
+## 2.8 Prompt Templates for Common Tasks
 
-Make ChatGPT adopt a specific persona for realistic interactions:
+Save these as your personal prompt templates:
 
-### Scenario: Practicing a Difficult Conversation
+**Summarisation:**
+> Summarise [document/text] in [X] bullet points. Target audience: [who]. Focus on: [key aspects]. Exclude: [what to leave out].
 
-**Prompt:**
-```
-ROLE: You are my hospital's CFO who is skeptical about spending on new 
-technology. You're cost-conscious and risk-averse.
+**Comparison:**
+> Compare [A] vs [B] across these dimensions: [list]. Present as a structured table. Conclude with a recommendation for [specific use case].
 
-TASK: I'm going to pitch you an AI implementation project. Respond with 
-tough questions and concerns a CFO would actually have.
+**Brainstorming:**
+> Generate [X] ideas for [goal]. I'm a [role/context]. Requirements: [list]. Avoid: [what not to suggest].
 
-CONTEXT: Our hospital has had 2 failed tech implementations in the past 
-3 years, so there's organizational skepticism.
+**Email:**
+> Write a [type] email to [recipient]. Context: [situation]. Goal: [what you want them to do or feel]. Tone: [warm/formal/direct]. Length: under [X] words.
 
-FORMAT: After each of my responses, ask 2-3 challenging follow-up questions.
+**Analysis:**
+> Analyse [topic/document/situation]. Identify: (1) key strengths, (2) key weaknesses, (3) opportunities, (4) risks. Be specific, not generic. Focus on [specific angle].
 
-Let's begin. Here's my opening pitch: [your pitch]
-```
-
-**Use Cases:**
-- Interview preparation
-- Sales pitch practice
-- Difficult conversation rehearsal
-- Customer service scenario training
+**Decision support:**
+> I need to decide between [options]. My priorities are: [list]. My constraints are: [list]. Walk me through the decision using those priorities.
 
 ---
 
-## Advanced Technique #3: Using Constraints Creatively
+## 2.9 Common Prompting Mistakes
 
-Constraints force better, more creative output:
+**Mistake 1: One-and-done**
+The first response is a starting point. Always refine.
 
-### Constraint Types:
+**Mistake 2: Vague verbs**
+"Write something" → too open. "Draft", "summarise", "analyse", "compare", "critique", "rewrite", "generate" → specific.
 
-**1. Length Constraints**
-```
-Explain our new employee benefits package in exactly 100 words
-```
+**Mistake 3: No context**
+ChatGPT doesn't know who you are, your audience, or your constraints unless you tell it. Context is free — include it liberally.
 
-**2. Vocabulary Constraints**
-```
-Explain AI to senior executives without using any technical jargon. 
-Avoid words like: algorithm, neural network, machine learning, data science
-```
+**Mistake 4: Asking multiple unrelated things**
+One prompt, one task. If you need three things, ask in sequence — each builds on the last.
 
-**3. Audience Constraints**
-```
-Describe our financial performance as if you're explaining it to 
-a smart 12-year-old who has never seen a balance sheet
-```
+**Mistake 5: Accepting hallucinated facts**
+ChatGPT can confidently state incorrect information. For any factual claim that matters, verify independently. Use Perplexity or ChatGPT Browse for fact-sensitive research.
 
-**4. Style Constraints**
-```
-Write this like you're Steve Jobs presenting at an Apple keynote - 
-simple, powerful, focused on human benefits not features
-```
-
-**5. Emotional Constraints**
-```
-Announce layoffs in a way that's honest about the situation but 
-maintains employee morale and dignity
-```
-
----
-
-## 20 Ready-to-Use Prompt Templates
-
-Copy, customize, and use immediately:
-
-### Business Communication
-
-**Template 1: Professional Email**
-```
-ROLE: You are an experienced business communications specialist.
-
-TASK: Write a professional email [describing specific situation].
-
-CONTEXT: [Recipient details, relationship, background]
-
-FORMAT: 150-200 words. Include subject line. Professional but warm tone.
-
-TONE: [Specify: apologetic/grateful/informative/persuasive]
-```
-
-**Template 2: Meeting Summary**
-```
-Convert these meeting notes into a professional summary with:
-1. Key decisions made
-2. Action items (who, what, when)
-3. Open questions
-4. Next meeting date/agenda
-
-Notes: [paste notes]
-
-Format as email to send to attendees within 2 hours of meeting.
-```
-
-**Template 3: Executive Brief**
-```
-ROLE: You are a senior business analyst reporting to C-suite executives.
-
-TASK: Create a 1-page executive brief on [topic].
-
-FORMAT: 
-- Headline (10 words max)
-- Situation (2 sentences)
-- Implications (3 bullet points)
-- Recommendations (3 bullet points)
-- Next steps (2 sentences)
-
-TONE: Data-driven, confident, action-oriented
-```
-
----
-
-### Content Creation
-
-**Template 4: Blog Post**
-```
-ROLE: You are a [industry] expert writing for [audience].
-
-TASK: Write a 800-word blog post titled "[title]"
-
-CONTEXT: [Industry trends, target reader pain points]
-
-FORMAT:
-- Compelling introduction (hook + thesis)
-- 3 main sections with subheadings
-- Practical examples
-- Clear call-to-action
-- SEO keywords: [list]
-
-TONE: Educational, authoritative, conversational
-```
-
-**Template 5: Social Media Post (LinkedIn)**
-```
-Create a LinkedIn post about [topic] that:
-- Opens with a thought-provoking question
-- Shares a specific insight or story
-- Includes 3 key takeaways
-- Ends with engaging question for comments
-- 200-250 words
-- Professional tone, personal voice
-- Include 3-5 relevant hashtags
-```
-
-**Template 6: Case Study**
-```
-ROLE: You are a marketing copywriter specializing in B2B case studies.
-
-TASK: Write a case study about [client/project].
-
-FORMAT:
-- Challenge (what problem existed)
-- Solution (what we implemented)
-- Results (specific metrics/outcomes)
-- Quote from client (realistic)
-- 500 words total
-
-TONE: Professional, results-focused, credible
-```
-
----
-
-### Data & Analysis
-
-**Template 7: Data Summary**
-```
-Analyze this data and provide:
-1. 3 key insights
-2. 2 surprising findings
-3. 3 actionable recommendations
-4. 1 area needing more research
-
-Data: [paste data]
-
-Explain for non-technical executives. Focus on business implications.
-```
-
-**Template 8: Comparison Table**
-```
-Create a comparison table for [options being compared].
-
-Columns: [list criteria]
-Rows: [list options]
-
-Add a summary row showing which option wins for each criterion.
-Include a final recommendation with 2-sentence justification.
-```
-
-**Template 9: Pros/Cons Analysis**
-```
-ROLE: You are an objective business consultant.
-
-TASK: Analyze the decision to [decision being made].
-
-FORMAT:
-- 5 pros (with brief explanation each)
-- 5 cons (with brief explanation each)
-- Risk assessment (high/medium/low + why)
-- Recommendation (50 words)
-
-TONE: Balanced, analytical, honest about trade-offs
-```
-
----
-
-### Problem Solving
-
-**Template 10: Root Cause Analysis**
-```
-ROLE: You are a process improvement consultant.
-
-TASK: Analyze this problem using the "5 Whys" technique.
-
-PROBLEM: [describe issue]
-
-FORMAT:
-- List 5 progressively deeper "why" questions
-- Identify root cause
-- Suggest 3 solutions targeting root cause
-- Recommend quickest win
-
-CONTEXT: [relevant background]
-```
-
-**Template 11: Brainstorming**
-```
-ROLE: You are a creative strategist who thinks outside the box.
-
-TASK: Generate 10 innovative ideas for [objective].
-
-CONSTRAINTS:
-- Budget: [amount]
-- Timeline: [timeframe]
-- Must be realistic and actionable
-
-FORMAT: For each idea, include:
-- Name/title
-- 1-sentence description
-- Estimated effort (low/medium/high)
-- Potential impact (low/medium/high)
-```
-
-**Template 12: Decision Framework**
-```
-Help me decide between [Option A] and [Option B] by creating a 
-decision matrix.
-
-Evaluation criteria:
-1. [Criterion 1]
-2. [Criterion 2]
-3. [Criterion 3]
-[etc.]
-
-Rate each option 1-10 for each criterion. Explain scores.
-Provide weighted recommendation based on: [priority factors]
-```
-
----
-
-### Learning & Explanation
-
-**Template 13: Explain Complex Topic**
-```
-ROLE: You are an educator specializing in making complex topics accessible.
-
-TASK: Explain [complex topic] to [specific audience].
-
-FORMAT:
-- Simple analogy (compare to everyday experience)
-- 3 key concepts (no jargon)
-- Real-world example
-- Why it matters to them
-
-LENGTH: 300 words
-
-TONE: Clear, friendly, non-condescending
-```
-
-**Template 14: Step-by-Step Tutorial**
-```
-Create a step-by-step guide for [process/task].
-
-AUDIENCE: [experience level]
-
-FORMAT: Number each step. For each step include:
-- What to do
-- Why you're doing it
-- Common mistakes to avoid
-- Estimated time
-
-Keep each step 2-3 sentences. Total 5-10 steps.
-```
-
-**Template 15: FAQ Creation**
-```
-ROLE: You are a customer success expert.
-
-TASK: Create 10 FAQs about [topic/product/service].
-
-CONTEXT: [Common customer concerns/confusion areas]
-
-FORMAT: 
-- Question (how customers would ask it)
-- Answer (50-75 words, friendly tone)
-- Related question link (for 3 of the 10)
-
-Prioritize questions by frequency/importance.
-```
-
----
-
-### Creative & Strategic
-
-**Template 16: Value Proposition**
-```
-ROLE: You are a strategic marketing consultant.
-
-TASK: Write a compelling value proposition for [product/service].
-
-CONTEXT:
-- Target customer: [description]
-- Main pain point: [what problem it solves]
-- Key differentiation: [what makes it unique]
-- Competition: [alternatives]
-
-FORMAT:
-- One-sentence headline
-- 2-3 sentence explanation
-- 3 key benefits (outcome-focused, not feature-focused)
-
-TONE: Customer-centric, benefit-driven, clear
-```
-
-**Template 17: User Story/Persona**
-```
-Create a detailed user persona for [product/service].
-
-Include:
-- Name and photo description
-- Demographics (age, job, income, location)
-- Goals and motivations
-- Challenges and pain points
-- How they currently solve the problem
-- What would make them switch to our solution
-- Buying triggers
-- Objections we need to overcome
-
-Make it realistic and specific, like a real person.
-```
-
-**Template 18: Product Launch Messaging**
-```
-ROLE: You are a product marketing manager.
-
-TASK: Create messaging for [product] launch.
-
-DELIVERABLES:
-1. Tagline (5-7 words)
-2. Elevator pitch (30 seconds = ~75 words)
-3. Email subject line
-4. Tweet (280 characters)
-5. LinkedIn post (200 words)
-
-TONE: Exciting but credible. Focus on customer benefits.
-
-TARGET AUDIENCE: [describe]
-```
-
----
-
-### Productivity & Organization
-
-**Template 19: Project Plan**
-```
-ROLE: You are an experienced project manager.
-
-TASK: Create a project plan for [project name/description].
-
-CONTEXT:
-- Timeline: [duration]
-- Team size: [number of people]
-- Budget: [if applicable]
-- Key deliverables: [list]
-
-FORMAT:
-- 5-7 major phases
-- 3-5 tasks per phase
-- Estimated duration for each task
-- Critical path identification
-- Risk areas
-
-Table format preferred.
-```
-
-**Template 20: Weekly Priorities**
-```
-Based on these tasks and goals, help me prioritize my week:
-
-TASKS: [list everything]
-GOALS: [this week's objectives]
-CONSTRAINTS: [meetings, deadlines]
-
-Create a day-by-day plan with:
-- Top 3 priorities each day
-- Time estimate for each
-- Which tasks can be delegated/postponed
-- Recommended focus blocks
-
-Format as daily schedule.
-```
-
----
-
-## Common Prompt Engineering Mistakes
-
-### Mistake #1: Information Overload
-❌ Don't: Dump 5 pages of text and ask "analyze this"
-✅ Do: "Analyze this 200-word excerpt for [specific aspect]"
-
-### Mistake #2: Asking Multiple Questions at Once
-❌ Don't: "Write an email, create a presentation, and draft a blog post about [topic]"
-✅ Do: One request at a time, or explicitly number separate tasks
-
-### Mistake #3: Vague Success Criteria
-❌ Don't: "Make it better"
-✅ Do: "Make it more concise (under 150 words) and add specific metrics"
-
-### Mistake #4: Ignoring Context Window
-❌ Don't: Paste entire 50-page documents
-✅ Do: Provide relevant excerpts or summaries for context
-
-### Mistake #5: Not Iterating
-❌ Don't: Accept first output if it's not quite right
-✅ Do: "This is close, but can you [specific change]?"
-
----
-
-## Power User Tips
-
-### Tip #1: Save Your Best Prompts
-Create a personal prompt library:
-- Document prompts that work well
-- Note what situations they're for
-- Refine them over time
-
-### Tip #2: Use Sequential Refinement
-```
-Prompt 1: "Write a product description"
-Prompt 2: "Make it more benefit-focused"
-Prompt 3: "Add a compelling headline"
-Prompt 4: "Now add social proof elements"
-```
-
-Each builds on the last!
-
-### Tip #3: Specify Examples
-"Write like this: [example]" is incredibly powerful
-- Show the style you want
-- ChatGPT will match it
-
-### Tip #4: Use Negative Instructions
-Sometimes it's easier to say what you DON'T want:
-```
-Write a professional email. Do NOT:
-- Use exclamation points
-- Be overly formal
-- Exceed 100 words
-- Include technical jargon
-```
-
-### Tip #5: Combine Techniques
-Use multiple advanced techniques in one prompt:
-- Role-playing + constraints + chaining
-- Format specifications + tone + examples
-
----
-
-## Practice Exercises
-
-### Exercise 1: Rewrite This Vague Prompt
-**Vague:** "Write something about healthcare AI"
-
-**Your Turn:** Use the 5-part formula to make this specific and actionable.
-
-**Example Answer:**
-```
-ROLE: You are a healthcare innovation consultant.
-TASK: Write a LinkedIn post introducing AI diagnostic tools to hospital administrators.
-CONTEXT: Audience is skeptical about AI replacing doctors. Focus on AI as augmentation, not replacement.
-FORMAT: 250 words, 3 paragraphs, include compelling opening question.
-TONE: Credible, balanced, focused on patient outcomes.
-```
-
----
-
-### Exercise 2: Chain Prompts for a Project
-**Project:** Create a customer onboarding email sequence
-
-**Your Turn:** Write 3-4 connected prompts that build on each other.
-
-**Example Answer:**
-1. "Outline a 5-email onboarding sequence for new customers of [product]"
-2. "Write Email 1 from that outline - the welcome email"
-3. "Write Email 2 - introducing the first key feature"
-4. "Create subject lines for all 5 emails that achieve 30%+ open rates"
-
----
-
-### Exercise 3: Add Constraints
-**Basic Prompt:** "Explain cloud computing"
-
-**Your Turn:** Add 3 creative constraints that make the output better.
-
-**Example Answer:**
-```
-Explain cloud computing to a hospital CFO who thinks "cloud" is just 
-marketing jargon. Use only analogies to things found in a hospital. 
-Do not use these words: server, data center, infrastructure. 
-Under 200 words.
-```
+**Mistake 6: Not specifying length or format**
+Without format guidance, ChatGPT defaults to a medium-length prose response. If you need a table, bullet list, JSON, numbered steps, or a word count — say so.
 
 ---
 
 ## Key Takeaways
 
-🎯 **What You Learned:**
-1. The 5-part prompt formula (Role, Task, Context, Format, Tone)
-2. How to chain prompts for complex projects
-3. Advanced techniques: role-playing, constraints, sequential refinement
-4. 20 copy-paste templates for common business needs
-5. Common mistakes and how to avoid them
-
-🚀 **Immediate Actions:**
-- Save the 20 templates to your notes
-- Try the 5-part formula on your next 3 ChatGPT prompts
-- Practice one advanced technique this week
-- Build your personal prompt library
+- The **CRAFT framework** (Context, Role, Action, Format, Tone) turns mediocre prompts into great ones
+- **Role prompting** shifts ChatGPT's perspective and expertise to match your needs
+- **Chain-of-thought** prompting dramatically improves complex reasoning and planning outputs
+- **Few-shot examples** teach ChatGPT your preferred style, format, or voice
+- **Constraints** (what not to do) are as important as instructions about what to do
+- Treat prompting as a **conversation** — iterate until the output is actually what you need
 
 ---
 
-## Glossary
+## Quick Check
 
-**Prompt Engineering:** The practice of crafting effective instructions for AI to get optimal results. Like writing clear specifications for a contractor.
-
-**Context Window:** The amount of conversation history ChatGPT can "remember" at once. Think of it as working memory—keep important info recent in the conversation.
-
-**Prompt Chaining:** Breaking complex tasks into sequential prompts that build on each other, maintaining context throughout.
-
-**Role-Playing:** Assigning ChatGPT a specific persona or expertise to influence response style and depth.
-
-**Constraints:** Deliberate limitations placed on output (length, vocabulary, style) to focus and improve results.
-
-**Iteration:** The process of refining ChatGPT outputs through follow-up prompts rather than starting over.
+1. Write a CRAFT prompt for a task you do regularly at work
+2. What trigger phrase can you add to any prompt to improve reasoning quality?
+3. Name two constraints you should add when asking for a written output
 
 ---
 
-## Coming Up in Module 3
-
-Next, you'll apply these prompting skills specifically to **Business Communication Excellence**:
-
-- Email mastery (30 templates for every situation)
-- Meeting summaries that actually get read
-- Report writing that impresses executives
-- Internal communication that drives action
-
-**You now have the foundation—let's apply it to business!** 📊
-
----
-
-**Module 2 Complete!** 🎉  
-Time to test your prompt engineering skills with the quiz!
+*Next up: Module 3 — Business Communication Excellence*

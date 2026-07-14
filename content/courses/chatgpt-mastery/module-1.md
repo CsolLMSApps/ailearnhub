@@ -3,285 +3,186 @@
 
 ---
 
-## Welcome to ChatGPT Mastery! 🚀
+## What You'll Learn
 
-Hey there! Ready to transform how you work with AI? In this first module, you'll discover what ChatGPT really is, how it works, and most importantly—how to start using it TODAY to save hours of your time.
-
-By the end of this module, you'll:
-- ✅ Understand what ChatGPT can (and can't) do
-- ✅ Create effective prompts that get real results
-- ✅ Apply ChatGPT to 5 common work scenarios immediately
-
-Let's dive in!
+- Navigate the ChatGPT interface confidently in 2025
+- Understand the difference between GPT-4o, o3, and other models
+- Configure Custom Instructions, Memory, and Projects from day one
+- Send your first effective prompts and get results worth using
 
 ---
 
-## What is ChatGPT? (In Plain English)
+## 1.1 ChatGPT in 2025 — What's Changed
 
-Think of ChatGPT as your incredibly knowledgeable colleague who:
-- Has read millions of books, articles, and websites
-- Can write, analyze, explain, and create on demand
-- Works 24/7 and never gets tired
-- Costs less than a coffee per day
+ChatGPT has evolved enormously since its launch. If you used it a year or two ago, you'll find a significantly more capable, personalised, and versatile tool today.
 
-**But here's the key:** ChatGPT is NOT Google. It doesn't search the internet—it generates responses based on patterns it learned during training.
+**Key upgrades in 2025:**
+- **GPT-4o** is now the default — multimodal (text, image, audio, video), fast, and highly capable
+- **o3 and o3-mini** — reasoning models that "think" before answering; dramatically better at maths, science, coding, and complex logic
+- **Memory** — ChatGPT now remembers things across all your conversations (name, role, preferences, ongoing projects)
+- **Projects** — organise conversations into folders with shared context and custom instructions
+- **Canvas** — a collaborative writing and coding workspace for longer-form work
+- **Voice Mode** — real-time, natural spoken conversation (not just text-to-speech)
+- **Operator/Computer Use** — ChatGPT can now take actions in websites and apps on your behalf
 
-### Real-World Analogy
-Imagine you have a brilliant intern who has studied everything but needs CLEAR INSTRUCTIONS to help you effectively. That's ChatGPT.
-
----
-
-## The 3 ChatGPT Versions You Need to Know
-
-### 1. **GPT-3.5** (Free Tier)
-- Speed: Lightning fast ⚡
-- Best for: Quick tasks, simple questions, drafts
-- Limitation: Less sophisticated reasoning
-- **When to use:** Daily emails, basic research, quick brainstorming
-
-### 2. **GPT-4** (ChatGPT Plus - $20/month)
-- Speed: Thoughtful and thorough 🧠
-- Best for: Complex analysis, creative work, detailed content
-- Strength: Better reasoning, fewer mistakes
-- **When to use:** Important documents, strategic planning, complex problem-solving
-
-### 3. **GPT-4 with Plugins** (Advanced)
-- Can browse the internet in real-time
-- Access to calculators, data analysis tools
-- Integration with other services
-- **When to use:** Research requiring current data, calculations, third-party data access
-
-**My Recommendation for Beginners:** Start with GPT-3.5 (free) to learn, upgrade to GPT-4 once you're using it daily.
+**Which plan to use:**
+- **Free:** GPT-4o with daily limits. Sufficient for learning and occasional use
+- **Plus ($20/month):** Higher limits, GPT-4o and o3 access, image generation, file uploads, advanced voice, memory
+- **Team ($25/user/month):** Everything in Plus, shared workspaces, no training on your data
+- **Enterprise:** Custom limits, admin controls, full data privacy, dedicated models
 
 ---
 
-## Your First ChatGPT Conversation
+## 1.2 Navigating the Interface
 
-Let's get practical. Here's how to have an effective conversation with ChatGPT:
+### The Main Screen
 
-### ❌ **Bad Prompt** (Too Vague):
-```
-Write an email
-```
+When you open ChatGPT you'll see:
+- **Sidebar (left):** Conversation history, Projects, and Explore GPTs
+- **New Chat button:** Starts a fresh conversation
+- **Model selector (top):** Choose between GPT-4o, o3, or other available models
+- **Input area:** Where you type your prompt — also has attachment, image, voice, and Canvas buttons
 
-**Result:** Generic, useless output because ChatGPT doesn't know:
-- Who is the email to?
-- What's the purpose?
-- What tone should it use?
+### Starting a Conversation
 
-### ✅ **Good Prompt** (Specific):
-```
-Write a professional email to my team announcing a new project deadline 
-extension from Dec 15 to Dec 31. Tone should be encouraging and appreciative 
-of their hard work. Keep it under 150 words.
-```
+Type your message and press Enter (or the send button). ChatGPT starts responding immediately. You can:
+- **Stop the response** mid-stream if it's going wrong
+- **Regenerate** to get a different answer to the same prompt
+- **Copy** the response to your clipboard
+- **Like or dislike** to give feedback
+- **Continue editing** your prompt after sending
 
-**Result:** Targeted, useful email that you can actually send.
+### Model Selection — Which to Use When
 
-### The Difference?
-**Specific prompts = Better results.** Always include:
-1. **Context** (what's the situation?)
-2. **Audience** (who is this for?)
-3. **Tone** (professional, casual, friendly?)
-4. **Constraints** (word count, format, specific requirements)
+| Model | Best For | Speed |
+|---|---|---|
+| GPT-4o | Everyday tasks, writing, multimodal | Fast |
+| o3 | Hard maths, logic puzzles, coding bugs, research | Slower (thinks longer) |
+| o3-mini | Faster reasoning for simpler problems | Medium |
+| GPT-4o mini | Speed and simplicity for quick tasks | Very fast |
 
----
-
-## 5 Ways to Use ChatGPT TODAY (Immediate Time Savers)
-
-### 1. **Email Writing**
-
-**Scenario:** You need to respond to a customer complaint
-
-**Prompt:**
-```
-Write a professional email response to a customer who received their order 
-late. Apologize sincerely, explain shipping delays, and offer a 15% discount 
-on next purchase. Tone: empathetic and solution-focused. 100-150 words.
-```
-
-**Time Saved:** 10 minutes per email × 5 emails/day = **50 minutes daily**
+**Rule of thumb:** Use GPT-4o for most things. Switch to o3 when you need deep reasoning or the first answer felt shallow.
 
 ---
 
-### 2. **Meeting Summaries**
+## 1.3 Custom Instructions — Make ChatGPT Work for You
 
-**Scenario:** You just finished a 1-hour meeting with messy notes
+Custom Instructions tell ChatGPT who you are and how you want it to respond — in every conversation, automatically.
 
-**Prompt:**
-```
-Turn these meeting notes into a structured summary with:
-1. Key decisions made
-2. Action items (who does what by when)
-3. Next steps
+**How to set them up:**
+1. Click your profile picture (bottom left)
+2. Go to Settings → Personalization → Custom Instructions
+3. Fill in both boxes
 
-Notes: [paste your raw notes here]
+**Box 1: What should ChatGPT know about you?**
+> I'm a marketing manager at a mid-size e-commerce company. I work in fashion retail. My audience is primarily women aged 25–45. I'm comfortable with marketing strategy and analytics but not technical coding.
 
-Format as bullet points, keep professional tone.
-```
+**Box 2: How should ChatGPT respond?**
+> Be concise and direct. Lead with the most important point. Use bullet points for lists. Don't add unnecessary caveats. When I ask for copy, give me the copy without explaining what you're doing. Always offer to iterate.
 
-**Time Saved:** 15 minutes after every meeting
-
----
-
-### 3. **Research & Analysis**
-
-**Scenario:** Need to understand a new industry term
-
-**Prompt:**
-```
-Explain "predictive analytics" to someone in healthcare administration 
-with no technical background. Include:
-1. Simple definition
-2. 3 real-world healthcare examples
-3. Key benefits for hospital operations
-
-Use analogies where helpful, avoid jargon.
-```
-
-**Time Saved:** 30 minutes of Googling and reading
+This single setup step makes every subsequent conversation more useful immediately.
 
 ---
 
-### 4. **Content Ideation**
+## 1.4 Memory — ChatGPT That Knows You
 
-**Scenario:** Creating social media posts for your business
+With Memory enabled (Settings → Personalization → Memory), ChatGPT builds a profile of you across conversations. It might remember:
+- Your name and job
+- Preferences you've expressed (*"you prefer bullet points over paragraphs"*)
+- Ongoing projects (*"you're working on a product launch in October"*)
+- Context you've shared (*"you have two children under 10"*)
 
-**Prompt:**
-```
-Generate 5 LinkedIn post ideas for a healthcare technology company. 
-Topics: AI in diagnostics, patient care improvement, healthcare efficiency. 
-Each idea should include:
-- Compelling hook (first line)
-- Main point
-- Call to action
+**Managing Memory:**
+- View everything it's remembered: Settings → Personalization → Manage Memory
+- Delete individual memories or clear all
+- Tell it to remember something: *"Remember that I work with enterprise clients, not SMBs"*
+- Tell it to forget: *"Forget what you know about my current project"*
 
-Target audience: Hospital administrators and healthcare executives.
-```
-
-**Time Saved:** 45 minutes of brainstorming
+**Important:** Memory is disabled by default in Temporary Chats. Use Temporary Chat when discussing sensitive topics you don't want remembered.
 
 ---
 
-### 5. **Data Organization**
+## 1.5 Projects — Organised AI Workspaces
 
-**Scenario:** You have unstructured information that needs formatting
+Projects are one of the most underused features in ChatGPT. They let you:
+- Group related conversations together
+- Set project-specific custom instructions (separate from your global ones)
+- Upload files that stay available across all conversations in the project
+- Build persistent context for ongoing work
 
-**Prompt:**
-```
-Convert this unstructured data into a professional table format:
+**Creating a Project:**
+1. Click "Projects" in the sidebar → "New Project"
+2. Name it (e.g., "Q4 Marketing Campaign", "Novel Writing", "Client: Acme Corp")
+3. Add custom instructions specific to this project
+4. Upload relevant files (briefs, style guides, previous work)
+5. All conversations inside inherit this context
 
-[paste your messy data]
+**Example Project Setup for a Marketing Manager:**
+- Name: *"September Product Launch"*
+- Instructions: *"This project is for our autumn collection launch. Target audience: women 30–45, urban professionals. Brand voice: aspirational but grounded. Budget context: £120K total. Timeline: 6 weeks to launch."*
+- Uploaded files: Campaign brief, brand guidelines, last year's campaign results
 
-Columns needed: Name, Title, Email, Department
-Sort alphabetically by last name.
-Output as markdown table.
-```
-
-**Time Saved:** 20 minutes of manual formatting
-
----
-
-## Common Beginner Mistakes (And How to Avoid Them)
-
-### Mistake #1: Treating ChatGPT Like Google
-❌ **Don't ask:** "What's the weather today?"  
-✅ **Instead ask:** "Help me write a weather-appropriate outfit guide for a business meeting"
-
-**Why:** ChatGPT generates text, it doesn't have real-time data (unless using browsing mode).
+Now every conversation in this project starts with that full context — without you having to re-explain it every time.
 
 ---
 
-### Mistake #2: Accepting First Output As Final
-Many beginners take the first response and move on. Power users iterate!
+## 1.6 Your First 5 Prompts
 
-**Example Conversation:**
-```
-You: Write a product description for noise-canceling headphones
+Try these to get comfortable with the interface. Each builds a skill:
 
-ChatGPT: [gives generic description]
+**Prompt 1 — Simple request:**
+> Explain what a "go-to-market strategy" is in plain language, as if I've never heard the term before.
 
-You: Make it more focused on remote workers. Emphasize productivity 
-benefits and Zoom call quality. Add specific technical specs.
+**Prompt 2 — Iterating:**
+After getting a response: *"Good. Now give me a real example of a company that executed this well and what they did differently."*
 
-ChatGPT: [gives much better, targeted description]
+**Prompt 3 — Asking for structure:**
+> List the 5 most important things I should know about AI language models in 2025. Format as a numbered list with one sentence of explanation for each.
 
-You: Perfect! Now create 3 headline variations for A/B testing.
+**Prompt 4 — Refinement:**
+After getting a response: *"Shorten this by 30%. Remove any points that are just restating what I already know."*
 
-ChatGPT: [gives even more value]
-```
-
-**Key Lesson:** ChatGPT conversations are iterative. Refine until you get exactly what you need.
+**Prompt 5 — Creative task:**
+> I need a 30-second script for a social media video introducing a new coffee blend called "Midnight Blue." Audience: specialty coffee enthusiasts, ages 25–40. Tone: sophisticated and slightly poetic. Start with a hook.
 
 ---
 
-### Mistake #3: Not Providing Context
-ChatGPT can't read your mind. The more context you provide, the better the output.
+## 1.7 The Canvas Feature
 
-❌ **Vague:** "Improve this sentence"  
-✅ **Specific:** "Improve this sentence for a formal business proposal to a Fortune 500 CFO. Make it more concise and data-driven: [your sentence]"
+Canvas is ChatGPT's collaborative workspace for documents and code. Instead of responses appearing in the chat thread, Canvas opens a dedicated editor.
 
----
+**Best used for:**
+- Writing and editing long documents
+- Building, reviewing, and debugging code
+- Collaborative revision (you edit, AI improves; AI edits, you review)
 
-## Quick Wins: Your First 3 Tasks
+**To open Canvas:** Start a message with *"Write me a [document type] in Canvas"* or click the Canvas icon in the input area.
 
-Before moving to Module 2, try these three tasks to build confidence:
-
-### Task 1: Email Draft (5 minutes)
-Write a prompt asking ChatGPT to draft an email for something you need to send this week. Be specific about recipient, purpose, and tone.
-
-### Task 2: Explain Something Complex (5 minutes)
-Ask ChatGPT to explain a work-related concept to you as if you're explaining it to a colleague. Practice the "explain to [audience]" technique.
-
-### Task 3: Improve Existing Content (5 minutes)
-Take a paragraph you wrote recently (email, report, social post) and ask ChatGPT to improve it with specific instructions (clearer, more professional, more engaging, etc.).
+**Key Canvas features:**
+- Inline comments and suggestions from ChatGPT
+- Version history
+- Export to file
+- Quick editing shortcuts (shorten, lengthen, change tone)
 
 ---
 
 ## Key Takeaways
 
-🎯 **What You Learned:**
-1. ChatGPT is a text generation AI, not a search engine
-2. Specific prompts with context get better results
-3. Iteration improves output quality significantly
-4. ChatGPT saves hours daily on email, research, content, and organization tasks
-5. The free version (GPT-3.5) is perfect for learning and daily tasks
-
-🚀 **Immediate Action:**
-- Complete the 3 quick win tasks above
-- Bookmark ChatGPT (chat.openai.com)
-- Set a goal: Use ChatGPT for at least 3 tasks this week
+- ChatGPT in 2025 is multimodal, has memory, supports projects, and offers reasoning models (o3)
+- Set up **Custom Instructions** immediately — this is the highest-ROI setup step
+- Use **Memory** so ChatGPT builds context about you over time
+- **Projects** organise related work and maintain persistent context across conversations
+- Use **GPT-4o** for everyday tasks; switch to **o3** when you need deeper reasoning
+- The **Canvas** feature is ideal for longer writing and coding work
 
 ---
 
-## Glossary
+## Quick Check
 
-**AI (Artificial Intelligence):** Computer systems that can perform tasks typically requiring human intelligence, like understanding language or recognizing patterns.
-
-**LLM (Large Language Model):** The technology behind ChatGPT—a type of AI trained on vast amounts of text to understand and generate human-like responses.
-
-**Prompt:** The instruction or question you give to ChatGPT. Think of it as how you "talk" to the AI.
-
-**Token:** How ChatGPT measures text. Roughly: 1 token ≈ 4 characters or ¾ of a word. Important because responses have token limits (GPT-3.5: ~4,000 tokens, GPT-4: ~8,000-32,000 tokens).
-
-**Temperature:** A setting that controls creativity vs. predictability in responses (you don't control this in the free interface, but it's good to know).
-
-**Context Window:** How much of your conversation ChatGPT remembers. It can "forget" earlier parts of very long conversations.
+1. What's the difference between GPT-4o and o3?
+2. Name two things you should put in your Custom Instructions
+3. What's a Project, and when would you create one?
 
 ---
 
-## Coming Up in Module 2
-
-Next, you'll master the art of **Prompt Engineering**—the skill that separates ChatGPT beginners from power users. You'll learn:
-
-- The 5-part prompt formula that always works
-- How to chain prompts for complex projects
-- Advanced techniques like role-playing and constraints
-- 20+ proven prompt templates you can use immediately
-
-**Ready to level up? Let's go!** 🚀
-
----
-
-**Module 1 Complete!** 🎉  
-Time to take the quiz to unlock Module 2.
+*Next up: Module 2 — Prompt Engineering Mastery*

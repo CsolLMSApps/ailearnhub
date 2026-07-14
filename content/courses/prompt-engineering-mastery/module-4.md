@@ -2,536 +2,212 @@
 
 **Duration:** 40 minutes
 
-## Learning Objectives
+---
 
-By the end of this module, you will be able to:
+## What You'll Learn
 
-- Apply systematic iteration processes to improve prompt outputs
-- Analyze output quality using objective criteria
-- Debug prompts that produce inconsistent or poor results
-- Conduct effective A/B testing on prompt variations
-- Implement prompt versioning for production use cases
+- Treat prompting as a conversation, not a single exchange
+- Diagnose exactly why an AI output fell short and fix the right thing
+- Apply systematic refinement techniques across writing, analysis, and code
+- Build a feedback loop that gets to high-quality output in fewer iterations
+- Know when to refine vs. when to start over
 
-## Introduction
+---
 
-No prompt is perfect on the first try. The difference between good and exceptional AI outputs often comes down to refinement—the systematic process of improving prompts based on results.
+## 4.1 The One-and-Done Fallacy
 
-Professional prompt engineers don't just write prompts; they iterate, test, analyze, and refine. This module teaches you the methodology for turning mediocre prompts into reliable, high-performing ones.
+The most expensive mistake in prompting is accepting the first response.
 
-Think of prompt engineering like cooking. Your first attempt might be edible, but through testing variations and refining techniques, you create something exceptional. The key is knowing what to change and why.
+First responses from AI are starting points — they're useful, often directionally correct, and always improvable. The people who get the best outputs from AI consistently are those who treat every prompt as the start of a dialogue, not a search query.
 
-## The Iteration Framework
+**The compounding improvement effect:**
+- First response: 60–70% of what you need
+- After one refinement: 80–85%
+- After two targeted refinements: 90–95%
+- After three focused iterations: publishable, usable, ready
 
-### The Four-Stage Refinement Process
+The gap between one-and-done and three-iteration outputs is not 10% — it's qualitatively different work.
 
-**Stage 1: Baseline**
-Create your initial prompt and generate outputs. This is your starting point.
+---
 
-**Stage 2: Analysis**
-Evaluate what works and what doesn't using specific criteria.
+## 4.2 Diagnosing Output Problems
 
-**Stage 3: Hypothesis**
-Form theories about what changes will improve results.
+Before you can fix a bad output, you need to understand exactly what's wrong. Vague dissatisfaction leads to vague follow-up prompts that don't improve things.
 
-**Stage 4: Test & Compare**
-Implement changes and compare against baseline.
+**Diagnostic categories:**
 
-Then repeat stages 2-4 until you achieve desired quality.
+| Problem Type | What It Looks Like | What to Fix |
+|---|---|---|
+| Wrong scope | Too broad, too narrow, missed key aspects | Restate scope constraints |
+| Wrong tone/voice | Too formal, too casual, too generic | Specify tone with examples |
+| Wrong format | Prose when you wanted bullets, too long, wrong structure | Specify format explicitly |
+| Wrong depth | Too surface-level or too detailed | Specify depth required |
+| Missing specificity | Generic examples, vague claims | Ask for concrete, specific examples |
+| Wrong audience calibration | Too technical or too basic | Restate audience and their knowledge level |
+| Factual issues | Claims you can't verify, likely hallucinations | Request sources or flag uncertain claims |
+| Wrong emphasis | Buries the main point, gets distracted by minor points | Tell it what matters most |
 
-### Example: Refining a Product Description Prompt
+### The Diagnosis Prompt
 
-**Iteration 1 (Baseline):**
-```
-"Write a product description for our wireless headphones."
-```
+Before refining, ask the model to evaluate its own output:
+> Looking at the response you just gave, what are the 3 weakest parts? What's missing that a careful reader would notice? What did you prioritise that you should have de-emphasised?
 
-**Output:** Generic, boring description with basic features listed.
+This surfaces problems you might not have noticed and gives you a specific agenda for the next iteration.
 
-**Analysis:** 
-- Missing target audience context
-- No emotional appeal
-- Features but no benefits
-- No brand voice
-- Doesn't differentiate from competitors
+---
 
-**Hypothesis:** Adding audience, benefits focus, and brand voice will create more compelling copy.
+## 4.3 The Refinement Toolkit
 
-**Iteration 2:**
-```
-"Write a product description for our wireless headphones targeted at busy professionals who value both sound quality and convenience. Focus on benefits over features. Use a confident, modern tone. Highlight what makes these different from typical wireless headphones."
-```
+### Targeted Refinement Prompts
 
-**Output:** Better, but still generic language. Not specific enough about the product's unique advantages.
+These work better than vague instructions like "make it better":
 
-**Analysis:**
-- Improved targeting
-- Still lacks specific differentiators
-- Needs concrete details about unique features
-- Could use social proof element
+**For length:**
+- `"Cut this by 30%. Prioritise removing filler, redundancy, and any point that's weaker than the others."`
+- `"Expand the [specific section] — it needs more detail and a concrete example."`
 
-**Hypothesis:** Adding specific product details and a customer testimonial format will increase credibility and specificity.
+**For tone:**
+- `"The tone is too formal. Rewrite it as if you're a smart colleague talking to another smart colleague — not a consultant writing a report."`
+- `"This sounds like marketing copy. Rewrite it to sound like a practitioner who's done this before."`
 
-**Iteration 3:**
-```
-"Write a compelling product description for our wireless headphones:
+**For specificity:**
+- `"Replace the generic examples with specific, real-world ones that are concrete enough to be useful."`
+- `"Every claim in this needs to be grounded in something specific — a number, a name, an example. Add that."`
 
-Target audience: Busy professionals (ages 25-45) who value quality audio and seamless connectivity
+**For structure:**
+- `"The structure doesn't serve the reader. Rewrite with the conclusion first, then the reasoning."`
+- `"This reads as a list. Rewrite as flowing paragraphs — it's too mechanical as bullets."`
 
-Key differentiators:
-- 40-hour battery life (industry best)
-- Instant multi-device switching
-- Studio-quality audio with adaptive EQ
-- Premium materials with all-day comfort
+**For missing elements:**
+- `"You didn't address [specific aspect]. Add that to the [section]."`
+- `"What did you leave out that a thoughtful expert would include?"`
 
-Tone: Confident and modern, but not overly technical
+**For emphasis:**
+- `"The most important point is buried in the third paragraph. Restructure so it leads."`
+- `"You spent too much time on [minor point]. Cut that to 2 sentences and expand [key point]."`
 
-Structure:
-1. Opening hook (2 sentences addressing a pain point)
-2. Key benefits paragraph (150 words max)
-3. Why these are different (3 bullet points)
-4. Customer outcome statement
+---
 
-Focus on the experience, not just specs. What does the customer's day look like with these headphones?"
-```
+## 4.4 Iterative Refinement in Practice
 
-**Output:** Significantly better—specific, benefit-focused, emotionally resonant.
+### Case Study: Writing a Business Proposal Section
 
-**Result:** This version converts 2.3x better than Iteration 1 (based on A/B testing).
+**Initial prompt:**
+> Write an executive summary for a proposal to implement a new CRM system.
 
-## Analyzing Output Quality
+**Initial output:** Generic, doesn't address our specific situation, too long, no recommendation.
 
-### The CREAM Framework for Evaluation
+**Diagnosis:** Wrong scope (too generic), wrong audience (doesn't account for who our executives are), missing recommendation.
 
-Use these five criteria to assess any AI output:
-
-**C - Correctness**
-Is the information accurate and appropriate?
-- Factual accuracy
-- Logical consistency
-- Appropriate for context
-
-**R - Relevance**
-Does it address exactly what was requested?
-- Stays on topic
-- Answers the actual question
-- No unnecessary tangents
-
-**E - Effectiveness**
-Does it achieve the intended goal?
-- Accomplishes the task
-- Usable without major editing
-- Provides actionable content
-
-**A - Appropriateness**
-Is the tone, style, and level suitable?
-- Right tone for audience
-- Appropriate complexity level
-- Suitable style and format
-
-**M - Measurability**
-Can you objectively assess quality?
-- Specific enough to verify
-- Includes requested elements
-- Meets stated criteria
-
-### Quality Scoring Method
-
-Rate each CREAM dimension on a 1-5 scale:
-
-```
-Prompt: "Explain machine learning to a high school student"
-
-Output Evaluation:
-Correctness: 5/5 (Accurate, no errors)
-Relevance: 4/5 (Good focus, minor tangent on history)
-Effectiveness: 5/5 (Clear explanation, good examples)
-Appropriateness: 3/5 (Still too technical in places)
-Measurability: 4/5 (Can verify understanding, could use quiz)
-
-Overall: 21/25 (84%)
-Improvement needed: Simplify technical language, add verification questions
-```
-
-### Common Quality Issues and Fixes
-
-**Issue: Output is too vague**
-```
-Problem: "The solution is good and should work well."
-Fix: Add constraint - "Provide specific metrics, numbers, or concrete examples for each point."
-```
-
-**Issue: Output misses the point**
-```
-Problem: Asked for marketing copy, got feature list
-Fix: Improve context - "Write marketing copy that emotionally connects with [audience] by highlighting how this solves [specific problem]."
-```
-
-**Issue: Inconsistent format**
-```
-Problem: Sometimes bullets, sometimes paragraphs
-Fix: Add strict format constraint - "Use exactly this format: [template]"
-```
-
-**Issue: Wrong level of complexity**
-```
-Problem: Too technical or too simplistic
-Fix: Specify audience expertise - "Audience is [level] with [background]. Assume they know [X] but not [Y]."
-```
-
-## Debugging Prompts
-
-When prompts produce poor or inconsistent results, systematic debugging identifies the problem.
-
-### The Debugging Checklist
-
-**1. Is the task clear?**
-```
-Vague: "Make this better"
-Clear: "Rewrite this paragraph to be more concise—reduce from 150 words to 75 words while keeping all key points"
-```
-
-**2. Is there sufficient context?**
-```
-Insufficient: "Write an email about the delay"
-Sufficient: "Write an apologetic email to a B2B customer about a 2-week delay in delivery. Acknowledge impact on their timeline, explain cause (supply chain issue), provide new delivery date, offer 10% discount."
-```
-
-**3. Are constraints specific enough?**
-```
-Vague: "Keep it short"
-Specific: "Maximum 200 words, 3 paragraphs"
-```
-
-**4. Is the format clearly defined?**
-```
-Unclear: "Organize this information"
-Clear: "Create a markdown table with columns: Feature, Benefit, Cost. 5-7 rows."
-```
-
-**5. Are examples provided when needed?**
-```
-Without example: "Classify these as high/medium/low priority"
-With example: "Classify using these criteria:
-- High: Impacts revenue, due within 1 week
-- Medium: Important but not urgent, due within 1 month
-- Low: Nice to have, no deadline"
-```
-
-### Debugging Process
-
-**Step 1: Isolate the Problem**
-Run the prompt 3-5 times. Is the issue:
-- Consistent (same problem every time) → Prompt issue
-- Intermittent (works sometimes) → Temperature/randomness issue
-- Totally random (unpredictable) → Task might be too ambiguous
-
-**Step 2: Simplify**
-Strip the prompt down to essentials. Does the core task work?
-- Yes → Add complexity back slowly to find the breaking point
-- No → The task definition itself needs work
-
-**Step 3: Add Specificity**
-Make one dimension more specific:
-- Add more context
-- Add stricter constraints  
-- Add explicit examples
-- Add format requirements
-
-**Step 4: Test the Change**
-Run the modified prompt 3-5 times. Did quality improve?
-- Yes → Keep change, identify next issue
-- No → Revert change, try different dimension
-
-### Real Debugging Example
-
-**Problem Prompt:**
-```
-"Summarize customer feedback from these support tickets"
-```
-
-**Issues:** Inconsistent length, misses key complaints, sometimes includes irrelevant details.
-
-**Debug Process:**
-
-**Test 1: Add format constraint**
-```
-"Summarize customer feedback in exactly 3 bullet points, each 15-20 words"
-```
-*Result: Better consistency, still misses key issues*
-
-**Test 2: Add criteria for what matters**
-```
-"Summarize customer feedback focusing on:
-- Product issues (bugs, missing features)
-- Service issues (support quality, wait times)
-- Requests for improvement
-
-Format: 3 bullet points, each 15-20 words"
-```
-*Result: Much better focus, but still misses priority*
-
-**Test 3: Add prioritization**
-```
-"Analyze customer feedback and identify the top 3 issues by:
-1. Frequency (mentioned by multiple customers)
-2. Severity (high impact on customer experience)
-3. Actionability (we can fix it)
-
-Format: 
-- Issue: [description in 15-20 words]
-- Impact: High/Medium/Low
-- Mentioned by: [number] customers"
-```
-*Result: Excellent—consistent, prioritized, actionable*
-
-## A/B Testing Prompts
-
-Systematic testing reveals which prompt variations perform best.
-
-### What to Test
-
-**Variable 1: Context Amount**
-- Version A: Minimal context
-- Version B: Rich context with background
-
-**Variable 2: Instruction Style**
-- Version A: Direct imperatives ("Do X")
-- Version B: Explanatory requests ("Please X because Y")
-
-**Variable 3: Format Specification**
-- Version A: Loose format ("Organize clearly")
-- Version B: Strict template (exact structure defined)
-
-**Variable 4: Temperature/Parameters**
-- Version A: Low temperature (0.2)
-- Version B: Medium temperature (0.7)
-
-**Variable 5: Examples**
-- Version A: Zero-shot (no examples)
-- Version B: Few-shot (2-3 examples)
-
-### A/B Testing Framework
-
-**1. Define Success Metrics**
-
-Quantitative:
-- Task completion rate
-- Time to usable output
-- Required edits/revisions
-- Error rate
-
-Qualitative:
-- Relevance to request
-- Tone appropriateness
-- Creativity level
-- Clarity of output
-
-**2. Test One Variable at a Time**
-
-Keep everything constant except the variable you're testing.
-
-**3. Run Multiple Trials**
-
-Minimum 5 trials per version (more for high-stakes applications).
-
-**4. Compare Results**
-
-Use your success metrics to determine which version performs better.
-
-### Example A/B Test
-
-**Task:** Generate social media post ideas
-
-**Baseline Prompt:**
-```
-"Generate 5 LinkedIn post ideas about productivity"
-```
-
-**Test: Adding Target Audience**
-
-**Version A (No audience):**
-```
-"Generate 5 LinkedIn post ideas about productivity"
-```
-
-**Version B (With audience):**
-```
-"Generate 5 LinkedIn post ideas about productivity for mid-career professionals in tech companies who struggle with context-switching"
-```
-
-**Results (averaged over 10 trials):**
-
-| Metric | Version A | Version B | Winner |
-|--------|-----------|-----------|---------|
-| Relevance (1-5) | 3.2 | 4.6 | B |
-| Specificity (1-5) | 2.8 | 4.4 | B |
-| Usability without edits | 40% | 80% | B |
-| Contains cliché advice | 60% | 20% | B |
-
-**Conclusion:** Adding audience context significantly improves output quality. Version B wins decisively.
-
-## Prompt Versioning
-
-For production use cases, version control for prompts ensures consistency and enables rollback.
-
-### Why Version Prompts?
-
-- Track what changes improved performance
-- Enable rollback if new version underperforms
-- Document evolution for team knowledge
-- Maintain consistency across applications
-- Facilitate A/B testing in production
-
-### Versioning Format
-
-```
-# Prompt v2.3.1 - Customer Email Response Generator
-# Last updated: 2024-01-15
-# Performance: 87% satisfaction (up from 82% in v2.3.0)
-# Changelog: Added empathy statement requirement
-
-[System Prompt]
-You are a customer support specialist...
-
-[Changes from v2.3.0]
-+ Added requirement for empathy statement in opening
-+ Specified maximum 150-word length
-- Removed technical jargon constraint (now in system prompt)
-
-[Performance Metrics]
-- Customer satisfaction: 87%
-- Response time: 12 seconds avg
-- Edit rate: 15% (down from 23%)
-```
-
-### Version Control Best Practices
-
-**1. Semantic Versioning**
-- Major.Minor.Patch (e.g., 2.3.1)
-- Major: Complete prompt redesign
-- Minor: Significant changes (added sections, different approach)
-- Patch: Small tweaks (wording, constraints)
-
-**2. Change Documentation**
-- What changed
-- Why it changed
-- Expected impact
-- Actual results
-
-**3. Performance Tracking**
-- Baseline metrics before change
-- Updated metrics after change
-- Statistical significance of improvement
-
-**4. Prompt Library Structure**
-```
-prompts/
-├── customer-support/
-│   ├── email-response-v2.3.1.txt (current)
-│   ├── email-response-v2.3.0.txt (previous)
-│   └── CHANGELOG.md
-├── content-generation/
-│   ├── blog-post-v1.2.0.txt
-│   └── CHANGELOG.md
-└── data-analysis/
-    ├── sales-analysis-v3.1.0.txt
-    └── CHANGELOG.md
-```
-
-**5. Rollback Strategy**
-Keep previous versions accessible for 90 days. If new version underperforms, revert to last stable version while debugging.
-
-## Building a Personal Prompt Library
-
-Create a collection of your best-performing prompts.
-
-### Library Organization
-
-**By Function:**
-- Analysis prompts
-- Writing prompts
-- Coding prompts
-- Data prompts
-- Communication prompts
-
-**By Use Frequency:**
-- Daily use (most refined)
-- Weekly use
-- Occasional use
-
-**By Maturity:**
-- Production-ready (thoroughly tested)
-- Beta (testing phase)
-- Experimental (new ideas)
-
-### Template Example
-
-```
-# Email Response - Customer Complaint
-
-## Context
-For responding to customer complaints about [common issue type]
-
-## Prompt
-"Draft a professional email response to this customer complaint:
-
-[paste complaint]
-
-Requirements:
-- Acknowledge their frustration specifically
-- Take ownership (no blame-shifting)
-- Explain what happened briefly (1-2 sentences)
-- Provide specific solution with timeline
-- Offer compensation if appropriate: [guidance]
-- Close with reassurance about preventing future issues
-
-Tone: Empathetic, professional, solution-focused
-Length: 100-150 words"
-
-## Performance Notes
-- 89% customer satisfaction
-- 12% require follow-up clarification
-- Works best with complaints about [X], less effective for [Y]
-
-## Version History
-- v1.2.0: Added compensation guidance
-- v1.1.0: Specified word count
-- v1.0.0: Initial version
-```
-
-## Action Items
-
-1. **Refinement Practice:** Take a prompt that's "okay but not great." Apply the four-stage refinement process. Document each iteration and the changes made.
-
-2. **Quality Audit:** Use the CREAM framework to evaluate 5 of your recent outputs. Identify patterns in where they score low.
-
-3. **Debug Exercise:** Find a prompt that gives inconsistent results. Apply the debugging checklist and process. Document what fixed it.
-
-4. **A/B Test:** Choose one prompt you use regularly. Create two versions varying one element. Run 5 trials of each and compare.
-
-5. **Start Your Library:** Create a simple prompt library with your 5 most-used prompts. Document them using the template format above.
+**Refinement 1:**
+> The output is too generic. Here's the specific context:
+> - We're a 120-person B2B services company
+> - Our current CRM is Salesforce but our team only uses 20% of its features and support tickets have been rising
+> - The proposed new system is HubSpot Sales Hub
+> - Primary audience: CFO and COO who care about cost and disruption, not features
+> - The recommendation is to switch — lead with that
+>
+> Rewrite the executive summary with this context. Under 200 words. Lead with the recommendation and the business case.
+
+**Output after Refinement 1:** Much better. Right audience, right length, right recommendation. Still missing specific cost data.
+
+**Refinement 2:**
+> Good. Two changes: (1) the cost comparison needs to be specific — add [our actual numbers]. (2) The "disruption risk" concern isn't addressed — add one sentence acknowledging the transition risk and how it will be mitigated. Keep total length under 225 words.
+
+**Final output:** Ready to use.
+
+Three focused refinements → publishable quality. This is the norm, not the exception.
+
+---
+
+## 4.5 Iterative Refinement for Analysis
+
+Analysis tasks often require multiple refinement passes to reach the right depth.
+
+**Pass 1 — Broad analysis:**
+> Analyse the competitive landscape for [market/product] and identify the key players, market dynamics, and trends.
+
+**Evaluate:** What's missing? What's too shallow? What's based on assumptions rather than specifics?
+
+**Pass 2 — Deepen specific areas:**
+> Your analysis was good at identifying the key players but shallow on the trends section. Go deeper on: (1) how AI is changing the competitive dynamics in this space specifically, (2) what differentiates the winners from the losers in the last 2 years.
+
+**Pass 3 — Challenge and stress-test:**
+> Play devil's advocate with the conclusions you've reached. What would the strongest critic of this analysis say? What might you be wrong about or missing?
+
+**Pass 4 — Synthesise for action:**
+> Based on the full analysis, give me a clear prioritised list of 3 strategic implications for a new entrant into this market.
+
+This four-pass approach produces much stronger analysis than any single-prompt attempt.
+
+---
+
+## 4.6 Iterative Refinement for Code
+
+Code generation almost always requires iteration, even for simple tasks.
+
+**Initial prompt → Initial code → Debug → Refine**
+
+**After getting initial code:**
+> The code runs but has these problems: [describe specific issues].
+> Also, I'd like you to: (1) add error handling for the edge case where [X], (2) add comments explaining the logic in [section], (3) make the variable names more descriptive.
+
+**For long or complex code, use staged prompting:**
+> Let's build this in stages. First, give me just the data model and database schema. Don't write any other code yet. We'll build the API layer and frontend logic in subsequent steps.
+
+**Debugging loop:**
+> The code is throwing this error: [paste error message and stack trace]. Here's the relevant code: [paste]. What's causing this and how do I fix it?
+
+---
+
+## 4.7 When to Refine vs. When to Start Over
+
+Iterative refinement works best when the initial response is directionally correct but needs improvement. If the initial response fundamentally misunderstood the task, refinement often compounds the problem rather than fixing it.
+
+**Refine when:**
+- The output is directionally right but needs polish
+- One or two specific things are wrong
+- The structure is right but the content needs adjustment
+
+**Start over when:**
+- The output completely missed what you wanted
+- The model seems to have misinterpreted the fundamental task
+- You've refined 3+ times and each version introduces new problems
+
+**Starting over effectively:** When you start a new conversation, learn from what went wrong. Your new prompt should address the exact failure mode of the previous attempt.
+
+> My previous prompt for this task got responses that were [too long / too generic / wrong format / missed the key point]. 
+> [Your improved prompt that explicitly addresses those failures]
+
+---
+
+## 4.8 Building a Refinement Practice
+
+**The 3-iteration rule:** Commit to at least 3 focused refinement iterations for any output you plan to use seriously. Most first-and-done outputs leave significant quality on the table.
+
+**Tracking improvements:** For important work, keep a log of each prompt and the corresponding output quality. You'll see patterns in what consistently needs improvement — these are prompting habits to fix at the source.
+
+**Prompt post-mortems:** After a successful output you're proud of, look back at your prompting process. What made the final version good? What would you put in the initial prompt next time to get there faster?
+
+---
 
 ## Key Takeaways
 
-- **Iteration is essential**—the first version of a prompt is rarely the best version
-- **The four-stage process** (baseline, analysis, hypothesis, test) provides structure for systematic improvement
-- **CREAM framework** (Correctness, Relevance, Effectiveness, Appropriateness, Measurability) enables objective quality evaluation
-- **Debugging prompts** requires systematic isolation of issues and incremental testing of fixes
-- **A/B testing** reveals which prompt variations actually perform better (not just which sound better)
-- **Version control** for production prompts ensures consistency and enables continuous improvement
-- **A personal prompt library** builds on your successes and accelerates future work
+- First AI responses are starting points — the best outputs come from **3+ focused refinement iterations**
+- **Diagnose before you refine** — identify the exact problem category (scope, tone, format, depth, specificity) so you fix the right thing
+- Use **targeted refinement prompts** — "make it better" is useless; "cut by 30%, prioritise removing filler" works
+- Apply different refinement strategies for **writing** (tone/structure), **analysis** (depth/challenge), and **code** (debug/refactor)
+- Know when to **start over** — if the model fundamentally misunderstood the task, refinement compounds the problem
+- Build a **refinement practice**: 3-iteration rule, improvement logs, prompt post-mortems
 
-## Resources and Next Steps
+---
 
-**Tools:**
-- Prompt versioning template (download)
-- CREAM evaluation scorecard (printable)
-- A/B testing tracker (spreadsheet)
+## Quick Check
 
-**Next Module Preview:**
-In Module 5, we'll explore domain-specific prompting—how to craft exceptional prompts for specific fields like technical writing, business analysis, creative work, code generation, and data analysis.
+1. What are the 8 problem categories for diagnosing AI output issues?
+2. Why is "make it better" a bad refinement instruction? Write a better version.
+3. Describe a situation where you'd start over rather than refine.
 
-**Advanced Practice:**
-- Set up a prompt library for your most common tasks
-- Conduct weekly prompt reviews to identify improvement opportunities
-- Track metrics on your most important prompts
+---
+
+*Next up: Module 5 — Domain-Specific Prompting*

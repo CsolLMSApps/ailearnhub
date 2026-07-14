@@ -1,701 +1,209 @@
 # Module 2: AI Writing Tools Mastery
 
-**Duration:** 25 minutes  
-**Learning Objectives:**
-- Master ChatGPT, Claude, and specialized writing AI
-- Create reusable prompt templates for common tasks
-- Build workflows for different content types
-- Edit AI-generated content like a pro
-- Integrate AI into your writing process
+**Duration:** 25 minutes
 
 ---
 
-## Introduction: AI as Your Writing Partner
+## What You'll Learn
 
-AI writing tools aren't here to replace writers—they're here to make you a better, faster writer. Think of AI as a writing partner who never gets tired, can research instantly, and helps you overcome blank page syndrome. This module shows you how to leverage AI for every type of writing you do.
-
-**What You'll Master:**
-- 10x faster first drafts
-- Higher quality final outputs
-- Consistent brand voice across content
-- Writing workflows that scale
+- Master the leading AI writing tools available in 2025
+- Build writing workflows that produce high-quality output quickly
+- Know when to use which tool for different writing tasks
+- Integrate AI writing tools into your existing applications
+- Maintain your voice and quality at scale
 
 ---
 
-## 1. The Big Three: ChatGPT, Claude, and Specialized AI (6 minutes)
+## 2.1 The AI Writing Tool Landscape in 2025
 
-### ChatGPT (OpenAI)
+The AI writing tool space has matured significantly. Three categories have emerged:
 
-**Best For:**
-- General writing and content creation
-- Brainstorming and idea generation
-- Quick responses and iterations
-- Code generation and technical writing
-- Conversational content
+**Category 1 — General AI assistants (best writing capability):**
+GPT-4o, Claude 3.7, and Gemini 2.5 Pro are more capable than any purpose-built writing tool for complex drafting, editing, and strategy.
 
-**Strengths:**
-- Most versatile and widely used
-- Excellent for creative tasks
-- Fast iteration and refinement
-- Strong integration ecosystem
-- GPT-4 is incredibly capable
+**Category 2 — Embedded writing tools:**
+Grammarly AI, Microsoft Copilot in Word, Notion AI, and Google Workspace Gemini bring AI writing assistance into the tools you already use.
 
-**Limitations:**
-- Can be verbose without constraints
-- Sometimes "hallucin ates" facts (makes things up)
-- Knowledge cutoff (no real-time data without plugins)
-- Can sound generic without good prompting
-
-**Pricing:**
-- Free tier: GPT-3.5 (good for basic tasks)
-- Plus ($20/month): GPT-4, faster responses, plugins
-- Team ($30/user/month): Collaboration features
-- Enterprise: Custom pricing
-
-**Best Use Cases:**
-- Blog posts and articles
-- Social media content
-- Email campaigns
-- Product descriptions
-- Ad copy
-
-### Claude (Anthropic)
-
-**Best For:**
-- Long-form content (handles 100K+ tokens)
-- Analysis and research
-- Technical documentation
-- Code review and debugging
-- Nuanced writing tasks
-
-**Strengths:**
-- Superior with long documents
-- More "thoughtful" responses
-- Better at following complex instructions
-- Stronger on technical accuracy
-- More natural conversational flow
-
-**Limitations:**
-- Smaller ecosystem than ChatGPT
-- Fewer integrations (for now)
-- Sometimes overly cautious
-- Less creative than GPT-4 for some tasks
-
-**Pricing:**
-- Free tier: Available
-- Pro ($20/month): Claude 3 Opus access
-- Team pricing: Contact sales
-
-**Best Use Cases:**
-- White papers and reports
-- Technical documentation
-- Research summaries
-- Long-form articles
-- Code documentation
-
-### Specialized Writing AI
-
-**Jasper AI ($49-125/month)**
-- **Best for:** Marketing copy at scale
-- **Strengths:** Brand voice training, templates, team features
-- **Use cases:** Ads, landing pages, email sequences
-
-**Copy.ai ($49-99/month)**
-- **Best for:** Quick marketing copy
-- **Strengths:** Templates, workflows, simplicity
-- **Use cases:** Social posts, product descriptions, CTAs
-
-**Writesonic ($20-80/month)**
-- **Best for:** SEO content and articles
-- **Strengths:** SEO optimization, bulk generation
-- **Use cases:** Blog posts, SEO pages, product content
-
-**Rytr ($9-29/month)**
-- **Best for:** Budget-conscious users
-- **Strengths:** Affordable, decent quality
-- **Use cases:** Social media, emails, basic blog posts
-
-**Choosing Your Writing AI:**
-
-| Your Need | Recommended Tool | Monthly Cost |
-|-----------|------------------|--------------|
-| All-purpose | ChatGPT Plus | $20 |
-| Long documents | Claude Pro | $20 |
-| Marketing at scale | Jasper | $49+ |
-| Budget option | Rytr | $9 |
-| Best combination | ChatGPT + Claude | $40 |
+**Category 3 — Specialised writing platforms:**
+Jasper, Copy.ai, and similar tools are now largely superseded by general AI — they remain useful only if you need very specific template libraries or team workflow features.
 
 ---
 
-## 2. Reusable Prompt Templates for Common Tasks (8 minutes)
+## 2.2 General AI Assistants for Writing
 
-### Template 1: Blog Post Generator
+### ChatGPT (GPT-4o) — Best for Versatility
 
-```
-Write a comprehensive blog post on [TOPIC]
+**Strengths for writing:**
+- Excellent at following detailed format and style instructions
+- Canvas feature provides a collaborative writing environment
+- Custom Instructions and Projects allow persistent style configuration
+- Integration with DALL-E 3 for document images
 
-Target audience: [WHO]
-Word count: [NUMBER]
-Tone: [PROFESSIONAL/CASUAL/TECHNICAL/etc.]
-Purpose: [EDUCATE/PERSUADE/ENTERTAIN]
+**Best writing use cases:**
+- Long-form content requiring complex structure
+- Persuasive writing where argument quality matters
+- Writing that requires voice customisation via examples
 
-Structure:
-- Attention-grabbing introduction
-- [NUMBER] main sections with subheadings
-- Practical examples in each section
-- Actionable takeaways
-- Strong conclusion with CTA
+**Key setup:** Put your writing preferences in Custom Instructions. Use Projects for recurring writing contexts (client briefs, brand voice, ongoing publications).
 
-SEO requirements:
-- Include keywords: [LIST]
-- Meta description (155 characters)
-- 3-5 internal link suggestions
+### Claude — Best for Writing Quality and Long Documents
 
-Additional requirements:
-- Include statistics and data points
-- Add 2-3 expert quotes (create realistic but generic)
-- Suggest 1-2 images or graphics to include
+**Strengths for writing:**
+- Produces the most natural, human-sounding prose of any major AI
+- Handles 200K context — entire manuscripts, research archives
+- Excellent for maintaining consistency across long documents
+- Strong at nuance, tone, and careful argumentation
 
-Write the complete blog post now.
-```
+**Best writing use cases:**
+- Long-form articles, white papers, reports
+- Documents requiring careful, nuanced tone
+- Editing and rewriting tasks where voice matters most
+- Situations where you want less "AI-sounding" output
 
-**Example Usage:**
-```
-Topic: "How to Build a Morning Routine"
-Audience: Professionals aged 25-40
-Word count: 1500
-Tone: Motivational but practical
-Purpose: Educate and inspire
+**Key URL:** claude.ai — free tier; Pro $20/month
 
-[Rest of template filled in...]
-```
+### Gemini — Best for Integrated Writing
 
-### Template 2: Email Writer
+**Strengths for writing:**
+- Gemini in Google Docs provides AI writing within your document
+- Access to real-time web information in writing prompts
+- Integrates with Gmail for email drafting
+- Google Drive files can be referenced in Gemini conversations
 
-```
-Write a professional email with the following parameters:
-
-Context: [SITUATION]
-Recipient: [WHO - title, relationship]
-Purpose: [WHAT YOU WANT]
-Tone: [FORMAL/FRIENDLY/URGENT/etc.]
-
-Key points to include:
-- [POINT 1]
-- [POINT 2]
-- [POINT 3]
-
-Constraints:
-- Keep under 150 words
-- Include clear call-to-action
-- Professional but not stiff
-- End with appropriate sign-off
-
-Write the email now with a subject line.
-```
-
-### Template 3: Social Media Content
-
-```
-Create [NUMBER] social media posts for [PLATFORM]
-
-Topic/Theme: [SUBJECT]
-Brand voice: [DESCRIPTION]
-Goal: [ENGAGEMENT/AWARENESS/TRAFFIC/SALES]
-
-For each post include:
-- Engaging hook (first line)
-- 3-5 sentences of value/entertainment
-- Clear CTA
-- 3-5 relevant hashtags
-- Optional emoji usage
-
-Post specifications:
-- Length: [CHARACTERS/WORDS]
-- Format: [CAROUSEL/SINGLE/VIDEO SCRIPT]
-- Target audience: [WHO]
-
-Additional requirements:
-- Include a question to drive comments
-- Make it shareable
-- Stay on-brand
-
-Create the posts now.
-```
-
-### Template 4: Product Description
-
-```
-Write a compelling product description for:
-
-Product name: [NAME]
-Category: [WHAT IT IS]
-Target customer: [WHO]
-
-Key features:
-- [FEATURE 1]
-- [FEATURE 2]
-- [FEATURE 3]
-
-Benefits/Value proposition:
-- [BENEFIT 1]
-- [BENEFIT 2]
-- [BENEFIT 3]
-
-Format requirements:
-- Attention-grabbing headline
-- 2-3 short paragraphs (100-150 words total)
-- Bullet points for features
-- Strong closing with CTA
-
-Tone: [LUXURIOUS/TECHNICAL/FRIENDLY/etc.]
-
-Additional elements:
-- Address common objections
-- Create urgency/scarcity (if appropriate)
-- SEO keywords: [LIST]
-
-Write the complete product description.
-```
-
-### Template 5: Video Script
-
-```
-Create a video script for:
-
-Platform: [YOUTUBE/TIKTOK/INSTAGRAM/LINKEDIN]
-Length: [DURATION]
-Topic: [SUBJECT]
-Target audience: [WHO]
-
-Script structure:
-- Hook (first 3 seconds) - grab attention immediately
-- Problem/Pain point (15 seconds)
-- Solution/Value proposition (30 seconds)
-- How-to/Tutorial (main content)
-- Recap key points (15 seconds)
-- Strong CTA (10 seconds)
-
-Tone: [ENERGETIC/CALM/PROFESSIONAL/HUMOROUS]
-
-Include:
-- Visual suggestions [what to show on screen]
-- B-roll suggestions
-- Text overlay suggestions
-- Music/sound effect notes
-- Estimated speaking pace
-
-Write the complete script with timestamps.
-```
-
-### Template 6: Meeting Notes Summary
-
-```
-Analyze these meeting notes and create a structured summary:
-
-[PASTE RAW NOTES OR TRANSCRIPT]
-
-Create the following outputs:
-
-1. Executive Summary (2-3 sentences)
-2. Key Discussion Points (bullet list)
-3. Decisions Made (with who decided)
-4. Action Items (with owner and deadline)
-5. Open Questions/Blockers
-6. Next Steps
-
-Format: Professional but concise
-Include: Meeting date, attendees, purpose
-
-Make it easy to scan and act upon.
-```
-
-### Template 7: Report Generator
-
-```
-Create a comprehensive report on [TOPIC]
-
-Report purpose: [WHY IT'S NEEDED]
-Audience: [WHO WILL READ IT]
-Length: [WORD COUNT]
-
-Required sections:
-1. Executive Summary
-2. Background/Context
-3. Current Situation Analysis
-4. Key Findings (with data)
-5. Recommendations
-6. Implementation Plan
-7. Conclusion
-
-Tone: [ANALYTICAL/PERSUASIVE/OBJECTIVE]
-
-Data to include:
-- [DATA POINT 1]
-- [DATA POINT 2]
-- [DATA POINT 3]
-
-Format requirements:
-- Professional structure
-- Clear headings and subheadings
-- Data visualization suggestions
-- Citations format: [STYLE]
-
-Write the complete report.
-```
+**Best writing use cases:**
+- Documents you're drafting in Google Docs
+- Emails in Gmail
+- Research-based writing that needs current information
 
 ---
 
-## 3. Content-Specific Workflows (6 minutes)
+## 2.3 Grammarly AI — The Everywhere Writing Tool
 
-### Workflow 1: Long-Form Blog Article (30 minutes total)
+Grammarly integrates into virtually every writing surface: browsers, Microsoft Office, Google Docs, Slack, email clients.
 
-**Step 1: Research & Outline (10 minutes)**
-```
-Prompt to ChatGPT:
+**What it does:**
+- Real-time grammar, spelling, and punctuation correction
+- Clarity and conciseness suggestions
+- Tone detection and recommendations
+- AI writing assistance (rewrite, summarise, generate)
+- Plagiarism detection (paid tiers)
 
-"Research [TOPIC] and create a detailed outline for a 2000-word blog post.
+**The workflow:**
+Grammarly runs in the background as you type — you get suggestions inline, accept or dismiss them, and your writing improves continuously without switching tools.
 
-Include:
-- 5-7 main sections
-- 3-5 subpoints for each section
-- Interesting statistics or facts to include
-- Expert perspectives to reference
-- Common questions readers have
-- Suggested CTAs
+**For teams:** Grammarly Business adds a style guide — you can upload your brand's writing standards and Grammarly flags deviations automatically.
 
-Target audience: [WHO]"
-```
-
-**Step 2: Write First Draft (10 minutes)**
-```
-"Using the outline above, write the complete blog post. 
-
-Requirements:
-- Conversational but authoritative tone
-- Short paragraphs (2-3 sentences)
-- Include transition sentences between sections
-- Add one example per major section
-- Write for SEO without keyword stuffing
-
-Keywords: [LIST]"
-```
-
-**Step 3: Enhance & Polish (10 minutes)**
-```
-To Grammarly or Claude:
-
-"Review this article and improve:
-- Clarity and readability
-- Grammar and punctuation
-- Sentence variety
-- Transition flow
-- Engagement (make it more compelling)
-
-Maintain the core message and structure."
-```
-
-**Result:** Publication-ready 2000-word article in 30 minutes vs. 3-4 hours manually
-
-### Workflow 2: Week of Social Content (20 minutes total)
-
-**Step 1: Content Calendar (5 minutes)**
-```
-"Create a 7-day social media content calendar for [PLATFORM]
-
-Theme: [TOPIC/CAMPAIGN]
-Brand: [YOUR BRAND]
-Goals: [OBJECTIVES]
-
-For each day, suggest:
-- Post type (educational, entertaining, promotional)
-- Topic/angle
-- Best posting time
-- Content format (image, video, carousel, text)
-
-Provide variety and strategic flow."
-```
-
-**Step 2: Bulk Content Generation (10 minutes)**
-```
-"Write all 7 posts based on the calendar above.
-
-For each post:
-- Engaging first line
-- 3-4 sentences of value
-- Clear CTA
-- 3-5 relevant hashtags
-
-Brand voice: [DESCRIPTION]
-Tone: [STYLE]
-
-Number the posts 1-7 for clarity."
-```
-
-**Step 3: Visual Brief (5 minutes)**
-```
-"For each of the 7 posts above, create a detailed visual brief including:
-- Image/graphic description
-- Color palette suggestion
-- Text overlay (if any)
-- Design style (minimal, bold, etc.)
-- Canva search terms to find similar templates
-
-Make it easy for a designer or Canva user to execute."
-```
-
-**Result:** Week of social content ready in 20 minutes vs. 4-5 hours
-
-### Workflow 3: Email Campaign Sequence (25 minutes total)
-
-**Step 1: Strategy & Flow (5 minutes)**
-```
-"Design a 5-email nurture sequence for:
-
-Goal: [CONVERSION GOAL]
-Audience: [WHO]
-Timeline: [DAYS BETWEEN EMAILS]
-
-For each email, outline:
-- Email number and days after trigger
-- Subject line approach
-- Main message/theme
-- Primary CTA
-- Supporting content elements
-
-Create strategic flow from awareness to conversion."
-```
-
-**Step 2: Write All Emails (15 minutes)**
-```
-"Write all 5 complete emails based on the sequence above.
-
-Each email should include:
-- Subject line
-- Preview text
-- Email body (150-250 words)
-- P.S. line
-- CTA button text
-
-Tone: [STYLE]
-Brand voice: [DESCRIPTION]
-
-Number each email clearly."
-```
-
-**Step 3: Optimize for Deliverability (5 minutes)**
-```
-"Review the 5 emails above and:
-- Flag any spam trigger words
-- Suggest A/B test variations for subject lines
-- Check email length appropriateness
-- Verify CTA clarity
-- Suggest design/formatting notes
-
-Provide actionable recommendations."
-```
-
-**Result:** Complete 5-email sequence in 25 minutes vs. 4-6 hours
-
-### Workflow 4: Technical Documentation (40 minutes total)
-
-**Step 1: Outline Structure (10 minutes)**
-```
-To Claude (better for technical content):
-
-"Create a comprehensive outline for technical documentation on [TOPIC]
-
-User level: [BEGINNER/INTERMEDIATE/ADVANCED]
-Product/feature: [DESCRIPTION]
-
-Include:
-- Getting started section
-- Core concepts
-- Step-by-step tutorials
-- Advanced topics
-- Troubleshooting
-- FAQ
-- Glossary
-
-Make it logically structured and easy to navigate."
-```
-
-**Step 2: Generate Content (20 minutes)**
-```
-"Write the complete technical documentation based on the outline.
-
-Requirements:
-- Clear, concise language
-- Numbered steps for procedures
-- Code examples with syntax highlighting
-- Warning/caution callouts where needed
-- Screenshots/diagram descriptions
-- Links to related resources
-
-Technical depth: [LEVEL]
-Assumed knowledge: [WHAT USER KNOWS]"
-```
-
-**Step 3: Technical Review (10 minutes)**
-```
-"Review this technical documentation for:
-- Technical accuracy
-- Completeness (missing steps?)
-- Clarity for target audience
-- Potential confusion points
-- Need for additional examples
-- Logical flow
-
-Suggest specific improvements."
-```
-
-**Result:** Complete technical documentation in 40 minutes vs. 6-8 hours
+**Best practice:** Use Grammarly as a final pass editor after AI draft → your edits → Grammarly → publish.
 
 ---
 
-## 4. Editing AI-Generated Content (3 minutes)
+## 2.4 Microsoft 365 Copilot — AI in Office
 
-### The 3-Layer Edit Process
+If your organisation uses Microsoft 365, Copilot is one of the highest-value AI tools available for professional writing.
 
-**Layer 1: Accuracy Check (2-3 minutes)**
-- ✓ Verify all facts, statistics, dates
-- ✓ Check that claims make sense
-- ✓ Ensure technical details are correct
-- ✓ Remove any obvious "hallucinations"
+### Copilot in Word
 
-**Layer 2: Brand Voice & Tone (3-5 minutes)**
-- ✓ Does it sound like your brand?
-- ✓ Is the tone appropriate?
-- ✓ Remove generic AI phrases ("delve into," "it's worth noting")
-- ✓ Add personality and unique voice
+- **Draft from scratch:** "Write a project proposal for [topic] using the context from these attached documents"
+- **Rewrite:** Select text → ask Copilot to rewrite in a different tone or format
+- **Summarise:** Summarise a long document in bullet points
+- **Transform:** Convert bullet points into paragraphs, or vice versa
 
-**Layer 3: Polish & Optimization (5-7 minutes)**
-- ✓ Tighten sentences (remove fluff)
-- ✓ Improve transitions
-- ✓ Strengthen opening and closing
-- ✓ Add relevant examples or anecdotes
-- ✓ Optimize for SEO (if applicable)
+### Copilot in Outlook
 
-### Common AI Writing Patterns to Fix
+- **Draft email:** Copilot writes an email based on a brief description
+- **Thread summarisation:** Summarise a long email thread to catch up quickly
+- **Meeting preparation:** Get an AI-generated summary and preparation brief before a meeting
 
-**❌ Overly formal language:**
-AI: "It is imperative to note that..."
-✅ Better: "Remember that..." or "Keep in mind..."
+### Copilot in Teams
 
-**❌ Repetitive structure:**
-AI: "First... Second... Third..." (for everything)
-✅ Better: Mix up transition words and sentence structures
+- **Meeting transcription and summary:** Automatic; highlights key decisions and action items
+- **Post-meeting recap:** Full meeting recap with action items in one click
+- **Catch-up:** "What happened in the last 30 minutes of this meeting?" — useful when you join late
 
-**❌ Generic conclusions:**
-AI: "In conclusion, [topic] is important and we should all..."
-✅ Better: Specific call-to-action or thought-provoking question
-
-**❌ Obvious AI phrases:**
-- "Delve into"
-- "It's worth noting"
-- "Landscape" (as in "marketing landscape")
-- "Leverage" (overused)
-- "Robust"
-
-### The Human Touch Checklist
-
-- [ ] Would someone know an AI wrote this?
-- [ ] Does it have personality and voice?
-- [ ] Are there specific examples, not just generalities?
-- [ ] Does it sound like something you'd actually say?
-- [ ] Is there an original insight or perspective?
-
-**Goal:** AI does 70-80% of the work, you add the 20-30% that makes it great
+**Availability:** Microsoft 365 Copilot requires Microsoft 365 Business Standard/Premium or Enterprise plans (additional licensing cost ~$30/user/month on top of M365 subscription).
 
 ---
 
-## 5. Building Your Writing System (2 minutes)
+## 2.5 Notion AI
 
-### The Prompt Library Approach
+If your team uses Notion for documentation and knowledge management, Notion AI adds writing and analysis capabilities directly inside your workspace.
 
-**Create a Notion/Google Doc with:**
+**Key features:**
+- Generate content inside Notion pages from a prompt
+- Summarise long documents in one click
+- Translate pages
+- Improve writing, fix grammar, change tone
+- Ask questions about your Notion workspace content
 
-**Section 1: Tested Prompts**
-- Blog post generator
-- Email templates
-- Social media frameworks
-- Report structures
-- Meeting summaries
+**Best use case:** Teams that centralise knowledge in Notion and want AI assistance without leaving the tool.
 
-**Section 2: Brand Voice Guide**
-```
-Our brand voice is:
-- [Characteristic 1]: Example sentence
-- [Characteristic 2]: Example sentence
-- [Characteristic 3]: Example sentence
+**Cost:** $8/user/month added to Notion subscription.
 
-Words we use: [list]
-Words we avoid: [list]
-Tone: [description]
-```
+---
 
-**Section 3: Common Modifications**
-- Make it shorter
-- Make it more conversational
-- Add statistics
-- Simplify language
-- Increase urgency
+## 2.6 Building a Writing Workflow
 
-**Section 4: Output Examples**
-- Save your best AI outputs
-- Note what prompt generated them
-- Use as examples for future prompts
+An effective AI writing workflow reduces total writing time while maintaining quality.
 
-### Workflow Automation
+### The 5-Stage AI Writing Workflow
 
-**Level 1: Manual but Systematic**
-- Copy prompt from library
-- Fill in variables
-- Generate content
-- Edit and publish
+**Stage 1 — Clarify (5 minutes):**
+Before prompting, get clear on: Who is this for? What's the goal? What format is needed? What constraints exist?
 
-**Level 2: Semi-Automated**
-- Use Zapier/Make to trigger AI generation
-- Auto-save outputs to specific folders
-- Set up approval workflows
+**Stage 2 — Structure (5–10 minutes):**
+> Create a detailed outline for [piece type] about [topic]. Target audience: [description]. Goal: [inform/persuade/entertain]. Key points to cover: [list].
 
-**Level 3: Fully Automated**
-- Schedule content generation
-- Auto-publish to platforms
-- Human review only for quality control
+Review and adjust the outline before drafting.
 
-**Start at Level 1, evolve to Level 2-3 over time**
+**Stage 3 — Draft (10–20 minutes):**
+> Using this outline [paste], write a complete draft of [piece]. Voice: [describe or paste examples]. Format: [specific requirements].
+
+**Stage 4 — Refine (15–30 minutes):**
+Do your own edit first — add personal examples, adjust voice, fix any errors or hallucinations.
+Then: `"Review this draft and suggest improvements for: clarity, flow, and strengthening the [key section]."`
+
+**Stage 5 — Polish (5–10 minutes):**
+Final Grammarly pass, read aloud, last check.
+
+**Total time: 40–75 minutes for a 1,000-word piece** vs. 2–3 hours without AI.
+
+---
+
+## 2.7 Maintaining Voice at Scale
+
+The biggest quality risk with AI writing is homogenisation — everything starts to sound the same.
+
+**Voice preservation techniques:**
+
+**1. Train with examples:** Paste 3–5 examples of your best writing into Custom Instructions or a Project. Tell the AI to match this voice.
+
+**2. Always edit the opening:** AI openings are consistently weaker than what you'd write yourself. Always rewrite the first paragraph.
+
+**3. Add personal specifics:** AI gives you the general; you add the specific. Replace generic examples with your actual experiences, clients, or data.
+
+**4. Use your vocabulary:** Maintain a list of words/phrases you use and words you never use. Add this to your AI context.
+
+**5. The "delete the obvious" rule:** AI tends to include everything that's technically relevant. Your job as editor is to cut what a smart reader already knows.
 
 ---
 
 ## Key Takeaways
 
-✅ **ChatGPT + Claude = Powerful combo** - Use both strategically  
-✅ **Templates save massive time** - Build your prompt library  
-✅ **Workflows beat one-off prompts** - Create repeatable processes  
-✅ **Always edit AI content** - Add human touch for quality  
-✅ **Systems compound** - Initial setup, ongoing benefits  
+- **General AI assistants** (GPT-4o, Claude, Gemini) are now more capable than purpose-built writing tools for complex drafting
+- Use **Claude** when writing quality is the priority; use **ChatGPT** when versatility and ecosystem integration matter; use **Gemini** when you live in Google Workspace
+- **Grammarly AI** is the highest-ROI embedded writing tool — it works everywhere and pays for itself quickly
+- **Microsoft 365 Copilot** is the most powerful writing tool for Office users — worth the investment if your team writes frequently
+- The **5-stage workflow** (Clarify → Structure → Draft → Refine → Polish) produces consistent quality in 40–75 minutes per piece
+- Maintain your voice by: training with examples, always editing the opening, adding personal specifics
 
 ---
 
-## Action Steps
+## Quick Check
 
-1. **Choose your primary AI** - ChatGPT Plus or Claude Pro
-2. **Create 3 prompt templates** - For your most common writing tasks
-3. **Build your first workflow** - Pick one from this module
-4. **Test and refine** - Use for 1 week, optimize
-5. **Start your prompt library** - Document what works
+1. What's the difference between Grammarly AI and ChatGPT for writing — when would you use each?
+2. Describe the 5-stage AI writing workflow and the purpose of each stage
+3. Name 3 techniques for maintaining your personal voice when using AI for writing
 
 ---
 
-## Resources Included
-
-📋 **50+ Prompt Templates Library**  
-📋 **Brand Voice Worksheet**  
-📋 **Content Calendar Template**  
-📋 **Editing Checklist**  
-📋 **AI Writing Workflow Maps**  
-
----
-
-**Next Module:** AI Research & Analysis Tools - Learn to use AI for research, data analysis, and extracting insights from information.
+*Next up: Module 3 — AI Design & Visual Tools*

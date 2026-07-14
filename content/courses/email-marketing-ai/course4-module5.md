@@ -1,645 +1,224 @@
 # Module 5: Email Automation Workflows
 
-**Duration:** 25 minutes  
-**Learning Objectives:**
-- Build automated email sequences that convert
-- Create customer journey workflows
-- Set up behavioral automation triggers
-- Optimize automation for maximum ROI
-- Scale your email marketing with AI
+**Duration:** 25 minutes
 
 ---
 
-## Introduction: Email Automation = Freedom + Revenue
+## What You'll Learn
 
-Email automation is the secret to scaling your marketing without scaling your team. Once set up, automated workflows run 24/7, nurturing leads, recovering abandoned carts, and driving sales while you sleep.
-
-**The ROI:**
-- Automated emails generate 320% more revenue than non-automated
-- Welcome emails have 4x higher open rates and 5x higher click rates
-- Abandoned cart emails recover 10-30% of lost sales
-- Drip campaigns convert 50% more leads than single-send emails
+- Design and build email automation sequences for every stage of the customer journey
+- Use AI to write automation emails that feel personal, not robotic
+- Set up the 6 essential automations every business needs
+- Build advanced behavioural automations triggered by subscriber actions
+- Measure and optimise automation performance over time
 
 ---
 
-## 1. Email Automation Fundamentals (4 minutes)
+## 5.1 Why Automation Changes the Game
 
-### Types of Email Automation
+Email automation is the most scalable thing you can build in marketing. Unlike broadcast emails that require constant manual work, automation sequences run 24/7 without intervention — delivering the right message to the right person at the right moment, automatically.
 
-**1. Trigger-Based Automation**
-Fires when a subscriber performs a specific action:
-- Signs up (welcome series)
-- Abandons cart (recovery email)
-- Makes purchase (confirmation + upsell)
-- Downloads resource (nurture sequence)
-- Visits pricing page (sales sequence)
+**The difference:**
+- **Broadcast:** You create an email, send it to everyone at once, then start again next week
+- **Automation:** You build a sequence once; every new subscriber, buyer, or trigger activates it automatically. The 100th subscriber gets the same quality welcome as the 1st.
 
-**2. Time-Based Automation**
-Sends at specific intervals or dates:
-- Onboarding day 1, 3, 7, 14, 30
-- Birthday/anniversary emails
-- Renewal reminders (30, 14, 7, 1 day before)
-- Re-engagement (90 days inactive)
-- Seasonal campaigns (holiday prep)
-
-**3. Conditional Automation**
-Logic-based workflows with if/then branches:
-- IF opened email → THEN send follow-up
-- IF clicked link → THEN tag as interested
-- IF purchased → THEN stop promotional emails
-- IF high engagement → THEN add to VIP segment
-
-### Automation Workflow Best Practices
-
-**DO:**
-✅ Map the customer journey first
-✅ Start simple, add complexity over time
-✅ Test workflows before launching
-✅ Monitor performance and optimize
-✅ Include exit conditions (don't email forever)
-✅ Personalize based on behavior
-
-**DON'T:**
-❌ Set and forget (review quarterly)
-❌ Over-automate (keep some human touch)
-❌ Ignore unsubscribe rates
-❌ Send too frequently (respect inbox)
-❌ Forget mobile optimization
+**The ROI of email automation is exceptional:** Klaviyo data shows automated flows consistently account for 30–40% of email revenue for e-commerce businesses, with a tiny fraction of the production effort.
 
 ---
 
-## 2. Essential Automation Workflows (10 minutes)
+## 5.2 The 6 Essential Automation Workflows
 
-### Workflow 1: Welcome Series (7-Day Onboarding)
+### 1. Welcome Sequence
 
-**Goal:** Turn new subscribers into engaged community members
+**Who triggers it:** Anyone who subscribes for the first time
+**Goal:** Deliver on your promise, build trust, introduce your brand, drive first engagement
 
-**AI Prompt: Design Welcome Series**
+**Structure (5 emails over 10 days):**
+- Email 1 (Immediate): deliver lead magnet or promised content + warm welcome
+- Email 2 (Day 2): your story — why you do this
+- Email 3 (Day 4): your best content or most useful resource
+- Email 4 (Day 7): address the main concern or objection
+- Email 5 (Day 10): soft pitch or community invite
 
-```
-Create a 7-day welcome email sequence for:
+*(Full prompt templates in Module 2)*
 
-Business: [YOUR BUSINESS]
-Product/Service: [WHAT YOU OFFER]
-Subscriber source: [WHERE THEY CAME FROM]
-Main goal: [ENGAGEMENT / TRIAL / PURCHASE]
-Brand voice: [PROFESSIONAL / FRIENDLY / PLAYFUL]
+### 2. Post-Purchase Onboarding
 
-For each email, include:
-- Day/timing
-- Subject line
-- Key message
-- CTA
-- Personalization elements
-```
+**Who triggers it:** Customers immediately after their first purchase
+**Goal:** Confirm the decision was right, ensure success with the product, prevent buyer's remorse, drive repeat purchase
 
-**Example Welcome Series:**
+**Structure (4 emails):**
+> Design a post-purchase email sequence for [product/service description].
+> Email 1 (Immediate): thank them + confirm order + set expectations for what happens next
+> Email 2 (Day 2): help them get the most out of their purchase — top tip, tutorial link, or quick start guide
+> Email 3 (Day 7): check-in — how's it going? Offer support. Share a success story from another customer.
+> Email 4 (Day 14): upsell or cross-sell opportunity — what's the natural next thing for someone who's got value from purchase 1?
+> Tone: warm, helpful, success-focused. Not salesy.
 
-**Email 1: Instant Welcome (Immediately after signup)**
-```
-Subject: Welcome to [Brand]! Here's what happens next
+### 3. Abandoned Cart Recovery
 
-Hi {{FirstName}},
+**Who triggers it:** Anyone who adds to cart but doesn't complete purchase (e-commerce)
+**Goal:** Recover the sale
 
-Thanks for joining! You're now part of a community of [X] people who [VALUE PROP].
+**Structure (3 emails):**
+> Write a 3-email abandoned cart recovery sequence for [product/business description].
+> Email 1 (1 hour after abandonment): gentle reminder — they left something behind. No discount yet. Show the items. Make it easy to complete.
+> Email 2 (24 hours): address the likely concern — "Still thinking it over?" Answer the most common objections about [product]. Maybe add social proof.
+> Email 3 (48–72 hours): create urgency or offer an incentive — limited stock, expiring offer, or a small discount if your margins allow.
+> Tone: helpful and conversational, not automated-sounding.
 
-Here's what to expect:
-✓ Weekly tips on [TOPIC]
-✓ Exclusive deals (subscribers only)
-✓ Early access to new [PRODUCTS/CONTENT]
+Industry average for recovered carts: 5–15% recovery rate. At 3 emails, it consistently outperforms a single reminder.
 
-First step: [QUICK WIN ACTION]
+### 4. Re-Engagement / Win-Back Sequence
 
-[CTA: Get Started]
+**Who triggers it:** Subscribers who haven't opened in 60–90 days
+**Goal:** Reengage them or clean them off the list (inactive subscribers hurt deliverability)
 
-P.S. Reply to this email anytime - I read every message.
+**Structure (3–4 emails):**
+> Write a re-engagement sequence for subscribers who haven't opened in [X days].
+> Email 1: honest, direct — "We've noticed you've been quiet." Remind them what they signed up for and why it's worth staying.
+> Email 2 (5 days later): give them something — your best piece of content, a gift, an offer, or a personalised recommendation.
+> Email 3 (5 days later): the "last chance" email. Be real: "We're going to remove you from our list unless you want to stay. If you do, click here." This binary choice has a surprisingly good activation rate.
+> Email 4 (7 days later, if no action): unsubscribe them automatically. Do not keep emailing people who never engage — it damages your sender reputation.
 
-- [Your Name]
-```
+### 5. Lead Nurture Sequence (B2B)
 
-**Email 2: Value Delivery (Day 2)**
-```
-Subject: Your first win: [Quick Win Resource]
+**Who triggers it:** Anyone who downloads a lead magnet, attends a webinar, or engages with top-of-funnel content
+**Goal:** Build trust and move toward conversion
 
-{{FirstName}}, here's that resource I promised:
+**Structure (5–7 emails over 3–4 weeks):**
+> Build a B2B lead nurture sequence for [business/offer description]. Target: [buyer persona description].
+> The sequence should: deliver educational value consistently, build trust through expertise, address the top 3 objections someone has before buying [product/service], and include 1–2 case studies or social proof emails.
+> End with a clear offer or CTA to book a call / start a trial.
+> Tone: professional and helpful, not pushy. These are educated buyers.
 
-[DELIVER VALUE IMMEDIATELY]
+### 6. Customer Anniversary / Loyalty Sequence
 
-This [RESOURCE] helped [TESTIMONIAL PERSON] achieve [RESULT].
+**Who triggers it:** Anniversary of first purchase, birthday (if captured), or loyalty milestone
+**Goal:** Celebrate the relationship, drive repeat purchase, deepen loyalty
 
-Try it and let me know how it goes.
-
-[CTA: Download Now]
-```
-
-**Email 3: Education (Day 4)**
-```
-Subject: How to get the most out of [Product/Service]
-
-Most people don't know about [HIDDEN FEATURE/BENEFIT].
-
-Here's how to [ACHIEVE OUTCOME]:
-
-[Step-by-step guide]
-
-[CTA: Try It Now]
-```
-
-**Email 4: Social Proof (Day 6)**
-```
-Subject: How [Customer Name] achieved [Impressive Result]
-
-{{FirstName}}, meet [Customer]:
-
-[CASE STUDY / SUCCESS STORY]
-
-You can do this too. Here's how:
-
-[CTA: Get Started]
-```
-
-**Email 5: Offer (Day 7)**
-```
-Subject: Special offer for new members (expires tonight)
-
-You've been with us for a week, {{FirstName}}.
-
-As a thank you, here's [EXCLUSIVE OFFER]:
-
-[OFFER DETAILS]
-
-Valid for 24 hours only.
-
-[CTA: Claim Your Offer]
-```
-
-### Workflow 2: Abandoned Cart Recovery
-
-**Goal:** Recover 15-30% of abandoned carts
-
-**The 3-Email Sequence:**
-
-**Email 1: Reminder (1 hour after abandonment)**
-```
-Subject: You left something behind...
-
-{{FirstName}}, you left these items in your cart:
-
-[PRODUCT IMAGE + NAME + PRICE]
-
-Still interested?
-
-[CTA: Complete Your Purchase]
-
-Cart link: [DIRECT CART LINK]
-
-P.S. We saved your cart for 24 hours.
-```
-
-**Email 2: Social Proof + Guarantee (24 hours)**
-```
-Subject: Is everything okay with your order?
-
-Hi {{FirstName}},
-
-I noticed you didn't complete your purchase. Common concerns:
-
-❌ "Is it worth it?" → [TESTIMONIALS]
-❌ "What if I don't like it?" → [30-DAY GUARANTEE]
-❌ "Can I trust this site?" → [TRUST BADGES: SSL, Reviews, Secure Checkout]
-
-Still have questions? Reply and I'll help.
-
-[CTA: Checkout Securely]
-```
-
-**Email 3: Discount + Urgency (48 hours)**
-```
-Subject: Last chance: 15% off your cart
-
-{{FirstName}}, I really don't want you to miss out.
-
-Here's 15% off everything in your cart:
-
-Use code: COMEBACK15
-
-⏰ Expires in 24 hours
-
-[CTA: Complete Purchase (Save 15%)]
-
-P.S. After this, your cart will be cleared. Don't lose your items!
-```
-
-**Results to Expect:**
-- Email 1: 15-20% recovery rate
-- Email 2: 5-8% recovery rate
-- Email 3: 8-12% recovery rate
-- **Total: 28-40% recovery rate**
-
-### Workflow 3: Post-Purchase Upsell
-
-**Goal:** Increase customer lifetime value
-
-**The Sequence:**
-
-**Email 1: Order Confirmation (Immediate)**
-```
-Subject: Order confirmed! Here's what's next
-
-Thanks for your order, {{FirstName}}!
-
-Order #{{OrderNumber}}
-[ORDER DETAILS]
-
-Estimated delivery: [DATE]
-Track your order: [TRACKING LINK]
-
-[CTA: View Order Status]
-```
-
-**Email 2: Educational Content (3 days after delivery)**
-```
-Subject: Get the most out of your new [Product]
-
-Your [Product] should have arrived!
-
-Here's how to get amazing results:
-[TIPS, TUTORIALS, BEST PRACTICES]
-
-[CTA: Watch Tutorial]
-```
-
-**Email 3: Cross-Sell (7 days after delivery)**
-```
-Subject: People who bought [Product A] also love [Product B]
-
-{{FirstName}}, enjoying your [Product A]?
-
-Customers who bought [Product A] also bought:
-
-[COMPLEMENTARY PRODUCT 1] - [BENEFIT]
-[COMPLEMENTARY PRODUCT 2] - [BENEFIT]
-[COMPLEMENTARY PRODUCT 3] - [BENEFIT]
-
-[CTA: Shop Recommendations]
-```
-
-**Email 4: Review Request (14 days)**
-```
-Subject: How's your [Product] working out?
-
-It's been 2 weeks since your [Product] arrived.
-
-Mind sharing your experience? Your feedback helps other customers make informed decisions.
-
-[CTA: Leave a Review] (Takes 60 seconds)
-
-P.S. As a thank you, we'll send you a 10% off coupon for your next purchase.
-```
-
-### Workflow 4: Win-Back Campaign (Inactive Subscribers)
-
-**Goal:** Re-engage dormant subscribers before they're lost forever
-
-**The 4-Email Re-Engagement Sequence:**
-
-**Email 1: We Miss You (60 days inactive)**
-```
-Subject: {{FirstName}}, we miss you!
-
-It's been a while since we've heard from you.
-
-Have we been sending too many emails? Wrong content?
-
-Let us know what you'd like to see:
-
-[SURVEY: Content preferences]
-
-Or, if you'd prefer to hear from us less often:
-[LINK: Update frequency preferences]
-
-Still want to stay in touch?
-[CTA: Yes, Keep Me Subscribed]
-```
-
-**Email 2: Special Offer (75 days inactive)**
-```
-Subject: Come back? Here's 25% off to sweeten the deal
-
-{{FirstName}}, we really want you back.
-
-Here's 25% off your next purchase:
-
-Code: COMEBACK25
-
-Valid for 7 days only.
-
-[CTA: Shop Now (Save 25%)]
-
-Not interested? [Unsubscribe link]
-```
-
-**Email 3: Final Chance (90 days inactive)**
-```
-Subject: Last email - should we stay in touch?
-
-{{FirstName}}, this is our last email.
-
-If you'd like to keep hearing from us, click below:
-
-[CTA: Yes, Keep Me Subscribed]
-
-If not, no hard feelings. We'll automatically unsubscribe you in 7 days.
-
-Thanks for being part of our community.
-```
-
-**Email 4: Goodbye (97 days inactive, if no action)**
-```
-Subject: Goodbye, {{FirstName}}
-
-We haven't heard from you, so we're saying goodbye.
-
-You've been unsubscribed from our email list.
-
-Changed your mind? You can always resubscribe:
-
-[LINK: Resubscribe]
-
-We wish you all the best!
-```
+> Write a customer anniversary email for someone who purchased from us exactly one year ago.
+> Make it: personal and warm, not transactional. Celebrate their milestone. Optionally include a surprise reward (discount, exclusive content, or early access). Make them feel valued — not like a number in a database.
 
 ---
 
-## 3. AI-Powered Workflow Design (5 minutes)
+## 5.3 Behavioural Triggers — Advanced Automation
 
-### Using ChatGPT to Build Workflows
+Beyond time-based sequences, behaviour-triggered emails respond to specific actions subscribers take.
 
-**Prompt: Complete Workflow Builder**
+**Common behavioural triggers:**
 
-```
-Design a complete email automation workflow for:
+| Trigger | Email |
+|---|---|
+| Visited pricing page but didn't buy | "Have questions about [product]?" |
+| Downloaded specific resource | Follow-up with related resource |
+| Viewed product 3+ times without buying | Personalised product email |
+| Reached loyalty milestone (100th order) | Reward email |
+| Hasn't logged in for 30 days (SaaS) | Re-engagement / feature highlight |
+| Just completed onboarding step | "Next step" email |
 
-Trigger event: [WHAT STARTS THE WORKFLOW]
-Business type: [E-COMMERCE / B2B / SERVICE]
-Goal: [CONVERSIONS / ENGAGEMENT / RETENTION]
-Customer segment: [WHO THIS IS FOR]
-Timeline: [DURATION OF WORKFLOW]
-
-Provide:
-1. Workflow name and objective
-2. Entry criteria (who enters this workflow)
-3. Exit criteria (when they leave workflow)
-4. Complete email sequence with:
-   - Email number and timing
-   - Subject line
-   - Key message summary
-   - Primary CTA
-   - Branching logic (if/then conditions)
-5. Success metrics to track
-6. Optimization opportunities
-```
-
-**Example AI-Generated Workflow:**
-
-**Workflow: Free Trial Conversion (SaaS)**
-
-**Trigger:** User signs up for 14-day free trial  
-**Goal:** Convert to paid customer  
-**Exit Criteria:** Converts to paid OR trial expires  
-
-**Sequence:**
-
-**Day 0: Welcome + Activation**
-- Subject: "Welcome to [Product]! Get started in 5 minutes"
-- Goal: Complete profile setup
-- Branch: IF setup completed → Email 2 | IF NOT → Reminder email after 24 hours
-
-**Day 1: Quick Win**
-- Subject: "Your first [Result] in under 10 minutes"
-- Goal: Achieve first meaningful outcome
-- Branch: IF completed → Email 3 | IF NOT → Educational email
-
-**Day 3: Feature Education**
-- Subject: "The #1 feature our users love (you'll love it too)"
-- Goal: Engage with key feature
-- Branch: IF used feature → Email 4 | IF NOT → Alternative feature demo
-
-**Day 7: Halfway Check-In**
-- Subject: "You're halfway through your trial - here's what's next"
-- Goal: Gauge engagement, offer help
-- Branch: IF high engagement → Upgrade email | IF low engagement → Support email
-
-**Day 10: Social Proof**
-- Subject: "How [Company] achieved [Result] with [Product]"
-- Goal: Build confidence with case study
-- CTA: Book demo with sales
-
-**Day 12: Upgrade Offer**
-- Subject: "Upgrade now and save 20%"
-- Goal: Convert to paid
-- Branch: IF upgraded → Onboarding workflow | IF NOT → Email continues
-
-**Day 14: Final Day**
-- Subject: "Your trial expires tonight - don't lose your progress"
-- Goal: Last chance conversion
-- Branch: IF upgraded → Success | IF NOT → Downgrade to free tier + nurture
-
-### Workflow Optimization with AI
-
-**Prompt: Optimize Existing Workflow**
-
-```
-Analyze this email automation workflow and suggest improvements:
-
-[PASTE YOUR WORKFLOW]
-
-Current performance:
-- Open rates: [X%]
-- Click rates: [X%]
-- Conversion rate: [X%]
-- Unsubscribe rate: [X%]
-
-Goals:
-- Increase conversions by X%
-- Reduce unsubscribes
-- Improve engagement
-
-Provide:
-1. What's working well
-2. What needs improvement
-3. Specific recommendations for:
-   - Subject lines
-   - Email timing
-   - Content/messaging
-   - CTAs
-   - Branching logic
-4. A/B test ideas
-5. Expected impact of changes
-```
+**Setting up a browse-abandonment flow:**
+> Write a behavioural email for someone who visited [specific page — e.g., pricing, a specific product] multiple times but hasn't converted.
+> This email should: acknowledge their interest without being creepy, address the most likely concern that's holding them back, provide social proof specific to [this product/service], and make the CTA extremely low-friction.
 
 ---
 
-## 4. Advanced Automation Strategies (4 minutes)
+## 5.4 Writing Automation Emails That Don't Feel Automated
 
-### Lead Scoring Automation
+The biggest failure in email automation is emails that read like they were written by a robot. A few principles:
 
-**Concept:** Assign points based on actions, send relevant emails based on score
+**1. Write to one person**
+Every automation email should feel like it was sent specifically to the reader. Use "you" throughout. Avoid "subscribers" or "customers" inside the email.
 
-**Scoring Example:**
-- Email open: +5 points
-- Email click: +10 points
-- Visited pricing page: +20 points
-- Downloaded white paper: +15 points
-- Requested demo: +50 points
+**2. Reference the specific trigger**
+"I noticed you downloaded our guide on [X]" lands better than a generic "I wanted to reach out."
 
-**Automation Rules:**
-- Score 0-25: Educational nurture emails (weekly)
-- Score 26-50: Case studies + soft sell (2x/week)
-- Score 51-75: Product demos + sales emails (3x/week)
-- Score 76+: Sales team notification + personalized outreach
+**3. Vary the sending name**
+Consider using a real person's name as the sender for nurture sequences (e.g., "Sarah from [Company]") rather than just the brand name. Open rates on named-sender emails are typically higher in B2B contexts.
 
-**AI Prompt: Lead Scoring Model**
+**4. Use plain text emails for personal sequences**
+Highly designed HTML emails signal "broadcast." Plain text (or lightly formatted) signals "personal message." For nurture sequences, this often outperforms polished templates.
 
-```
-Create a lead scoring model for:
+**5. Let the logic be honest**
+> "You downloaded our pricing guide, so I wanted to follow up" is transparent and acceptable.
+> "As a valued customer" when you've never interacted with them feels hollow.
 
-Business: [B2B / B2C]
-Sales cycle: [LENGTH]
-Average deal size: [$XXX]
-Key conversion actions: [LIST ACTIONS]
-
-Provide:
-1. Point values for each action
-2. Score tiers (low, medium, high, hot)
-3. Email strategy for each tier
-4. When to notify sales team
-5. Automated workflow for each tier
-```
-
-### Multi-Channel Automation
-
-**Integrate Email with:**
-- **SMS:** Send text for time-sensitive (cart abandonment, flash sales)
-- **Push Notifications:** Re-engage mobile app users
-- **Retargeting Ads:** Show ads to email clickers who didn't convert
-- **Direct Mail:** Send physical mail to high-value prospects
-
-**Example Multi-Channel Workflow:**
-
-**Trigger:** High-value cart abandonment ($500+)
-
-**Channel 1: Email (1 hour later)**
-→ Reminder email with cart contents
-
-**Channel 2: SMS (3 hours later, if email not opened)**
-→ "Your cart expires soon! Complete checkout: [LINK]"
-
-**Channel 3: Retargeting Ad (24 hours later, if no purchase)**
-→ Show Facebook/Instagram ad with cart items
-
-**Channel 4: Email with Discount (48 hours later)**
-→ "Last chance: 15% off your cart"
-
-**Result:** 40-50% recovery rate (vs. 20-30% email-only)
+**Humanising automation prompt:**
+> Here's an automation email I've drafted: [paste email].
+> Rewrite it to feel more like a one-to-one message and less like an automated template. Make it: conversational, specific to the trigger (reference what they did), and human in tone. Remove any corporate language. Keep the core message but change the feel entirely.
 
 ---
 
-## 5. Automation Analytics & Optimization (2 minutes)
+## 5.5 Deliverability — Keeping Your Emails Out of Spam
 
-### Key Metrics to Track
+Automation only works if your emails land in the inbox. Deliverability is increasingly important in 2025.
 
-**Workflow-Level Metrics:**
-- **Completion Rate:** % who complete entire workflow
-- **Conversion Rate:** % who achieve goal
-- **Revenue per Subscriber:** Total revenue / subscribers in workflow
-- **Time to Convert:** Average days from entry to conversion
+**Key deliverability factors:**
 
-**Email-Level Metrics:**
-- **Open Rate:** Track by email position in sequence
-- **Click Rate:** Which emails drive most engagement
-- **Unsubscribe Rate:** Where people leave workflow
-- **Conversion Rate:** Which emails drive purchases
+**Authentication:** Set up SPF, DKIM, and DMARC records for your sending domain. If your platform doesn't prompt you to do this, do it manually — Google and Yahoo now require it for bulk senders.
 
-### Optimization Checklist
+**Sender reputation:** Your domain builds a reputation based on engagement signals. High opens/clicks = good. High unsubscribes/spam complaints = bad.
 
-**Monthly Review:**
-- [ ] Check workflow completion rates
-- [ ] Identify drop-off points
-- [ ] A/B test underperforming emails
-- [ ] Update outdated content/offers
-- [ ] Remove/consolidate low-performing emails
+**List hygiene:** Remove subscribers who haven't engaged in 6+ months. Keeping them hurts your deliverability and increases cost.
 
-**Quarterly Review:**
-- [ ] Compare to industry benchmarks
-- [ ] Refresh workflows entirely if stale
-- [ ] Test new workflow variations
-- [ ] Update customer journey maps
+**Content:** Avoid spam trigger words (Free!, Act now!, $$, 100% guaranteed), all-caps subject lines, and excessive punctuation.
+
+**Deliverability audit prompt:**
+> I'm having [deliverability issue: emails going to spam / lower open rates / bounces]. 
+> My setup: [describe your ESP, sending domain, authentication status].
+> Diagnose the most likely causes of my issue and give me a prioritised action plan to fix it.
+
+---
+
+## 5.6 Measuring Automation Performance
+
+Unlike broadcast emails that are measured once, automations should be measured continuously.
+
+**Key metrics per automation type:**
+
+| Automation | Primary Metric | Secondary Metrics |
+|---|---|---|
+| Welcome Sequence | Engagement rate through sequence | Completion rate, conversion from sequence |
+| Post-Purchase | Repeat purchase rate | Product satisfaction signals |
+| Abandoned Cart | Recovery rate | Revenue recovered per month |
+| Re-Engagement | Re-activation rate | List cleaned (inactive removed) |
+| Lead Nurture | Conversion to sale/demo | Time-to-conversion |
+
+**Automation review prompt:**
+> Here's my [sequence name] automation performance data [paste metrics per email: send, open, click, unsubscribe rates].
+> Which emails are performing below expectations? What do the drop-off points tell me about where I'm losing subscribers? Give me 3 specific improvements to test.
+
+---
+
+## Course Summary
+
+You've completed AI for Email Marketing. Here's what you've built:
+
+| Module | Core Skill |
+|---|---|
+| 1: Email Marketing Strategy with AI | List growth, program structure, platform selection, goals |
+| 2: AI-Powered Email Writing | Subject lines, AIDA/PAS, welcome sequences, newsletters |
+| 3: Segmentation & Personalization | Segments, dynamic content, predictive AI, send time optimisation |
+| 4: A/B Testing & Optimization | Test design, statistical validity, result interpretation |
+| 5: Email Automation Workflows | 6 essential automations, behavioural triggers, deliverability |
 
 ---
 
 ## Key Takeaways
 
-✅ **Automation generates 320% more revenue** - Set it up once, earn forever  
-✅ **Welcome series are essential** - 4-5x higher engagement  
-✅ **Cart recovery = easy wins** - 15-30% recovery rate  
-✅ **AI designs better workflows** - Leverage prompts to build faster  
-✅ **Review and optimize** - Monthly check-ins compound gains  
+- Email automation runs 24/7 and accounts for **30–40% of email revenue** with a fraction of the production effort
+- The **6 essential automations:** welcome, post-purchase, abandoned cart, re-engagement, lead nurture, loyalty
+- **Behavioural triggers** are more powerful than time-based ones — respond to what subscribers actually do
+- Automation emails fail when they read like automation — write to one person, reference the trigger, vary format
+- **Deliverability** is non-negotiable: set up SPF, DKIM, DMARC, and maintain list hygiene
+- Review automation performance monthly — drop-off points tell you where to improve
 
 ---
 
-## Action Steps
+## Congratulations!
 
-1. **Build welcome series** - Start with 3-5 emails
-2. **Set up cart abandonment** - If you have e-commerce
-3. **Create win-back campaign** - Re-engage inactive subscribers
-4. **Implement lead scoring** - For B2B or high-ticket sales
-5. **Monitor and optimize** - Review monthly, improve continuously
+You've completed **Email Marketing with AI**. Take the final quiz to earn your certificate.
 
 ---
 
-## Resources Included
-
-📋 **Workflow Templates Library (15+ workflows)**  
-📋 **Email Sequence Swipe File**  
-📋 **Lead Scoring Calculator**  
-📋 **Automation Checklist**  
-📋 **AI Workflow Prompts (20+ prompts)**  
-
----
-
-## Course Conclusion
-
-Congratulations! You've completed Email Marketing with AI.
-
-**You now know how to:**
-✅ Develop data-driven email strategies  
-✅ Write compelling copy that converts  
-✅ Segment and personalize at scale  
-✅ Test and optimize systematically  
-✅ Automate workflows that run 24/7  
-
-**Next Steps:**
-1. Apply these strategies to your business
-2. Start with one workflow this week
-3. Test, measure, optimize
-4. Join our community for ongoing support
-
-**Your email marketing will never be the same!** 🚀
-
----
-
-## Bonus Resources
-
-📧 **100+ Email Templates**  
-📧 **Subject Line Swipe File (500+ examples)**  
-📧 **AI Prompts Master Library (100+ prompts)**  
-📧 **Email Marketing Checklist**  
-📧 **Private Community Access**  
-
-**Download all resources from your course dashboard.**
-
----
-
-**Congratulations on completing the course!**  
-**Now go build email campaigns that convert!** 💪
+*Take the Course Final Quiz to earn your certificate.*
