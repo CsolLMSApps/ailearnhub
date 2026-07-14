@@ -2,6 +2,7 @@
 // Dynamic course page with functional purchase flow
 // PATCHED: Added FALLBACK_MODULES so curriculum always renders even if DB is empty
 
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
@@ -130,6 +131,204 @@ const DELIVERABLES: Record<string, string[]> = {
   'ai-tools-productivity': ['AI Tool Stack Builder', '50+ Prompt Templates', 'Automation Workflow Templates (10+)', 'ROI Calculator & Time Tracking Sheets', 'Completion Certificate'],
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   SEO — per-course metadata and keyword-rich content
+   Keywords sourced from verified high-traffic search terms only.
+───────────────────────────────────────────────────────────────────────────── */
+const COURSE_SEO: Record<string, {
+  metaTitle: string
+  metaDescription: string
+  keywords: string[]
+  aboutParagraph: string
+  skillTags: string[]
+}> = {
+  'ai-for-beginners': {
+    metaTitle: 'AI for Beginners (Zero to Hero) | AI Certification for Professionals 2026 | AI Learn Hub',
+    metaDescription: 'The essential AI upskilling for business course for non-technical professionals. Learn AI for business strategy, implementing AI in business operations, and AI ethics for business leaders. Earn your AI certification for professionals 2026.',
+    keywords: [
+      'AI for career growth',
+      'AI upskilling for business',
+      'AI certification for professionals 2026',
+      'Predictive analytics training for beginners',
+      'AI for business managers certification',
+      'Enterprise AI strategy for non-technical teams',
+      'AI for business strategy',
+      'implementing AI in business operations',
+      'AI ethics for business leaders',
+      'Data governance and AI ethics for business',
+    ],
+    aboutParagraph: 'Whether you are pursuing AI for career growth or building an Enterprise AI strategy for non-technical teams, this course gives you a clear, jargon-free foundation. Designed as the ideal Predictive analytics training for beginners, you will explore AI for business managers certification content covering AI for business strategy, Data governance and AI ethics for business, and practical frameworks for implementing AI in business operations — all without writing a single line of code.',
+    skillTags: [
+      'AI for career growth',
+      'AI upskilling for business',
+      'AI for business strategy',
+      'AI ethics for business leaders',
+      'Enterprise AI strategy for non-technical teams',
+      'Data governance and AI ethics for business',
+      'AI for business managers certification',
+      'implementing AI in business operations',
+    ],
+  },
+
+  'chatgpt-mastery': {
+    metaTitle: 'ChatGPT Mastery for Professionals | Advanced ChatGPT Prompts | AI Learn Hub',
+    metaDescription: 'Master advanced ChatGPT prompts for professionals and build AI workflows for operational efficiency. Learn NLP for business professionals, data-driven decision making with AI, and AI for business operations optimization. AI certification for professionals 2026.',
+    keywords: [
+      'advanced ChatGPT prompts for professionals',
+      'AI upskilling for business',
+      'AI certification for professionals 2026',
+      'AI for career growth',
+      'AI for business operations optimization',
+      'AI workflows for operational efficiency',
+      'NLP for business professionals',
+      'text analytics for non-coders',
+      'data-driven decision making with AI',
+    ],
+    aboutParagraph: 'Built for professionals who want to go beyond the basics, this course covers advanced ChatGPT prompts for professionals across every business function. You will learn AI for business operations optimization — from writing prompts that deliver consistent results to building AI workflows for operational efficiency that save hours every week. Designed for NLP for business professionals and text analytics for non-coders alike, this is the most practical AI upskilling for business program available, supporting data-driven decision making with AI throughout.',
+    skillTags: [
+      'advanced ChatGPT prompts for professionals',
+      'AI workflows for operational efficiency',
+      'AI for business operations optimization',
+      'NLP for business professionals',
+      'text analytics for non-coders',
+      'data-driven decision making with AI',
+      'AI upskilling for business',
+    ],
+  },
+
+  'prompt-engineering-mastery': {
+    metaTitle: 'Prompt Engineering Mastery | Prompt Engineering for Business | AI Learn Hub',
+    metaDescription: 'Master prompt engineering for business and build your complete AI prompt vocabulary. Learn advanced ChatGPT prompts for professionals — the essential AI upskilling for business skill for 2026. Ideal for NLP for business professionals.',
+    keywords: [
+      'Prompt engineering for business',
+      'advanced ChatGPT prompts for professionals',
+      'AI prompt vocabulary',
+      'AI upskilling for business',
+      'AI certification for professionals 2026',
+      'AI for career growth',
+      'NLP for business professionals',
+    ],
+    aboutParagraph: 'Prompt engineering for business is the most in-demand AI skill of 2026. This course teaches you a complete AI prompt vocabulary — from basic structure to the advanced ChatGPT prompts for professionals used by top-performing teams. Whether you are pursuing AI upskilling for business, building skills as NLP for business professionals, or preparing for AI certification for professionals 2026, this course gives you the exact frameworks to get consistent, high-quality results from any AI model.',
+    skillTags: [
+      'Prompt engineering for business',
+      'advanced ChatGPT prompts for professionals',
+      'AI prompt vocabulary',
+      'NLP for business professionals',
+      'AI upskilling for business',
+      'AI for career growth',
+    ],
+  },
+
+  'email-marketing-ai': {
+    metaTitle: 'Email Marketing with AI | AI Marketing Automation Tools | AI Learn Hub',
+    metaDescription: 'Master AI-driven marketing strategy and AI marketing automation tools. Learn AI for customer lifetime value (CLV) prediction, sentiment analysis for brand monitoring, machine learning for marketing attribution, and data-driven decision making with AI.',
+    keywords: [
+      'AI-driven marketing strategy',
+      'AI marketing automation tools',
+      'AI for customer lifetime value (CLV) prediction',
+      'sentiment analysis for brand monitoring',
+      'AI for churn prediction',
+      'Machine learning for marketing attribution',
+      'Customer churn prediction training',
+      'Business automation workflow certification',
+      'forecasting with AI',
+      'data-driven decision making with AI',
+      'AI workflows for operational efficiency',
+    ],
+    aboutParagraph: 'This course puts the most powerful AI-driven marketing strategy techniques directly in your hands. You will master AI marketing automation tools to build email campaigns that convert, apply machine learning for marketing attribution to prove ROI, and use AI for customer lifetime value (CLV) prediction to grow revenue. Topics include sentiment analysis for brand monitoring, AI for churn prediction, Customer churn prediction training, and forecasting with AI — all within practical email workflows. The course earns you a Business automation workflow certification and covers AI workflows for operational efficiency across your entire email program.',
+    skillTags: [
+      'AI-driven marketing strategy',
+      'AI marketing automation tools',
+      'AI for customer lifetime value (CLV) prediction',
+      'sentiment analysis for brand monitoring',
+      'Machine learning for marketing attribution',
+      'AI for churn prediction',
+      'data-driven decision making with AI',
+      'forecasting with AI',
+      'Business automation workflow certification',
+    ],
+  },
+
+  'ai-tools-productivity': {
+    metaTitle: 'AI Tools for Productivity | AI for Business Operations Optimization | AI Learn Hub',
+    metaDescription: 'Master AI for business operations optimization and build AI workflows for operational efficiency. The leading No-code machine learning courses for business — earn your Business automation workflow certification and save 10–20 hours a week.',
+    keywords: [
+      'AI for business operations optimization',
+      'AI workflows for operational efficiency',
+      'Business automation workflow certification',
+      'AI upskilling for business',
+      'AI for career growth',
+      'AI for business managers certification',
+      'Enterprise AI strategy for non-technical teams',
+      'implementing AI in business operations',
+      'No-code machine learning courses for business',
+      'data-driven decision making with AI',
+    ],
+    aboutParagraph: 'This is the definitive course for professionals focused on AI for business operations optimization. You will build real AI workflows for operational efficiency using no-code tools — making it one of the top No-code machine learning courses for business available today. Whether you are pursuing AI for business managers certification, designing an Enterprise AI strategy for non-technical teams, or seeking the best AI upskilling for business program, this course delivers. It covers implementing AI in business operations, data-driven decision making with AI, and earns you a Business automation workflow certification.',
+    skillTags: [
+      'AI for business operations optimization',
+      'AI workflows for operational efficiency',
+      'No-code machine learning courses for business',
+      'implementing AI in business operations',
+      'AI for business managers certification',
+      'Enterprise AI strategy for non-technical teams',
+      'data-driven decision making with AI',
+      'Business automation workflow certification',
+    ],
+  },
+
+  'social-media-marketing-ai': {
+    metaTitle: 'Social Media Marketing with AI | AI-Driven Marketing Strategy | AI Learn Hub',
+    metaDescription: 'Master AI-driven marketing strategy and AI marketing automation tools for social media. Learn sentiment analysis for brand monitoring, machine learning for marketing attribution, forecasting with AI, and data-driven decision making with AI.',
+    keywords: [
+      'AI-driven marketing strategy',
+      'AI marketing automation tools',
+      'sentiment analysis for brand monitoring',
+      'Machine learning for marketing attribution',
+      'data-driven decision making with AI',
+      'forecasting with AI',
+    ],
+    aboutParagraph: 'This course arms marketers with cutting-edge AI-driven marketing strategy skills for every major social platform. You will master AI marketing automation tools to scale content creation, use sentiment analysis for brand monitoring across channels, and apply machine learning for marketing attribution to prove the value of every campaign. Learn data-driven decision making with AI and forecasting with AI for smarter planning — and build systems that grow your brand consistently and efficiently.',
+    skillTags: [
+      'AI-driven marketing strategy',
+      'AI marketing automation tools',
+      'sentiment analysis for brand monitoring',
+      'Machine learning for marketing attribution',
+      'data-driven decision making with AI',
+      'forecasting with AI',
+    ],
+  },
+}
+
+export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
+  const { slug } = await params
+  const supabase = await createServerSupabaseClient()
+  const { data: course } = await supabase
+    .from('courses')
+    .select('title, short_description')
+    .eq('slug', slug)
+    .eq('is_published', true)
+    .single()
+
+  const seo = COURSE_SEO[slug]
+
+  return {
+    title: seo?.metaTitle ?? `${course?.title ?? 'Course'} | AI Learn Hub`,
+    description: seo?.metaDescription ?? course?.short_description ?? '',
+    keywords: seo?.keywords ?? [],
+    openGraph: {
+      title: seo?.metaTitle ?? course?.title,
+      description: seo?.metaDescription ?? course?.short_description ?? '',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seo?.metaTitle ?? course?.title,
+      description: seo?.metaDescription ?? course?.short_description ?? '',
+    },
+  }
+}
+
 export default async function CoursePage({ params }: CoursePageProps) {
   const { slug } = await params
   const supabase = await createServerSupabaseClient()
@@ -165,6 +364,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
   const learningOutcomes = LEARNING_OUTCOMES[slug] || []
   const deliverables = DELIVERABLES[slug] || []
   const price = (course.price_usd / 100).toFixed(0)
+  const seo = COURSE_SEO[slug] ?? null
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -249,6 +449,23 @@ export default async function CoursePage({ params }: CoursePageProps) {
                         )}
                       </div>
                     </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Skills & Topics */}
+            {seo && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">Skills &amp; Topics Covered</h2>
+                <p className="text-gray-600 leading-relaxed mb-6">{seo.aboutParagraph}</p>
+                <div className="flex flex-wrap gap-2">
+                  {seo.skillTags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 bg-orange-50 text-[#FF6F00] rounded-full text-sm font-medium border border-orange-100"
+                    >
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>

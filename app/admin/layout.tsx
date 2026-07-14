@@ -18,6 +18,7 @@ const navLinks = [
   { href: '/admin/modules', label: '🎓 Modules' },
   { href: '/admin/purchases', label: '💳 Purchases' },
   { href: '/admin/quiz-results', label: '📝 Quiz Results' },
+  { href: '/admin/quiz', label: '❓ Quiz Editor' },
   { href: '/admin/admin-access', label: '🔑 Admin Access' },
   { href: '/admin/system-health', label: '🩺 System Health' },
 ]

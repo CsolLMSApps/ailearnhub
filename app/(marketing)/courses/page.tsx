@@ -1,9 +1,37 @@
 // app/(marketing)/courses/page.tsx
 // Courses listing page with custom SVG icons
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+
+export const metadata: Metadata = {
+  title: 'AI Courses | AI Certification for Professionals 2026 | AI Learn Hub',
+  description: 'Browse expert-led AI courses covering AI upskilling for business, prompt engineering for business, AI-driven marketing strategy, AI workflows for operational efficiency, and more. Earn your AI certification for professionals 2026.',
+  keywords: [
+    'AI for career growth',
+    'AI upskilling for business',
+    'AI certification for professionals 2026',
+    'Prompt engineering for business',
+    'advanced ChatGPT prompts for professionals',
+    'AI-driven marketing strategy',
+    'AI marketing automation tools',
+    'AI for business operations optimization',
+    'AI workflows for operational efficiency',
+    'data-driven decision making with AI',
+    'AI for business managers certification',
+    'Enterprise AI strategy for non-technical teams',
+    'No-code machine learning courses for business',
+    'Business automation workflow certification',
+    'NLP for business professionals',
+  ],
+  openGraph: {
+    title: 'AI Courses | AI Certification for Professionals 2026 | AI Learn Hub',
+    description: 'Expert-led AI courses for business professionals. Master prompt engineering, AI marketing strategy, productivity automation, and more.',
+    type: 'website',
+  },
+}
 
 export default async function CoursesPage() {
   const supabase = await createServerSupabaseClient()
