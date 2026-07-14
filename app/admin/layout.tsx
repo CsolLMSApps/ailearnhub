@@ -19,6 +19,7 @@ const navLinks = [
   { href: '/admin/purchases', label: '💳 Purchases' },
   { href: '/admin/quiz-results', label: '📝 Quiz Results' },
   { href: '/admin/admin-access', label: '🔑 Admin Access' },
+  { href: '/admin/system-health', label: '🩺 System Health' },
 ]
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
