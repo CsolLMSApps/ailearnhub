@@ -2,6 +2,7 @@
 
 import { adminFetchAll } from '@/lib/supabase/admin'
 import CreateCourseForm from '@/components/admin/CreateCourseForm'
+import CourseList from '@/components/admin/CourseList'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,55 +55,7 @@ export default async function AdminCoursesPage() {
 
       <CreateCourseForm />
 
-      <div className="space-y-4">
-        {courseStats.map((c: any) => (
-          <div key={c.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">{c.title}</h2>
-                <p className="text-xs text-gray-400 mt-0.5">{c.slug} · {c.level} · {c.total_modules} modules</p>
-              </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-green-600">${(c.revenue / 100).toFixed(2)}</p>
-                <p className="text-xs text-gray-400">total revenue</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-orange-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-[#FF6F00]">{c.enrollments}</p>
-                <p className="text-xs text-gray-500 mt-0.5">Enrollments</p>
-              </div>
-              <div className="bg-blue-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-600">{c.avgProgress}%</p>
-                <p className="text-xs text-gray-500 mt-0.5">Avg Progress</p>
-              </div>
-              <div className="bg-purple-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-purple-600">{c.quizPasses}</p>
-                <p className="text-xs text-gray-500 mt-0.5">Quiz Passes</p>
-              </div>
-              <div className="bg-green-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-green-600">{c.certificates}</p>
-                <p className="text-xs text-gray-500 mt-0.5">Certificates ({c.completionRate}%)</p>
-              </div>
-            </div>
-
-            {/* Progress bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-xs text-gray-500 mb-1">
-                <span>Completion rate</span>
-                <span>{c.completionRate}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-green-500 h-2 rounded-full transition-all"
-                  style={{ width: `${c.completionRate}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <CourseList courses={courseStats} />
     </div>
   )
 }
