@@ -406,6 +406,24 @@ export default async function CoursePage({ params }: CoursePageProps) {
           {/* Main */}
           <div className="lg:col-span-2 space-y-10">
 
+            {/* About This Course */}
+            {seo && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Course</h2>
+                <p className="text-gray-700 leading-relaxed text-base">{seo.aboutParagraph}</p>
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {seo.skillTags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 bg-orange-50 text-[#FF6F00] rounded-full text-sm font-medium border border-orange-100"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* What You Will Learn */}
             {learningOutcomes.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
@@ -449,23 +467,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
                         )}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {/* Skills & Topics */}
-            {seo && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">Skills &amp; Topics Covered</h2>
-                <p className="text-gray-600 leading-relaxed mb-6">{seo.aboutParagraph}</p>
-                <div className="flex flex-wrap gap-2">
-                  {seo.skillTags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1.5 bg-orange-50 text-[#FF6F00] rounded-full text-sm font-medium border border-orange-100"
-                    >
-                      {tag}
-                    </span>
                   ))}
                 </div>
               </div>
