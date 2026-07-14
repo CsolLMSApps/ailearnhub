@@ -52,7 +52,6 @@ Your purchase includes:
 ✓ Lifetime access to all course materials
 ✓ Downloadable resources and templates
 ✓ Certificate of completion
-✓ 30-day money-back guarantee
 
 If you have any questions, just reply to this email.
 

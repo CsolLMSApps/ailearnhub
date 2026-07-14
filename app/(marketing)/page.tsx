@@ -295,7 +295,7 @@ export default function HomePage() {
             </Link>
           </div>
           <p className="text-sm text-gray-400 mt-6">
-            30-day money-back guarantee • Lifetime access • No subscription required
+Lifetime access • No subscription required
           </p>
         </div>
       </section>

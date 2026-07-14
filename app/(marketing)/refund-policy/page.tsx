@@ -21,9 +21,9 @@ export default function RefundPolicyPage() {
           </p>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">24-Hour Money-Back Guarantee</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Refund Policy</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              At AI Learn Hub, we stand behind the quality of our courses. We offer a <strong>24-hour money-back guarantee</strong> on all course purchases.
+              At AI Learn Hub, we stand behind the quality of our courses. You may request a refund within 24 hours of purchase if you meet the eligibility requirements below.
             </p>
           </section>
 

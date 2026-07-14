@@ -265,7 +265,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 </span>
               </div>
               <EnrollButton slug={slug} fullWidth />
-              <p className="text-center text-sm text-gray-500 mt-4">30-day money-back guarantee</p>
+              <p className="text-center text-sm text-gray-500 mt-4">Lifetime access to all content</p>
             </div>
 
             {deliverables.length > 0 && (

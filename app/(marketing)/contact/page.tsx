@@ -256,8 +256,9 @@ export default function ContactPage() {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
               <h3 className="font-bold text-lg mb-2">Can I get a refund?</h3>
               <p className="text-gray-600 text-sm">
-                Yes! We offer a 30-day money-back guarantee on all courses. See our{' '}
-                <Link href="/refund-policy" className="text-[#FF6F00] hover:underline">refund policy</Link>.
+                Please see our{' '}
+                <Link href="/refund-policy" className="text-[#FF6F00] hover:underline">refund policy</Link>{' '}
+                for details on eligibility and how to request a refund.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">

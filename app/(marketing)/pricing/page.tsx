@@ -131,7 +131,7 @@ export default async function PricingPage() {
             <button className="bg-white text-[#FF6F00] font-bold py-4 px-12 rounded-lg hover:bg-gray-100 transition-colors text-lg shadow-lg">
               Get Complete Bundle
             </button>
-            <p className="text-sm mt-4 opacity-90">Limited time offer • 30-day money-back guarantee</p>
+            <p className="text-sm mt-4 opacity-90">Limited time offer • Lifetime access</p>
           </div>
         </div>
 
@@ -149,8 +149,7 @@ export default async function PricingPage() {
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="font-bold text-lg mb-2">What if I'm not satisfied?</h3>
               <p className="text-gray-600">
-                We offer a 30-day money-back guarantee. If you're not completely satisfied, 
-                contact us for a full refund, no questions asked.
+                If you have any concerns about your purchase, please contact our support team and we'll do our best to help.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
