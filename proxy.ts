@@ -8,12 +8,12 @@ export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname === '/privacy-policy')
     return NextResponse.redirect(new URL('/privacy', request.url), 301)
 
-  // Build a mutable copy of request headers.
-  // SECURITY: strip any incoming x-user-email so callers can't forge it.
+  // Mutable copy of request headers.
+  // SECURITY: strip any incoming x-user-email so the client can't forge it.
   const requestHeaders = new Headers(request.headers)
   requestHeaders.delete('x-user-email')
 
-  // Track any cookies that Supabase wants to set (e.g. token refresh)
+  // Collect cookies that Supabase wants to set (e.g. after token refresh)
   const cookiesToSet: Array<{ name: string; value: string; options: any }> = []
 
   const supabase = createServerClient(
@@ -25,29 +25,30 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookies) {
-          // Update the mutable Cookie header so the refreshed token reaches RSCs
-          const parts: string[] = []
+          // Merge refreshed cookies into the mutable Cookie header so RSCs
+          // (admin layout, server components) see the new tokens immediately.
+          const names = new Set(cookies.map(c => c.name))
           const existing = requestHeaders.get('cookie') ?? ''
-          if (existing) {
-            const names = new Set(cookies.map(c => c.name))
-            existing.split(';').map(s => s.trim()).filter(Boolean).forEach(part => {
-              const [name] = part.split('=')
-              if (!names.has(name.trim())) parts.push(part)
-            })
-          }
-          cookies.forEach(({ name, value }) => parts.push(`${name}=${value}`))
-          requestHeaders.set('cookie', parts.join('; '))
+          const kept = existing
+            ? existing.split(';').map(s => s.trim()).filter(s => {
+                const [n] = s.split('=')
+                return s && !names.has(n.trim())
+              })
+            : []
+          cookies.forEach(({ name, value }) => kept.push(`${name}=${value}`))
+          requestHeaders.set('cookie', kept.join('; '))
           cookies.forEach(c => cookiesToSet.push(c))
         },
       },
     }
   )
 
-  // getUser() verifies the JWT server-side (one network call).
-  // This is the single source of truth — we stamp the result into a request
-  // header so the admin layout can trust it without a second Supabase call.
-  const { data: { user } } = await supabase.auth.getUser()
-
+  // getSession() validates the JWT signature locally — no Supabase network call
+  // for fresh tokens. Only calls Supabase when the token needs refreshing.
+  // This avoids competing with the browser client's autoRefreshToken for the
+  // same refresh token on every request (which caused the 1-hour expiry issue).
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
   const path = request.nextUrl.pathname
 
   // Protect /dashboard and /learn
@@ -55,17 +56,17 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Stamp verified user email into request headers.
-  // Admin layout reads this instead of calling Supabase again.
+  // Stamp the verified email into the request so the admin layout can read it
+  // via headers() without making a second Supabase call.
   if (user?.email) {
     requestHeaders.set('x-user-email', user.email)
   }
 
-  // Build response with modified request headers (includes refreshed cookies
-  // in the Cookie header + custom x-user-email)
+  // Build the response, forwarding the modified request headers (updated Cookie
+  // header + x-user-email) to all server components and route handlers.
   const response = NextResponse.next({ request: { headers: requestHeaders } })
 
-  // Also set refreshed cookies on the response so the browser gets them
+  // Write any refreshed cookies to the response so the browser updates them.
   cookiesToSet.forEach(({ name, value, options }) => {
     response.cookies.set(name, value, options)
   })
