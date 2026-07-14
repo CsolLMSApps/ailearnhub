@@ -15,6 +15,7 @@ const navLinks = [
   { href: '/admin/analytics', label: '📈 Analytics' },
   { href: '/admin/users', label: '👥 Users' },
   { href: '/admin/courses', label: '📚 Courses' },
+  { href: '/admin/modules', label: '🎓 Modules' },
   { href: '/admin/purchases', label: '💳 Purchases' },
   { href: '/admin/quiz-results', label: '📝 Quiz Results' },
   { href: '/admin/admin-access', label: '🔑 Admin Access' },
