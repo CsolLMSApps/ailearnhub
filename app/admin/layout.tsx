@@ -44,9 +44,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <Link href="/dashboard" className="text-sm text-gray-300 hover:text-white transition-colors">
                 ← Back to Dashboard
               </Link>
-              <Link href="/auth/signout" className="text-sm text-gray-300 hover:text-red-400 transition-colors">
-                Sign Out
-              </Link>
+              <form action="/auth/signout" method="POST">
+                <button type="submit" className="text-sm text-gray-300 hover:text-red-400 transition-colors">
+                  Sign Out
+                </button>
+              </form>
             </div>
           </div>
         </div>

@@ -117,12 +117,14 @@ export default async function DashboardPage() {
                   Admin Panel
                 </Link>
               )}
-              <Link
-                href="/auth/signout"
-                className="text-sm text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-100"
-              >
-                Sign Out
-              </Link>
+              <form action="/auth/signout" method="POST">
+                <button
+                  type="submit"
+                  className="text-sm text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  Sign Out
+                </button>
+              </form>
             </div>
           </div>
         </div>
