@@ -5,7 +5,13 @@ import ModuleEditorClient from './ModuleEditorClient'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminModulesPage() {
+interface Props {
+  searchParams: Promise<{ courseId?: string }>
+}
+
+export default async function AdminModulesPage({ searchParams }: Props) {
+  const { courseId } = await searchParams
+
   const { data: courses, error: coursesError } = await adminFetchAll(
     'courses',
     'select=id,title,slug,total_modules&order=title.asc'
@@ -21,6 +27,7 @@ export default async function AdminModulesPage() {
       courses={courses ?? []}
       allModules={modules ?? []}
       fetchError={coursesError?.message ?? modulesError?.message ?? null}
+      defaultCourseId={courseId ?? null}
     />
   )
 }

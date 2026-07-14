@@ -23,17 +23,22 @@ interface Props {
   courses: Course[]
   allModules: Module[]
   fetchError: string | null
+  defaultCourseId?: string | null
 }
 
 const initialState = { error: undefined, success: undefined }
 
-export default function ModuleEditorClient({ courses, allModules, fetchError }: Props) {
+export default function ModuleEditorClient({ courses, allModules, fetchError, defaultCourseId }: Props) {
   const [saveState, saveAction, savePending] = useActionState(saveModule, initialState)
   const [deleteState, deleteAction, deletePending] = useActionState(deleteModule, initialState)
 
-  const [selectedCourseId, setSelectedCourseId] = useState<string>(courses[0]?.id ?? '')
+  const [selectedCourseId, setSelectedCourseId] = useState<string>(
+    defaultCourseId && courses.find(c => c.id === defaultCourseId) ? defaultCourseId : (courses[0]?.id ?? '')
+  )
   const [editingModule, setEditingModule] = useState<Module | null>(null)
-  const [isAddingNew, setIsAddingNew] = useState(false)
+  // Auto-open "Add Module" form when arriving from course creation
+  const arrivedFromNewCourse = !!defaultCourseId && allModules.filter(m => m.course_id === defaultCourseId).length === 0
+  const [isAddingNew, setIsAddingNew] = useState(arrivedFromNewCourse)
 
   const formRef = useRef<HTMLFormElement>(null)
 

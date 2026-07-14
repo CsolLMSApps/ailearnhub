@@ -20,6 +20,7 @@ export default function CreateCourseForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [createdCourseId, setCreatedCourseId] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     title: '',
@@ -85,7 +86,8 @@ export default function CreateCourseForm() {
         return
       }
 
-      setSuccess(`Course "${data.course?.title}" created successfully!`)
+      setSuccess(`Course "${data.course?.title}" created! Now add its modules.`)
+      setCreatedCourseId(data.course?.id ?? null)
       setForm({
         title: '', slug: '', short_description: '', long_description: '',
         price_dollars: '', level: 'beginner', category: '',
@@ -279,8 +281,16 @@ export default function CreateCourseForm() {
               </div>
             )}
             {success && (
-              <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3">
-                ✅ {success}
+              <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3 flex items-center justify-between gap-4">
+                <span>✅ {success}</span>
+                {createdCourseId && (
+                  <a
+                    href={`/admin/modules?courseId=${createdCourseId}`}
+                    className="shrink-0 px-4 py-1.5 bg-[#FF6F00] text-white text-xs font-semibold rounded-lg hover:bg-[#e65c00] transition-colors"
+                  >
+                    Add Modules →
+                  </a>
+                )}
               </div>
             )}
 
