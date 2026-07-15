@@ -284,11 +284,19 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
 
           {/* Quiz requirement notice at bottom of module list */}
           {!isCourseComplete && (
-            <div className="px-6 py-4 bg-amber-50 border-t border-amber-100 flex items-center gap-3">
-              <span className="text-amber-500 text-xl">📝</span>
-              <p className="text-sm text-amber-800">
-                <span className="font-bold">Course Final Quiz required</span> — Complete all modules then pass the quiz on Module {lastModuleNumber} to earn your certificate (70% pass mark).
-              </p>
+            <div className="px-6 py-4 bg-amber-50 border-t border-amber-100 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-amber-500 text-xl">📝</span>
+                <p className="text-sm text-amber-800">
+                  <span className="font-bold">Course Final Quiz required</span> — Complete all modules then pass the quiz to earn your certificate.
+                </p>
+              </div>
+              <Link
+                href={`/learn/${slug}/quiz`}
+                className="shrink-0 px-4 py-2 bg-[#FF6F00] text-white text-xs font-bold rounded-lg hover:bg-[#E65100] transition-colors"
+              >
+                Take Quiz →
+              </Link>
             </div>
           )}
         </div>

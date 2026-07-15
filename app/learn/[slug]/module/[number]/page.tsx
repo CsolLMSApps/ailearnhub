@@ -6,7 +6,6 @@ import { notFound, redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { QuizComponent } from '@/components/quiz/QuizComponent'
 import { AutoMarkVisited } from '@/components/AutoMarkVisited'
 import { adminFetch } from '@/lib/supabase/admin'
 import Link from 'next/link'
@@ -180,9 +179,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   </a>
                 </div>
                 <iframe
-                  src={module.content_pdf_url}
-                  className="w-full rounded-xl border border-gray-200 shadow-sm"
-                  style={{ height: '75vh', minHeight: '500px' }}
+                  src={`${module.content_pdf_url}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
+                  className="w-full rounded-xl border border-gray-200 shadow-sm bg-white"
+                  style={{ height: '80vh', minHeight: '600px' }}
                   title={module.title}
                 />
               </div>
@@ -242,55 +241,46 @@ export default async function ModulePage({ params }: ModulePageProps) {
             </div>
             )}
 
-            {/* Course Final Quiz — only on last module */}
-            {isLastModule && quiz && (
-              <div className="bg-gradient-to-br from-orange-50 to-white rounded-xl border-2 border-[#FF6F00] p-8 mb-8">
-                <div className="mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="inline-block px-3 py-1 bg-[#FF6F00] text-white rounded-full text-sm font-bold">
-                      🏆 Course Final Quiz
-                    </span>
+            {/* Final Quiz CTA — last module */}
+            {isLastModule && (
+              <div className="mb-8">
+                {hasPassedQuiz ? (
+                  <div className="bg-green-50 border-2 border-green-400 rounded-xl p-6 text-center">
+                    <p className="text-4xl mb-3">🏆</p>
+                    <h2 className="text-xl font-bold text-green-800 mb-1">Quiz Passed!</h2>
+                    <p className="text-green-700 text-sm mb-4">
+                      You scored {quizResult.percentage}% — your certificate is ready.
+                    </p>
+                    <div className="flex gap-3 justify-center">
+                      <Link
+                        href={`/learn/${slug}/quiz`}
+                        className="px-5 py-2.5 border-2 border-green-500 text-green-700 rounded-lg font-semibold text-sm hover:bg-green-100 transition-colors"
+                      >
+                        Retake Quiz
+                      </Link>
+                      <Link
+                        href={`/learn/${slug}/certificate`}
+                        className="px-5 py-2.5 bg-[#FF6F00] text-white rounded-lg font-semibold text-sm hover:bg-[#E65100] transition-colors"
+                      >
+                        View Certificate →
+                      </Link>
+                    </div>
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                    Test Your Knowledge
-                  </h2>
-                  <p className="text-gray-600">
-                    10 questions covering all 5 modules. Score {quiz.pass_percentage}% or higher to earn your certificate.
-                  </p>
-
-                  {hasPassedQuiz && (
-                    <div className="mt-4 p-4 bg-green-50 border-l-4 border-green-500 rounded">
-                      <p className="text-green-800 font-medium">
-                        ✅ You passed with {quizResult.percentage}%! Your certificate is ready.
-                      </p>
-                      <p className="text-green-700 text-sm mt-1">You can retake to improve your score.</p>
-                    </div>
-                  )}
-
-                  {!hasPassedQuiz && (
-                    <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
-                      <p className="text-blue-800 font-medium">
-                        📝 Complete all modules first, then pass this quiz to earn your certificate.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <QuizComponent
-                  slug={slug}
-                  moduleNumber={moduleNumber}
-                  questions={quiz.questions.questions || quiz.questions}
-                  passPercentage={quiz.pass_percentage}
-                />
-              </div>
-            )}
-
-            {/* Lock notice on last module if quiz not passed */}
-            {isLastModule && quiz && !hasPassedQuiz && (
-              <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                <p className="text-amber-800 font-medium text-sm">
-                  🔒 Pass the Course Final Quiz above to complete the course and get your certificate
-                </p>
+                ) : (
+                  <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-[#FF6F00] rounded-xl p-8 text-center">
+                    <p className="text-5xl mb-4">📝</p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Ready for the Final Quiz?</h2>
+                    <p className="text-gray-600 mb-6">
+                      Test your knowledge across all modules. Score {quiz?.pass_percentage ?? 70}% or higher to earn your certificate.
+                    </p>
+                    <Link
+                      href={`/learn/${slug}/quiz`}
+                      className="inline-flex items-center gap-2 px-8 py-3 bg-[#FF6F00] text-white rounded-xl font-bold text-lg hover:bg-[#E65100] transition-colors shadow-md"
+                    >
+                      Take Final Quiz →
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 
