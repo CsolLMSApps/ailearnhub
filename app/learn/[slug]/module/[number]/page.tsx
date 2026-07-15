@@ -167,7 +167,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
           {/* PDF content — rendered via PDF.js viewer (no browser chrome/borders) */}
           {module.content_pdf_url ? (
             <iframe
-              src={`/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+              src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
               style={{ width: '100%', height: '88vh', minHeight: '680px', border: 'none', display: 'block' }}
               title={module.title}
             />

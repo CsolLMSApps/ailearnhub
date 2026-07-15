@@ -114,7 +114,7 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
             {module.content_pdf_url && (
               <div className="mb-8">
                 <iframe
-                  src={`/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+                  src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
                   style={{ width: '100%', height: '85vh', minHeight: '650px', border: 'none', display: 'block' }}
                   title={module.title}
                 />
