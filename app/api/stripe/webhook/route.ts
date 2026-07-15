@@ -40,15 +40,57 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
 
     try {
-      const userId = session.metadata?.userId
-      const courseId = session.metadata?.courseId
+      const userId    = session.metadata?.userId
+      const isBundle  = session.metadata?.isBundle === 'true'
+      const courseIds = session.metadata?.courseIds?.split(',').filter(Boolean) ?? []
+      const courseId  = session.metadata?.courseId // single-course purchases
 
-      if (!userId || !courseId) {
-        console.error('Missing metadata in webhook:', session.metadata)
-        return NextResponse.json(
-          { error: 'Missing required metadata' },
-          { status: 400 }
-        )
+      if (!userId) {
+        console.error('Missing userId in webhook metadata:', session.metadata)
+        return NextResponse.json({ error: 'Missing userId' }, { status: 400 })
+      }
+
+      // ── Bundle: insert a purchase + progress row for every course ──────────
+      if (isBundle && courseIds.length > 0) {
+        for (const cid of courseIds) {
+          // Skip if already purchased
+          const { data: existing } = await supabase
+            .from('purchases')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('course_id', cid)
+            .eq('status', 'completed')
+            .single()
+
+          if (existing) continue
+
+          await supabase.from('purchases').insert({
+            user_id: userId,
+            course_id: cid,
+            stripe_checkout_session_id: session.id,
+            stripe_payment_intent_id: session.payment_intent as string,
+            amount_paid: Math.round((session.amount_total || 0) / courseIds.length),
+            currency: session.currency || 'usd',
+            status: 'completed',
+          })
+
+          await supabase.from('progress').insert({
+            user_id: userId,
+            course_id: cid,
+            current_module: 1,
+            completion_percentage: 0,
+            completed_modules: [],
+          })
+        }
+
+        console.log(`✅ Bundle purchase: User ${userId} unlocked ${courseIds.length} courses`)
+        return NextResponse.json({ received: true, status: 'bundle_success' })
+      }
+
+      // ── Single course ──────────────────────────────────────────────────────
+      if (!courseId) {
+        console.error('Missing courseId in webhook metadata:', session.metadata)
+        return NextResponse.json({ error: 'Missing courseId' }, { status: 400 })
       }
 
       const { error: purchaseError } = await supabase
@@ -82,15 +124,11 @@ export async function POST(request: NextRequest) {
       }
 
       console.log(`✅ Purchase completed: User ${userId} bought course ${courseId}`)
-
       return NextResponse.json({ received: true, status: 'success' })
 
     } catch (error: any) {
       console.error('Webhook processing error:', error)
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: error.message }, { status: 500 })
     }
   }
 

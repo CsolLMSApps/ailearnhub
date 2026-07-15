@@ -17,8 +17,49 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { slug, currency = 'usd' } = body
+    const { slug, isBundle = false, currency = 'usd' } = body
 
+    // ── Bundle checkout ──────────────────────────────────────────────────────
+    if (isBundle) {
+      const bundlePriceId = process.env.STRIPE_PRICE_BUNDLE
+      if (!bundlePriceId) {
+        return NextResponse.json(
+          { error: 'Bundle price not configured' },
+          { status: 500 }
+        )
+      }
+
+      // Fetch all published course IDs
+      const { data: allCourses, error: coursesError } = await supabase
+        .from('courses')
+        .select('id, slug')
+        .eq('is_published', true)
+
+      if (coursesError || !allCourses?.length) {
+        return NextResponse.json({ error: 'No courses found' }, { status: 404 })
+      }
+
+      const courseIds = allCourses.map((c: any) => c.id).join(',')
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        mode: 'payment',
+        customer_email: user.email,
+        line_items: [{ price: bundlePriceId, quantity: 1 }],
+        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&bundle=true`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing?purchase=cancelled`,
+        metadata: {
+          userId: user.id,
+          userEmail: user.email || '',
+          isBundle: 'true',
+          courseIds,
+        },
+      })
+
+      return NextResponse.json({ sessionId: session.id, url: session.url })
+    }
+
+    // ── Single course checkout ───────────────────────────────────────────────
     const { data: course, error: courseError } = await supabase
       .from('courses')
       .select('*')

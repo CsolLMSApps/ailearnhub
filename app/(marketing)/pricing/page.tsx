@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import BundleCheckoutButton from '@/components/course/BundleCheckoutButton'
 
 export default async function PricingPage() {
   const supabase = await createServerSupabaseClient()
@@ -128,9 +129,7 @@ export default async function PricingPage() {
               </svg>
               <span>34 Modules • 16 Hours • All Certificates</span>
             </div>
-            <button className="bg-white text-[#FF6F00] font-bold py-4 px-12 rounded-lg hover:bg-gray-100 transition-colors text-lg shadow-lg">
-              Get Complete Bundle
-            </button>
+            <BundleCheckoutButton />
             <p className="text-sm mt-4 opacity-90">Limited time offer • Lifetime access</p>
           </div>
         </div>
@@ -142,8 +141,7 @@ export default async function PricingPage() {
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="font-bold text-lg mb-2">What's included in each course?</h3>
               <p className="text-gray-600">
-                Each course includes comprehensive video lessons, downloadable resources, quizzes, 
-                templates, and a certificate of completion. You get lifetime access to all content.
+                Each course includes structured learning modules, quizzes, and a certificate of completion. You get lifetime access to all content.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
