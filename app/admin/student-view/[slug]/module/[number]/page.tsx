@@ -6,6 +6,7 @@ import { adminFetch, adminFetchAll } from '@/lib/supabase/admin'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Link from 'next/link'
+import PdfIframe from '@/components/course/PdfIframe'
 
 export const dynamic = 'force-dynamic'
 
@@ -113,9 +114,8 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
             {/* Module content — PDF or Markdown */}
             {module.content_pdf_url && (
               <div className="mb-8">
-                <iframe
+                <PdfIframe
                   src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
-                  style={{ width: '100%', height: '85vh', minHeight: '650px', border: 'none', display: 'block' }}
                   title={module.title}
                 />
               </div>

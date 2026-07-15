@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm'
 import { AutoMarkVisited } from '@/components/AutoMarkVisited'
 import { adminFetch } from '@/lib/supabase/admin'
 import Link from 'next/link'
+import PdfIframe from '@/components/course/PdfIframe'
 
 export const dynamic = 'force-dynamic'
 
@@ -164,11 +165,10 @@ export default async function ModulePage({ params }: ModulePageProps) {
             </div>
           </div>
 
-          {/* PDF content — rendered via PDF.js viewer (no browser chrome/borders) */}
+          {/* PDF content — auto-height iframe, no internal scrollbar */}
           {module.content_pdf_url ? (
-            <iframe
+            <PdfIframe
               src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
-              style={{ width: '100%', height: '88vh', minHeight: '680px', border: 'none', display: 'block' }}
               title={module.title}
             />
           ) : null}

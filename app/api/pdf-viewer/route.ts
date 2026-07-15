@@ -154,6 +154,11 @@ export async function GET(request: NextRequest) {
       await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
     }
     rendering = false;
+    // Tell parent iframe to resize to fit all pages (no internal scrollbar)
+    setTimeout(() => {
+      const totalHeight = document.body.scrollHeight + 8;
+      window.parent.postMessage({ type: 'pdf-height', height: totalHeight }, '*');
+    }, 100);
   }
 
   async function renderPage(num) {
