@@ -165,23 +165,20 @@ export default async function ModulePage({ params }: ModulePageProps) {
             {/* Module Content — PDF or Markdown */}
             {module.content_pdf_url ? (
               <div className="mb-8">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600">
-                    📄 PDF Document
-                  </span>
+                <div className="flex justify-end mb-2">
                   <a
                     href={module.content_pdf_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-[#FF6F00] hover:underline font-medium"
+                    className="text-xs text-gray-400 hover:text-[#FF6F00] transition-colors"
                   >
                     Open in new tab ↗
                   </a>
                 </div>
                 <iframe
                   src={`${module.content_pdf_url}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
-                  className="w-full rounded-xl border border-gray-200 shadow-sm bg-white"
-                  style={{ height: '80vh', minHeight: '600px' }}
+                  className="w-full"
+                  style={{ height: '82vh', minHeight: '620px', border: 'none', display: 'block' }}
                   title={module.title}
                 />
               </div>
