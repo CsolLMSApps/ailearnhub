@@ -34,20 +34,21 @@ export async function saveModule(
     return { error: 'Unauthorized' }
   }
 
-  const course_id = formData.get('course_id')?.toString().trim()
-  const module_number = parseInt(formData.get('module_number')?.toString() ?? '0')
-  const title = formData.get('title')?.toString().trim()
-  const content = formData.get('content')?.toString() ?? ''
+  const course_id         = formData.get('course_id')?.toString().trim()
+  const module_number     = parseInt(formData.get('module_number')?.toString() ?? '0')
+  const title             = formData.get('title')?.toString().trim()
+  const content           = formData.get('content')?.toString() ?? ''
+  const content_pdf_url   = formData.get('content_pdf_url')?.toString().trim() ?? ''
   const estimated_minutes = parseInt(formData.get('estimated_minutes')?.toString() ?? '20')
 
   if (!course_id) return { error: 'Course is required.' }
   if (!module_number || module_number < 1) return { error: 'Module number must be 1 or greater.' }
   if (!title) return { error: 'Module title is required.' }
-  if (!content.trim()) return { error: 'Module content is required.' }
+  if (!content.trim() && !content_pdf_url) return { error: 'Module content or a PDF file is required.' }
 
   const { error } = await adminUpsert(
     'course_modules',
-    { course_id, module_number, title, content, estimated_minutes },
+    { course_id, module_number, title, content, content_pdf_url, estimated_minutes },
     'course_id,module_number'
   )
 

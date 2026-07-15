@@ -163,7 +163,33 @@ export default async function ModulePage({ params }: ModulePageProps) {
               )}
             </div>
 
-            {/* Module Content */}
+            {/* Module Content — PDF or Markdown */}
+            {module.content_pdf_url ? (
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600">
+                    📄 PDF Document
+                  </span>
+                  <a
+                    href={module.content_pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-[#FF6F00] hover:underline font-medium"
+                  >
+                    Open in new tab ↗
+                  </a>
+                </div>
+                <iframe
+                  src={module.content_pdf_url}
+                  className="w-full rounded-xl border border-gray-200 shadow-sm"
+                  style={{ height: '75vh', minHeight: '500px' }}
+                  title={module.title}
+                />
+              </div>
+            ) : null}
+
+            {/* Markdown content (shown when no PDF, or alongside PDF if both exist) */}
+            {module.content && (
             <div className="prose max-w-none mb-8 overflow-hidden">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -214,6 +240,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 {module.content}
               </ReactMarkdown>
             </div>
+            )}
 
             {/* Course Final Quiz — only on last module */}
             {isLastModule && quiz && (
