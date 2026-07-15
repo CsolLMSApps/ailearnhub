@@ -3,6 +3,7 @@ import { Roboto } from 'next/font/google'
 import './globals.css'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import CookieConsent from '@/components/CookieConsent'
+import PWARegister from '@/components/PWARegister'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -102,13 +103,19 @@ export default function RootLayout({
     <html lang="en" className={roboto.variable}>
       <head>
         <link rel="icon" href="/logo-icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/logo-icon.svg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#FF6F00" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="AI Learn Hub" />
         <GoogleAnalytics />
       </head>
       <body className="antialiased">
         {children}
         <CookieConsent />
+        <PWARegister />
       </body>
     </html>
   )
