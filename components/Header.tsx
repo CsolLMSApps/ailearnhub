@@ -22,7 +22,13 @@ export default function Header() {
       return
     }
 
-    // Capture the install prompt as soon as the browser fires it
+    // Pick up prompt captured early by the inline script in layout.tsx
+    // (fires before React mounts, so we'd miss it otherwise)
+    if ((window as any).__pwaInstallPrompt) {
+      setInstallPrompt((window as any).__pwaInstallPrompt)
+    }
+
+    // Also listen for future firings (e.g. if prompt is dismissed and re-triggered)
     const handler = (e: any) => {
       e.preventDefault()
       setInstallPrompt(e)
@@ -30,12 +36,16 @@ export default function Header() {
     window.addEventListener('beforeinstallprompt', handler)
 
     // Hide button once the user installs
-    window.addEventListener('appinstalled', () => {
+    const onInstalled = () => {
       setIsInstalled(true)
       setInstallPrompt(null)
-    })
+    }
+    window.addEventListener('appinstalled', onInstalled)
 
-    return () => window.removeEventListener('beforeinstallprompt', handler)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler)
+      window.removeEventListener('appinstalled', onInstalled)
+    }
   }, [])
 
   const handleInstall = async () => {
@@ -97,16 +107,16 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Install App Button — visible when browser supports PWA install */}
+          {/* Install App Button — shown on all screen sizes when installable */}
           {installPrompt && !isInstalled && (
             <button
               onClick={handleInstall}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 border-2 border-[#FF6F00] text-[#FF6F00] rounded-lg text-sm font-semibold hover:bg-[#FF6F00] hover:text-white transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-[#FF6F00] text-[#FF6F00] rounded-lg text-sm font-semibold hover:bg-[#FF6F00] hover:text-white transition-colors whitespace-nowrap"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
               </svg>
-              Install App
+              <span>Install App</span>
             </button>
           )}
 

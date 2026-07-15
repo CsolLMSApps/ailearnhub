@@ -110,6 +110,13 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="AI Learn Hub" />
+        {/* Capture install prompt ASAP — before React mounts — so it's never missed */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            window.__pwaInstallPrompt = e;
+          });
+        `}} />
         <GoogleAnalytics />
       </head>
       <body className="antialiased">
