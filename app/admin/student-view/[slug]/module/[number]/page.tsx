@@ -113,20 +113,9 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
             {/* Module content — PDF or Markdown */}
             {module.content_pdf_url && (
               <div className="mb-8">
-                <div className="flex justify-end mb-2">
-                  <a
-                    href={module.content_pdf_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-gray-400 hover:text-[#FF6F00] transition-colors"
-                  >
-                    Open in new tab ↗
-                  </a>
-                </div>
                 <iframe
-                  src={`${module.content_pdf_url}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
-                  className="w-full"
-                  style={{ height: '82vh', minHeight: '620px', border: 'none', display: 'block' }}
+                  src={`/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+                  style={{ width: '100%', height: '85vh', minHeight: '650px', border: 'none', display: 'block' }}
                   title={module.title}
                 />
               </div>

@@ -164,25 +164,13 @@ export default async function ModulePage({ params }: ModulePageProps) {
             </div>
           </div>
 
-          {/* PDF content — fills the full card width, no padding */}
+          {/* PDF content — rendered via PDF.js viewer (no browser chrome/borders) */}
           {module.content_pdf_url ? (
-            <div>
-              <div className="flex justify-end px-6 py-1">
-                <a
-                  href={module.content_pdf_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-gray-400 hover:text-[#FF6F00] transition-colors"
-                >
-                  Open in new tab ↗
-                </a>
-              </div>
-              <iframe
-                src={`${module.content_pdf_url}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-                style={{ width: '100%', height: '85vh', minHeight: '650px', border: 'none', display: 'block' }}
-                title={module.title}
-              />
-            </div>
+            <iframe
+              src={`/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+              style={{ width: '100%', height: '88vh', minHeight: '680px', border: 'none', display: 'block' }}
+              title={module.title}
+            />
           ) : null}
 
           {/* Padded content area — markdown + quiz CTA + navigation */}
