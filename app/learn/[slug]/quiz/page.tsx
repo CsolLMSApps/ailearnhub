@@ -53,10 +53,11 @@ export default async function CourseQuizPage({ params }: Props) {
 
   const lastModule = allModules[allModules.length - 1]
 
-  // Fetch the quiz
+  // Fetch the quiz — find any quiz for this course (ordered by module_number desc
+  // so if multiple exist, we get the highest module's quiz)
   const { data: quiz } = await adminFetch(
     'quizzes',
-    `course_id=eq.${course.id}&module_number=eq.${lastModule.module_number}&select=*&limit=1`
+    `course_id=eq.${course.id}&select=*&order=module_number.desc&limit=1`
   )
 
   if (!quiz) {
@@ -74,13 +75,13 @@ export default async function CourseQuizPage({ params }: Props) {
     )
   }
 
-  // Check existing pass
+  // Check existing pass — use the quiz's actual module_number
   const { data: quizResult } = await supabase
     .from('quiz_results')
     .select('*')
     .eq('user_id', user.id)
     .eq('course_id', course.id)
-    .eq('module_number', lastModule.module_number)
+    .eq('module_number', quiz.module_number)
     .eq('passed', true)
     .order('percentage', { ascending: false })
     .limit(1)
@@ -136,7 +137,7 @@ export default async function CourseQuizPage({ params }: Props) {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
           <QuizComponent
             slug={slug}
-            moduleNumber={lastModule.module_number}
+            moduleNumber={quiz.module_number}
             questions={questions}
             passPercentage={quiz.pass_percentage}
           />

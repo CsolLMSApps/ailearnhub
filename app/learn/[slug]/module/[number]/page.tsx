@@ -138,9 +138,10 @@ export default async function ModulePage({ params }: ModulePageProps) {
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-6 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-8">
-            {/* Module Title */}
-            <div className="mb-8">
+
+          {/* Module header — always padded */}
+          <div className="p-8 pb-0">
+            <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <span className="inline-block px-3 py-1 bg-[#FF6F00] text-white rounded-full text-sm font-bold">
                   Module {moduleNumber}
@@ -161,28 +162,31 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 <p className="text-gray-500 mt-1">⏱️ {module.estimated_minutes} minutes</p>
               )}
             </div>
+          </div>
 
-            {/* Module Content — PDF or Markdown */}
-            {module.content_pdf_url ? (
-              <div className="mb-8">
-                <div className="flex justify-end mb-2">
-                  <a
-                    href={module.content_pdf_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-gray-400 hover:text-[#FF6F00] transition-colors"
-                  >
-                    Open in new tab ↗
-                  </a>
-                </div>
-                <iframe
-                  src={`${module.content_pdf_url}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
-                  className="w-full"
-                  style={{ height: '82vh', minHeight: '620px', border: 'none', display: 'block' }}
-                  title={module.title}
-                />
+          {/* PDF content — fills the full card width, no padding */}
+          {module.content_pdf_url ? (
+            <div>
+              <div className="flex justify-end px-6 py-1">
+                <a
+                  href={module.content_pdf_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-gray-400 hover:text-[#FF6F00] transition-colors"
+                >
+                  Open in new tab ↗
+                </a>
               </div>
-            ) : null}
+              <iframe
+                src={`${module.content_pdf_url}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                style={{ width: '100%', height: '85vh', minHeight: '650px', border: 'none', display: 'block' }}
+                title={module.title}
+              />
+            </div>
+          ) : null}
+
+          {/* Padded content area — markdown + quiz CTA + navigation */}
+          <div className="p-8 pt-6">
 
             {/* Markdown content (shown when no PDF, or alongside PDF if both exist) */}
             {module.content && (
@@ -309,7 +313,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 <div />
               )}
             </div>
-          </div>
+          </div>{/* end padded content area */}
         </div>
       </div>
     </div>
