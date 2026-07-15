@@ -1,6 +1,8 @@
 // app/learn/[slug]/page.tsx
 // Course overview page — shows all modules, progress, and completion certificate
 
+export const dynamic = 'force-dynamic'
+
 import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminFetch, adminUpsert } from '@/lib/supabase/admin'

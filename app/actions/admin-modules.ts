@@ -54,7 +54,19 @@ export async function saveModule(
 
   if (error) return { error: `Failed to save module: ${error.message}` }
 
+  // Revalidate admin + all student-facing pages for this course
+  const { data: courseRow } = await adminFetchAll(
+    'courses',
+    `id=eq.${course_id}&select=slug&limit=1`
+  )
+  const slug = courseRow?.[0]?.slug
   revalidatePath('/admin/modules')
+  if (slug) {
+    revalidatePath(`/learn/${slug}`)
+    revalidatePath(`/learn/${slug}/module/[number]`)
+    revalidatePath(`/courses/${slug}`)
+  }
+
   return { success: `Module ${module_number} "${title}" saved successfully.` }
 }
 
@@ -80,6 +92,17 @@ export async function deleteModule(
 
   if (error) return { error: `Failed to delete module: ${error.message}` }
 
+  const { data: courseRow } = await adminFetchAll(
+    'courses',
+    `id=eq.${course_id}&select=slug&limit=1`
+  )
+  const slug = courseRow?.[0]?.slug
   revalidatePath('/admin/modules')
+  if (slug) {
+    revalidatePath(`/learn/${slug}`)
+    revalidatePath(`/learn/${slug}/module/[number]`)
+    revalidatePath(`/courses/${slug}`)
+  }
+
   return { success: `Module ${module_number} deleted.` }
 }
