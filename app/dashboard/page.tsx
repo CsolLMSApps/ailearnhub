@@ -291,6 +291,51 @@ export default async function DashboardPage() {
           </div>
         )}
 
+        {/* ResumeBlast.ai Banner */}
+        <section className="mb-12">
+          <a
+            href="https://www.resumeblast.ai/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block group"
+          >
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow">
+              {/* Decorative background circles */}
+              <div className="absolute -top-8 -right-8 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+              <div className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
+
+              <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+                <div className="flex items-start gap-4">
+                  {/* Icon */}
+                  <div className="shrink-0 w-12 h-12 rounded-xl bg-[#FF6F00] flex items-center justify-center text-2xl shadow-md">
+                    🚀
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-bold uppercase tracking-widest text-[#FF6F00]">Partner Offer</span>
+                      <span className="text-xs bg-green-500 text-white font-bold px-2 py-0.5 rounded-full">Free to Start</span>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-1">
+                      Ready to land your next AI job?
+                    </h3>
+                    <p className="text-sm text-gray-300 max-w-lg">
+                      <span className="text-white font-semibold">ResumeBlast.ai</span> sends your résumé directly to 250–500 verified recruiters via AI-powered 3-wave email campaigns — automatically.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="shrink-0 sm:text-right">
+                  <div className="inline-flex items-center gap-2 bg-[#FF6F00] group-hover:bg-[#e65c00] text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-md whitespace-nowrap">
+                    Try Free Now
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">No credit card required</p>
+                </div>
+              </div>
+            </div>
+          </a>
+        </section>
+
         {/* Recommended Courses */}
         {availableCourses.length > 0 && (
           <section>
