@@ -25,12 +25,12 @@ export default async function AdminPurchasesPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Purchases</h1>
           <p className="text-sm text-gray-500 mt-1">{purchases?.length ?? 0} total transactions</p>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-3 text-right">
+        <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-3 text-right shrink-0">
           <p className="text-xs text-gray-500">Total Revenue</p>
           <p className="text-2xl font-bold text-green-600">${(totalRevenue / 100).toFixed(2)}</p>
         </div>
@@ -41,12 +41,12 @@ export default async function AdminPurchasesPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">User</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Course</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Amount</th>
-                <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Currency</th>
-                <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">User</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Course</th>
+                <th className="text-right px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Amount</th>
+                <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Currency</th>
+                <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -55,18 +55,18 @@ export default async function AdminPurchasesPage() {
               )}
               {(purchases ?? []).map((p: any) => (
                 <tr key={p.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
+                  <td className="px-3 py-3 text-gray-500 whitespace-nowrap">
                     {new Date(p.purchased_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                   </td>
-                  <td className="px-6 py-3 text-gray-700">
+                  <td className="px-3 py-3 text-gray-700">
                     {userMap[p.user_id] ?? <span className="text-gray-400 font-mono text-xs">{p.user_id.slice(0,8)}…</span>}
                   </td>
-                  <td className="px-6 py-3 text-gray-700">{courseMap[p.course_id] ?? '—'}</td>
-                  <td className="px-6 py-3 text-right font-semibold text-green-600">
+                  <td className="px-3 py-3 text-gray-700">{courseMap[p.course_id] ?? '—'}</td>
+                  <td className="px-3 py-3 text-right font-semibold text-green-600">
                     ${(p.amount_paid / 100).toFixed(2)}
                   </td>
-                  <td className="px-6 py-3 text-center text-gray-500 uppercase text-xs">{p.currency}</td>
-                  <td className="px-6 py-3 text-center">
+                  <td className="px-3 py-3 text-center text-gray-500 uppercase text-xs">{p.currency}</td>
+                  <td className="px-3 py-3 text-center">
                     <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                       p.status === 'completed'
                         ? 'bg-green-100 text-green-700'

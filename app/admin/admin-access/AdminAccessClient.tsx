@@ -98,7 +98,7 @@ export default function AdminAccessClient({ superAdmins, dynamicAdmins, fetchErr
 
       {/* ── Current Admin List ────────────────────────────────────── */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
+        <div className="px-3 py-3 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-800">
             Current Admins
             <span className="ml-2 text-sm font-normal text-gray-400">
@@ -114,29 +114,29 @@ export default function AdminAccessClient({ superAdmins, dynamicAdmins, fetchErr
           </div>
         )}
 
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto"><table className="w-full text-sm">
           <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
             <tr>
-              <th className="px-6 py-3 text-left">Email</th>
-              <th className="px-6 py-3 text-left">Type</th>
-              <th className="px-6 py-3 text-left">Added By</th>
-              <th className="px-6 py-3 text-left">Added</th>
-              <th className="px-6 py-3 text-right">Action</th>
+              <th className="px-3 py-3 text-left">Email</th>
+              <th className="px-3 py-3 text-left">Type</th>
+              <th className="px-3 py-3 text-left">Added By</th>
+              <th className="px-3 py-3 text-left">Added</th>
+              <th className="px-3 py-3 text-right">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {/* Permanent superadmins */}
             {superAdmins.map((email) => (
               <tr key={email} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-900">{email}</td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3 font-medium text-gray-900">{email}</td>
+                <td className="px-3 py-3">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                     🔒 Permanent
                   </span>
                 </td>
-                <td className="px-6 py-4 text-gray-400">—</td>
-                <td className="px-6 py-4 text-gray-400">—</td>
-                <td className="px-6 py-4 text-right">
+                <td className="px-3 py-3 text-gray-400">—</td>
+                <td className="px-3 py-3 text-gray-400">—</td>
+                <td className="px-3 py-3 text-right">
                   <span className="text-xs text-gray-400">Cannot remove</span>
                 </td>
               </tr>
@@ -145,15 +145,15 @@ export default function AdminAccessClient({ superAdmins, dynamicAdmins, fetchErr
             {/* Dynamic admins from DB */}
             {dynamicAdmins.map((admin) => (
               <tr key={admin.email} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-900">{admin.email}</td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3 font-medium text-gray-900">{admin.email}</td>
+                <td className="px-3 py-3">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                     ✅ Dynamic
                   </span>
                 </td>
-                <td className="px-6 py-4 text-gray-500">{admin.added_by}</td>
-                <td className="px-6 py-4 text-gray-500">{formatDate(admin.added_at)}</td>
-                <td className="px-6 py-4 text-right">
+                <td className="px-3 py-3 text-gray-500">{admin.added_by}</td>
+                <td className="px-3 py-3 text-gray-500">{formatDate(admin.added_at)}</td>
+                <td className="px-3 py-3 text-right">
                   <form action={removeAction}>
                     <input type="hidden" name="email" value={admin.email} />
                     <button
@@ -175,13 +175,13 @@ export default function AdminAccessClient({ superAdmins, dynamicAdmins, fetchErr
 
             {dynamicAdmins.length === 0 && !fetchError && (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-400 text-sm">
+                <td colSpan={5} className="px-3 py-8 text-center text-gray-400 text-sm">
                   No additional admins added yet. Use the form above to grant access.
                 </td>
               </tr>
             )}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       {/* ── How it works note ─────────────────────────────────────── */}

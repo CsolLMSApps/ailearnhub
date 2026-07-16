@@ -187,7 +187,7 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
       {/* ── Module Editor Form ──────────────────────────────────────────────── */}
       {isEditing && (
         <div className="bg-white rounded-xl border border-[#FF6F00] shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <h2 className="text-lg font-semibold text-gray-800">
               {isAddingNew
                 ? `New Module for "${selectedCourse?.title}"`
@@ -214,7 +214,7 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
             {/* PDF URL hidden field — populated by upload handler */}
             <input type="hidden" name="content_pdf_url" value={pdfUrl} />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">Module Number *</label>
                 <input
@@ -433,7 +433,7 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
 
       {/* ── Module List ──────────────────────────────────────────────────────── */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="px-4 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <h2 className="text-lg font-semibold text-gray-800">
             {selectedCourse?.title ?? 'Modules'}
             <span className="ml-2 text-sm font-normal text-gray-400">
@@ -448,21 +448,21 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
         </div>
 
         {courseModules.length === 0 ? (
-          <div className="px-6 py-12 text-center text-gray-400 text-sm">
+          <div className="px-3 py-12 text-center text-gray-400 text-sm">
             No modules yet for this course.{' '}
             <button onClick={startNew} className="text-[#FF6F00] font-medium hover:underline">
               Add the first module
             </button>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto"><table className="w-full text-sm">
             <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
               <tr>
-                <th className="px-6 py-3 text-left w-12">#</th>
-                <th className="px-6 py-3 text-left">Title</th>
-                <th className="px-6 py-3 text-left">Duration</th>
-                <th className="px-6 py-3 text-left">Content</th>
-                <th className="px-6 py-3 text-right">Actions</th>
+                <th className="px-3 py-3 text-left w-10">#</th>
+                <th className="px-3 py-3 text-left">Title</th>
+                <th className="px-3 py-3 text-left">Duration</th>
+                <th className="px-3 py-3 text-left">Content</th>
+                <th className="px-3 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -471,21 +471,21 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
                   key={mod.id ?? `${mod.course_id}-${mod.module_number}`}
                   className={`hover:bg-gray-50 transition-colors ${editingModule?.module_number === mod.module_number ? 'bg-orange-50' : ''}`}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-3 py-3">
                     <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#FF6F00] text-white text-xs font-bold">
                       {mod.module_number}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-900">{mod.title}</td>
-                  <td className="px-6 py-4 text-gray-500">{mod.estimated_minutes} min</td>
-                  <td className="px-6 py-4 text-gray-400 text-xs">
+                  <td className="px-3 py-3 font-medium text-gray-900">{mod.title}</td>
+                  <td className="px-3 py-3 text-gray-500">{mod.estimated_minutes} min</td>
+                  <td className="px-3 py-3 text-gray-400 text-xs">
                     {mod.content_pdf_url
                       ? <span className="text-orange-500 font-semibold">📄 PDF</span>
                       : mod.content
                         ? `${Math.round(mod.content.length / 1024 * 10) / 10} KB`
                         : '—'}
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-3 py-3 text-right">
                     <div className="flex items-center justify-end gap-3">
                       <button
                         onClick={() => startEdit(mod)}
@@ -514,7 +514,7 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         )}
       </div>
 

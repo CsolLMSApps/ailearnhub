@@ -84,7 +84,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {statCards.map((card) => (
           <Link key={card.label} href={card.href} className="block group">
             <div className={`bg-gradient-to-br ${card.from} ${card.to} rounded-2xl p-5 text-white shadow-md hover:shadow-xl transition-shadow`}>

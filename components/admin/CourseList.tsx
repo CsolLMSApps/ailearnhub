@@ -37,14 +37,14 @@ export default function CourseList({ courses }: { courses: CourseStat[] }) {
 
       {courses.map((c) => (
         <div key={c.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">{c.title}</h2>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+            <div className="min-w-0">
+              <h2 className="text-lg font-bold text-gray-900 truncate">{c.title}</h2>
               <p className="text-xs text-gray-400 mt-0.5">
                 {c.slug} · {c.level} · {c.total_modules} modules
               </p>
             </div>
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 shrink-0">
               <div className="text-right">
                 <p className="text-2xl font-bold text-green-600">${(c.revenue / 100).toFixed(2)}</p>
                 <p className="text-xs text-gray-400">total revenue</p>

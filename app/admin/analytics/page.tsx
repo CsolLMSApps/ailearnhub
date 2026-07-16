@@ -79,10 +79,10 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       {/* Top KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg">
           <p className="text-xs font-semibold text-orange-100 uppercase tracking-wide">Total Revenue</p>
-          <p className="text-3xl font-bold mt-1">${(totalRevenue / 100).toFixed(2)}</p>
+          <p className="text-2xl font-bold mt-1">${(totalRevenue / 100).toFixed(2)}</p>
           <p className="text-xs text-orange-200 mt-1">All time</p>
         </div>
         <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-5 text-white shadow-lg">

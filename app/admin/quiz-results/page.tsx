@@ -62,11 +62,11 @@ export default async function AdminQuizResultsPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">User</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Course</th>
-                <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Score</th>
-                <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Result</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">User</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Course</th>
+                <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Score</th>
+                <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Result</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -75,18 +75,18 @@ export default async function AdminQuizResultsPage() {
               )}
               {(quizResults ?? []).map((r: any) => (
                 <tr key={r.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
+                  <td className="px-3 py-3 text-gray-500 whitespace-nowrap">
                     {r.completed_at
                       ? new Date(r.completed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
                       : '—'}
                   </td>
-                  <td className="px-6 py-3 text-gray-700">
+                  <td className="px-3 py-3 text-gray-700">
                     {userMap[r.user_id] ?? (
                       <span className="text-gray-400 font-mono text-xs">{(r.user_id ?? '').slice(0, 8)}…</span>
                     )}
                   </td>
-                  <td className="px-6 py-3 text-gray-700">{courseMap[r.course_id] ?? '—'}</td>
-                  <td className="px-6 py-3 text-center">
+                  <td className="px-3 py-3 text-gray-700">{courseMap[r.course_id] ?? '—'}</td>
+                  <td className="px-3 py-3 text-center">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-16 bg-gray-200 rounded-full h-1.5">
                         <div
@@ -97,7 +97,7 @@ export default async function AdminQuizResultsPage() {
                       <span className="text-xs font-semibold text-gray-700">{r.percentage ?? 0}%</span>
                     </div>
                   </td>
-                  <td className="px-6 py-3 text-center">
+                  <td className="px-3 py-3 text-center">
                     <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${
                       r.passed
                         ? 'bg-green-100 text-green-700'
