@@ -59,6 +59,36 @@ export default async function CoursesPage() {
           <p className="text-gray-600">Expand your skills with our comprehensive AI courses</p>
         </div>
 
+        {/* Bundle Banner */}
+        <Link href="/pricing" className="block mb-10 group">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#FF6F00] to-[#E65100] p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="absolute -top-6 -right-6 w-40 h-40 rounded-full bg-white/10 pointer-events-none" />
+            <div className="absolute -bottom-8 -left-4 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">🎓</div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-bold uppercase tracking-widest text-white/70">Best Value</span>
+                    <span className="text-xs bg-white text-[#FF6F00] font-bold px-2 py-0.5 rounded-full">Save $34</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Complete AI Mastery Bundle — All 6 Courses</h3>
+                  <p className="text-sm text-white/80 mt-0.5">34 modules · 16 hours · All certificates included</p>
+                </div>
+              </div>
+              <div className="shrink-0 flex items-center gap-4 sm:flex-col sm:items-end sm:gap-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-white/60 line-through text-sm">$133</span>
+                  <span className="text-3xl font-black text-white">$99</span>
+                </div>
+                <span className="inline-flex items-center gap-1.5 bg-white text-[#FF6F00] font-bold text-sm px-5 py-2.5 rounded-xl shadow group-hover:bg-gray-50 transition-colors whitespace-nowrap">
+                  Get Bundle →
+                </span>
+              </div>
+            </div>
+          </div>
+        </Link>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses?.map((course) => (
             <Link
@@ -118,6 +148,37 @@ export default async function CoursesPage() {
             ← Back to Home
           </Link>
         </div>
+
+        {/* Bundle Banner */}
+        <Link href="/pricing" className="block mb-10 group">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#FF6F00] to-[#E65100] p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="absolute -top-6 -right-6 w-40 h-40 rounded-full bg-white/10 pointer-events-none" />
+            <div className="absolute -bottom-8 -left-4 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">🎓</div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-bold uppercase tracking-widest text-white/70">Best Value</span>
+                    <span className="text-xs bg-white text-[#FF6F00] font-bold px-2 py-0.5 rounded-full">Save $34</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Complete AI Mastery Bundle — All 6 Courses</h3>
+                  <p className="text-sm text-white/80 mt-0.5">34 modules · 16 hours · All certificates included</p>
+                </div>
+              </div>
+              <div className="shrink-0 flex items-center gap-4 sm:flex-col sm:items-end sm:gap-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-white/60 line-through text-sm">$133</span>
+                  <span className="text-3xl font-black text-white">$99</span>
+                </div>
+                <span className="inline-flex items-center gap-1.5 bg-white text-[#FF6F00] font-bold text-sm px-5 py-2.5 rounded-xl shadow group-hover:bg-gray-50 transition-colors whitespace-nowrap">
+                  Get Bundle →
+                </span>
+              </div>
+            </div>
+          </div>
+        </Link>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses?.map((course) => (
             <Link
