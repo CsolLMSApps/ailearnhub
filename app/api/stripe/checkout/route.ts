@@ -17,18 +17,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { slug, isBundle = false, currency = 'usd' } = body
+    const { slug, isBundle = false, currency = 'usd', upgradePriceCents } = body
 
     // ── Bundle checkout ──────────────────────────────────────────────────────
     if (isBundle) {
-      const bundlePriceId = process.env.STRIPE_PRICE_BUNDLE
-      if (!bundlePriceId) {
-        return NextResponse.json(
-          { error: 'Bundle price not configured' },
-          { status: 500 }
-        )
-      }
-
       // Fetch all published course IDs
       const { data: allCourses, error: coursesError } = await supabase
         .from('courses')
@@ -41,11 +33,30 @@ export async function POST(request: NextRequest) {
 
       const courseIds = allCourses.map((c: any) => c.id).join(',')
 
+      // Use dynamic price for upgrades, fixed bundle price for new buyers
+      const BUNDLE_PRICE_CENTS = 9900
+      const finalPriceCents: number =
+        typeof upgradePriceCents === 'number' && upgradePriceCents > 0 && upgradePriceCents < BUNDLE_PRICE_CENTS
+          ? upgradePriceCents
+          : BUNDLE_PRICE_CENTS
+
+      const isUpgrade = finalPriceCents < BUNDLE_PRICE_CENTS
+      const productName = isUpgrade
+        ? `AI Learn Hub — Bundle Upgrade (remaining courses)`
+        : `AI Learn Hub — Complete AI Mastery Bundle (All Courses)`
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'payment',
         customer_email: user.email,
-        line_items: [{ price: bundlePriceId, quantity: 1 }],
+        line_items: [{
+          price_data: {
+            currency: currency || 'usd',
+            product_data: { name: productName },
+            unit_amount: finalPriceCents,
+          },
+          quantity: 1,
+        }],
         success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&bundle=true`,
         cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing?purchase=cancelled`,
         metadata: {

@@ -64,23 +64,25 @@ export async function POST(request: NextRequest) {
 
           if (existing) continue
 
-          await supabase.from('purchases').insert({
+          const { error: purchaseErr } = await supabase.from('purchases').insert({
             user_id: userId,
             course_id: cid,
-            stripe_checkout_session_id: session.id,
+            stripe_checkout_session_id: `${session.id}_${cid}`,
             stripe_payment_intent_id: session.payment_intent as string,
             amount_paid: Math.round((session.amount_total || 0) / courseIds.length),
             currency: session.currency || 'usd',
             status: 'completed',
           })
+          if (purchaseErr) console.error(`Purchase insert failed for course ${cid}:`, purchaseErr.message)
 
-          await supabase.from('progress').insert({
+          const { error: progressErr } = await supabase.from('progress').upsert({
             user_id: userId,
             course_id: cid,
             current_module: 1,
             completion_percentage: 0,
             completed_modules: [],
-          })
+          }, { onConflict: 'user_id,course_id', ignoreDuplicates: true })
+          if (progressErr) console.error(`Progress upsert failed for course ${cid}:`, progressErr.message)
         }
 
         console.log(`✅ Bundle purchase: User ${userId} unlocked ${courseIds.length} courses`)
@@ -111,16 +113,16 @@ export async function POST(request: NextRequest) {
 
       const { error: progressError } = await supabase
         .from('progress')
-        .insert({
+        .upsert({
           user_id: userId,
           course_id: courseId,
           current_module: 1,
           completion_percentage: 0,
           completed_modules: [],
-        })
+        }, { onConflict: 'user_id,course_id', ignoreDuplicates: true })
 
       if (progressError) {
-        console.error('Progress insert error:', progressError)
+        console.error('Progress upsert error:', progressError)
       }
 
       console.log(`✅ Purchase completed: User ${userId} bought course ${courseId}`)
