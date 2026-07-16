@@ -355,7 +355,7 @@ export default async function DashboardPage() {
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link href="/courses" className="hover:text-[#FF6F00]">Browse All</Link></li>
                 <li><Link href="/courses" className="hover:text-[#FF6F00]">Beginner</Link></li>
-                <li><Link href="/courses" className="hover:text-[#FF6F00]">Advanced</Link></li>
+                <li><Link href="/courses" className="hover:text-[#FF6F00]">Intermediate</Link></li>
               </ul>
             </div>
             <div>
