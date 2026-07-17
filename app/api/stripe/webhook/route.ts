@@ -72,7 +72,6 @@ export async function POST(request: NextRequest) {
             amount_paid: Math.round((session.amount_total || 0) / courseIds.length),
             currency: session.currency || 'usd',
             status: 'completed',
-            is_bundle: true,
           })
           if (purchaseErr) console.error(`Purchase insert failed for course ${cid}:`, purchaseErr.message)
 

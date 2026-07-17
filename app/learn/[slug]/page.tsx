@@ -38,55 +38,16 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
 
   if (!course) notFound()
 
-  // Check purchase — access is valid if user has a bundle purchase OR a non-downloaded single purchase
+  // Check purchase
   const { data: purchase } = await supabase
     .from('purchases')
-    .select('id, is_bundle, certificate_downloaded')
+    .select('id')
     .eq('user_id', user.id)
     .eq('course_id', course.id)
     .eq('status', 'completed')
-    .order('created_at', { ascending: false })
-    .limit(1)
     .single()
 
   if (!purchase) redirect(`/courses/${slug}`)
-
-  // Lock check: non-bundle users who downloaded certificate lose access
-  const isLocked = !purchase.is_bundle && purchase.certificate_downloaded
-
-  if (isLocked) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-10 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
-            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Course Access Locked</h2>
-          <p className="text-gray-500 mb-2">
-            You downloaded the certificate for <strong>{course.title}</strong>, which locked access to this course.
-          </p>
-          <p className="text-gray-400 text-sm mb-8">To regain access, purchase the course again or upgrade to the Pro Bundle for unlimited access to all courses.</p>
-          <div className="flex flex-col gap-3">
-            <a
-              href={`/courses/${slug}`}
-              className="block w-full py-3 bg-[#FF6F00] text-white font-bold rounded-xl hover:bg-[#E65100] transition-colors"
-            >
-              Purchase Course Again
-            </a>
-            <a
-              href="/pricing"
-              className="block w-full py-3 border-2 border-[#FF6F00] text-[#FF6F00] font-bold rounded-xl hover:bg-orange-50 transition-colors"
-            >
-              Upgrade to Pro Bundle →
-            </a>
-            <a href="/dashboard" className="text-sm text-gray-400 hover:text-gray-600 mt-1">← Back to Dashboard</a>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   // Get all modules
   const { data: modules } = await supabase

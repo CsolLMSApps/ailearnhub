@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-export function CertificateActions({ slug, isBundleUser = false }: { slug: string; isBundleUser?: boolean }) {
+export function CertificateActions({ slug }: { slug: string }) {
   const [downloading, setDownloading] = useState(false)
 
   const handleDownload = async () => {
@@ -12,12 +12,11 @@ export function CertificateActions({ slug, isBundleUser = false }: { slug: strin
       const el = document.getElementById('certificate')
       if (!el) throw new Error('Certificate element not found')
 
-      // Dynamically import so they don't bloat the server bundle
       const html2canvas = (await import('html2canvas')).default
       const jsPDF = (await import('jspdf')).default
 
       const canvas = await html2canvas(el, {
-        scale: 3,           // high resolution
+        scale: 3,
         useCORS: true,
         backgroundColor: '#ffffff',
       })
@@ -29,18 +28,8 @@ export function CertificateActions({ slug, isBundleUser = false }: { slug: strin
       const pageW = pdf.internal.pageSize.getWidth()
       const pageH = pdf.internal.pageSize.getHeight()
 
-      // Fit the certificate image to fill the page
       pdf.addImage(imgData, 'PNG', 0, 0, pageW, pageH)
       pdf.save('AILearnHub-Certificate.pdf')
-
-      // Lock course access for non-bundle users after download
-      if (!isBundleUser) {
-        await fetch('/api/cert/lock', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ courseSlug: slug }),
-        })
-      }
     } catch (err) {
       console.error('Download failed:', err)
       alert('Download failed. Please use the Print button and save as PDF.')

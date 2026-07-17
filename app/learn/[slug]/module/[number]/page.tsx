@@ -36,20 +36,13 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   const { data: purchase } = await supabase
     .from('purchases')
-    .select('id, is_bundle, certificate_downloaded')
+    .select('id')
     .eq('user_id', user.id)
     .eq('course_id', course.id)
     .eq('status', 'completed')
-    .order('created_at', { ascending: false })
-    .limit(1)
     .single()
 
   if (!purchase) redirect(`/courses/${slug}`)
-
-  // Lock check
-  if (!purchase.is_bundle && purchase.certificate_downloaded) {
-    redirect(`/learn/${slug}`)
-  }
 
   const { data: module } = await supabase
     .from('course_modules')

@@ -50,19 +50,6 @@ export default async function CertificatePage({ params }: CertPageProps) {
     )
   }
 
-  // Check if this is a bundle purchase (bundle users keep access after download)
-  const { data: bundlePurchase } = await supabase
-    .from('purchases')
-    .select('id')
-    .eq('user_id', user.id)
-    .eq('course_id', course.id)
-    .eq('status', 'completed')
-    .eq('is_bundle', true)
-    .limit(1)
-    .single()
-
-  const isBundleUser = !!bundlePurchase
-
   const rawDate = certificate.issued_at || certificate.created_at || new Date().toISOString()
   const issuedDate = new Date(rawDate).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
@@ -70,22 +57,8 @@ export default async function CertificatePage({ params }: CertPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <CertificateActions slug={slug} isBundleUser={isBundleUser} />
-
-      {/* Warning banner for non-bundle users */}
-      {!isBundleUser && (
-        <div className="print:hidden bg-amber-50 border-b border-amber-200 px-6 py-3">
-          <div className="max-w-4xl mx-auto flex items-center gap-2 text-amber-800 text-sm">
-            <svg className="w-4 h-4 shrink-0 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-            <span>
-              <strong>Note:</strong> Downloading your certificate will lock access to this course. To regain access, you will need to purchase the course again or{' '}
-              <Link href="/pricing" className="underline font-medium">upgrade to the Pro Bundle</Link>.
-            </span>
-          </div>
-        </div>
-      )}
+      {/* Client component handles onClick → window.print() */}
+      <CertificateActions slug={slug} />
 
       {/* Certificate */}
       <div className="flex items-center justify-center py-10 print:py-0">
