@@ -1,21 +1,22 @@
 'use client'
 
 // app/reset-password/page.tsx
-// Supabase redirects here after the user clicks the email link.
-// The URL contains #access_token=...&type=recovery in the hash.
-// Supabase JS picks up the token automatically from the hash on page load.
+// Reached after OTP is verified. Email + otpId passed as query params.
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createClient } from '@/lib/supabase/client'
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const email = searchParams?.get('email') || ''
+  const otpId = searchParams?.get('otpId') || ''
+
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -23,34 +24,21 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
-  const [validSession, setValidSession] = useState(false)
-  const [checking, setChecking] = useState(true)
 
-  // Supabase processes the hash token and fires an AUTH_STATE_CHANGE
-  // with event "PASSWORD_RECOVERY". We listen for that to know the link is valid.
-  useEffect(() => {
-    const supabase = createClient()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setValidSession(true)
-        setChecking(false)
-      }
-    })
-
-    // Fallback: if already signed in via recovery token
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setValidSession(true)
-        setChecking(false)
-      } else {
-        // Give Supabase a moment to parse the hash
-        setTimeout(() => setChecking(false), 2000)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
+  if (!email || !otpId) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
+        <Card className="w-full max-w-md border border-gray-200">
+          <CardContent className="pt-8 text-center">
+            <p className="text-gray-500 mb-4">Invalid or expired reset session.</p>
+            <Link href="/forgot-password">
+              <Button className="bg-[#FF6F00] hover:bg-[#E65100] text-white">Request new code</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -67,21 +55,23 @@ export default function ResetPasswordPage() {
 
     setLoading(true)
     try {
-      const supabase = createClient()
-      const { error: updateError } = await supabase.auth.updateUser({ password })
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otpId, newPassword: password }),
+      })
+      const data = await res.json()
 
-      if (updateError) {
-        setError(updateError.message)
+      if (!res.ok) {
+        setError(data.error || 'Failed to update password')
         setLoading(false)
         return
       }
 
       setDone(true)
-      // Sign out so user logs in fresh with new password
-      await supabase.auth.signOut()
       setTimeout(() => router.push('/login'), 3000)
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong.')
+    } catch {
+      setError('Something went wrong. Please try again.')
       setLoading(false)
     }
   }
@@ -107,20 +97,21 @@ export default function ResetPasswordPage() {
   )
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center px-6 py-12 bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center px-6 py-12 bg-gray-50">
       <Card className="w-full max-w-md border border-gray-200">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-medium text-[#212121]">Reset Password</CardTitle>
+          <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg className="w-6 h-6 text-[#FF6F00]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <CardTitle className="text-2xl font-medium text-[#212121]">Set New Password</CardTitle>
           <CardDescription className="text-[#424242]">
-            Enter your new password below
+            Create a strong password for your account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {checking ? (
-            <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF6F00]" />
-            </div>
-          ) : done ? (
+          {done ? (
             <div className="text-center py-4">
               <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -128,24 +119,7 @@ export default function ResetPasswordPage() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Password updated!</h3>
-              <p className="text-sm text-gray-500">Redirecting you to the login page…</p>
-            </div>
-          ) : !validSession ? (
-            <div className="text-center py-4">
-              <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-7 h-7 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M10.293 4.293a1 1 0 011.414 0l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Link expired or invalid</h3>
-              <p className="text-sm text-gray-500 mb-6">
-                This reset link has expired or already been used. Please request a new one.
-              </p>
-              <Link href="/forgot-password">
-                <Button className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white">
-                  Request new link
-                </Button>
-              </Link>
+              <p className="text-sm text-gray-500">Redirecting you to login…</p>
             </div>
           ) : (
             <>
@@ -200,5 +174,17 @@ export default function ResetPasswordPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF6F00]" />
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
   )
 }
