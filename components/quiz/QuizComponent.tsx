@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuestionCard } from './QuestionCard'
 import { ResultsSummary } from './ResultsSummary'
@@ -20,65 +20,79 @@ interface QuizComponentProps {
   passPercentage?: number
 }
 
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 export function QuizComponent({
   slug,
   moduleNumber,
-  questions,
+  questions: originalQuestions,
   passPercentage = 70,
 }: QuizComponentProps) {
   const router = useRouter()
+
+  // Shuffle on first load
+  const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>(() =>
+    shuffleArray(originalQuestions)
+  )
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [userAnswers, setUserAnswers] = useState<{ [key: string]: number }>({})
   const [showResults, setShowResults] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [quizResults, setQuizResults] = useState<any>(null)
+  const [submitAttempted, setSubmitAttempted] = useState(false)
+
+  const totalQuestions = shuffledQuestions.length
+  const answeredCount = Object.keys(userAnswers).length
+  const allAnswered = answeredCount === totalQuestions
+
+  // Unanswered question indices for quick navigation
+  const unansweredIndices = shuffledQuestions
+    .map((q, i) => (userAnswers[q.id] === undefined ? i : null))
+    .filter((i): i is number => i !== null)
 
   const handleAnswer = (questionId: string, answerIndex: number) => {
-    setUserAnswers(prev => ({
-      ...prev,
-      [questionId]: answerIndex
-    }))
+    setUserAnswers(prev => ({ ...prev, [questionId]: answerIndex }))
   }
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(prev => prev + 1)
-    }
+    if (currentQuestion < totalQuestions - 1) setCurrentQuestion(prev => prev + 1)
   }
 
   const handlePrevious = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(prev => prev - 1)
-    }
+    if (currentQuestion > 0) setCurrentQuestion(prev => prev - 1)
   }
 
   const handleSubmit = async () => {
-    setSubmitting(true)
+    setSubmitAttempted(true)
 
+    if (!allAnswered) {
+      // Jump to first unanswered question
+      if (unansweredIndices.length > 0) setCurrentQuestion(unansweredIndices[0])
+      return
+    }
+
+    setSubmitting(true)
     try {
       const response = await fetch('/api/quiz/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          slug,
-          moduleNumber,
-          answers: userAnswers
-        })
+        body: JSON.stringify({ slug, moduleNumber, answers: userAnswers }),
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to submit quiz')
-      }
+      if (!response.ok) throw new Error('Failed to submit quiz')
 
       const results = await response.json()
       setQuizResults(results)
       setShowResults(true)
 
-      // If passed, refresh the server component so progress + nav update
-      if (results.passed) {
-        router.refresh()
-      }
-
+      if (results.passed) router.refresh()
     } catch (error) {
       console.error('Quiz submission error:', error)
       alert('Failed to submit quiz. Please try again.')
@@ -88,14 +102,14 @@ export function QuizComponent({
   }
 
   const handleRetry = () => {
+    // Reshuffle questions on every retry
+    setShuffledQuestions(shuffleArray(originalQuestions))
     setCurrentQuestion(0)
     setUserAnswers({})
     setShowResults(false)
     setQuizResults(null)
+    setSubmitAttempted(false)
   }
-
-  // Check if all questions answered
-  const allAnswered = questions.every((q: Question) => userAnswers[q.id] !== undefined)
 
   if (showResults && quizResults) {
     return (
@@ -107,27 +121,72 @@ export function QuizComponent({
     )
   }
 
-  const question = questions[currentQuestion]
+  const question = shuffledQuestions[currentQuestion]
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Progress Bar */}
-      <div className="mb-8">
+
+      {/* Progress bar */}
+      <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm text-gray-600">
-            Question {currentQuestion + 1} of {questions.length}
+            Question {currentQuestion + 1} of {totalQuestions}
           </span>
-          <span className="text-sm text-gray-600">
-            {Object.keys(userAnswers).length}/{questions.length} answered
+          <span className={`text-sm font-medium ${allAnswered ? 'text-green-600' : 'text-gray-500'}`}>
+            {answeredCount}/{totalQuestions} answered
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-[#FF6F00] h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+            style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
           />
         </div>
       </div>
+
+      {/* Question navigator dots */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {shuffledQuestions.map((q, i) => {
+          const isAnswered = userAnswers[q.id] !== undefined
+          const isCurrent = i === currentQuestion
+          const isUnansweredAfterAttempt = submitAttempted && !isAnswered
+          return (
+            <button
+              key={q.id}
+              onClick={() => setCurrentQuestion(i)}
+              className={`w-8 h-8 rounded-full text-xs font-bold transition-all border-2 ${
+                isCurrent
+                  ? 'bg-[#FF6F00] text-white border-[#FF6F00] scale-110'
+                  : isAnswered
+                  ? 'bg-green-100 text-green-700 border-green-300'
+                  : isUnansweredAfterAttempt
+                  ? 'bg-red-100 text-red-600 border-red-300 animate-pulse'
+                  : 'bg-gray-100 text-gray-500 border-gray-200 hover:border-[#FF6F00] hover:text-[#FF6F00]'
+              }`}
+              title={`Question ${i + 1}${isAnswered ? ' (answered)' : ' (unanswered)'}`}
+            >
+              {i + 1}
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Unanswered warning after submit attempt */}
+      {submitAttempted && !allAnswered && (
+        <div className="mb-5 flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          <div>
+            <p className="text-sm font-semibold text-red-700">
+              {unansweredIndices.length} question{unansweredIndices.length > 1 ? 's' : ''} unanswered
+            </p>
+            <p className="text-xs text-red-500 mt-0.5">
+              All questions must be answered before submitting. Red dots above show which ones are missing.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Question Card */}
       <QuestionCard
@@ -144,35 +203,35 @@ export function QuizComponent({
           disabled={currentQuestion === 0}
           className="px-6 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-[#FF6F00] hover:text-[#FF6F00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Previous
+          ← Previous
         </button>
 
-        <div className="flex gap-4">
-          {currentQuestion < questions.length - 1 ? (
+        <div className="flex gap-3">
+          {currentQuestion < totalQuestions - 1 && (
             <button
               onClick={handleNext}
               className="px-6 py-2 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors"
             >
-              Next
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              disabled={!allAnswered || submitting}
-              className="px-8 py-2 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold"
-            >
-              {submitting ? 'Submitting...' : 'Submit Quiz'}
+              Next →
             </button>
           )}
+
+          {/* Submit always visible, disabled until all answered */}
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className={`px-8 py-2 rounded-lg font-bold transition-colors ${
+              allAnswered
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            } ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            title={allAnswered ? 'Submit quiz' : `Answer all ${totalQuestions} questions first`}
+          >
+            {submitting ? 'Submitting…' : allAnswered ? '✓ Submit Quiz' : `Submit (${answeredCount}/${totalQuestions})`}
+          </button>
         </div>
       </div>
 
-      {/* Answer indicator */}
-      {!allAnswered && currentQuestion === questions.length - 1 && (
-        <p className="text-center mt-4 text-red-600 text-sm">
-          Please answer all questions before submitting
-        </p>
-      )}
     </div>
   )
 }
