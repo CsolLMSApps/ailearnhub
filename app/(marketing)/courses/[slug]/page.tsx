@@ -460,11 +460,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
                             <p className="text-sm text-gray-600 mt-1">{module.description}</p>
                           )}
                         </div>
-                        {module.estimated_minutes > 0 && (
-                          <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded flex-shrink-0 ml-4 mt-0.5">
-                            {module.estimated_minutes} min
-                          </span>
-                        )}
                       </div>
                     </div>
                   ))}

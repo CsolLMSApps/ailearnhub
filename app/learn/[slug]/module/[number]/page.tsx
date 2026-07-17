@@ -179,9 +179,6 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 )}
               </div>
               <h1 className="text-3xl font-bold text-gray-900">{module.title}</h1>
-              {module.estimated_minutes && (
-                <p className="text-gray-500 mt-1">⏱️ {module.estimated_minutes} minutes</p>
-              )}
             </div>
           </div>
 

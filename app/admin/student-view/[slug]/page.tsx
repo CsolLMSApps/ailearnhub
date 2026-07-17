@@ -109,9 +109,6 @@ export default async function AdminStudentViewCoursePage({ params }: Props) {
                         {mod.title}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        {mod.estimated_minutes > 0 && (
-                          <p className="text-xs text-gray-400">⏱ {mod.estimated_minutes} min</p>
-                        )}
                         {isLast && (
                           <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
                             🏆 Final Quiz

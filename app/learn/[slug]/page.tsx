@@ -252,9 +252,6 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
                       {mod.title}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      {mod.estimated_minutes && (
-                        <p className="text-xs text-gray-400">⏱ {mod.estimated_minutes} minutes</p>
-                      )}
                       {isLast && (
                         <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
                           🏆 Final Quiz
