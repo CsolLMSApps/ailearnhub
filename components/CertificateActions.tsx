@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-export function CertificateActions({ slug }: { slug: string }) {
+export function CertificateActions({ slug, isBundleUser = false }: { slug: string; isBundleUser?: boolean }) {
   const [downloading, setDownloading] = useState(false)
 
   const handleDownload = async () => {
@@ -32,6 +32,15 @@ export function CertificateActions({ slug }: { slug: string }) {
       // Fit the certificate image to fill the page
       pdf.addImage(imgData, 'PNG', 0, 0, pageW, pageH)
       pdf.save('AILearnHub-Certificate.pdf')
+
+      // Lock course access for non-bundle users after download
+      if (!isBundleUser) {
+        await fetch('/api/cert/lock', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ courseSlug: slug }),
+        })
+      }
     } catch (err) {
       console.error('Download failed:', err)
       alert('Download failed. Please use the Print button and save as PDF.')
