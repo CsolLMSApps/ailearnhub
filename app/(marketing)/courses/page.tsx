@@ -124,6 +124,35 @@ export default async function CoursesPage() {
             </Link>
           ))}
         </div>
+
+        {/* ResumeBlast.ai Banner */}
+        <a href="https://www.resumeblast.ai/" target="_blank" rel="noopener noreferrer" className="block mt-12 group">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="absolute -top-8 -right-8 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+            <div className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-2xl">🚀</div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="text-xs font-bold uppercase tracking-widest text-white/50">Partner Offer</span>
+                    <span className="text-xs bg-green-400 text-gray-900 font-bold px-2 py-0.5 rounded-full">Free to Start</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Ready to land your dream job?</h3>
+                  <p className="text-sm text-white/60 mt-0.5">
+                    Use <span className="text-white font-semibold">ResumeBlast.ai</span> to build an AI-powered resume and apply to hundreds of jobs instantly.
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0">
+                <span className="inline-flex items-center gap-2 bg-white text-[#0f172a] font-bold text-sm px-6 py-3 rounded-xl shadow group-hover:bg-gray-100 transition-colors whitespace-nowrap">
+                  Try ResumeBlast.ai →
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+
       </div>
     )
   }
@@ -214,6 +243,35 @@ export default async function CoursesPage() {
             </Link>
           ))}
         </div>
+
+        {/* ResumeBlast.ai Banner */}
+        <a href="https://www.resumeblast.ai/" target="_blank" rel="noopener noreferrer" className="block mt-12 group">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="absolute -top-8 -right-8 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+            <div className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-2xl">🚀</div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="text-xs font-bold uppercase tracking-widest text-white/50">Partner Offer</span>
+                    <span className="text-xs bg-green-400 text-gray-900 font-bold px-2 py-0.5 rounded-full">Free to Start</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Ready to land your dream job?</h3>
+                  <p className="text-sm text-white/60 mt-0.5">
+                    Use <span className="text-white font-semibold">ResumeBlast.ai</span> to build an AI-powered resume and apply to hundreds of jobs instantly.
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0">
+                <span className="inline-flex items-center gap-2 bg-white text-[#0f172a] font-bold text-sm px-6 py-3 rounded-xl shadow group-hover:bg-gray-100 transition-colors whitespace-nowrap">
+                  Try ResumeBlast.ai →
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+
       </div>
     </>
   )
