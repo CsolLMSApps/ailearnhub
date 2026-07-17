@@ -168,16 +168,6 @@ export default async function PricingPage() {
                     </div>
                     <div className="w-px h-8 bg-gray-200" />
                     <div className="text-center">
-                      <p className="text-sm font-bold text-gray-800">{course.total_hours}h</p>
-                      <p className="text-xs text-gray-400">content</p>
-                    </div>
-                    <div className="w-px h-8 bg-gray-200" />
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-gray-800 capitalize">{course.level}</p>
-                      <p className="text-xs text-gray-400">level</p>
-                    </div>
-                    <div className="w-px h-8 bg-gray-200" />
-                    <div className="text-center">
                       <p className="text-sm font-bold text-gray-500 line-through">${(course.price_usd / 100).toFixed(0)}</p>
                       <p className="text-xs text-gray-400">included</p>
                     </div>
