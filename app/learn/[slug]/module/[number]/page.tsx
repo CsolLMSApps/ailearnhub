@@ -34,15 +34,16 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   if (!course) notFound()
 
-  const { data: purchase } = await supabase
+  // Check purchase — use limit(1) instead of single() to handle potential duplicate rows gracefully
+  const { data: purchaseRows } = await supabase
     .from('purchases')
     .select('id')
     .eq('user_id', user.id)
     .eq('course_id', course.id)
     .eq('status', 'completed')
-    .single()
+    .limit(1)
 
-  if (!purchase) redirect(`/courses/${slug}`)
+  if (!purchaseRows || purchaseRows.length === 0) redirect(`/courses/${slug}`)
 
   const { data: module } = await supabase
     .from('course_modules')

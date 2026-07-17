@@ -6,6 +6,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminFetchAll } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import Image from 'next/image'
+import { BundleSuccessBanner } from '@/components/BundleSuccessBanner'
 
 // Keep in sync with components/admin/AdminAuthGuard.tsx
 const ADMIN_EMAILS = [
@@ -14,7 +15,13 @@ const ADMIN_EMAILS = [
   'info@shirotechnologies.com',
 ]
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ purchase?: string; bundle?: string }>
+}) {
+  const { purchase, bundle } = await searchParams
+  const showBundleSuccess = purchase === 'success' && bundle === 'true'
   const supabase = await createServerSupabaseClient()
   
   // Check if user is authenticated
@@ -25,7 +32,7 @@ export default async function DashboardPage() {
   }
 
   // Get user's purchased courses
-  const { data: purchases } = await supabase
+  const { data: rawPurchases } = await supabase
     .from('purchases')
     .select(`
       *,
@@ -33,6 +40,17 @@ export default async function DashboardPage() {
     `)
     .eq('user_id', user.id)
     .eq('status', 'completed')
+    .order('created_at', { ascending: false })
+
+  // Deduplicate by course_id — keep the most recent purchase row per course
+  const purchases = rawPurchases
+    ? Object.values(
+        rawPurchases.reduce((acc: any, p: any) => {
+          if (!acc[p.course_id]) acc[p.course_id] = p
+          return acc
+        }, {})
+      )
+    : []
 
   // Get all published courses for recommendations
   const { data: allCourses } = await supabase
@@ -140,6 +158,9 @@ export default async function DashboardPage() {
             Continue your learning journey
           </p>
         </div>
+
+        {/* Bundle purchase success banner */}
+        {showBundleSuccess && <BundleSuccessBanner />}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
