@@ -144,31 +144,46 @@ export function QuizComponent({
         </div>
       </div>
 
-      {/* Question navigator dots */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {shuffledQuestions.map((q, i) => {
-          const isAnswered = userAnswers[q.id] !== undefined
-          const isCurrent = i === currentQuestion
-          const isUnansweredAfterAttempt = submitAttempted && !isAnswered
-          return (
-            <button
-              key={q.id}
-              onClick={() => setCurrentQuestion(i)}
-              className={`w-8 h-8 rounded-full text-xs font-bold transition-all border-2 ${
-                isCurrent
-                  ? 'bg-[#FF6F00] text-white border-[#FF6F00] scale-110'
-                  : isAnswered
-                  ? 'bg-green-100 text-green-700 border-green-300'
-                  : isUnansweredAfterAttempt
-                  ? 'bg-red-100 text-red-600 border-red-300 animate-pulse'
-                  : 'bg-gray-100 text-gray-500 border-gray-200 hover:border-[#FF6F00] hover:text-[#FF6F00]'
-              }`}
-              title={`Question ${i + 1}${isAnswered ? ' (answered)' : ' (unanswered)'}`}
-            >
-              {i + 1}
-            </button>
-          )
-        })}
+      {/* Question navigator */}
+      <div className="mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Questions</p>
+          <div className="flex items-center gap-3 text-xs text-gray-400">
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded-full bg-green-400 inline-block" /> Answered
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded-full bg-red-400 inline-block" /> Unanswered
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded-full bg-[#FF6F00] inline-block" /> Current
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {shuffledQuestions.map((q, i) => {
+            const isAnswered = userAnswers[q.id] !== undefined
+            const isCurrent = i === currentQuestion
+            return (
+              <button
+                key={q.id}
+                onClick={() => setCurrentQuestion(i)}
+                className={`w-9 h-9 rounded-xl text-sm font-bold transition-all shadow-sm border-2 ${
+                  isCurrent
+                    ? 'bg-[#FF6F00] text-white border-[#FF6F00] scale-110 shadow-md'
+                    : isAnswered
+                    ? 'bg-green-500 text-white border-green-500 hover:bg-green-600'
+                    : submitAttempted
+                    ? 'bg-red-500 text-white border-red-500 animate-pulse hover:bg-red-600'
+                    : 'bg-red-100 text-red-600 border-red-200 hover:bg-red-200'
+                }`}
+                title={`Q${i + 1} — ${isAnswered ? 'Answered' : 'Not answered yet'}`}
+              >
+                {i + 1}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* Unanswered warning after submit attempt */}
