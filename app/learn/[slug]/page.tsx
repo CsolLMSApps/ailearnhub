@@ -209,74 +209,91 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
           </div>
 
           <ul className="divide-y divide-gray-100">
-            {modules?.map((mod) => {
+            {modules?.map((mod, index) => {
               const isDone = completedModules.includes(mod.module_number)
               const isCurrent = continueModule?.module_number === mod.module_number && !isCourseComplete
               const isLast = mod.module_number === lastModuleNumber
 
-              return (
-                <li key={mod.id}>
-                  <Link
-                    href={`/learn/${slug}/module/${mod.module_number}`}
-                    className={`flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors ${
-                      isCurrent ? 'bg-orange-50' : isLast && !isCourseComplete ? 'bg-purple-50' : ''
-                    }`}
-                  >
-                    {/* Status icon */}
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-sm font-bold ${
-                      isDone
-                        ? 'bg-green-100 text-green-700'
-                        : isCurrent
-                        ? 'bg-[#FF6F00] text-white'
-                        : isLast
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-gray-100 text-gray-500'
-                    }`}>
-                      {isDone ? '✓' : mod.module_number}
-                    </div>
+              // Sequential unlock: module 1 is always open; every other module
+              // requires the previous one to be completed first.
+              const prevModuleNumber = index > 0 ? modules[index - 1].module_number : null
+              const isLocked = prevModuleNumber !== null && !completedModules.includes(prevModuleNumber)
 
-                    {/* Title */}
-                    <div className="flex-1 min-w-0">
-                      <p className={`font-semibold truncate ${isDone ? 'text-gray-500' : 'text-gray-900'}`}>
-                        {mod.title}
-                      </p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        {mod.estimated_minutes && (
-                          <p className="text-xs text-gray-400">⏱ {mod.estimated_minutes} minutes</p>
-                        )}
-                        {isLast && (
-                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
-                            🏆 Final Quiz
-                          </span>
-                        )}
-                      </div>
-                    </div>
+              const rowClass = `flex items-center gap-4 px-6 py-4 transition-colors ${
+                isLocked
+                  ? 'opacity-50 cursor-not-allowed bg-gray-50'
+                  : isCurrent
+                  ? 'bg-orange-50 hover:bg-orange-100'
+                  : isLast && !isCourseComplete
+                  ? 'bg-purple-50 hover:bg-purple-100'
+                  : 'hover:bg-gray-50'
+              }`
 
-                    {/* Badge */}
-                    <div className="shrink-0">
-                      {isCourseComplete && isLast ? (
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                          ✅ Passed
-                        </span>
-                      ) : isDone ? (
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                          Completed
-                        </span>
-                      ) : isCurrent ? (
-                        <span className="text-xs bg-[#FF6F00] text-white px-2 py-1 rounded-full font-medium">
-                          Continue →
-                        </span>
-                      ) : isLast ? (
-                        <span className="text-xs bg-purple-600 text-white px-2 py-1 rounded-full font-medium">
-                          Take Quiz →
-                        </span>
-                      ) : (
-                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
-                          Start
+              const inner = (
+                <>
+                  {/* Status icon */}
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-sm font-bold ${
+                    isDone
+                      ? 'bg-green-100 text-green-700'
+                      : isLocked
+                      ? 'bg-gray-200 text-gray-400'
+                      : isCurrent
+                      ? 'bg-[#FF6F00] text-white'
+                      : isLast
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'bg-gray-100 text-gray-500'
+                  }`}>
+                    {isDone ? '✓' : isLocked ? '🔒' : mod.module_number}
+                  </div>
+
+                  {/* Title */}
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-semibold truncate ${isDone ? 'text-gray-500' : isLocked ? 'text-gray-400' : 'text-gray-900'}`}>
+                      {mod.title}
+                    </p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {mod.estimated_minutes && (
+                        <p className="text-xs text-gray-400">⏱ {mod.estimated_minutes} minutes</p>
+                      )}
+                      {isLast && (
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
+                          🏆 Final Quiz
                         </span>
                       )}
+                      {isLocked && (
+                        <span className="text-xs text-gray-400">Complete previous module to unlock</span>
+                      )}
                     </div>
-                  </Link>
+                  </div>
+
+                  {/* Badge */}
+                  <div className="shrink-0">
+                    {isCourseComplete && isLast ? (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">✅ Passed</span>
+                    ) : isDone ? (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Completed</span>
+                    ) : isLocked ? (
+                      <span className="text-xs bg-gray-200 text-gray-400 px-2 py-1 rounded-full">Locked</span>
+                    ) : isCurrent ? (
+                      <span className="text-xs bg-[#FF6F00] text-white px-2 py-1 rounded-full font-medium">Continue →</span>
+                    ) : isLast ? (
+                      <span className="text-xs bg-purple-600 text-white px-2 py-1 rounded-full font-medium">Take Quiz →</span>
+                    ) : (
+                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">Start</span>
+                    )}
+                  </div>
+                </>
+              )
+
+              return (
+                <li key={mod.id}>
+                  {isLocked ? (
+                    <div className={rowClass}>{inner}</div>
+                  ) : (
+                    <Link href={`/learn/${slug}/module/${mod.module_number}`} className={rowClass}>
+                      {inner}
+                    </Link>
+                  )}
                 </li>
               )
             })}

@@ -66,7 +66,27 @@ export default async function ModulePage({ params }: ModulePageProps) {
     .eq('course_id', course.id)
     .single()
 
-  const isCompleted = progress?.completed_modules?.includes(moduleNumber) || false
+  const completedModules: number[] = progress?.completed_modules || []
+  const isCompleted = completedModules.includes(moduleNumber)
+
+  // ── Sequential unlock ────────────────────────────────────────────────────────
+  // Module 1 is always accessible. Every other module requires the previous one
+  // to be in completed_modules before it can be opened.
+  if (moduleNumber > 1) {
+    const prevModuleNumber = allModules?.[
+      (allModules?.findIndex((m: { module_number: number }) => m.module_number === moduleNumber) ?? 0) - 1
+    ]?.module_number
+
+    if (prevModuleNumber && !completedModules.includes(prevModuleNumber)) {
+      // Redirect to the furthest unlocked module (last completed + 1, or module 1)
+      const lastCompleted = completedModules.length > 0 ? Math.max(...completedModules) : 0
+      const nextUnlocked = allModules?.find(
+        (m: { module_number: number }) => m.module_number === lastCompleted + 1
+      )
+      redirect(`/learn/${slug}/module/${nextUnlocked?.module_number ?? allModules?.[0]?.module_number ?? 1}`)
+    }
+  }
+  // ────────────────────────────────────────────────────────────────────────────
 
   const currentIndex = allModules?.findIndex((m: { module_number: number }) => m.module_number === moduleNumber) ?? -1
   const isLastModule = currentIndex === (allModules?.length ?? 0) - 1
