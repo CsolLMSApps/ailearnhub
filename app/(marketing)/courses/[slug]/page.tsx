@@ -361,24 +361,10 @@ export default async function CoursePage({ params }: CoursePageProps) {
         }))
       : (FALLBACK_MODULES[slug] || [])
 
-  // Use DB fields first, fall back to hardcoded data for existing courses
-  const seo = COURSE_SEO[slug] ?? null
-  const aboutParagraph: string =
-    (course.about_course as string | null) ?? seo?.aboutParagraph ?? ''
-  const skillTags: string[] =
-    (course.skill_tags as string[] | null)?.length
-      ? (course.skill_tags as string[])
-      : (seo?.skillTags ?? [])
-  const learningOutcomes: string[] =
-    (course.what_you_learn as string[] | null)?.length
-      ? (course.what_you_learn as string[])
-      : (LEARNING_OUTCOMES[slug] ?? [])
-  const deliverables: string[] =
-    (course.what_is_included as string[] | null)?.length
-      ? (course.what_is_included as string[])
-      : (DELIVERABLES[slug] ?? [])
-  const bannerUrl: string | null = (course.banner_url as string | null) ?? null
+  const learningOutcomes = LEARNING_OUTCOMES[slug] || []
+  const deliverables = DELIVERABLES[slug] || []
   const price = (course.price_usd / 100).toFixed(0)
+  const seo = COURSE_SEO[slug] ?? null
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -391,11 +377,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
         </div>
       </div>
       {/* Hero */}
-      <div className="bg-gradient-to-r from-[#FF6F00] to-[#E65100] text-white py-16"
-        style={bannerUrl ? { backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-      >
-        {bannerUrl && <div className="absolute inset-0 bg-gradient-to-r from-[#FF6F00]/90 to-[#E65100]/80 pointer-events-none" />}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="bg-gradient-to-r from-[#FF6F00] to-[#E65100] text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{course.title}</h1>
             <p className="text-xl mb-6 text-white/90">{course.short_description}</p>
@@ -422,22 +405,20 @@ export default async function CoursePage({ params }: CoursePageProps) {
           <div className="lg:col-span-2 space-y-10">
 
             {/* About This Course */}
-            {aboutParagraph && (
+            {seo && (
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Course</h2>
-                <p className="text-gray-700 leading-relaxed text-base">{aboutParagraph}</p>
-                {skillTags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-5">
-                    {skillTags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1.5 bg-orange-50 text-[#FF6F00] rounded-full text-sm font-medium border border-orange-100"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <p className="text-gray-700 leading-relaxed text-base">{seo.aboutParagraph}</p>
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {seo.skillTags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 bg-orange-50 text-[#FF6F00] rounded-full text-sm font-medium border border-orange-100"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 

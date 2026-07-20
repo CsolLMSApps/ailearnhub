@@ -7,7 +7,6 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { isAdmin } from '@/lib/supabase/is-admin'
 
 export async function POST(request: Request) {
-  // Auth check — must be a signed-in admin (super-admin or dynamic admin)
   const supabase = await createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user || !(await isAdmin(user.email))) {
@@ -19,12 +18,8 @@ export async function POST(request: Request) {
     title,
     slug,
     short_description,
-    about_course,
-    skill_tags,
-    what_you_learn,
-    what_is_included,
-    banner_url,
-    price_usd,       // sent as cents from the form
+    long_description,
+    price_usd,
     category,
     total_modules,
     featured,
@@ -54,14 +49,11 @@ export async function POST(request: Request) {
       title,
       slug,
       short_description: short_description || null,
-      about_course: about_course || null,
-      skill_tags: skill_tags ?? [],
-      what_you_learn: what_you_learn ?? [],
-      what_is_included: what_is_included ?? [],
-      banner_url: banner_url || null,
+      long_description: long_description || null,
       price_usd: price_usd ?? 0,
       category: category || null,
       total_modules: total_modules ?? 0,
+      total_hours: 0,
       featured: featured ?? false,
       is_published: is_published ?? false,
     }),
@@ -71,7 +63,6 @@ export async function POST(request: Request) {
 
   if (!res.ok) {
     const message = json?.message ?? json?.error ?? `HTTP ${res.status}`
-    // Friendly error for duplicate slug
     if (res.status === 409 || message.toLowerCase().includes('unique')) {
       return NextResponse.json({ error: 'A course with this slug already exists. Choose a different slug.' }, { status: 409 })
     }

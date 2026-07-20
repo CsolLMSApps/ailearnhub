@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface CourseData {
@@ -8,11 +8,7 @@ interface CourseData {
   title: string
   slug: string
   short_description?: string | null
-  about_course?: string | null
-  skill_tags?: string[] | null
-  what_you_learn?: string[] | null
-  what_is_included?: string[] | null
-  banner_url?: string | null
+  long_description?: string | null
   price_usd?: number
   category?: string | null
   total_modules?: number
@@ -30,19 +26,12 @@ export default function EditCourseForm({ course, onClose }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const [bannerUrl, setBannerUrl] = useState<string>(course.banner_url ?? '')
-  const [bannerUploading, setBannerUploading] = useState(false)
-  const [bannerError, setBannerError] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [form, setForm] = useState({
     title: course.title ?? '',
     slug: course.slug ?? '',
     short_description: course.short_description ?? '',
-    about_course: course.about_course ?? '',
-    skill_tags: (course.skill_tags ?? []).join(', '),
-    what_you_learn: (course.what_you_learn ?? []).join('\n'),
-    what_is_included: (course.what_is_included ?? []).join('\n'),
+    long_description: course.long_description ?? '',
     price_dollars: course.price_usd ? (course.price_usd / 100).toFixed(2) : '',
     category: course.category ?? '',
     total_modules: course.total_modules?.toString() ?? '',
@@ -50,33 +39,10 @@ export default function EditCourseForm({ course, onClose }: Props) {
     is_published: course.is_published ?? false,
   })
 
-  async function handleBannerUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setBannerUploading(true)
-    setBannerError(null)
-    const fd = new FormData()
-    fd.append('file', file)
-    fd.append('course_slug', form.slug || course.id)
-    try {
-      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: fd })
-      const data = await res.json()
-      if (!res.ok) { setBannerError(data.error ?? 'Upload failed'); return }
-      setBannerUrl(data.url)
-    } catch {
-      setBannerError('Upload failed — please try again')
-    } finally {
-      setBannerUploading(false)
-    }
-  }
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target
     const checked = (e.target as HTMLInputElement).checked
-    setForm(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -89,13 +55,6 @@ export default function EditCourseForm({ course, onClose }: Props) {
       ? Math.round(parseFloat(form.price_dollars) * 100)
       : 0
 
-    const skill_tags = form.skill_tags
-      .split(',').map(s => s.trim()).filter(Boolean)
-    const what_you_learn = form.what_you_learn
-      .split('\n').map(s => s.trim()).filter(Boolean)
-    const what_is_included = form.what_is_included
-      .split('\n').map(s => s.trim()).filter(Boolean)
-
     try {
       const res = await fetch('/api/admin/update-course', {
         method: 'PATCH',
@@ -105,11 +64,7 @@ export default function EditCourseForm({ course, onClose }: Props) {
           title: form.title,
           slug: form.slug,
           short_description: form.short_description,
-          about_course: form.about_course,
-          skill_tags,
-          what_you_learn,
-          what_is_included,
-          banner_url: bannerUrl,
+          long_description: form.long_description,
           price_usd,
           category: form.category,
           total_modules: parseInt(form.total_modules) || 0,
@@ -126,10 +81,10 @@ export default function EditCourseForm({ course, onClose }: Props) {
         return
       }
 
-      setSuccess('Course updated successfully!')
+      setSuccess('Course updated!')
       setLoading(false)
       router.refresh()
-      setTimeout(() => onClose(), 1200)
+      setTimeout(() => onClose(), 1000)
     } catch {
       setError('Network error — please try again')
       setLoading(false)
@@ -138,15 +93,9 @@ export default function EditCourseForm({ course, onClose }: Props) {
 
   return (
     <div className="bg-white rounded-2xl border border-blue-200 shadow-md mt-4">
-      {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <h2 className="text-lg font-bold text-gray-900">Edit Course</h2>
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 text-xl leading-none"
-        >
-          ✕
-        </button>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 space-y-5">
@@ -166,8 +115,7 @@ export default function EditCourseForm({ course, onClose }: Props) {
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1">
-              Slug <span className="text-red-500">*</span>
-              <span className="text-gray-400 font-normal ml-1">(URL path)</span>
+              Slug <span className="text-gray-400 font-normal ml-1">(URL path)</span>
             </label>
             <input
               name="slug"
@@ -181,10 +129,7 @@ export default function EditCourseForm({ course, onClose }: Props) {
 
         {/* Short description */}
         <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Short Description
-            <span className="text-gray-400 font-normal ml-1">(shown on course cards)</span>
-          </label>
+          <label className="block text-xs font-semibold text-gray-600 mb-1">Short Description</label>
           <input
             name="short_description"
             value={form.short_description}
@@ -193,108 +138,16 @@ export default function EditCourseForm({ course, onClose }: Props) {
           />
         </div>
 
-        {/* About This Course */}
+        {/* Long description */}
         <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            About This Course
-            <span className="text-gray-400 font-normal ml-1">(full description paragraph)</span>
-          </label>
+          <label className="block text-xs font-semibold text-gray-600 mb-1">Long Description</label>
           <textarea
-            name="about_course"
-            value={form.about_course}
+            name="long_description"
+            value={form.long_description}
             onChange={handleChange}
-            rows={4}
-            placeholder="Describe what this course covers, who it's for, and why someone should take it..."
+            rows={3}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none"
           />
-        </div>
-
-        {/* Skill Tags */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Skill Tags
-            <span className="text-gray-400 font-normal ml-1">(comma-separated)</span>
-          </label>
-          <input
-            name="skill_tags"
-            value={form.skill_tags}
-            onChange={handleChange}
-            placeholder="ChatGPT, Prompt Engineering, AI Productivity"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-          />
-        </div>
-
-        {/* What You'll Learn */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            What You&apos;ll Learn
-            <span className="text-gray-400 font-normal ml-1">(one item per line)</span>
-          </label>
-          <textarea
-            name="what_you_learn"
-            value={form.what_you_learn}
-            onChange={handleChange}
-            rows={5}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* What's Included */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            What&apos;s Included
-            <span className="text-gray-400 font-normal ml-1">(one item per line)</span>
-          </label>
-          <textarea
-            name="what_is_included"
-            value={form.what_is_included}
-            onChange={handleChange}
-            rows={4}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* Banner Image Upload */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Course Banner Image
-            <span className="text-gray-400 font-normal ml-1">(optional — JPG, PNG, WebP, max 10 MB)</span>
-          </label>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleBannerUpload}
-            className="hidden"
-          />
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={bannerUploading}
-              className="px-4 py-2 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
-            >
-              {bannerUploading ? 'Uploading...' : bannerUrl ? '↻ Change Image' : '↑ Upload Image'}
-            </button>
-            {bannerUrl && (
-              <button
-                type="button"
-                onClick={() => { setBannerUrl(''); if (fileInputRef.current) fileInputRef.current.value = '' }}
-                className="text-xs text-red-500 hover:text-red-700"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-          {bannerError && <p className="mt-1 text-xs text-red-600">{bannerError}</p>}
-          {bannerUrl && (
-            <img
-              src={bannerUrl}
-              alt="Banner preview"
-              className="mt-2 h-24 w-full object-cover rounded-lg border border-gray-200"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-            />
-          )}
         </div>
 
         {/* Price + Category */}
@@ -322,43 +175,34 @@ export default function EditCourseForm({ course, onClose }: Props) {
           </div>
         </div>
 
+        {/* Total Modules */}
+        <div className="w-1/2 pr-2">
+          <label className="block text-xs font-semibold text-gray-600 mb-1">Total Modules</label>
+          <input
+            name="total_modules"
+            type="number"
+            min="0"
+            value={form.total_modules}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+          />
+        </div>
+
         {/* Toggles */}
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="featured"
-              checked={form.featured}
-              onChange={handleChange}
-              className="w-4 h-4 accent-[#FF6F00]"
-            />
-            <span className="text-sm text-gray-700 font-medium">Featured course</span>
+            <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} className="w-4 h-4 accent-[#FF6F00]" />
+            <span className="text-sm text-gray-700 font-medium">Featured</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="is_published"
-              checked={form.is_published}
-              onChange={handleChange}
-              className="w-4 h-4 accent-[#FF6F00]"
-            />
+            <input type="checkbox" name="is_published" checked={form.is_published} onChange={handleChange} className="w-4 h-4 accent-[#FF6F00]" />
             <span className="text-sm text-gray-700 font-medium">Published</span>
           </label>
         </div>
 
-        {/* Feedback */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3">
-            ✅ {success}
-          </div>
-        )}
+        {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">{error}</div>}
+        {success && <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3">✅ {success}</div>}
 
-        {/* Actions */}
         <div className="flex items-center gap-3 pt-1">
           <button
             type="submit"
@@ -367,11 +211,7 @@ export default function EditCourseForm({ course, onClose }: Props) {
           >
             {loading ? 'Saving...' : 'Save Changes'}
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-sm text-gray-500 hover:text-gray-700 px-4 py-2.5"
-          >
+          <button type="button" onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700 px-4 py-2.5">
             Cancel
           </button>
         </div>
