@@ -47,6 +47,8 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
   const [uploading, setUploading]   = useState(false)
   const [uploadError, setUploadError] = useState('')
   const [uploadSuccess, setUploadSuccess] = useState(false)
+  // Controlled markdown content — updated programmatically after PDF extraction
+  const [markdownContent, setMarkdownContent] = useState<string>('')
 
   const formRef    = useRef<HTMLFormElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -83,13 +85,19 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
     setUploadError('')
     setUploadSuccess(false)
     setContentTab('markdown')
+    setMarkdownContent('')
   }
 
   function startEdit(mod: Module) {
     setIsAddingNew(false)
     setEditingModule(mod)
-    // Auto-select PDF tab if the module already has a PDF
-    if (mod.content_pdf_url) {
+    setMarkdownContent(mod.content ?? '')
+    // Saved PDF modules: if content exists (extracted notes) → show markdown tab
+    // If only PDF URL exists → show PDF tab
+    if (mod.content) {
+      setContentTab('markdown')
+      setPdfUrl(mod.content_pdf_url ?? '')
+    } else if (mod.content_pdf_url) {
       setContentTab('pdf')
       setPdfUrl(mod.content_pdf_url)
     } else {
@@ -134,6 +142,12 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
 
       setPdfUrl(data.url)
       setUploadSuccess(true)
+
+      // If text was extracted from the PDF, switch to markdown tab so it renders as notes
+      if (data.extractedContent && data.extractedContent.trim().length > 0) {
+        setMarkdownContent(data.extractedContent)
+        setContentTab('markdown')
+      }
     } catch (err: any) {
       setUploadError(err.message || 'Upload failed')
     } finally {
@@ -276,7 +290,8 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
                 <div>
                   <textarea
                     name="content"
-                    defaultValue={editingModule?.content ?? ''}
+                    value={markdownContent}
+                    onChange={e => setMarkdownContent(e.target.value)}
                     placeholder={`# Module Title\n\n## What You'll Learn\n- Point 1\n- Point 2\n\n## Section 1\n\nYour content here...`}
                     rows={20}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF6F00] focus:border-transparent resize-y"

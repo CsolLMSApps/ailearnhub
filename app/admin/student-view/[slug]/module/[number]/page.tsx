@@ -108,15 +108,11 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
               <h1 className="text-3xl font-bold text-gray-900">{module.title}</h1>
             </div>
 
-            {/* Module content — PDF or Markdown */}
-            {module.content_pdf_url ? (
-              <div className="mb-8">
-                <PdfIframe
-                  src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
-                  title={module.title}
-                />
-              </div>
-            ) : module.content ? (
+            {/* Module content:
+                - If extracted markdown exists → render as notes (even if PDF URL also exists)
+                - Else if only PDF URL → show PDF viewer
+                - Else → placeholder                                                */}
+            {module.content ? (
               <div className="prose max-w-none mb-10 overflow-hidden">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
@@ -177,6 +173,13 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
                 >
                   {module.content}
                 </ReactMarkdown>
+              </div>
+            ) : module.content_pdf_url ? (
+              <div className="mb-8">
+                <PdfIframe
+                  src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+                  title={module.title}
+                />
               </div>
             ) : (
               <div className="py-12 text-center text-gray-400 mb-8">
