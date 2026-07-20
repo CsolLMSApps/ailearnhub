@@ -186,18 +186,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
           {/* Padded content area — PDF / markdown + quiz CTA + navigation */}
           <div className="p-8 pt-6">
 
-            {/* PDF content — viewer now renders as plain text notes (no toolbar/page breaks) */}
-            {module.content_pdf_url && (
-              <div className="mb-8">
-                <PdfIframe
-                  src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
-                  title={module.title}
-                />
-              </div>
-            )}
-
-            {/* Markdown content — shown when no PDF, or both exist */}
-            {!module.content_pdf_url && module.content && (
+            {/* Markdown notes — takes priority (includes PDF-extracted content) */}
+            {module.content ? (
             <div className="prose max-w-none mb-8 overflow-hidden">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -243,12 +233,32 @@ export default async function ModulePage({ params }: ModulePageProps) {
                       {children}
                     </blockquote>
                   ),
+                  table: ({ children }) => (
+                    <div className="overflow-x-auto my-4">
+                      <table className="min-w-full border border-gray-200 rounded-lg">{children}</table>
+                    </div>
+                  ),
+                  th: ({ children }) => (
+                    <th className="px-4 py-2 bg-gray-50 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">{children}</th>
+                  ),
+                  td: ({ children }) => (
+                    <td className="px-4 py-2 border-b border-gray-100 text-sm text-gray-600">{children}</td>
+                  ),
                 }}
               >
                 {module.content}
               </ReactMarkdown>
             </div>
-            )}
+            ) : module.content_pdf_url ? (
+              /* Fallback PDF viewer for old modules without extracted content */
+              <div className="mb-8">
+                <PdfIframe
+                  src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+                  title={module.title}
+                />
+              </div>
+            ) : null}
+
 
             {/* Final Quiz CTA — last module */}
             {isLastModule && (
