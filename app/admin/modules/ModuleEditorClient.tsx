@@ -214,29 +214,19 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
             {/* PDF URL hidden field — populated by upload handler */}
             <input type="hidden" name="content_pdf_url" value={pdfUrl} />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Module Number *</label>
-                <input
-                  type="number"
-                  name="module_number"
-                  min="1"
-                  defaultValue={editingModule?.module_number ?? nextModuleNumber}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6F00] focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Estimated Time (minutes) *</label>
-                <input
-                  type="number"
-                  name="estimated_minutes"
-                  min="1"
-                  defaultValue={editingModule?.estimated_minutes ?? 20}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6F00] focus:border-transparent"
-                />
-              </div>
+            {/* estimated_minutes hidden — not shown in UI but required by DB */}
+            <input type="hidden" name="estimated_minutes" value="0" />
+
+            <div className="w-full sm:w-1/2">
+              <label className="block text-xs font-medium text-gray-600 mb-1">Module Number *</label>
+              <input
+                type="number"
+                name="module_number"
+                min="1"
+                defaultValue={editingModule?.module_number ?? nextModuleNumber}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6F00] focus:border-transparent"
+              />
             </div>
 
             <div>
@@ -319,10 +309,11 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
                           Open in new tab ↗
                         </a>
                       </div>
-                      <iframe
-                        src={pdfUrl}
-                        className="w-full h-64 rounded-lg border border-green-200"
-                        title="PDF Preview"
+                      <embed
+                        src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+                        type="application/pdf"
+                        className="w-full rounded-lg border border-green-200"
+                        style={{ height: '420px' }}
                       />
                     </div>
                   )}
@@ -460,7 +451,6 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
               <tr>
                 <th className="px-3 py-3 text-left w-10">#</th>
                 <th className="px-3 py-3 text-left">Title</th>
-                <th className="px-3 py-3 text-left">Duration</th>
                 <th className="px-3 py-3 text-left">Content</th>
                 <th className="px-3 py-3 text-right">Actions</th>
               </tr>
@@ -477,7 +467,6 @@ export default function ModuleEditorClient({ courses, allModules, fetchError, de
                     </span>
                   </td>
                   <td className="px-3 py-3 font-medium text-gray-900">{mod.title}</td>
-                  <td className="px-3 py-3 text-gray-500">{mod.estimated_minutes} min</td>
                   <td className="px-3 py-3 text-gray-400 text-xs">
                     {mod.content_pdf_url
                       ? <span className="text-orange-500 font-semibold">📄 PDF</span>
