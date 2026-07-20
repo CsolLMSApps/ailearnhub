@@ -4,9 +4,10 @@
 // so AdminAuthGuard calls this endpoint instead of checking client-side.
 
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { adminFetchAll } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
-const ADMIN_EMAILS = [
+const SUPER_ADMIN_EMAILS = [
   'srikanth@ctekksolutions.net',
   'shuchitha@shiroapps.com',
   'info@shirotechnologies.com',
@@ -21,7 +22,21 @@ export async function GET() {
       return NextResponse.json({ status: 'unauthenticated' }, { status: 401 })
     }
 
-    if (!ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) {
+    const email = user.email?.toLowerCase() ?? ''
+
+    // Check hardcoded super-admins first
+    let hasAccess = SUPER_ADMIN_EMAILS.includes(email)
+
+    // Then check dynamic admins in the database
+    if (!hasAccess) {
+      const { data } = await adminFetchAll(
+        'admin_users',
+        `email=eq.${encodeURIComponent(email)}&select=email`
+      )
+      hasAccess = data.length > 0
+    }
+
+    if (!hasAccess) {
       return NextResponse.json({ status: 'unauthorized' }, { status: 403 })
     }
 

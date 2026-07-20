@@ -31,6 +31,18 @@ export default async function DashboardPage({
     redirect('/login')
   }
 
+  // Check if user is an admin (hardcoded super-admins OR dynamic admins in DB)
+  const userEmail = user.email?.toLowerCase() ?? ''
+  const isSuperAdmin = ADMIN_EMAILS.includes(userEmail)
+  let isAdmin = isSuperAdmin
+  if (!isAdmin) {
+    const { data: adminRows } = await adminFetchAll(
+      'admin_users',
+      `email=eq.${encodeURIComponent(userEmail)}&select=email`
+    )
+    isAdmin = adminRows.length > 0
+  }
+
   // Get user's purchased courses
   const { data: purchases } = await supabase
     .from('purchases')
@@ -116,7 +128,7 @@ export default async function DashboardPage({
               <div className="text-right hidden sm:block">
                 <div className="text-sm text-gray-600">{user.email}</div>
               </div>
-              {ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '') && (
+              {isAdmin && (
                 <Link
                   href="/admin"
                   className="text-sm font-semibold text-white bg-[#FF6F00] hover:bg-[#E65100] px-4 py-2 rounded-lg transition-colors"
