@@ -52,114 +52,288 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer()
   const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise
 
-  // Collect all text items across all pages with absolute top-down y
-  type Item = { str: string; fontSize: number; x: number; pageY: number }
-  const allItems: Item[] = []
-  let pageOffset = 0
+  type RawItem = { str: string; fontSize: number; x: number; y: number; w: number }
+  type Line = { items: RawItem[]; y: number; topY: number }
 
-  for (let p = 1; p <= pdf.numPages; p++) {
-    const page = await pdf.getPage(p)
+  const allMd: string[] = []
+
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum)
     const viewport = page.getViewport({ scale: 1 })
+    const pageWidth = viewport.width
+    const pageHeight = viewport.height
     const tc = await page.getTextContent({ normalizeWhitespace: true })
 
-    for (const item of tc.items as any[]) {
-      const str: string = (item.str ?? '').replace(/\s+/g, ' ').trim()
-      if (!str) continue
-      const fontSize = Math.abs(item.transform?.[0] ?? 12)
-      const x: number = item.transform?.[4] ?? 0
-      const y: number = item.transform?.[5] ?? 0
-      // Convert PDF bottom-up y to top-down pageY
-      allItems.push({ str, fontSize, x, pageY: pageOffset + (viewport.height - y) })
+    // Parse items for this page
+    const rawItems: RawItem[] = (tc.items as any[])
+      .filter(i => i.str?.trim().length > 0)
+      .map(i => ({
+        str: i.str.trim(),
+        fontSize: Math.abs(i.transform?.[0] ?? 12),
+        x: i.transform?.[4] ?? 0,
+        y: i.transform?.[5] ?? 0,
+        w: i.width ?? 0,
+      }))
+
+    if (!rawItems.length) continue
+
+    // Average font size (trim outliers)
+    const fontSizes = rawItems.map(i => i.fontSize).filter(s => s > 4 && s < 72)
+    const avgFont = fontSizes.length
+      ? fontSizes.reduce((a, b) => a + b, 0) / fontSizes.length
+      : 12
+
+    // Group items into lines by PDF y (bottom-up), within 3pt
+    const lineMap: Map<number, RawItem[]> = new Map()
+    for (const item of rawItems) {
+      const yKey = Math.round(item.y)
+      let matched = false
+      for (const k of lineMap.keys()) {
+        if (Math.abs(k - yKey) <= 3) {
+          lineMap.get(k)!.push(item)
+          matched = true
+          break
+        }
+      }
+      if (!matched) lineMap.set(yKey, [item])
     }
-    pageOffset += viewport.height + 60
-  }
 
-  if (!allItems.length) return ''
+    // Sort lines top→bottom (descending PDF y = ascending page position)
+    const lines: Line[] = [...lineMap.entries()]
+      .sort((a, b) => b[0] - a[0])
+      .map(([y, items]) => ({
+        y,
+        topY: pageHeight - y,
+        items: items.sort((a, b) => a.x - b.x),
+      }))
+      // Strip page header/footer (top 7% and bottom 7%)
+      .filter(l => l.topY / pageHeight > 0.07 && l.topY / pageHeight < 0.93)
 
-  // Average font size (ignore tiny and huge outliers)
-  const sizes = allItems.map(i => i.fontSize).filter(s => s > 4 && s < 100)
-  const avgSize = sizes.length ? sizes.reduce((a, b) => a + b, 0) / sizes.length : 12
+    if (!lines.length) continue
 
-  // Group items into lines by pageY (within 4pt tolerance)
-  type Line = { items: Item[]; y: number }
-  const lines: Line[] = []
-  for (const item of allItems.sort((a, b) => a.pageY - b.pageY || a.x - b.x)) {
-    const last = lines[lines.length - 1]
-    if (last && Math.abs(last.y - item.pageY) < 4) {
-      last.items.push(item)
-    } else {
-      lines.push({ items: [item], y: item.pageY })
+    // Median line gap (typical line height for this page)
+    const yGaps = lines.slice(1)
+      .map((l, i) => l.topY - lines[i].topY)
+      .filter(g => g > 0 && g < 40)
+    yGaps.sort((a, b) => a - b)
+    const medianGap = yGaps.length ? yGaps[Math.floor(yGaps.length / 2)] : 14
+
+    // ── Helper: detect table columns in a line ──────────────────────
+    // Returns array of cell strings if multiple columns detected, else null
+    function getTableCells(lineItems: RawItem[]): string[] | null {
+      if (lineItems.length < 2) return null
+      const sorted = [...lineItems].sort((a, b) => a.x - b.x)
+      const colGapThreshold = pageWidth * 0.10 // 10% of page width = column gap
+      const cols: string[] = []
+      let cell = sorted[0].str
+      for (let k = 1; k < sorted.length; k++) {
+        // Gap = distance from end of previous item to start of next
+        const prevEnd = sorted[k - 1].x + sorted[k - 1].w
+        const gap = sorted[k].x - prevEnd
+        if (gap > colGapThreshold) {
+          cols.push(cell.trim())
+          cell = sorted[k].str
+        } else {
+          cell += ' ' + sorted[k].str
+        }
+      }
+      cols.push(cell.trim())
+      return cols.length >= 2 ? cols : null
     }
-  }
 
-  // Sort items in each line left-to-right
-  for (const line of lines) line.items.sort((a, b) => a.x - b.x)
+    // ── Process lines ────────────────────────────────────────────────
+    const pageMd: string[] = []
+    let li = 0
 
-  // Convert lines → markdown
-  const md: string[] = []
-  let prevY = -1
+    while (li < lines.length) {
+      const line = lines[li]
+      const lineText = line.items.map(i => i.str).join(' ').trim()
 
-  const isJunk = (t: string) =>
-    /^\d{1,3}$/.test(t) || /^Page \d+( of \d+)?$/i.test(t) || t.length < 2
+      // Skip junk: bare numbers (page numbers), very short lines
+      if (!lineText || lineText.length < 2) { li++; continue }
+      if (/^\d{1,4}$/.test(lineText)) { li++; continue }
+      if (/^Page \d+/i.test(lineText)) { li++; continue }
+      // Skip footer-style lines (contains •, ·, ©, and is short)
+      if (lineText.length < 80 && /[•·©®]/.test(lineText) && lineText.split(' ').length < 10 && li > lines.length - 4) {
+        li++; continue
+      }
 
-  for (let li = 0; li < lines.length; li++) {
-    const line = lines[li]
-    const text = line.items.map(i => i.str).join(' ').trim()
-    if (!text || isJunk(text)) continue
+      // ── Divider line (---, ___, ===) ────────────────────────────
+      if (/^[-_=]{3,}$/.test(lineText.replace(/\s/g, ''))) {
+        if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+        pageMd.push('---')
+        pageMd.push('')
+        li++; continue
+      }
 
-    const maxSize = Math.max(...line.items.map(i => i.fontSize))
-    const gap = prevY >= 0 ? line.y - prevY : 0
-    if (gap > 18 && md.length && md[md.length - 1] !== '') md.push('')
-    prevY = line.y
+      // ── Table detection ─────────────────────────────────────────
+      const cells = getTableCells(line.items)
+      if (cells && cells.length >= 2) {
+        // Collect consecutive table rows with same column count
+        const tableRows: string[][] = [cells]
+        let tj = li + 1
+        while (tj < lines.length) {
+          const nextLine = lines[tj]
+          const nextText = nextLine.items.map(i => i.str).join(' ').trim()
+          if (!nextText || nextText.length < 2) { tj++; continue }
+          if (/^\d{1,4}$/.test(nextText)) { tj++; break }
+          const nextCells = getTableCells(nextLine.items)
+          const yGap = nextLine.topY - lines[tj - 1].topY
+          if (nextCells && yGap < medianGap * 4) {
+            // Pad/trim to match header column count
+            while (nextCells.length < cells.length) nextCells.push('')
+            tableRows.push(nextCells.slice(0, cells.length))
+            tj++
+          } else {
+            break
+          }
+        }
 
-    // Heading by font size
-    if (maxSize >= avgSize * 1.5 && text.length < 120) {
-      if (md[md.length - 1] !== '') md.push('')
-      md.push(`# ${text}`)
-      md.push('')
-    } else if (maxSize >= avgSize * 1.2 && text.length < 140 && !/[.,;]$/.test(text)) {
-      if (md[md.length - 1] !== '') md.push('')
-      md.push(`## ${text}`)
-      md.push('')
-    } else if (
-      text === text.toUpperCase() &&
-      /[A-Z]/.test(text) &&
-      text.length >= 4 &&
-      text.length < 80 &&
-      !/^\d+$/.test(text)
-    ) {
-      // All-caps line → heading
-      if (md[md.length - 1] !== '') md.push('')
-      md.push(`## ${text}`)
-      md.push('')
-    } else if (/^[•·○●–\-\*]\s/.test(text)) {
-      md.push(`- ${text.slice(text.indexOf(' ') + 1).trim()}`)
-    } else if (/^\d+[\.\)]\s+\S/.test(text)) {
-      md.push(text)
-    } else {
-      // Check if looks like a section heading (short, title case, no trailing punct)
-      const wordCount = text.split(' ').length
-      if (
-        wordCount <= 8 &&
-        text.length < 80 &&
-        !text.endsWith('.') &&
-        !text.endsWith(',') &&
-        /^[A-Z0-9]/.test(text) &&
-        md[md.length - 1] === ''
-      ) {
-        const next = lines[li + 1]
-        const nextText = next?.items.map(i => i.str).join(' ').trim() ?? ''
-        if (nextText.length > 20) {
-          md.push(`## ${text}`)
-          md.push('')
+        if (tableRows.length >= 2) {
+          // Emit markdown table
+          if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+          const header = tableRows[0]
+          pageMd.push('| ' + header.join(' | ') + ' |')
+          pageMd.push('| ' + header.map(() => '---').join(' | ') + ' |')
+          for (const row of tableRows.slice(1)) {
+            pageMd.push('| ' + row.join(' | ') + ' |')
+          }
+          pageMd.push('')
+          li = tj
           continue
         }
       }
-      md.push(text)
+
+      // ── Single bullet character (PDF puts • on its own item) ─────
+      const isSoloBullet = /^[•·○●–]$/.test(lineText) || lineText === '-' || lineText === '*'
+      if (isSoloBullet && li + 1 < lines.length) {
+        const nextLine = lines[li + 1]
+        const nextText = nextLine.items.map(i => i.str).join(' ').trim()
+        const yGap = nextLine.topY - line.topY
+        if (yGap <= medianGap * 1.8) {
+          // Merge bullet + text, then look for continuation lines
+          let bulletText = nextText
+          let cj = li + 2
+          while (cj < lines.length) {
+            const cl = lines[cj]
+            const ct = cl.items.map(i => i.str).join(' ').trim()
+            if (!ct) break
+            const cGap = cl.topY - lines[cj - 1].topY
+            if (cGap > medianGap * 1.8) break
+            if (/^[•·○●–\-\*\d#]/.test(ct) || /^[•·○●–]$/.test(ct)) break
+            bulletText += ' ' + ct
+            cj++
+          }
+          pageMd.push(`- ${bulletText}`)
+          li = cj
+          continue
+        }
+      }
+
+      // ── Bullet line with text ────────────────────────────────────
+      if (/^[•·○●–\-\*]\s/.test(lineText)) {
+        let bulletText = lineText.slice(lineText.indexOf(' ') + 1).trim()
+        // Merge continuation lines (wrapped bullet text)
+        let cj = li + 1
+        while (cj < lines.length) {
+          const cl = lines[cj]
+          const ct = cl.items.map(i => i.str).join(' ').trim()
+          if (!ct) break
+          const cGap = cl.topY - lines[cj - 1].topY
+          if (cGap > medianGap * 1.8) break
+          if (/^[•·○●–\-\*\d#]/.test(ct)) break
+          const nextCells = getTableCells(cl.items)
+          if (nextCells) break
+          bulletText += ' ' + ct
+          cj++
+        }
+        pageMd.push(`- ${bulletText}`)
+        li = cj
+        continue
+      }
+
+      // ── Numbered list ────────────────────────────────────────────
+      if (/^\d+[\.\)]\s+\S/.test(lineText)) {
+        pageMd.push(lineText)
+        li++; continue
+      }
+
+      // ── Heading detection (conservative) ─────────────────────────
+      const maxFont = Math.max(...line.items.map(i => i.fontSize))
+      const wordCount = lineText.split(/\s+/).length
+      const noTrailPunct = !/[.,;]$/.test(lineText)
+      const isAllCaps = lineText === lineText.toUpperCase() && /[A-Z]/.test(lineText) && !/^\d/.test(lineText)
+      // Check gap from previous line
+      const prevTopY = li > 0 ? lines[li - 1].topY : 0
+      const gapFromPrev = li > 0 ? line.topY - prevTopY : 0
+      const afterBigGap = gapFromPrev > medianGap * 2.5
+
+      // H1: large font, short
+      if (maxFont >= avgFont * 1.5 && lineText.length < 120 && noTrailPunct) {
+        if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+        pageMd.push(`# ${lineText}`)
+        pageMd.push('')
+        li++; continue
+      }
+      // H2: medium-large font, short, few words, no trailing period
+      if (maxFont >= avgFont * 1.18 && wordCount <= 12 && lineText.length < 120 && noTrailPunct) {
+        if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+        pageMd.push(`## ${lineText}`)
+        pageMd.push('')
+        li++; continue
+      }
+      // All-caps short line → H2
+      if (isAllCaps && wordCount <= 8 && lineText.length < 80) {
+        if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+        pageMd.push(`## ${lineText}`)
+        pageMd.push('')
+        li++; continue
+      }
+      // Short line after big gap that reads like a heading (title-case, no trailing punct, few words)
+      if (afterBigGap && wordCount <= 6 && lineText.length < 60 && noTrailPunct && /^[A-Z]/.test(lineText)) {
+        if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+        pageMd.push(`## ${lineText}`)
+        pageMd.push('')
+        li++; continue
+      }
+
+      // ── Regular paragraph — merge wrapped lines ──────────────────
+      let paraText = lineText
+      // Merge continuation if current line doesn't end a sentence
+      if (!lineText.endsWith('.') && !lineText.endsWith('!') && !lineText.endsWith('?') && lineText.length > 10) {
+        let cj = li + 1
+        while (cj < lines.length) {
+          const cl = lines[cj]
+          const ct = cl.items.map(i => i.str).join(' ').trim()
+          if (!ct) break
+          const cGap = cl.topY - lines[cj - 1].topY
+          if (cGap > medianGap * 1.9) break
+          if (/^[•·○●–\-\*\d#]/.test(ct) || /^[•·○●–]$/.test(ct)) break
+          const nextCells = getTableCells(cl.items)
+          if (nextCells) break
+          // Check if next line looks like a heading (large font)
+          const nextMaxFont = Math.max(...cl.items.map(i => i.fontSize))
+          if (nextMaxFont >= avgFont * 1.18) break
+          paraText += ' ' + ct
+          li = cj
+          if (ct.endsWith('.') || ct.endsWith('!') || ct.endsWith('?')) { cj++; break }
+          cj++
+        }
+      }
+
+      if (afterBigGap && pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
+      pageMd.push(paraText)
+      li++
+    }
+
+    // Add page content with a blank line separator
+    if (pageMd.length) {
+      if (allMd.length && allMd[allMd.length - 1] !== '') allMd.push('')
+      allMd.push(...pageMd)
     }
   }
 
-  return md.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+  return allMd.join('\n').replace(/\n{3,}/g, '\n\n').trim()
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
