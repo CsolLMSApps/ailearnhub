@@ -52,7 +52,7 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
   // Get all modules
   const { data: modules } = await supabase
     .from('course_modules')
-    .select('id, module_number, title, estimated_minutes')
+    .select('id, module_number, title')
     .eq('course_id', course.id)
     .order('module_number', { ascending: true })
 
