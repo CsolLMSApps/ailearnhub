@@ -386,7 +386,6 @@ export default async function DashboardPage({
                     </p>
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>{course.total_modules} modules</span>
-                      <span>{course.total_hours} hours</span>
                     </div>
                   </div>
                 </Link>

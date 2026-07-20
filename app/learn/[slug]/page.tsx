@@ -138,7 +138,7 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
               </span>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{course.title}</h1>
               <p className="text-gray-500 text-sm">
-                {totalModules} modules · {course.total_hours || Math.ceil(totalModules * 0.7)} hours
+                {totalModules} modules
               </p>
             </div>
             {continueModule && (

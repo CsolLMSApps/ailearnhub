@@ -115,7 +115,6 @@ export default async function CoursesPage() {
                 <p className="text-gray-600 text-sm mb-4">{course.short_description}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
                   <span>{course.total_modules} modules</span>
-                  <span>{course.total_hours} hours</span>
                 </div>
               </div>
             </Link>
@@ -231,7 +230,6 @@ export default async function CoursesPage() {
                 <p className="text-gray-600 text-sm mb-4">{course.short_description}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
                   <span>{course.total_modules} modules</span>
-                  <span>{course.total_hours} hours</span>
                 </div>
               </div>
             </Link>
