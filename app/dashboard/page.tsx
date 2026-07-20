@@ -374,9 +374,6 @@ export default async function DashboardPage({
                       <span className="text-2xl font-bold text-[#FF6F00]">
                         ${(course.price_usd / 100).toFixed(0)}
                       </span>
-                      <span className="text-xs text-gray-500 uppercase">
-                        {course.level}
-                      </span>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">
                       {course.title}

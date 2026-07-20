@@ -384,8 +384,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
             <p className="text-xl mb-6 text-white/90">{course.short_description}</p>
             <div className="flex items-center gap-6 text-white/90 mb-8">
               <span className="font-medium">{course.total_modules} Modules</span>
-              <span className="font-medium">{course.total_hours} Hours</span>
-              <span className="font-medium capitalize">{course.level}</span>
             </div>
             <div className="flex items-center gap-4">
               <div className="bg-white/10 backdrop-blur px-6 py-3 rounded-lg">
@@ -503,14 +501,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 <li className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-[#FF6F00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                   {course.total_modules} Modules
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-[#FF6F00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  {course.total_hours} Hours Total
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-[#FF6F00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <span className="capitalize">{course.level}</span> Level
                 </li>
                 <li className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-[#FF6F00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
