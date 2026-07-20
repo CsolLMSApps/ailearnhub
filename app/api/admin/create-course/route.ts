@@ -4,18 +4,13 @@
 
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-
-const ADMIN_EMAILS = [
-  'srikanth@ctekksolutions.net',
-  'shuchitha@shiroapps.com',
-  'info@shirotechnologies.com',
-]
+import { isAdmin } from '@/lib/supabase/is-admin'
 
 export async function POST(request: Request) {
-  // Auth check — must be a signed-in admin
+  // Auth check — must be a signed-in admin (super-admin or dynamic admin)
   const supabase = await createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user || !ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? '')) {
+  if (!user || !(await isAdmin(user.email))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

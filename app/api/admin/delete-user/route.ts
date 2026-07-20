@@ -1,17 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminDeleteUser } from '@/lib/supabase/admin'
-
-const ADMIN_EMAILS = (
-  process.env.ADMIN_EMAILS ?? 'srikanth@ctekksolutions.net,shuchitha@shiroapps.com'
-).split(',').map(e => e.trim().toLowerCase())
+import { isAdmin } from '@/lib/supabase/is-admin'
 
 export async function DELETE(request: Request) {
   const supabase = await createServerSupabaseClient()
   const { data: { session } } = await supabase.auth.getSession()
-  const email = session?.user?.email?.toLowerCase() ?? ''
+  const email = session?.user?.email ?? ''
 
-  if (!email || !ADMIN_EMAILS.includes(email)) {
+  if (!email || !(await isAdmin(email))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
