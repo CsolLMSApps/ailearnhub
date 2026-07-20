@@ -31,38 +31,38 @@ export default async function DashboardPage({
     redirect('/login')
   }
 
-  // Get user's purchased courses
+  // Fetch purchases and courses as separate queries — PostgREST join (courses (*))
+  // silently fails without a FK relationship, so we merge manually in JS.
   const { data: rawPurchases } = await supabase
     .from('purchases')
-    .select(`
-      *,
-      courses (*)
-    `)
+    .select('*')
     .eq('user_id', user.id)
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
 
-  // Deduplicate by course_id — keep the most recent purchase row per course
-  const purchases = rawPurchases
-    ? Object.values(
-        rawPurchases.reduce((acc: any, p: any) => {
-          if (!acc[p.course_id]) acc[p.course_id] = p
-          return acc
-        }, {})
-      )
-    : []
-
-  // Get all published courses for recommendations
   const { data: allCourses } = await supabase
     .from('courses')
     .select('*')
     .eq('is_published', true)
 
-  // Filter out already purchased courses
-  const purchasedCourseIds = (purchases as any[])?.map((p: any) => p.course_id) || []
-  const availableCourses = allCourses?.filter(
-    course => !purchasedCourseIds.includes(course.id)
-  ) || []
+  // Build a course lookup map
+  const courseMap: Record<string, any> = {}
+  for (const c of allCourses || []) courseMap[c.id] = c
+
+  // Deduplicate purchases by course_id (bundles create one row per course)
+  // and attach course data from the map
+  const seenIds = new Set<string>()
+  const purchases: any[] = []
+  for (const p of rawPurchases || []) {
+    if (!p.course_id || seenIds.has(p.course_id)) continue
+    seenIds.add(p.course_id)
+    purchases.push({ ...p, courses: courseMap[p.course_id] ?? null })
+  }
+
+  // Filter out already purchased courses for recommendations
+  const availableCourses = (allCourses || []).filter(
+    (course: any) => !seenIds.has(course.id)
+  )
 
   // Get user's progress
   const { data: progressData } = await supabase
@@ -202,6 +202,7 @@ export default async function DashboardPage({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {purchases.map((purchase: any) => {
                 const course = purchase.courses
+                if (!course) return null
                 const progress = progressData?.find((p: any) => p.course_id === course.id)
                 const pct = progress?.completion_percentage || 0
                 const isComplete = certCourseIds.has(course.id)
