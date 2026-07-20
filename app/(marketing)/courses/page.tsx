@@ -110,9 +110,6 @@ export default async function CoursesPage() {
                   <span className="text-2xl font-bold text-[#FF6F00]">
                     ${(course.price_usd / 100).toFixed(0)}
                   </span>
-                  <span className="text-xs text-gray-500 uppercase px-3 py-1 bg-gray-100 rounded-full">
-                    {course.level}
-                  </span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
                 <p className="text-gray-600 text-sm mb-4">{course.short_description}</p>
@@ -228,9 +225,6 @@ export default async function CoursesPage() {
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-bold text-[#FF6F00]">
                     ${(course.price_usd / 100).toFixed(0)}
-                  </span>
-                  <span className="text-xs text-gray-500 uppercase px-3 py-1 bg-gray-100 rounded-full">
-                    {course.level}
                   </span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
