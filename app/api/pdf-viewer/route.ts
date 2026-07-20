@@ -1,6 +1,6 @@
 // app/api/pdf-viewer/route.ts
-// Route Handler — returns a full HTML page using PDF.js (CDN)
-// No browser PDF chrome or black borders.
+// Extracts text from the PDF using PDF.js and renders it as styled notes.
+// No toolbar, no canvas pages, no page breaks, no zoom buttons.
 
 export const dynamic = 'force-dynamic'
 
@@ -20,220 +20,233 @@ export async function GET(request: NextRequest) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDF Viewer</title>
+  <title>Notes</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { background: #f8f8f8; font-family: sans-serif; }
 
-    #toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    html, body {
+      background: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1f2937;
+      font-size: 15px;
+      line-height: 1.75;
     }
-    #toolbar .nav { display: flex; align-items: center; gap: 8px; }
-    #toolbar button {
-      padding: 5px 12px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 6px;
-      background: #fff;
-      cursor: pointer;
-      font-size: 13px;
+
+    #notes {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Headings — detected by large font size */
+    .h1 { font-size: 1.6rem; font-weight: 700; color: #111827; margin: 1.4rem 0 0.5rem; }
+    .h2 { font-size: 1.2rem; font-weight: 700; color: #111827; margin: 1.2rem 0 0.4rem; }
+    .h3 { font-size: 1rem;   font-weight: 700; color: #374151; margin: 1rem 0 0.3rem; }
+
+    /* Paragraphs */
+    p {
+      margin-bottom: 0.75rem;
       color: #374151;
-      transition: all 0.15s;
-    }
-    #toolbar button:hover:not(:disabled) { border-color: #FF6F00; color: #FF6F00; }
-    #toolbar button:disabled { opacity: 0.4; cursor: default; }
-    #page-info { font-size: 13px; color: #6b7280; white-space: nowrap; }
-    .zoom-group { display: flex; align-items: center; gap: 6px; }
-    #zoom-level { font-size: 12px; color: #6b7280; min-width: 38px; text-align: center; }
-
-    #pages {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 20px 16px 40px;
+      word-wrap: break-word;
     }
 
-    .page-wrapper {
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-      border-radius: 4px;
-      overflow: hidden;
-      display: inline-block;
+    /* Bullet lines */
+    .bullet {
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: 0.4rem;
+      color: #374151;
     }
-    canvas { display: block; }
+    .bullet::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #FF6F00;
+      font-weight: 700;
+    }
 
+    /* Loading */
     #loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 60vh;
-      gap: 16px;
-      color: #6b7280;
+      padding: 48px 0;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
     }
     .spinner {
-      width: 36px; height: 36px;
+      width: 32px; height: 32px;
       border: 3px solid #e5e7eb;
       border-top-color: #FF6F00;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
+      margin: 0 auto 12px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    #error { display: none; padding: 40px; text-align: center; color: #ef4444; font-size: 14px; }
+
+    #error { display: none; padding: 40px; color: #ef4444; font-size: 14px; }
   </style>
 </head>
 <body>
 
-<div id="toolbar">
-  <div class="nav">
-    <button id="prev" disabled>◀ Prev</button>
-    <span id="page-info">— / —</span>
-    <button id="next" disabled>Next ▶</button>
-  </div>
-  <div class="zoom-group">
-    <button id="zoom-out">−</button>
-    <span id="zoom-level">100%</span>
-    <button id="zoom-in">+</button>
-    <button id="zoom-fit">Fit</button>
-  </div>
-</div>
-
-<div id="loading">
-  <div class="spinner"></div>
-  <span>Loading PDF…</span>
-</div>
-<div id="error">Failed to load PDF.</div>
-<div id="pages" style="display:none"></div>
+<div id="loading"><div class="spinner"></div>Loading…</div>
+<div id="error">Failed to load PDF content.</div>
+<div id="notes" style="display:none"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  const PDF_URL = ${JSON.stringify(url)};
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const PDF_URL = ${JSON.stringify(url)};
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  let pdfDoc = null;
-  let currentPage = 1;
-  let scale = 1.4;
-  let totalPages = 0;
-  let rendering = false;
+// Detect if a text run looks like a heading candidate
+function looksLikeHeading(text, fontSize, avgFontSize) {
+  if (!text.trim()) return false;
+  const big = fontSize >= avgFontSize * 1.25;
+  const short = text.trim().length < 120;
+  const noEndPunct = !/[.,;:!?]$/.test(text.trim());
+  return big && short && noEndPunct;
+}
 
-  const pagesDiv   = document.getElementById('pages');
+// Strip lone page numbers or decorative artifacts
+function isJunk(text) {
+  const t = text.trim();
+  if (!t) return true;
+  if (/^\\d{1,4}$/.test(t)) return true;          // bare page numbers
+  if (/^Page \\d+( of \\d+)?$/i.test(t)) return true;
+  if (t.length < 2) return true;
+  return false;
+}
+
+async function extractAndRender() {
+  const notesDiv = document.getElementById('notes');
   const loadingDiv = document.getElementById('loading');
-  const errorDiv   = document.getElementById('error');
-  const prevBtn    = document.getElementById('prev');
-  const nextBtn    = document.getElementById('next');
-  const pageInfo   = document.getElementById('page-info');
-  const zoomIn     = document.getElementById('zoom-in');
-  const zoomOut    = document.getElementById('zoom-out');
-  const zoomFit    = document.getElementById('zoom-fit');
-  const zoomLevel  = document.getElementById('zoom-level');
+  const errorDiv = document.getElementById('error');
 
-  async function renderAllPages() {
-    pagesDiv.innerHTML = '';
-    rendering = true;
-    for (let i = 1; i <= totalPages; i++) {
-      const page = await pdfDoc.getPage(i);
-      const viewport = page.getViewport({ scale });
-      const wrapper = document.createElement('div');
-      wrapper.className = 'page-wrapper';
-      const canvas = document.createElement('canvas');
-      canvas.width  = viewport.width;
-      canvas.height = viewport.height;
-      wrapper.appendChild(canvas);
-      pagesDiv.appendChild(wrapper);
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+  try {
+    const pdf = await pdfjsLib.getDocument(PDF_URL).promise;
+
+    // First pass: collect all items with font sizes to compute average
+    const allItems = [];
+    for (let p = 1; p <= pdf.numPages; p++) {
+      const page = await pdf.getPage(p);
+      const tc = await page.getTextContent({ normalizeWhitespace: true });
+      for (const item of tc.items) {
+        if (item.str) {
+          allItems.push({ str: item.str, fontSize: item.transform ? Math.abs(item.transform[0]) : 12, y: item.transform ? item.transform[5] : 0 });
+        }
+      }
     }
-    rendering = false;
-    // Tell parent iframe to resize to fit all pages (no internal scrollbar)
-    setTimeout(() => {
-      const totalHeight = document.body.scrollHeight + 8;
-      window.parent.postMessage({ type: 'pdf-height', height: totalHeight }, '*');
-    }, 100);
-  }
 
-  async function renderPage(num) {
-    if (rendering) return;
-    currentPage = num;
-    pageInfo.textContent = num + ' / ' + totalPages;
-    prevBtn.disabled = num <= 1;
-    nextBtn.disabled = num >= totalPages;
-
-    const page = await pdfDoc.getPage(num);
-    const viewport = page.getViewport({ scale });
-    pagesDiv.innerHTML = '';
-    const wrapper = document.createElement('div');
-    wrapper.className = 'page-wrapper';
-    const canvas = document.createElement('canvas');
-    canvas.width  = viewport.width;
-    canvas.height = viewport.height;
-    wrapper.appendChild(canvas);
-    pagesDiv.appendChild(wrapper);
-    rendering = true;
-    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-    rendering = false;
-  }
-
-  function updateZoom() {
-    zoomLevel.textContent = Math.round(scale * 100) + '%';
-  }
-
-  pdfjsLib.getDocument(PDF_URL).promise.then(pdf => {
-    pdfDoc = pdf;
-    totalPages = pdf.numPages;
-    loadingDiv.style.display = 'none';
-    pagesDiv.style.display   = 'flex';
-
-    if (totalPages <= 10) {
-      pageInfo.textContent = '1 – ' + totalPages;
-      prevBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
-      renderAllPages();
-    } else {
-      prevBtn.disabled = false;
-      nextBtn.disabled = false;
-      renderPage(1);
+    if (allItems.length === 0) {
+      notesDiv.innerHTML = '<p style="color:#9ca3af;padding:24px 0">No text content found in this PDF.</p>';
+      loadingDiv.style.display = 'none';
+      notesDiv.style.display = 'block';
+      signalHeight();
+      return;
     }
-    updateZoom();
-  }).catch(err => {
+
+    const sizes = allItems.map(i => i.fontSize).filter(s => s > 0);
+    const avgFontSize = sizes.reduce((a, b) => a + b, 0) / sizes.length;
+
+    // Second pass: rebuild the PDF page-by-page, grouping items into lines then paragraphs
+    const html = [];
+    for (let p = 1; p <= pdf.numPages; p++) {
+      const page = await pdf.getPage(p);
+      const tc = await page.getTextContent({ normalizeWhitespace: true });
+      if (!tc.items.length) continue;
+
+      // Group items into lines by their y-coordinate (within 2pt tolerance)
+      const lines = [];
+      let currentLine = null;
+      for (const item of tc.items) {
+        if (!item.str) continue;
+        const y = item.transform ? Math.round(item.transform[5]) : 0;
+        const fontSize = item.transform ? Math.abs(item.transform[0]) : 12;
+        if (!currentLine || Math.abs(currentLine.y - y) > 2) {
+          currentLine = { y, text: '', maxFontSize: fontSize };
+          lines.push(currentLine);
+        }
+        currentLine.text += item.str;
+        if (fontSize > currentLine.maxFontSize) currentLine.maxFontSize = fontSize;
+      }
+
+      // Sort lines by descending y (PDF y-axis is bottom-up)
+      lines.sort((a, b) => b.y - a.y);
+
+      // Merge short adjacent lines into paragraphs, detect headings & bullets
+      let paragraphText = '';
+      let paragraphFontSize = avgFontSize;
+
+      const flush = () => {
+        const t = paragraphText.trim();
+        if (!t || isJunk(t)) { paragraphText = ''; return; }
+
+        const big = paragraphFontSize >= avgFontSize * 1.35;
+        const medium = paragraphFontSize >= avgFontSize * 1.15;
+
+        // Bullet detection
+        if (/^[•·○●–\\-\\*]\\s/.test(t)) {
+          const content = escapeHtml(t.slice(t.indexOf(' ') + 1).trim());
+          html.push('<div class="bullet">' + content + '</div>');
+        } else if (big && t.length < 100) {
+          html.push('<div class="h1">' + escapeHtml(t) + '</div>');
+        } else if (medium && t.length < 120 && !/[.,;]$/.test(t)) {
+          html.push('<div class="h2">' + escapeHtml(t) + '</div>');
+        } else if (looksLikeHeading(t, paragraphFontSize, avgFontSize) && t.length < 120) {
+          html.push('<div class="h3">' + escapeHtml(t) + '</div>');
+        } else {
+          html.push('<p>' + escapeHtml(t) + '</p>');
+        }
+        paragraphText = '';
+        paragraphFontSize = avgFontSize;
+      };
+
+      for (const line of lines) {
+        const t = line.text.trim();
+        if (!t) { flush(); continue; }
+
+        const isHeadingLine = looksLikeHeading(t, line.maxFontSize, avgFontSize);
+        const isBullet = /^[•·○●–\\-\\*]\\s/.test(t);
+
+        if (isHeadingLine || isBullet) {
+          flush();
+          paragraphText = t;
+          paragraphFontSize = line.maxFontSize;
+          flush();
+        } else {
+          // Accumulate into paragraph
+          if (paragraphText) paragraphText += ' ';
+          paragraphText += t;
+          if (line.maxFontSize > paragraphFontSize) paragraphFontSize = line.maxFontSize;
+          // Flush if line ends a sentence
+          if (/[.!?]$/.test(t)) flush();
+        }
+      }
+      flush();
+    }
+
     loadingDiv.style.display = 'none';
-    errorDiv.style.display = 'block';
+    notesDiv.innerHTML = html.join('\\n');
+    notesDiv.style.display = 'block';
+    signalHeight();
+
+  } catch(err) {
     console.error(err);
-  });
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+  }
+}
 
-  prevBtn.addEventListener('click', () => { if (currentPage > 1) renderPage(currentPage - 1); });
-  nextBtn.addEventListener('click', () => { if (currentPage < totalPages) renderPage(currentPage + 1); });
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-  zoomIn.addEventListener('click', () => {
-    if (scale >= 3) return;
-    scale = Math.min(3, scale + 0.2);
-    updateZoom();
-    totalPages <= 10 ? renderAllPages() : renderPage(currentPage);
-  });
-  zoomOut.addEventListener('click', () => {
-    if (scale <= 0.4) return;
-    scale = Math.max(0.4, scale - 0.2);
-    updateZoom();
-    totalPages <= 10 ? renderAllPages() : renderPage(currentPage);
-  });
-  zoomFit.addEventListener('click', () => {
-    const containerW = pagesDiv.clientWidth - 32;
-    pdfjsLib.getDocument(PDF_URL).promise.then(pdf => pdf.getPage(1)).then(page => {
-      const vp = page.getViewport({ scale: 1 });
-      scale = Math.min(3, containerW / vp.width);
-      updateZoom();
-      totalPages <= 10 ? renderAllPages() : renderPage(currentPage);
-    });
-  });
+function signalHeight() {
+  setTimeout(() => {
+    const h = document.body.scrollHeight + 8;
+    window.parent.postMessage({ type: 'pdf-height', height: h }, '*');
+  }, 100);
+}
+
+extractAndRender();
 </script>
 </body>
 </html>`

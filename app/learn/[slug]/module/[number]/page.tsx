@@ -186,8 +186,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
           {/* Padded content area — PDF / markdown + quiz CTA + navigation */}
           <div className="p-8 pt-6">
 
-            {/* PDF viewer — only shown when there is NO extracted markdown content */}
-            {module.content_pdf_url && !module.content && (
+            {/* PDF content — viewer now renders as plain text notes (no toolbar/page breaks) */}
+            {module.content_pdf_url && (
               <div className="mb-8">
                 <PdfIframe
                   src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
@@ -196,8 +196,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
               </div>
             )}
 
-            {/* Markdown content — shown whenever content exists (includes PDF-extracted notes) */}
-            {module.content && (
+            {/* Markdown content — shown when no PDF, or both exist */}
+            {!module.content_pdf_url && module.content && (
             <div className="prose max-w-none mb-8 overflow-hidden">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
