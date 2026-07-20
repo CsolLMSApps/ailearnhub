@@ -23,46 +23,35 @@ export default async function DashboardPage({
   const { purchase, bundle } = await searchParams
   const showBundleSuccess = purchase === 'success' && bundle === 'true'
   const supabase = await createServerSupabaseClient()
-  
+
   // Check if user is authenticated
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  
+
   if (authError || !user) {
     redirect('/login')
   }
 
-  // Fetch purchases and courses as separate queries — PostgREST join (courses (*))
-  // silently fails without a FK relationship, so we merge manually in JS.
-  const { data: rawPurchases } = await supabase
+  // Get user's purchased courses
+  const { data: purchases } = await supabase
     .from('purchases')
-    .select('*')
+    .select(`
+      *,
+      courses (*)
+    `)
     .eq('user_id', user.id)
     .eq('status', 'completed')
-    .order('created_at', { ascending: false })
 
+  // Get all published courses for recommendations
   const { data: allCourses } = await supabase
     .from('courses')
     .select('*')
     .eq('is_published', true)
 
-  // Build a course lookup map
-  const courseMap: Record<string, any> = {}
-  for (const c of allCourses || []) courseMap[c.id] = c
-
-  // Deduplicate purchases by course_id (bundles create one row per course)
-  // and attach course data from the map
-  const seenIds = new Set<string>()
-  const purchases: any[] = []
-  for (const p of rawPurchases || []) {
-    if (!p.course_id || seenIds.has(p.course_id)) continue
-    seenIds.add(p.course_id)
-    purchases.push({ ...p, courses: courseMap[p.course_id] ?? null })
-  }
-
-  // Filter out already purchased courses for recommendations
-  const availableCourses = (allCourses || []).filter(
-    (course: any) => !seenIds.has(course.id)
-  )
+  // Filter out already purchased courses
+  const purchasedCourseIds = (purchases as any[])?.map((p: any) => p.course_id) || []
+  const availableCourses = allCourses?.filter(
+    (course: any) => !purchasedCourseIds.includes(course.id)
+  ) || []
 
   // Get user's progress
   const { data: progressData } = await supabase
@@ -87,7 +76,7 @@ export default async function DashboardPage({
   const passedQuizCourseIds = new Set((passedQuizzes || []).map((q: any) => q.course_id))
 
   // Calculate overall completion
-  const totalModulesAcrossAllCourses = purchases?.reduce((sum: number, p: any) => {
+  const totalModulesAcrossAllCourses = (purchases as any[])?.reduce((sum: number, p: any) => {
     return sum + (p.courses?.total_modules || 0)
   }, 0) || 0
 
@@ -168,7 +157,7 @@ export default async function DashboardPage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Enrolled Courses</p>
-                <p className="text-3xl font-bold text-gray-900">{purchases?.length || 0}</p>
+                <p className="text-3xl font-bold text-gray-900">{(purchases as any[])?.length || 0}</p>
               </div>
               <div className="text-4xl">📚</div>
             </div>
@@ -194,13 +183,13 @@ export default async function DashboardPage({
         </div>
 
         {/* My Courses */}
-        {purchases && purchases.length > 0 ? (
+        {purchases && (purchases as any[]).length > 0 ? (
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               My Courses
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {purchases.map((purchase: any) => {
+              {(purchases as any[]).map((purchase: any) => {
                 const course = purchase.courses
                 if (!course) return null
                 const progress = progressData?.find((p: any) => p.course_id === course.id)
