@@ -59,7 +59,7 @@ export default async function DashboardPage({
     .eq('is_published', true)
 
   // Filter out already purchased courses
-  const purchasedCourseIds = purchases?.map(p => p.course_id) || []
+  const purchasedCourseIds = (purchases as any[])?.map((p: any) => p.course_id) || []
   const availableCourses = allCourses?.filter(
     course => !purchasedCourseIds.includes(course.id)
   ) || []
