@@ -183,16 +183,18 @@ export default async function ModulePage({ params }: ModulePageProps) {
             </div>
           </div>
 
-          {/* PDF content — auto-height iframe, no internal scrollbar */}
-          {module.content_pdf_url ? (
-            <PdfIframe
-              src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
-              title={module.title}
-            />
-          ) : null}
-
-          {/* Padded content area — markdown + quiz CTA + navigation */}
+          {/* Padded content area — PDF / markdown + quiz CTA + navigation */}
           <div className="p-8 pt-6">
+
+            {/* PDF content */}
+            {module.content_pdf_url && (
+              <div className="mb-8">
+                <PdfIframe
+                  src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
+                  title={module.title}
+                />
+              </div>
+            )}
 
             {/* Markdown content (shown when no PDF, or alongside PDF if both exist) */}
             {module.content && (

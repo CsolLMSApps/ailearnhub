@@ -109,17 +109,15 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
             </div>
 
             {/* Module content — PDF or Markdown */}
-            {module.content_pdf_url && (
+            {module.content_pdf_url ? (
               <div className="mb-8">
                 <PdfIframe
                   src={`/api/pdf-viewer?url=${encodeURIComponent(module.content_pdf_url)}`}
                   title={module.title}
                 />
               </div>
-            )}
-
-            <div className="prose max-w-none mb-10 overflow-hidden">
-              {module.content ? (
+            ) : module.content ? (
+              <div className="prose max-w-none mb-10 overflow-hidden">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
@@ -179,20 +177,20 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
                 >
                   {module.content}
                 </ReactMarkdown>
-              ) : (
-                <div className="py-12 text-center text-gray-400">
-                  <p className="text-4xl mb-3">📄</p>
-                  <p className="font-medium">No content added yet for this module.</p>
-                  <p className="text-sm mt-1">
-                    Add content via the{' '}
-                    <Link href="/admin/modules" className="text-[#FF6F00] hover:underline">
-                      Module Editor
-                    </Link>
-                    .
-                  </p>
-                </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="py-12 text-center text-gray-400 mb-8">
+                <p className="text-4xl mb-3">📄</p>
+                <p className="font-medium">No content added yet for this module.</p>
+                <p className="text-sm mt-1">
+                  Add content via the{' '}
+                  <Link href="/admin/modules" className="text-[#FF6F00] hover:underline">
+                    Module Editor
+                  </Link>
+                  .
+                </p>
+              </div>
+            )}
 
             {/* Quiz preview — read only, last module only */}
             {isLastModule && (
