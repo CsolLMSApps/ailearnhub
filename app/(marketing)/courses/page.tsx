@@ -73,7 +73,7 @@ export default async function CoursesPage() {
                     <span className="text-xs bg-white text-[#FF6F00] font-bold px-2 py-0.5 rounded-full">Save $34</span>
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Complete AI Mastery Bundle — All 6 Courses</h3>
-                  <p className="text-sm text-white/80 mt-0.5">34 modules · 16 hours · All certificates included</p>
+                  <p className="text-sm text-white/80 mt-0.5">34 modules · All certificates included</p>
                 </div>
               </div>
               <div className="shrink-0 flex items-center gap-4 sm:flex-col sm:items-end sm:gap-1">
@@ -188,7 +188,7 @@ export default async function CoursesPage() {
                     <span className="text-xs bg-white text-[#FF6F00] font-bold px-2 py-0.5 rounded-full">Save $34</span>
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Complete AI Mastery Bundle — All 6 Courses</h3>
-                  <p className="text-sm text-white/80 mt-0.5">34 modules · 16 hours · All certificates included</p>
+                  <p className="text-sm text-white/80 mt-0.5">34 modules · All certificates included</p>
                 </div>
               </div>
               <div className="shrink-0 flex items-center gap-4 sm:flex-col sm:items-end sm:gap-1">

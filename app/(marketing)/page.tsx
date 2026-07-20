@@ -112,9 +112,6 @@ export default function HomePage() {
             <Card className="border-2 border-gray-200 hover:border-[#FF6F00] transition-colors">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="px-3 py-1 bg-[#FF6F00] text-white text-xs font-semibold rounded-full">
-                    FEATURED
-                  </span>
                   <span className="text-2xl font-bold text-[#FF6F00]">$19</span>
                 </div>
                 <CardTitle className="text-2xl text-[#212121]">
@@ -129,10 +126,6 @@ export default function HomePage() {
                   <li className="flex items-center text-sm text-[#424242]">
                     <span className="text-[#FF6F00] mr-2">✓</span>
                     7 comprehensive modules
-                  </li>
-                  <li className="flex items-center text-sm text-[#424242]">
-                    <span className="text-[#FF6F00] mr-2">✓</span>
-                    4 hours of expert training
                   </li>
                   <li className="flex items-center text-sm text-[#424242]">
                     <span className="text-[#FF6F00] mr-2">✓</span>
@@ -155,9 +148,6 @@ export default function HomePage() {
             <Card className="border-2 border-gray-200 hover:border-[#FF6F00] transition-colors">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="px-3 py-1 bg-[#424242] text-white text-xs font-semibold rounded-full">
-                    BEGINNER
-                  </span>
                   <span className="text-2xl font-bold text-[#FF6F00]">$19</span>
                 </div>
                 <CardTitle className="text-2xl text-[#212121]">
@@ -172,10 +162,6 @@ export default function HomePage() {
                   <li className="flex items-center text-sm text-[#424242]">
                     <span className="text-[#FF6F00] mr-2">✓</span>
                     6 easy-to-follow modules
-                  </li>
-                  <li className="flex items-center text-sm text-[#424242]">
-                    <span className="text-[#FF6F00] mr-2">✓</span>
-                    2.9 hours of training
                   </li>
                   <li className="flex items-center text-sm text-[#424242]">
                     <span className="text-[#FF6F00] mr-2">✓</span>

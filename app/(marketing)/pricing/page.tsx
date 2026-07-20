@@ -70,7 +70,7 @@ export default async function PricingPage() {
             Complete AI Mastery Bundle
           </h1>
           <p className="text-lg text-gray-500 mb-8 max-w-xl mx-auto">
-            Get all {totalCourses} AI courses in one plan — {totalModules} modules, {totalHours} hours of content, and {totalCourses} certificates. Everything you need to master AI.
+            Get all {totalCourses} AI courses in one plan — {totalModules} modules and {totalCourses} certificates. Everything you need to master AI.
           </p>
 
           {/* Price block */}
@@ -183,7 +183,7 @@ export default async function PricingPage() {
               <span className="text-2xl">🎓</span>
               <div>
                 <p className="font-bold">Complete Bundle — All {totalCourses} Courses</p>
-                <p className="text-sm text-gray-400">{totalModules} modules · {totalHours} hours · {totalCourses} certificates</p>
+                <p className="text-sm text-gray-400">{totalModules} modules · {totalCourses} certificates</p>
               </div>
             </div>
             <div className="text-right shrink-0">
@@ -200,7 +200,6 @@ export default async function PricingPage() {
             {[
               `All ${totalCourses} AI courses — instant access`,
               `${totalModules} comprehensive learning modules`,
-              `${totalHours} hours of expert-led content`,
               `${totalCourses} certificates of completion`,
               'Lifetime access — no expiry',
               'Final quiz for each course',
