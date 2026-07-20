@@ -1,13 +1,14 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useState, useActionState } from 'react'
 import { deleteCourse } from '@/app/actions/admin-courses'
+import EditCourseForm from '@/components/admin/EditCourseForm'
 
 interface CourseStat {
   id: string
   title: string
   slug: string
-  level: string
+  level?: string
   total_modules: number
   revenue: number
   enrollments: number
@@ -15,12 +16,24 @@ interface CourseStat {
   quizPasses: number
   certificates: number
   completionRate: number
+  // editable content fields
+  short_description?: string | null
+  about_course?: string | null
+  skill_tags?: string[] | null
+  what_you_learn?: string[] | null
+  what_is_included?: string[] | null
+  banner_url?: string | null
+  price_usd?: number
+  category?: string | null
+  featured?: boolean
+  is_published?: boolean
 }
 
 const initialState = { error: undefined, success: undefined }
 
 export default function CourseList({ courses }: { courses: CourseStat[] }) {
   const [deleteState, deleteAction, deletePending] = useActionState(deleteCourse, initialState)
+  const [editingId, setEditingId] = useState<string | null>(null)
 
   return (
     <div className="space-y-4">
@@ -41,14 +54,21 @@ export default function CourseList({ courses }: { courses: CourseStat[] }) {
             <div className="min-w-0">
               <h2 className="text-lg font-bold text-gray-900 truncate">{c.title}</h2>
               <p className="text-xs text-gray-400 mt-0.5">
-                {c.slug} · {c.level} · {c.total_modules} modules
+                {c.slug} · {c.total_modules} modules
               </p>
             </div>
-            <div className="flex items-start gap-4 shrink-0">
-              <div className="text-right">
+            <div className="flex items-start gap-2 shrink-0">
+              <div className="text-right mr-2">
                 <p className="text-2xl font-bold text-green-600">${(c.revenue / 100).toFixed(2)}</p>
                 <p className="text-xs text-gray-400">total revenue</p>
               </div>
+              {/* Edit button */}
+              <button
+                onClick={() => setEditingId(editingId === c.id ? null : c.id)}
+                className="mt-1 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+              >
+                {editingId === c.id ? 'Close' : 'Edit'}
+              </button>
               {/* Delete button */}
               <form action={deleteAction}>
                 <input type="hidden" name="course_id" value={c.id} />
@@ -105,6 +125,14 @@ export default function CourseList({ courses }: { courses: CourseStat[] }) {
               />
             </div>
           </div>
+
+          {/* Inline Edit Form */}
+          {editingId === c.id && (
+            <EditCourseForm
+              course={c}
+              onClose={() => setEditingId(null)}
+            />
+          )}
         </div>
       ))}
     </div>

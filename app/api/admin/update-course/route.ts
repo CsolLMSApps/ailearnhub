@@ -1,13 +1,12 @@
-// app/api/admin/create-course/route.ts
-// Creates a new course row using the service role key (bypasses RLS).
+// app/api/admin/update-course/route.ts
+// Updates an existing course row using the service role key (bypasses RLS).
 // Auth-gated: only admin emails may call this.
 
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { isAdmin } from '@/lib/supabase/is-admin'
 
-export async function POST(request: Request) {
-  // Auth check — must be a signed-in admin (super-admin or dynamic admin)
+export async function PATCH(request: Request) {
   const supabase = await createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user || !(await isAdmin(user.email))) {
@@ -16,6 +15,7 @@ export async function POST(request: Request) {
 
   const body = await request.json()
   const {
+    id,
     title,
     slug,
     short_description,
@@ -24,16 +24,15 @@ export async function POST(request: Request) {
     what_you_learn,
     what_is_included,
     banner_url,
-    price_usd,       // sent as cents from the form
+    price_usd,
     category,
     total_modules,
     featured,
     is_published,
   } = body
 
-  if (!title || !slug) {
-    return NextResponse.json({ error: 'title and slug are required' }, { status: 400 })
-  }
+  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+  if (!title || !slug) return NextResponse.json({ error: 'title and slug are required' }, { status: 400 })
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
@@ -42,8 +41,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Server config error' }, { status: 500 })
   }
 
-  const res = await fetch(`${url}/rest/v1/courses`, {
-    method: 'POST',
+  const res = await fetch(`${url}/rest/v1/courses?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
     headers: {
       apikey: key,
       Authorization: `Bearer ${key}`,
@@ -71,9 +70,8 @@ export async function POST(request: Request) {
 
   if (!res.ok) {
     const message = json?.message ?? json?.error ?? `HTTP ${res.status}`
-    // Friendly error for duplicate slug
     if (res.status === 409 || message.toLowerCase().includes('unique')) {
-      return NextResponse.json({ error: 'A course with this slug already exists. Choose a different slug.' }, { status: 409 })
+      return NextResponse.json({ error: 'A course with this slug already exists.' }, { status: 409 })
     }
     return NextResponse.json({ error: message }, { status: res.status })
   }
