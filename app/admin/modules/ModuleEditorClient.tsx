@@ -52,8 +52,42 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer()
   const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise
 
-  type RawItem = { str: string; fontSize: number; x: number; y: number; w: number }
+  type RawItem = { str: string; fontSize: number; x: number; y: number; w: number; bold: boolean; italic: boolean }
   type Line = { items: RawItem[]; y: number; topY: number }
+
+  // Render items into markdown text, preserving bold/italic spans
+  function renderItems(items: RawItem[]): string {
+    if (!items.length) return ''
+    const parts: string[] = []
+    let i = 0
+    while (i < items.length) {
+      const { bold, italic } = items[i]
+      let chunk = ''
+      // Collect consecutive items with same formatting
+      while (i < items.length && items[i].bold === bold && items[i].italic === italic) {
+        if (chunk) chunk += ' '
+        chunk += items[i].str
+        i++
+      }
+      chunk = chunk.trim()
+      if (!chunk) continue
+      if (bold && italic) {
+        parts.push(`***${chunk}***`)
+      } else if (bold) {
+        parts.push(`**${chunk}**`)
+      } else if (italic) {
+        parts.push(`*${chunk}*`)
+      } else {
+        parts.push(chunk)
+      }
+    }
+    return parts.join(' ')
+  }
+
+  // Plain text from items (for heading detection — no markdown markers)
+  function plainText(items: RawItem[]): string {
+    return items.map(i => i.str).join(' ').trim()
+  }
 
   const allMd: string[] = []
 
@@ -67,13 +101,18 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
     // Parse items for this page
     const rawItems: RawItem[] = (tc.items as any[])
       .filter(i => i.str?.trim().length > 0)
-      .map(i => ({
-        str: i.str.trim(),
-        fontSize: Math.abs(i.transform?.[0] ?? 12),
-        x: i.transform?.[4] ?? 0,
-        y: i.transform?.[5] ?? 0,
-        w: i.width ?? 0,
-      }))
+      .map(i => {
+        const fn = (i.fontName ?? '').toLowerCase()
+        return {
+          str: i.str.trim(),
+          fontSize: Math.abs(i.transform?.[0] ?? 12),
+          x: i.transform?.[4] ?? 0,
+          y: i.transform?.[5] ?? 0,
+          w: i.width ?? 0,
+          bold: /bold|heavy|black/.test(fn),
+          italic: /italic|oblique/.test(fn),
+        }
+      })
 
     if (!rawItems.length) continue
 
@@ -147,13 +186,14 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
 
     while (li < lines.length) {
       const line = lines[li]
-      const lineText = line.items.map(i => i.str).join(' ').trim()
+      // lineText = plain text for detection logic (no ** markers)
+      const lineText = plainText(line.items)
 
       // Skip junk: bare numbers (page numbers), very short lines
       if (!lineText || lineText.length < 2) { li++; continue }
       if (/^\d{1,4}$/.test(lineText)) { li++; continue }
       if (/^Page \d+/i.test(lineText)) { li++; continue }
-      // Skip footer-style lines (contains •, ·, ©, and is short)
+      // Skip footer-style lines at bottom of page
       if (lineText.length < 80 && /[•·©®]/.test(lineText) && lineText.split(' ').length < 10 && li > lines.length - 4) {
         li++; continue
       }
@@ -169,18 +209,16 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
       // ── Table detection ─────────────────────────────────────────
       const cells = getTableCells(line.items)
       if (cells && cells.length >= 2) {
-        // Collect consecutive table rows with same column count
         const tableRows: string[][] = [cells]
         let tj = li + 1
         while (tj < lines.length) {
           const nextLine = lines[tj]
-          const nextText = nextLine.items.map(i => i.str).join(' ').trim()
+          const nextText = plainText(nextLine.items)
           if (!nextText || nextText.length < 2) { tj++; continue }
           if (/^\d{1,4}$/.test(nextText)) { tj++; break }
           const nextCells = getTableCells(nextLine.items)
           const yGap = nextLine.topY - lines[tj - 1].topY
           if (nextCells && yGap < medianGap * 4) {
-            // Pad/trim to match header column count
             while (nextCells.length < cells.length) nextCells.push('')
             tableRows.push(nextCells.slice(0, cells.length))
             tj++
@@ -190,7 +228,6 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
         }
 
         if (tableRows.length >= 2) {
-          // Emit markdown table
           if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
           const header = tableRows[0]
           pageMd.push('| ' + header.join(' | ') + ' |')
@@ -208,23 +245,23 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
       const isSoloBullet = /^[•·○●–]$/.test(lineText) || lineText === '-' || lineText === '*'
       if (isSoloBullet && li + 1 < lines.length) {
         const nextLine = lines[li + 1]
-        const nextText = nextLine.items.map(i => i.str).join(' ').trim()
+        const nextText = plainText(nextLine.items)
         const yGap = nextLine.topY - line.topY
         if (yGap <= medianGap * 1.8) {
-          // Merge bullet + text, then look for continuation lines
-          let bulletText = nextText
+          // Merge bullet + text (with bold/italic), then look for continuation lines
+          let bulletItems = [...nextLine.items]
           let cj = li + 2
           while (cj < lines.length) {
             const cl = lines[cj]
-            const ct = cl.items.map(i => i.str).join(' ').trim()
+            const ct = plainText(cl.items)
             if (!ct) break
             const cGap = cl.topY - lines[cj - 1].topY
             if (cGap > medianGap * 1.8) break
             if (/^[•·○●–\-\*\d#]/.test(ct) || /^[•·○●–]$/.test(ct)) break
-            bulletText += ' ' + ct
+            bulletItems = [...bulletItems, { str: ' ', fontSize: 12, x: 0, y: 0, w: 0, bold: false, italic: false }, ...cl.items]
             cj++
           }
-          pageMd.push(`- ${bulletText}`)
+          pageMd.push(`- ${renderItems(bulletItems)}`)
           li = cj
           continue
         }
@@ -232,50 +269,49 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
 
       // ── Bullet line with text ────────────────────────────────────
       if (/^[•·○●–\-\*]\s/.test(lineText)) {
-        let bulletText = lineText.slice(lineText.indexOf(' ') + 1).trim()
-        // Merge continuation lines (wrapped bullet text)
+        // Items after the bullet character
+        const bulletBodyItems = line.items.slice(1)
+        let bulletItems = bulletBodyItems.length ? bulletBodyItems : line.items
         let cj = li + 1
         while (cj < lines.length) {
           const cl = lines[cj]
-          const ct = cl.items.map(i => i.str).join(' ').trim()
+          const ct = plainText(cl.items)
           if (!ct) break
           const cGap = cl.topY - lines[cj - 1].topY
           if (cGap > medianGap * 1.8) break
           if (/^[•·○●–\-\*\d#]/.test(ct)) break
-          const nextCells = getTableCells(cl.items)
-          if (nextCells) break
-          bulletText += ' ' + ct
+          if (getTableCells(cl.items)) break
+          bulletItems = [...bulletItems, { str: ' ', fontSize: 12, x: 0, y: 0, w: 0, bold: false, italic: false }, ...cl.items]
           cj++
         }
-        pageMd.push(`- ${bulletText}`)
+        pageMd.push(`- ${renderItems(bulletItems)}`)
         li = cj
         continue
       }
 
       // ── Numbered list ────────────────────────────────────────────
       if (/^\d+[\.\)]\s+\S/.test(lineText)) {
-        pageMd.push(lineText)
+        pageMd.push(renderItems(line.items))
         li++; continue
       }
 
-      // ── Heading detection (conservative) ─────────────────────────
+      // ── Heading detection (conservative — uses plain text) ────────
       const maxFont = Math.max(...line.items.map(i => i.fontSize))
       const wordCount = lineText.split(/\s+/).length
       const noTrailPunct = !/[.,;]$/.test(lineText)
       const isAllCaps = lineText === lineText.toUpperCase() && /[A-Z]/.test(lineText) && !/^\d/.test(lineText)
-      // Check gap from previous line
       const prevTopY = li > 0 ? lines[li - 1].topY : 0
       const gapFromPrev = li > 0 ? line.topY - prevTopY : 0
       const afterBigGap = gapFromPrev > medianGap * 2.5
 
-      // H1: large font, short
+      // H1: large font, short — always plain text (heading style renders the weight)
       if (maxFont >= avgFont * 1.5 && lineText.length < 120 && noTrailPunct) {
         if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
         pageMd.push(`# ${lineText}`)
         pageMd.push('')
         li++; continue
       }
-      // H2: medium-large font, short, few words, no trailing period
+      // H2: medium-large font, short, few words
       if (maxFont >= avgFont * 1.18 && wordCount <= 12 && lineText.length < 120 && noTrailPunct) {
         if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
         pageMd.push(`## ${lineText}`)
@@ -289,7 +325,7 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
         pageMd.push('')
         li++; continue
       }
-      // Short line after big gap that reads like a heading (title-case, no trailing punct, few words)
+      // Short line after big gap, reads like a heading
       if (afterBigGap && wordCount <= 6 && lineText.length < 60 && noTrailPunct && /^[A-Z]/.test(lineText)) {
         if (pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
         pageMd.push(`## ${lineText}`)
@@ -297,32 +333,31 @@ async function extractMarkdownFromPdf(file: File): Promise<string> {
         li++; continue
       }
 
-      // ── Regular paragraph — merge wrapped lines ──────────────────
-      let paraText = lineText
-      // Merge continuation if current line doesn't end a sentence
-      if (!lineText.endsWith('.') && !lineText.endsWith('!') && !lineText.endsWith('?') && lineText.length > 10) {
+      // ── Regular paragraph — merge wrapped lines, preserve bold/italic ──
+      let paraItems: RawItem[] = [...line.items]
+      const endsLine = (t: string) => t.endsWith('.') || t.endsWith('!') || t.endsWith('?')
+
+      if (!endsLine(lineText) && lineText.length > 10) {
         let cj = li + 1
         while (cj < lines.length) {
           const cl = lines[cj]
-          const ct = cl.items.map(i => i.str).join(' ').trim()
+          const ct = plainText(cl.items)
           if (!ct) break
           const cGap = cl.topY - lines[cj - 1].topY
           if (cGap > medianGap * 1.9) break
           if (/^[•·○●–\-\*\d#]/.test(ct) || /^[•·○●–]$/.test(ct)) break
-          const nextCells = getTableCells(cl.items)
-          if (nextCells) break
-          // Check if next line looks like a heading (large font)
+          if (getTableCells(cl.items)) break
           const nextMaxFont = Math.max(...cl.items.map(i => i.fontSize))
           if (nextMaxFont >= avgFont * 1.18) break
-          paraText += ' ' + ct
+          paraItems = [...paraItems, { str: ' ', fontSize: 12, x: 0, y: 0, w: 0, bold: false, italic: false }, ...cl.items]
           li = cj
-          if (ct.endsWith('.') || ct.endsWith('!') || ct.endsWith('?')) { cj++; break }
+          if (endsLine(ct)) { cj++; break }
           cj++
         }
       }
 
       if (afterBigGap && pageMd.length && pageMd[pageMd.length - 1] !== '') pageMd.push('')
-      pageMd.push(paraText)
+      pageMd.push(renderItems(paraItems))
       li++
     }
 
