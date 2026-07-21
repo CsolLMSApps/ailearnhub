@@ -13,6 +13,7 @@ export default function SignupPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [confirmSent, setConfirmSent] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -35,6 +36,8 @@ export default function SignupPage() {
           data: {
             full_name: formData.name,
           },
+          // After email confirmation, Supabase redirects here to exchange the code
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       })
 
@@ -45,8 +48,16 @@ export default function SignupPage() {
       }
 
       if (data.user) {
-        router.push('/dashboard')
-        router.refresh()
+        // If email confirmation is required, identities will be empty
+        if (data.user.identities && data.user.identities.length === 0) {
+          // Email already registered
+          setError('An account with this email already exists. Please sign in.')
+          setLoading(false)
+          return
+        }
+        // Confirmation email sent — show message instead of redirecting
+        setConfirmSent(true)
+        setLoading(false)
       }
     } catch (err: any) {
       setError(err.message || 'An error occurred during signup')
@@ -76,6 +87,28 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {confirmSent ? (
+            <div className="py-6 text-center space-y-3">
+              <div className="text-4xl">📧</div>
+              <h3 className="text-lg font-semibold text-gray-900">Check your email</h3>
+              <p className="text-sm text-gray-600">
+                We sent a confirmation link to <strong>{formData.email}</strong>.
+                Click the link in the email to activate your account.
+              </p>
+              <p className="text-xs text-gray-400">
+                Didn&apos;t receive it? Check your spam folder or{' '}
+                <button
+                  type="button"
+                  onClick={() => setConfirmSent(false)}
+                  className="text-[#FF6F00] hover:underline"
+                >
+                  try again
+                </button>
+                .
+              </p>
+            </div>
+          ) : (
+          <>
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
               <p className="text-sm text-red-600">{error}</p>
@@ -165,6 +198,8 @@ export default function SignupPage() {
               Privacy Policy
             </Link>
           </div>
+          </>
+          )}
         </CardContent>
       </Card>
     </div>
