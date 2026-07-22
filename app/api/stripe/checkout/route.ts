@@ -2,27 +2,30 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
 })
 
+// Admin client for fetching published courses (bypasses RLS)
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
 export async function POST(request: NextRequest) {
   try {
+    // Auth is OPTIONAL — guests can check out without logging in
     const supabase = await createServerSupabaseClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const { data: { user } } = await supabase.auth.getUser()
 
     const body = await request.json()
     const { slug, isBundle = false, currency = 'usd', upgradePriceCents } = body
 
     // ── Bundle checkout ──────────────────────────────────────────────────────
     if (isBundle) {
-      // Fetch all published course IDs
-      const { data: allCourses, error: coursesError } = await supabase
+      const { data: allCourses, error: coursesError } = await supabaseAdmin
         .from('courses')
         .select('id, slug')
         .eq('is_published', true)
@@ -33,7 +36,6 @@ export async function POST(request: NextRequest) {
 
       const courseIds = allCourses.map((c: any) => c.id).join(',')
 
-      // Use dynamic price for upgrades, fixed bundle price for new buyers
       const BUNDLE_PRICE_CENTS = 9900
       const finalPriceCents: number =
         typeof upgradePriceCents === 'number' && upgradePriceCents > 0 && upgradePriceCents < BUNDLE_PRICE_CENTS
@@ -45,10 +47,16 @@ export async function POST(request: NextRequest) {
         ? `AI Learn Hub — Bundle Upgrade (remaining courses)`
         : `AI Learn Hub — Complete AI Mastery Bundle (All Courses)`
 
+      // Guest lands on payment-success page; logged-in user goes to dashboard
+      const successUrl = user
+        ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&bundle=true`
+        : `${process.env.NEXT_PUBLIC_SITE_URL}/payment-success?bundle=true`
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'payment',
-        customer_email: user.email,
+        // Pre-fill email only if logged in; guests enter their own
+        ...(user?.email ? { customer_email: user.email } : {}),
         line_items: [{
           price_data: {
             currency: currency || 'usd',
@@ -57,11 +65,10 @@ export async function POST(request: NextRequest) {
           },
           quantity: 1,
         }],
-        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&bundle=true`,
+        success_url: successUrl,
         cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing?purchase=cancelled`,
         metadata: {
-          userId: user.id,
-          userEmail: user.email || '',
+          ...(user ? { userId: user.id, userEmail: user.email || '' } : {}),
           isBundle: 'true',
           courseIds,
         },
@@ -71,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Single course checkout ───────────────────────────────────────────────
-    const { data: course, error: courseError } = await supabase
+    const { data: course, error: courseError } = await supabaseAdmin
       .from('courses')
       .select('*')
       .eq('slug', slug)
@@ -82,19 +89,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Course not found' }, { status: 404 })
     }
 
-    const { data: existingPurchase } = await supabase
-      .from('purchases')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('course_id', course.id)
-      .eq('status', 'completed')
-      .single()
+    // Only check for existing purchase if user is logged in
+    if (user) {
+      const { data: existingPurchase } = await supabase
+        .from('purchases')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('course_id', course.id)
+        .eq('status', 'completed')
+        .single()
 
-    if (existingPurchase) {
-      return NextResponse.json(
-        { error: 'You have already purchased this course' },
-        { status: 400 }
-      )
+      if (existingPurchase) {
+        return NextResponse.json(
+          { error: 'You have already purchased this course' },
+          { status: 400 }
+        )
+      }
     }
 
     const priceIdMap: Record<string, string | undefined> = {
@@ -115,30 +125,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Guest lands on payment-success page; logged-in user goes to dashboard
+    const successUrl = user
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&course=${slug}`
+      : `${process.env.NEXT_PUBLIC_SITE_URL}/payment-success?course=${slug}`
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      customer_email: user.email,
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&course=${slug}`,
+      ...(user?.email ? { customer_email: user.email } : {}),
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: successUrl,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/courses/${slug}?purchase=cancelled`,
       metadata: {
-        userId: user.id,
+        ...(user ? { userId: user.id, userEmail: user.email || '' } : {}),
         courseId: course.id,
         slug: slug,
-        userEmail: user.email || '',
       },
     })
 
-    return NextResponse.json({
-      sessionId: session.id,
-      url: session.url,
-    })
+    return NextResponse.json({ sessionId: session.id, url: session.url })
 
   } catch (error: any) {
     console.error('Stripe checkout error:', error)

@@ -2,8 +2,6 @@
 
 // components/course/BundleCheckoutButton.tsx
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
 interface Props {
   upgradePriceCents: number  // $99 minus what user already paid
@@ -11,7 +9,6 @@ interface Props {
 }
 
 export default function BundleCheckoutButton({ upgradePriceCents, ownedCourseCount }: Props) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -25,14 +22,7 @@ export default function BundleCheckoutButton({ upgradePriceCents, ownedCourseCou
     setError('')
 
     try {
-      const supabase = createClient()
-      const { data: { session } } = await supabase.auth.getSession()
-
-      if (!session) {
-        router.push('/login?redirect=/pricing&action=bundle')
-        return
-      }
-
+      // Go straight to checkout — no login required
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

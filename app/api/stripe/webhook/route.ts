@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { sendAccountSetupEmail } from '@/lib/email'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
@@ -11,6 +12,53 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
+
+/**
+ * Resolve a Supabase userId from an email address.
+ * - If the user already exists, returns their existing id (isNew = false).
+ * - If the user does not exist, creates a new confirmed account and returns
+ *   their id along with a one-time password-setup link (isNew = true).
+ */
+async function resolveOrCreateUser(email: string): Promise<{
+  userId: string
+  isNew: boolean
+  passwordSetupUrl?: string
+}> {
+  // Try to create the user first. If they already exist Supabase returns an error.
+  const { data: created, error: createErr } = await supabase.auth.admin.createUser({
+    email,
+    email_confirm: true, // mark email as confirmed — no separate confirmation needed
+  })
+
+  if (!createErr && created?.user) {
+    // Brand-new user — generate a one-time password-setup (recovery) link
+    const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+    })
+
+    if (linkErr) {
+      console.error('Failed to generate password-setup link:', linkErr.message)
+    }
+
+    return {
+      userId: created.user.id,
+      isNew: true,
+      passwordSetupUrl: linkData?.properties?.action_link,
+    }
+  }
+
+  // User already exists — find their id via listUsers (fine for typical scale)
+  const { data: { users } } = await supabase.auth.admin.listUsers({ perPage: 1000 })
+  const existing = users.find((u) => u.email === email)
+
+  if (!existing) {
+    // Extremely unlikely: createUser failed for a reason other than duplicate
+    throw new Error(`Could not resolve user for email: ${email} — createUser error: ${createErr?.message}`)
+  }
+
+  return { userId: existing.id, isNew: false }
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
@@ -40,20 +88,46 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
 
     try {
-      const userId    = session.metadata?.userId
       const isBundle  = session.metadata?.isBundle === 'true'
       const courseIds = session.metadata?.courseIds?.split(',').filter(Boolean) ?? []
-      const courseId  = session.metadata?.courseId // single-course purchases
+      const courseId  = session.metadata?.courseId
+
+      // ── Resolve the user (existing or auto-created) ────────────────────────
+      let userId = session.metadata?.userId
 
       if (!userId) {
-        console.error('Missing userId in webhook metadata:', session.metadata)
-        return NextResponse.json({ error: 'Missing userId' }, { status: 400 })
+        // Guest checkout — resolve via email
+        const email = session.customer_details?.email || session.metadata?.userEmail
+        if (!email) {
+          console.error('No userId and no customer email in webhook:', session.id)
+          return NextResponse.json({ error: 'Cannot identify purchaser' }, { status: 400 })
+        }
+
+        const { userId: resolvedId, isNew, passwordSetupUrl } = await resolveOrCreateUser(email)
+        userId = resolvedId
+
+        if (isNew && passwordSetupUrl) {
+          // Look up course name for email copy (best-effort)
+          let courseName: string | undefined
+          if (!isBundle && courseId) {
+            const { data: course } = await supabase
+              .from('courses')
+              .select('title')
+              .eq('id', courseId)
+              .single()
+            courseName = course?.title
+          } else if (isBundle) {
+            courseName = 'Complete AI Mastery Bundle'
+          }
+
+          await sendAccountSetupEmail(email, passwordSetupUrl, courseName)
+          console.log(`📧 Account setup email sent to new user: ${email}`)
+        }
       }
 
       // ── Bundle: insert a purchase + progress row for every course ──────────
       if (isBundle && courseIds.length > 0) {
         for (const cid of courseIds) {
-          // Skip if already purchased
           const { data: existing } = await supabase
             .from('purchases')
             .select('id')

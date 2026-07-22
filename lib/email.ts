@@ -64,6 +64,39 @@ The AI Learn Hub Team
   }
 }
 
+export async function sendAccountSetupEmail(
+  email: string,
+  passwordSetupUrl: string,
+  courseName?: string
+) {
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Your AI Learn Hub account is ready! 🎉',
+      text: `
+Hi there!
+
+Your payment was successful${courseName ? ` for "${courseName}"` : ''}.
+
+Your AI Learn Hub account has been created. Click the link below to set your password and start learning:
+
+${passwordSetupUrl}
+
+This link expires in 24 hours. Once you set your password, you can log in any time at:
+${process.env.NEXT_PUBLIC_SITE_URL}/login
+
+If you have any questions, just reply to this email.
+
+Best regards,
+The AI Learn Hub Team
+      `.trim(),
+    })
+  } catch (error) {
+    console.error('Failed to send account setup email:', error)
+  }
+}
+
 export async function sendCertificateEmail(
   email: string,
   name: string,
