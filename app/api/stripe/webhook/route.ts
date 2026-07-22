@@ -35,6 +35,9 @@ async function resolveOrCreateUser(email: string): Promise<{
     const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
       type: 'recovery',
       email,
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/set-password`,
+      },
     })
 
     if (linkErr) {
