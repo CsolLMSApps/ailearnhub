@@ -132,6 +132,7 @@ export default async function DashboardPage({
               <SetupNotification
                 passwordSet={user.user_metadata?.password_set === true}
                 userEmail={user.email ?? ''}
+                userName={user.user_metadata?.full_name ?? ''}
               />
               <div className="text-right hidden sm:block">
                 <div className="text-sm text-gray-600">{user.email}</div>
