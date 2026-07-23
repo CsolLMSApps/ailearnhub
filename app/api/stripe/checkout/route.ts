@@ -47,10 +47,11 @@ export async function POST(request: NextRequest) {
         ? `AI Learn Hub — Bundle Upgrade (remaining courses)`
         : `AI Learn Hub — Complete AI Mastery Bundle (All Courses)`
 
-      // Guest lands on payment-success page; logged-in user goes to dashboard
+      // Logged-in user → dashboard directly. Guest → purchase-complete which
+      // auto-creates their account and logs them in via magic link → dashboard.
       const successUrl = user
         ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&bundle=true`
-        : `${process.env.NEXT_PUBLIC_SITE_URL}/payment-success?bundle=true`
+        : `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/purchase-complete?session_id={CHECKOUT_SESSION_ID}&bundle=true`
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -125,10 +126,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Guest lands on payment-success page; logged-in user goes to dashboard
+    // Logged-in user → dashboard directly. Guest → purchase-complete which
+    // auto-creates their account and logs them in via magic link → dashboard.
     const successUrl = user
       ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&course=${slug}`
-      : `${process.env.NEXT_PUBLIC_SITE_URL}/payment-success?course=${slug}`
+      : `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/purchase-complete?session_id={CHECKOUT_SESSION_ID}&slug=${slug}`
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

@@ -2,7 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-import { sendAccountSetupEmail } from '@/lib/email'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
@@ -107,25 +106,11 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'Cannot identify purchaser' }, { status: 400 })
         }
 
-        const { userId: resolvedId, isNew, passwordSetupUrl } = await resolveOrCreateUser(email)
+        const { userId: resolvedId, isNew } = await resolveOrCreateUser(email)
         userId = resolvedId
 
-        if (isNew && passwordSetupUrl) {
-          // Look up course name for email copy (best-effort)
-          let courseName: string | undefined
-          if (!isBundle && courseId) {
-            const { data: course } = await supabase
-              .from('courses')
-              .select('title')
-              .eq('id', courseId)
-              .single()
-            courseName = course?.title
-          } else if (isBundle) {
-            courseName = 'Complete AI Mastery Bundle'
-          }
-
-          await sendAccountSetupEmail(email, passwordSetupUrl, courseName)
-          console.log(`📧 Account setup email sent to new user: ${email}`)
+        if (isNew) {
+          console.log(`✅ New account auto-created for: ${email} (login handled by purchase-complete route)`)
         }
       }
 

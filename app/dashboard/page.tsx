@@ -7,6 +7,7 @@ import { adminFetchAll } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import Image from 'next/image'
 import { BundleSuccessBanner } from '@/components/BundleSuccessBanner'
+import { PurchaseSuccessBanner } from '@/components/PurchaseSuccessBanner'
 import SetupNotification from '@/components/dashboard/SetupNotification'
 
 // Keep in sync with components/admin/AdminAuthGuard.tsx
@@ -19,10 +20,11 @@ const ADMIN_EMAILS = [
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ purchase?: string; bundle?: string }>
+  searchParams: Promise<{ purchase?: string; bundle?: string; course?: string }>
 }) {
-  const { purchase, bundle } = await searchParams
+  const { purchase, bundle, course } = await searchParams
   const showBundleSuccess = purchase === 'success' && bundle === 'true'
+  const showCourseSuccess = purchase === 'success' && !bundle && !!course
   const supabase = await createServerSupabaseClient()
 
   // Check if user is authenticated
@@ -166,8 +168,16 @@ export default async function DashboardPage({
           </p>
         </div>
 
-        {/* Bundle purchase success banner */}
+        {/* Purchase success banners */}
         {showBundleSuccess && <BundleSuccessBanner />}
+        {showCourseSuccess && (
+          <PurchaseSuccessBanner
+            courseName={
+              (purchases as any[])?.find((p: any) => p.courses?.slug === course)?.courses?.title
+              ?? allCourses?.find((c: any) => c.slug === course)?.title
+            }
+          />
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
