@@ -1,36 +1,23 @@
 'use client'
 
 // components/course/BundleCheckoutButton.tsx
+// Always charges $99 — no deductions for previous purchases.
+
 import { useState } from 'react'
 
-interface Props {
-  upgradePriceCents: number  // $99 minus what user already paid
-  ownedCourseCount: number
-}
-
-export default function BundleCheckoutButton({ upgradePriceCents, ownedCourseCount }: Props) {
+export default function BundleCheckoutButton() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  const isUpgrade = ownedCourseCount > 0
-  const label = isUpgrade
-    ? `Upgrade for $${(upgradePriceCents / 100).toFixed(0)}`
-    : 'Get Complete Bundle'
 
   const handleBundleCheckout = async () => {
     setLoading(true)
     setError('')
 
     try {
-      // Go straight to checkout — no login required
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          isBundle: true,
-          currency: 'usd',
-          upgradePriceCents,
-        }),
+        body: JSON.stringify({ isBundle: true, currency: 'usd' }),
       })
 
       const data = await response.json()
@@ -59,7 +46,7 @@ export default function BundleCheckoutButton({ upgradePriceCents, ownedCourseCou
         disabled={loading}
         className="bg-[#FF6F00] text-white font-bold py-4 px-12 rounded-xl hover:bg-[#E65100] transition-colors text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Processing...' : label}
+        {loading ? 'Processing...' : 'Get Complete Bundle'}
       </button>
 
       {error && (

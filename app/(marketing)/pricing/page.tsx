@@ -25,28 +25,24 @@ export default async function PricingPage() {
     .eq('is_published', true)
     .order('created_at', { ascending: true })
 
-  // Fetch user's existing purchases to calculate upgrade price
-  let alreadyPaidCents = 0
-  let ownedCourseCount = 0
+  // Fetch user's existing purchases — only to show "Owned" badges, not for pricing
   let ownedCourseIds: string[] = []
 
   if (user) {
     const { data: purchases } = await supabase
       .from('purchases')
-      .select('amount_paid, course_id')
+      .select('course_id')
       .eq('user_id', user.id)
       .eq('status', 'completed')
     if (purchases) {
-      ownedCourseCount = purchases.length
-      alreadyPaidCents = purchases.reduce((sum, p) => sum + (p.amount_paid ?? 0), 0)
       ownedCourseIds = purchases.map((p: any) => p.course_id)
     }
   }
 
   const BUNDLE_PRICE_CENTS = 9900
-  const upgradePriceCents = Math.max(0, BUNDLE_PRICE_CENTS - alreadyPaidCents)
   const totalCourses = courses?.length ?? 6
-  const alreadyOwnsAll = ownedCourseCount >= totalCourses
+  // Hide CTA only if user already owns every single course
+  const alreadyOwnsAll = ownedCourseIds.length >= totalCourses && totalCourses > 0
 
   const totalModules = courses?.reduce((s, c) => s + (c.total_modules ?? 0), 0) ?? 34
   const totalHours   = courses?.reduce((s, c) => s + (c.total_hours ?? 0), 0) ?? 16
@@ -77,18 +73,6 @@ export default async function PricingPage() {
           <div className="inline-block bg-gray-50 border border-gray-200 rounded-2xl px-10 py-6 mb-6">
             {alreadyOwnsAll ? (
               <p className="text-2xl font-bold text-green-600">🎉 You already own all courses!</p>
-            ) : ownedCourseCount > 0 ? (
-              <>
-                <p className="text-sm text-gray-500 mb-1">Your upgrade price</p>
-                <div className="flex items-baseline justify-center gap-3">
-                  <span className="text-xl text-gray-400 line-through">${(BUNDLE_PRICE_CENTS / 100).toFixed(0)}</span>
-                  <span className="text-5xl font-black text-[#FF6F00]">${(upgradePriceCents / 100).toFixed(0)}</span>
-                  <span className="text-gray-400 text-sm">USD</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  You've already paid <strong>${(alreadyPaidCents / 100).toFixed(0)}</strong> for {ownedCourseCount} course{ownedCourseCount > 1 ? 's' : ''} — deducted from bundle price
-                </p>
-              </>
             ) : (
               <>
                 <p className="text-sm text-gray-500 mb-1">One-time payment · Lifetime access</p>
@@ -105,10 +89,7 @@ export default async function PricingPage() {
           {/* CTA */}
           {!alreadyOwnsAll && (
             <div className="flex flex-col items-center gap-2">
-              <BundleCheckoutButton
-                upgradePriceCents={upgradePriceCents}
-                ownedCourseCount={ownedCourseCount}
-              />
+              <BundleCheckoutButton />
               <p className="text-xs text-gray-400 mt-1">Secure checkout via Stripe · No subscription · Cancel anytime</p>
             </div>
           )}
@@ -217,18 +198,9 @@ export default async function PricingPage() {
         {/* ── Bottom CTA ── */}
         {!alreadyOwnsAll && (
           <section className="bg-gradient-to-r from-[#FF6F00] to-[#E65100] rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-2">
-              {ownedCourseCount > 0 ? `Unlock the remaining ${totalCourses - ownedCourseCount} courses` : 'Start learning today'}
-            </h2>
-            <p className="text-white/80 mb-6 text-sm">
-              {ownedCourseCount > 0
-                ? `Pay just $${(upgradePriceCents / 100).toFixed(0)} to complete your bundle — already saved $${(alreadyPaidCents / 100).toFixed(0)}`
-                : 'One payment. Lifetime access to everything.'}
-            </p>
-            <BundleCheckoutButton
-              upgradePriceCents={upgradePriceCents}
-              ownedCourseCount={ownedCourseCount}
-            />
+            <h2 className="text-2xl font-bold mb-2">Start learning today</h2>
+            <p className="text-white/80 mb-6 text-sm">One payment. Lifetime access to everything.</p>
+            <BundleCheckoutButton />
             <p className="text-xs text-white/60 mt-4">Secure checkout via Stripe · Instant access after payment</p>
           </section>
         )}
@@ -244,7 +216,7 @@ export default async function PricingPage() {
               },
               {
                 q: 'I already bought one course. Can I still get the bundle?',
-                a: `Absolutely. The price is automatically adjusted — what you've already paid is deducted from the $99 bundle price. You only pay for what you don't own yet.`,
+                a: `Absolutely. The bundle is $99 for everyone — the same price regardless of how many courses you've previously purchased. You'll get instant access to all remaining courses you don't own yet.`,
               },
               {
                 q: 'Is this a subscription or a one-time payment?',

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
 
     const body = await request.json()
-    const { slug, isBundle = false, currency = 'usd', upgradePriceCents } = body
+    const { slug, isBundle = false, currency = 'usd' } = body
 
     // ── Bundle checkout ──────────────────────────────────────────────────────
     if (isBundle) {
@@ -36,16 +36,9 @@ export async function POST(request: NextRequest) {
 
       const courseIds = allCourses.map((c: any) => c.id).join(',')
 
+      // Bundle price is always $99 — no deductions for previous purchases
       const BUNDLE_PRICE_CENTS = 9900
-      const finalPriceCents: number =
-        typeof upgradePriceCents === 'number' && upgradePriceCents > 0 && upgradePriceCents < BUNDLE_PRICE_CENTS
-          ? upgradePriceCents
-          : BUNDLE_PRICE_CENTS
-
-      const isUpgrade = finalPriceCents < BUNDLE_PRICE_CENTS
-      const productName = isUpgrade
-        ? `AI Learn Hub — Bundle Upgrade (remaining courses)`
-        : `AI Learn Hub — Complete AI Mastery Bundle (All Courses)`
+      const productName = `AI Learn Hub — Complete AI Mastery Bundle (All Courses)`
 
       // Logged-in user → dashboard directly. Guest → purchase-complete which
       // auto-creates their account and logs them in via magic link → dashboard.
@@ -62,7 +55,7 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: currency || 'usd',
             product_data: { name: productName },
-            unit_amount: finalPriceCents,
+            unit_amount: BUNDLE_PRICE_CENTS,
           },
           quantity: 1,
         }],
