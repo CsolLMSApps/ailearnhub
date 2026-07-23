@@ -88,6 +88,22 @@ export default function SetupNotification({ passwordSet, userEmail, userName = '
 
   return (
     <div className="relative" ref={ref}>
+      {/* Bell animation keyframes */}
+      <style>{`
+        @keyframes bell-ring {
+          0%, 80%, 100% { transform: rotate(0deg); }
+          82%  { transform: rotate(-18deg); }
+          84%  { transform: rotate(18deg); }
+          86%  { transform: rotate(-14deg); }
+          88%  { transform: rotate(14deg); }
+          90%  { transform: rotate(-8deg); }
+          92%  { transform: rotate(8deg); }
+          94%  { transform: rotate(-4deg); }
+          96%  { transform: rotate(4deg); }
+          98%  { transform: rotate(0deg); }
+        }
+      `}</style>
+
       {/* Bell button */}
       <button
         onClick={() => setOpen(v => !v)}
@@ -101,6 +117,11 @@ export default function SetupNotification({ passwordSet, userEmail, userName = '
           viewBox="0 0 24 24"
           stroke="currentColor"
           strokeWidth={2}
+          style={{
+            animation: 'bell-ring 10s ease-in-out infinite',
+            transformOrigin: 'top center',
+            display: 'block',
+          }}
         >
           <path
             strokeLinecap="round"

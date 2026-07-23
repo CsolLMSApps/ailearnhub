@@ -1,18 +1,18 @@
 // app/api/auth/purchase-complete/route.ts
-// Stripe redirects guests here after a successful payment via:
+// Stripe redirects guests here after payment:
 //   success_url: /api/auth/purchase-complete?session_id={CHECKOUT_SESSION_ID}&slug=SLUG
 //
-// This route:
-//   1. Fetches the Stripe session to get the customer's email
-//   2. Creates or finds their Supabase account
-//   3. Generates a magic link (one-time login URL)
-//   4. Immediately redirects to that magic link → user lands on /dashboard logged in
-//
-// Logged-in users are never sent here (they go directly to /dashboard).
+// Strategy — no Supabase magic links, no external URLs:
+//   1. Fetch Stripe session → get customer email
+//   2. Create Supabase account with a random temp password
+//   3. Sign our own short-lived HMAC token containing the temp credentials
+//   4. Redirect to /auth/post-purchase?t=TOKEN  (our domain, our URL)
+//   5. That route verifies token, signs in with temp password, lands on /dashboard
 
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { createHmac, randomUUID } from 'crypto'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
@@ -25,6 +25,33 @@ const supabaseAdmin = createClient(
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!
 
+// ── Token helpers (self-contained, no external JWT library) ─────────────────
+
+function signToken(payload: object): string {
+  // Use service role key as signing secret — already server-only
+  const secret = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  const data = Buffer.from(JSON.stringify(payload)).toString('base64url')
+  const sig = createHmac('sha256', secret).update(data).digest('base64url')
+  return `${data}.${sig}`
+}
+
+export function verifyToken(token: string): { email: string; tp: string; exp: number } | null {
+  try {
+    const secret = process.env.SUPABASE_SERVICE_ROLE_KEY!
+    const [data, sig] = token.split('.')
+    if (!data || !sig) return null
+    const expectedSig = createHmac('sha256', secret).update(data).digest('base64url')
+    if (sig !== expectedSig) return null
+    const payload = JSON.parse(Buffer.from(data, 'base64url').toString())
+    if (Date.now() > payload.exp) return null // expired
+    return payload
+  } catch {
+    return null
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const sessionId = searchParams.get('session_id')
@@ -36,7 +63,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Fetch the Stripe session — customer email is available here after payment
+    // Fetch Stripe session to get customer email
     const stripeSession = await stripe.checkout.sessions.retrieve(sessionId)
     const email = stripeSession.customer_details?.email
 
@@ -45,46 +72,40 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${SITE_URL}/payment-success`)
     }
 
-    // ── Create or find Supabase user ─────────────────────────────────────────
-    const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
-      email,
-      email_confirm: true,
-      user_metadata: { password_set: false },
-    })
-
-    // If creation failed it's because the user already exists — that's fine
-    if (createErr && !createErr.message.toLowerCase().includes('already')) {
-      console.error('purchase-complete: createUser error', createErr.message)
-    }
-
-    // If user wasn't just created, find their existing id (needed for magic link)
-    if (!created?.user) {
-      // User already exists — generateLink works on existing users too, no lookup needed
-    }
-
-    // ── Generate magic link → logs user in and sends them to /dashboard ──────
     const successParam = isBundle
       ? `purchase=success&bundle=true`
       : slug
       ? `purchase=success&course=${slug}`
       : `purchase=success`
 
-    const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'magiclink',
+    // ── Try to create a new user ─────────────────────────────────────────────
+    const tempPassword = randomUUID() // random, single-use
+
+    const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
       email,
-      options: {
-        redirectTo: `${SITE_URL}/dashboard?${successParam}`,
-      },
+      password: tempPassword,
+      email_confirm: true,
+      user_metadata: { password_set: false },
     })
 
-    if (linkErr || !linkData?.properties?.action_link) {
-      console.error('purchase-complete: generateLink error', linkErr?.message)
-      return NextResponse.redirect(`${SITE_URL}/payment-success`)
+    if (!createErr && created?.user) {
+      // Brand new user — sign our own token and do the auto-login flow
+      const token = signToken({
+        email,
+        tp: tempPassword,
+        exp: Date.now() + 10 * 60 * 1000, // 10 minutes
+      })
+
+      return NextResponse.redirect(
+        `${SITE_URL}/auth/post-purchase?t=${encodeURIComponent(token)}&${successParam}`
+      )
     }
 
-    // Redirect straight to the Supabase magic link URL.
-    // Supabase verifies the token → creates session → redirects to /dashboard.
-    return NextResponse.redirect(linkData.properties.action_link)
+    // Existing user — they already have a password, just send them to login
+    // Their purchase record will be created by the webhook
+    return NextResponse.redirect(
+      `${SITE_URL}/payment-success?${successParam}&existing=true`
+    )
 
   } catch (err: any) {
     console.error('purchase-complete error:', err.message)
