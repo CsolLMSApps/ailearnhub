@@ -38,6 +38,13 @@ export default function SetupNotification({ passwordSet, userEmail, userName = '
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  // Open when SignOutButton's "Complete Setup" is clicked
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener('open-setup-notification', handler)
+    return () => window.removeEventListener('open-setup-notification', handler)
+  }, [])
+
   // Bell disappears once setup is done
   if (passwordSet || stage === 'done') return null
 

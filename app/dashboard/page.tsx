@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { BundleSuccessBanner } from '@/components/BundleSuccessBanner'
 import { PurchaseSuccessBanner } from '@/components/PurchaseSuccessBanner'
 import SetupNotification from '@/components/dashboard/SetupNotification'
+import SignOutButton from '@/components/dashboard/SignOutButton'
 
 // Keep in sync with components/admin/AdminAuthGuard.tsx
 const ADMIN_EMAILS = [
@@ -145,14 +146,9 @@ export default async function DashboardPage({
                   Admin Panel
                 </Link>
               )}
-              <form action="/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="text-sm text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-100"
-                >
-                  Sign Out
-                </button>
-              </form>
+              <SignOutButton
+                passwordSet={user.user_metadata?.password_set === true}
+              />
             </div>
           </div>
         </div>
