@@ -27,16 +27,17 @@ async function resolveOrCreateUser(email: string): Promise<{
   // Try to create the user first. If they already exist Supabase returns an error.
   const { data: created, error: createErr } = await supabase.auth.admin.createUser({
     email,
-    email_confirm: true, // mark email as confirmed — no separate confirmation needed
+    email_confirm: true,
+    user_metadata: { password_set: false },
   })
 
   if (!createErr && created?.user) {
     // Brand-new user — generate a one-time password-setup (recovery) link
     const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
-      type: 'recovery',
+      type: 'magiclink',
       email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/set-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`,
       },
     })
 

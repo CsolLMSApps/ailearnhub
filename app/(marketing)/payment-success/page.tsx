@@ -19,16 +19,16 @@ export default function PaymentSuccessPage() {
         </h1>
 
         <p className="text-gray-600 mb-6 leading-relaxed">
-          Check your email — we've sent you a link to set your password and access your course.
+          We're setting up your account. Check your email — we've sent you a one-click link to access your course.
         </p>
 
         <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6 text-left">
-          <p className="text-sm text-orange-900 font-medium mb-1">What happens next?</p>
-          <ol className="text-sm text-orange-800 space-y-1 list-decimal list-inside">
-            <li>Open the email from AI Learn Hub</li>
-            <li>Click "Set your password"</li>
-            <li>Create your password and log in</li>
+          <p className="text-sm text-orange-900 font-medium mb-2">What happens next?</p>
+          <ol className="text-sm text-orange-800 space-y-2 list-decimal list-inside">
+            <li>Open the email from <strong>AI Learn Hub</strong></li>
+            <li>Click <strong>"Access your course"</strong> — you'll be logged in automatically</li>
             <li>Your course is waiting in your dashboard</li>
+            <li>Set a password from the dashboard to secure your account</li>
           </ol>
         </div>
 
@@ -40,7 +40,7 @@ export default function PaymentSuccessPage() {
           href="/login"
           className="inline-block w-full py-3 px-6 bg-[#FF6F00] text-white font-bold rounded-xl hover:bg-[#E65100] transition-colors"
         >
-          Go to Login
+          Already have a password? Log in
         </Link>
 
         <div className="mt-4">

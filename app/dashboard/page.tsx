@@ -7,6 +7,7 @@ import { adminFetchAll } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import Image from 'next/image'
 import { BundleSuccessBanner } from '@/components/BundleSuccessBanner'
+import SetupNotification from '@/components/dashboard/SetupNotification'
 
 // Keep in sync with components/admin/AdminAuthGuard.tsx
 const ADMIN_EMAILS = [
@@ -125,6 +126,11 @@ export default async function DashboardPage({
               </nav>
             </div>
             <div className="flex items-center gap-4">
+              {/* Bell notification — only visible to users who haven't set a password */}
+              <SetupNotification
+                passwordSet={user.user_metadata?.password_set === true}
+                userEmail={user.email ?? ''}
+              />
               <div className="text-right hidden sm:block">
                 <div className="text-sm text-gray-600">{user.email}</div>
               </div>

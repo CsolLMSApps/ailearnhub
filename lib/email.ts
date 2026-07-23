@@ -66,25 +66,24 @@ The AI Learn Hub Team
 
 export async function sendAccountSetupEmail(
   email: string,
-  passwordSetupUrl: string,
+  accessUrl: string,
   courseName?: string
 ) {
   try {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Your AI Learn Hub account is ready! 🎉',
+      subject: 'Your AI Learn Hub course is ready! 🎉',
       text: `
 Hi there!
 
-Your payment was successful${courseName ? ` for "${courseName}"` : ''}.
+Your payment was successful${courseName ? ` for "${courseName}"` : ''}. Your account has been created.
 
-Your AI Learn Hub account has been created. Click the link below to set your password and start learning:
+Click the link below to access your course — no password needed, you'll be logged in automatically:
 
-${passwordSetupUrl}
+${accessUrl}
 
-This link expires in 24 hours. Once you set your password, you can log in any time at:
-${process.env.NEXT_PUBLIC_SITE_URL}/login
+This link expires in 24 hours. Once you're in your dashboard, you'll see a notification to set a password so you can log in anytime.
 
 If you have any questions, just reply to this email.
 
@@ -94,6 +93,34 @@ The AI Learn Hub Team
     })
   } catch (error) {
     console.error('Failed to send account setup email:', error)
+  }
+}
+
+export async function sendPasswordSetupEmail(email: string, setupUrl: string) {
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Set your AI Learn Hub password',
+      text: `
+Hi there!
+
+You requested a link to set your password for AI Learn Hub.
+
+Click the link below to create your password:
+
+${setupUrl}
+
+This link expires in 24 hours.
+
+If you didn't request this, you can ignore this email.
+
+Best regards,
+The AI Learn Hub Team
+      `.trim(),
+    })
+  } catch (error) {
+    console.error('Failed to send password setup email:', error)
   }
 }
 
