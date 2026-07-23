@@ -101,11 +101,39 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Existing user — they already have a password, just send them to login
-    // Their purchase record will be created by the webhook
-    return NextResponse.redirect(
-      `${SITE_URL}/payment-success?${successParam}&existing=true`
-    )
+    // Existing user — find them, reset temp password, auto-login same as new users
+    const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
+    const existingUser = listData?.users.find(u => u.email === email)
+
+    if (existingUser) {
+      const meta = existingUser.user_metadata || {}
+
+      if (meta.password_set === true) {
+        // They have a real password we must not overwrite — send to login with a message
+        return NextResponse.redirect(
+          `${SITE_URL}/login?message=Payment+successful!+Log+in+to+access+your+new+course.&redirect=/dashboard`
+        )
+      }
+
+      // Guest who never set a password — safe to issue new temp credentials
+      const newTempPassword = randomUUID()
+      await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+        password: newTempPassword,
+      })
+
+      const token = signToken({
+        email,
+        tp: newTempPassword,
+        exp: Date.now() + 10 * 60 * 1000,
+      })
+
+      return NextResponse.redirect(
+        `${SITE_URL}/auth/post-purchase?t=${encodeURIComponent(token)}&${successParam}`
+      )
+    }
+
+    // Fallback — shouldn't happen
+    return NextResponse.redirect(`${SITE_URL}/login?message=Payment+received.+Please+log+in+to+access+your+course.`)
 
   } catch (err: any) {
     console.error('purchase-complete error:', err.message)
