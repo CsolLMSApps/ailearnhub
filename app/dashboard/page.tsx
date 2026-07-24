@@ -131,7 +131,7 @@ export default async function DashboardPage({
             <div className="flex items-center gap-4">
               {/* Bell notification — only visible to users who haven't set a password */}
               <SetupNotification
-                passwordSet={user.user_metadata?.password_set === true}
+                passwordSet={user.user_metadata?.password_set !== false}
                 userEmail={user.email ?? ''}
                 userName={user.user_metadata?.full_name ?? ''}
               />
@@ -147,7 +147,7 @@ export default async function DashboardPage({
                 </Link>
               )}
               <SignOutButton
-                passwordSet={user.user_metadata?.password_set === true}
+                passwordSet={user.user_metadata?.password_set !== false}
               />
             </div>
           </div>
