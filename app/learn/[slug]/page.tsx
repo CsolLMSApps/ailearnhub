@@ -309,15 +309,24 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
               <div className="flex items-center gap-3">
                 <span className="text-amber-500 text-xl">📝</span>
                 <p className="text-sm text-amber-800">
-                  <span className="font-bold">Course Final Quiz required</span> — Complete all modules then pass the quiz to earn your certificate.
+                  <span className="font-bold">Course Final Quiz required</span>
+                  {completedModules.length < totalModules
+                    ? ` — Complete all ${totalModules} modules to unlock the quiz.`
+                    : ' — All modules done! You can now take the final quiz.'}
                 </p>
               </div>
-              <Link
-                href={`/learn/${slug}/quiz`}
-                className="shrink-0 px-4 py-2 bg-[#FF6F00] text-white text-xs font-bold rounded-lg hover:bg-[#E65100] transition-colors"
-              >
-                Take Quiz →
-              </Link>
+              {completedModules.length < totalModules ? (
+                <div className="shrink-0 flex items-center gap-1.5 px-4 py-2 bg-gray-200 text-gray-400 text-xs font-bold rounded-lg cursor-not-allowed select-none">
+                  🔒 Locked
+                </div>
+              ) : (
+                <Link
+                  href={`/learn/${slug}/quiz`}
+                  className="shrink-0 px-4 py-2 bg-[#FF6F00] text-white text-xs font-bold rounded-lg hover:bg-[#E65100] transition-colors"
+                >
+                  Take Quiz →
+                </Link>
+              )}
             </div>
           )}
         </div>

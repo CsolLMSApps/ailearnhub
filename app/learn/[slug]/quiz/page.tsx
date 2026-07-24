@@ -51,6 +51,19 @@ export default async function CourseQuizPage({ params }: Props) {
 
   if (!allModules?.length) notFound()
 
+  // Guard: all modules must be completed before the quiz is accessible
+  const { data: progress } = await supabase
+    .from('progress')
+    .select('completed_modules')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .single()
+
+  const completedModules: number[] = progress?.completed_modules ?? []
+  const allDone = allModules.every(m => completedModules.includes(m.module_number))
+
+  if (!allDone) redirect(`/learn/${slug}`)
+
   const lastModule = allModules[allModules.length - 1]
 
   // Fetch the quiz — find any quiz for this course (ordered by module_number desc
