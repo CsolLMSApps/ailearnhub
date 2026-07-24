@@ -109,6 +109,13 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
     certificate = cert
   }
 
+  // Fetch downloadable resources for this course
+  const { data: resources } = await supabase
+    .from('course_resources')
+    .select('id, name, description, file_name, file_type, file_size_bytes, sort_order')
+    .eq('course_id', course.id)
+    .order('sort_order', { ascending: true })
+
   // First incomplete module for "Continue" button
   const nextIncomplete = modules?.find(m => !completedModules.includes(m.module_number))
   const continueModule = nextIncomplete ?? modules?.[0]
@@ -314,6 +321,53 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
             </div>
           )}
         </div>
+
+        {/* Downloads Section — only shown if resources exist */}
+        {resources && resources.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-6">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+              <span className="text-xl">📦</span>
+              <h2 className="text-lg font-bold text-gray-900">Course Resources</h2>
+              <span className="ml-auto text-xs bg-orange-100 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">
+                {resources.length} file{resources.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+
+            <ul className="divide-y divide-gray-100">
+              {resources.map(r => {
+                const icon = r.file_type?.includes('pdf') ? '📄'
+                  : r.file_type?.includes('sheet') || r.file_type?.includes('excel') || r.file_type?.includes('csv') ? '📊'
+                  : r.file_type?.includes('word') || r.file_type?.includes('document') ? '📝'
+                  : r.file_type?.includes('zip') ? '🗜️'
+                  : '📁'
+
+                const sizeLabel = !r.file_size_bytes ? ''
+                  : r.file_size_bytes < 1024 * 1024
+                  ? `${(r.file_size_bytes / 1024).toFixed(0)} KB`
+                  : `${(r.file_size_bytes / (1024 * 1024)).toFixed(1)} MB`
+
+                return (
+                  <li key={r.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
+                    <span className="text-2xl shrink-0">{icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 text-sm">{r.name}</p>
+                      {r.description && (
+                        <p className="text-xs text-gray-500 mt-0.5">{r.description}</p>
+                      )}
+                      <p className="text-xs text-gray-400 mt-0.5">{r.file_name}{sizeLabel ? ` · ${sizeLabel}` : ''}</p>
+                    </div>
+                    <a
+                      href={`/api/resources/download/${r.id}`}
+                      className="shrink-0 flex items-center gap-1.5 text-sm font-semibold text-[#FF6F00] border border-[#FF6F00] px-4 py-2 rounded-lg hover:bg-orange-50 transition-colors"
+                    >
+                      ↓ Download
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
 
       </div>
     </div>
