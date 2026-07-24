@@ -115,6 +115,9 @@ export default async function CoursesPage() {
                 <p className="text-gray-600 text-sm mb-4">{course.short_description}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
                   <span>{course.total_modules} modules</span>
+                  <span className="flex items-center gap-1 text-xs bg-orange-50 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">
+                    📋 Templates included
+                  </span>
                 </div>
               </div>
             </Link>
@@ -230,6 +233,9 @@ export default async function CoursesPage() {
                 <p className="text-gray-600 text-sm mb-4">{course.short_description}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
                   <span>{course.total_modules} modules</span>
+                  <span className="flex items-center gap-1 text-xs bg-orange-50 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">
+                    📋 Templates included
+                  </span>
                 </div>
               </div>
             </Link>

@@ -331,14 +331,14 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
           )}
         </div>
 
-        {/* Downloads Section — only shown if resources exist */}
+        {/* Templates Section — only shown if resources exist */}
         {resources && resources.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-6">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-              <span className="text-xl">📦</span>
-              <h2 className="text-lg font-bold text-gray-900">Course Resources</h2>
+              <span className="text-xl">📋</span>
+              <h2 className="text-lg font-bold text-gray-900">Templates</h2>
               <span className="ml-auto text-xs bg-orange-100 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">
-                {resources.length} file{resources.length !== 1 ? 's' : ''}
+                {resources.length} template{resources.length !== 1 ? 's' : ''}
               </span>
             </div>
 

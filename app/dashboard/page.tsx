@@ -294,7 +294,10 @@ export default async function DashboardPage({
                       </div>
 
                       <div className="flex items-center justify-between text-sm pt-3 border-t border-gray-100">
-                        <span className="text-gray-500">{course.total_modules} modules</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-500">{course.total_modules} modules</span>
+                          <span className="text-xs bg-orange-50 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">📋 Templates</span>
+                        </div>
                         {isComplete ? (
                           <span className="text-green-600 font-medium">View Certificate →</span>
                         ) : quizRequired ? (
@@ -408,6 +411,7 @@ export default async function DashboardPage({
                     </p>
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>{course.total_modules} modules</span>
+                      <span className="text-xs bg-orange-50 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">📋 Templates included</span>
                     </div>
                   </div>
                 </Link>
