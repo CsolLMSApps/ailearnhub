@@ -320,6 +320,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
               courseId={course.id}
               moduleNumber={moduleNumber}
               initialNote={initialNote}
+              courseTitle={course.title}
+              moduleTitle={module.title}
             />
 
             {/* Navigation */}

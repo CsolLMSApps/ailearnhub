@@ -6,11 +6,13 @@ interface StudentNotesProps {
   courseId:     string
   moduleNumber: number
   initialNote:  string
+  courseTitle:  string
+  moduleTitle:  string
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
 
-export default function StudentNotes({ courseId, moduleNumber, initialNote }: StudentNotesProps) {
+export default function StudentNotes({ courseId, moduleNumber, initialNote, courseTitle, moduleTitle }: StudentNotesProps) {
   const [isOpen,     setIsOpen]     = useState(false)
   const [content,    setContent]    = useState(initialNote)
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
@@ -63,6 +65,26 @@ export default function StudentNotes({ courseId, moduleNumber, initialNote }: St
 
   const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0
 
+  const handleDownload = () => {
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    const text = [
+      `${courseTitle}`,
+      `Module ${moduleNumber}: ${moduleTitle}`,
+      `Notes downloaded on ${date}`,
+      `${'─'.repeat(50)}`,
+      '',
+      content,
+    ].join('\n')
+
+    const blob = new Blob([text], { type: 'text/plain' })
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
+    a.download = `Module-${moduleNumber}-Notes.txt`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="mt-6 border border-gray-200 rounded-xl overflow-hidden">
       {/* Toggle header */}
@@ -113,15 +135,23 @@ export default function StudentNotes({ courseId, moduleNumber, initialNote }: St
           <div className="flex items-center justify-between mt-2">
             <p className="text-xs text-gray-400">Notes are private to you · Auto-saved as you type</p>
             {content.trim() && (
-              <button
-                onClick={() => {
-                  setContent('')
-                  saveNote('')
-                }}
-                className="text-xs text-gray-400 hover:text-red-500 transition-colors"
-              >
-                Clear notes
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleDownload}
+                  className="text-xs font-medium text-[#FF6F00] hover:underline transition-colors flex items-center gap-1"
+                >
+                  ↓ Download notes
+                </button>
+                <button
+                  onClick={() => {
+                    setContent('')
+                    saveNote('')
+                  }}
+                  className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+                >
+                  Clear
+                </button>
+              </div>
             )}
           </div>
         </div>
