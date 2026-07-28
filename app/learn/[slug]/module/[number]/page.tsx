@@ -10,6 +10,7 @@ import { AutoMarkVisited } from '@/components/AutoMarkVisited'
 import { adminFetch } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import PdfIframe from '@/components/course/PdfIframe'
+import StudentNotes from '@/components/course/StudentNotes'
 
 export const dynamic = 'force-dynamic'
 
@@ -93,6 +94,17 @@ export default async function ModulePage({ params }: ModulePageProps) {
   const isLastModule = currentIndex === (allModules?.length ?? 0) - 1
   const previousModule = currentIndex > 0 ? allModules?.[currentIndex - 1] : null
   const nextModule = !isLastModule ? allModules?.[currentIndex + 1] : null
+
+  // Fetch this student's existing note for this module (silent fail — no note = empty string)
+  const { data: existingNote } = await supabase
+    .from('student_notes')
+    .select('content')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .eq('module_number', moduleNumber)
+    .single()
+
+  const initialNote = existingNote?.content ?? ''
 
   // Only fetch the quiz on the last module — it's the Course Final Quiz
   let quiz: any = null
@@ -303,8 +315,15 @@ export default async function ModulePage({ params }: ModulePageProps) {
               </div>
             )}
 
+            {/* Student Notes */}
+            <StudentNotes
+              courseId={course.id}
+              moduleNumber={moduleNumber}
+              initialNote={initialNote}
+            />
+
             {/* Navigation */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mt-6">
               {previousModule ? (
                 <Link
                   href={`/learn/${slug}/module/${previousModule.module_number}`}
