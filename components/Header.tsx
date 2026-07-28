@@ -113,6 +113,7 @@ export default function Header() {
             {/* Navigation */}
             <nav className="hidden md:flex gap-6">
               <Link href="/courses" className="text-gray-600 hover:text-gray-900 transition-colors">Courses</Link>
+              <Link href="/blog" className="text-gray-600 hover:text-gray-900 transition-colors">Blog</Link>
               <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
               <Link href="/about" className="text-gray-600 hover:text-gray-900 transition-colors">About</Link>
               <Link href="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>

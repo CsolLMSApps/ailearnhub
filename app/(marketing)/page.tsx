@@ -1,8 +1,21 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from '@supabase/supabase-js'
 
-export default function HomePage() {
+const supabasePublic = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+export default async function HomePage() {
+  const { data: latestPosts } = await supabasePublic
+    .from('blog_posts')
+    .select('id, title, slug, excerpt, category, cover_image_url, published_at')
+    .eq('is_published', true)
+    .order('published_at', { ascending: false })
+    .limit(3)
   return (
     <div className="flex flex-col">
       {/* Hero Section - Lighter, More Informative */}
@@ -251,6 +264,45 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Latest Blog Posts */}
+      {latestPosts && latestPosts.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#212121] mb-3">
+                Latest from Our <span className="text-[#FF6F00]">Blog</span>
+              </h2>
+              <p className="text-[#757575] text-lg">Tips, tutorials, and AI insights for you</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-8">
+              {latestPosts.map(post => (
+                <Link key={post.id} href={`/blog/${post.slug}`} className="group block bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="relative h-40 bg-gradient-to-br from-orange-100 to-amber-50 flex items-center justify-center overflow-hidden">
+                    {post.cover_image_url ? (
+                      <Image src={post.cover_image_url} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                    ) : (
+                      <span className="text-4xl opacity-40">📝</span>
+                    )}
+                    <span className="absolute top-2 left-2 bg-[#FF6F00] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {post.category}
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-[#FF6F00] transition-colors line-clamp-2">{post.title}</h3>
+                    {post.excerpt && <p className="text-gray-400 text-xs mt-1.5 line-clamp-2">{post.excerpt}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center">
+              <Link href="/blog" className="inline-block border-2 border-[#FF6F00] text-[#FF6F00] font-semibold px-6 py-2.5 rounded-xl hover:bg-[#FF6F00] hover:text-white transition-colors text-sm">
+                View All Posts →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-br from-[#212121] to-[#424242] text-white">

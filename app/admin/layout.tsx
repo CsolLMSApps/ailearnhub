@@ -27,6 +27,7 @@ const navLinks = [
   { href: '/admin/student-view',  label: '👁️ Student View' },
   { href: '/admin/resources',     label: '📁 Resources' },
   { href: '/admin/support',       label: '🎫 Support' },
+  { href: '/admin/blog',          label: '✍️ Blog' },
   { href: '/admin/admin-access',  label: '🔑 Admin Access' },
   { href: '/admin/system-health', label: '🩺 System Health' },
 ]
