@@ -60,7 +60,11 @@ export default async function CourseQuizPage({ params }: Props) {
     .single()
 
   const completedModules: number[] = progress?.completed_modules ?? []
-  const allDone = allModules.every(m => completedModules.includes(m.module_number))
+
+  // The last module is only "completed" after passing the quiz — exclude it from this check.
+  // Require all modules except the last to be visited before the quiz is accessible.
+  const nonFinalModules = allModules.slice(0, -1)
+  const allDone = nonFinalModules.every(m => completedModules.includes(m.module_number))
 
   if (!allDone) redirect(`/learn/${slug}`)
 

@@ -310,12 +310,12 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
                 <span className="text-amber-500 text-xl">📝</span>
                 <p className="text-sm text-amber-800">
                   <span className="font-bold">Course Final Quiz required</span>
-                  {completedModules.length < totalModules
-                    ? ` — Complete all ${totalModules} modules to unlock the quiz.`
+                  {completedModules.length < totalModules - 1
+                    ? ` — Complete all ${totalModules - 1} modules to unlock the quiz.`
                     : ' — All modules done! You can now take the final quiz.'}
                 </p>
               </div>
-              {completedModules.length < totalModules ? (
+              {completedModules.length < totalModules - 1 ? (
                 <div className="shrink-0 flex items-center gap-1.5 px-4 py-2 bg-gray-200 text-gray-400 text-xs font-bold rounded-lg cursor-not-allowed select-none">
                   🔒 Locked
                 </div>
