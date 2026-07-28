@@ -2,12 +2,18 @@ import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { adminFetchAll } from '@/lib/supabase/admin'
+import { createClient } from '@supabase/supabase-js'
 
 const SUPER_ADMIN_EMAILS = [
   'srikanth@ctekksolutions.net',
   'shuchitha@shiroapps.com',
   'info@shirotechnologies.com',
 ]
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 const navLinks = [
   { href: '/admin',               label: '📊 Overview' },
@@ -44,6 +50,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   if (!hasAccess) redirect('/dashboard')
 
+  // Fetch open support ticket count for badge
+  const { count: openTickets } = await supabaseAdmin
+    .from('support_tickets')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'open')
+
+  const openCount = openTickets ?? 0
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top header */}
@@ -77,9 +91,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <Link
                 key={link.href}
                 href={link.href}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors whitespace-nowrap"
+                className="relative flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors whitespace-nowrap"
               >
                 {link.label}
+                {link.href === '/admin/support' && openCount > 0 && (
+                  <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full leading-none">
+                    {openCount > 99 ? '99+' : openCount}
+                  </span>
+                )}
               </Link>
             ))}
           </div>
@@ -96,9 +115,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-[#FF6F00] border-b border-gray-100 last:border-0 transition-colors"
+                  className="flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-[#FF6F00] border-b border-gray-100 last:border-0 transition-colors"
                 >
-                  {link.label}
+                  <span>{link.label}</span>
+                  {link.href === '/admin/support' && openCount > 0 && (
+                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full leading-none">
+                      {openCount > 99 ? '99+' : openCount}
+                    </span>
+                  )}
                 </Link>
               ))}
             </nav>
