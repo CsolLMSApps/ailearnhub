@@ -142,7 +142,7 @@ export default async function CoursesPage() {
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Ready to land your dream job?</h3>
                   <p className="text-sm text-white/60 mt-0.5">
-                    Use <span className="text-white font-semibold">ResumeBlast.ai</span> to build an AI-powered resume and apply to hundreds of jobs instantly.
+                    Use <span className="text-white font-semibold">ResumeBlast.ai</span> to upload your resume and blast it to hundreds of employers instantly.
                   </p>
                 </div>
               </div>
@@ -263,7 +263,7 @@ export default async function CoursesPage() {
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-white">Ready to land your dream job?</h3>
                   <p className="text-sm text-white/60 mt-0.5">
-                    Use <span className="text-white font-semibold">ResumeBlast.ai</span> to build an AI-powered resume and apply to hundreds of jobs instantly.
+                    Use <span className="text-white font-semibold">ResumeBlast.ai</span> to upload your resume and blast it to hundreds of employers instantly.
                   </p>
                 </div>
               </div>

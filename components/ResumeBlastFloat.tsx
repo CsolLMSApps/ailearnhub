@@ -43,7 +43,7 @@ export function ResumeBlastFloat() {
             </button>
           </div>
           <p className="text-white/70 text-xs leading-relaxed mb-4">
-            Learning AI skills? Turn them into a job. Build an AI-powered resume and blast it to hundreds of employers — free to start.
+            Learning AI skills? Turn them into a job. Upload your resume and blast it to hundreds of employers instantly — free to start.
           </p>
           <a
             href="https://www.resumeblast.ai/"
@@ -53,7 +53,6 @@ export function ResumeBlastFloat() {
           >
             Try ResumeBlast.ai →
           </a>
-          <p className="text-center text-white/30 text-xs mt-2">Free to start · No credit card</p>
         </div>
       )}
 
