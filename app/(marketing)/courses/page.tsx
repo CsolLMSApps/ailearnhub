@@ -131,7 +131,10 @@ export default async function CoursesPage() {
             <div className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
             <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
               <div className="flex items-center gap-4">
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-2xl">🚀</div>
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="https://www.google.com/s2/favicons?domain=resumeblast.ai&sz=64" alt="ResumeBlast.ai" width={40} height={40} />
+                  </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="text-xs font-bold uppercase tracking-widest text-white/50">Partner Offer</span>
@@ -249,7 +252,10 @@ export default async function CoursesPage() {
             <div className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
             <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
               <div className="flex items-center gap-4">
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-2xl">🚀</div>
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="https://www.google.com/s2/favicons?domain=resumeblast.ai&sz=64" alt="ResumeBlast.ai" width={40} height={40} />
+                  </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="text-xs font-bold uppercase tracking-widest text-white/50">Partner Offer</span>

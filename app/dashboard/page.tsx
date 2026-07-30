@@ -345,9 +345,15 @@ export default async function DashboardPage({
 
               <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                 <div className="flex items-start gap-4">
-                  {/* Icon */}
-                  <div className="shrink-0 w-12 h-12 rounded-xl bg-[#FF6F00] flex items-center justify-center text-2xl shadow-md">
-                    🚀
+                  {/* Logo */}
+                  <div className="shrink-0 w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-md overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://www.google.com/s2/favicons?domain=resumeblast.ai&sz=64"
+                      alt="ResumeBlast.ai"
+                      width={40}
+                      height={40}
+                    />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">

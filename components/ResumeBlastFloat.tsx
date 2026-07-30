@@ -2,6 +2,21 @@
 
 import { useState } from 'react'
 
+const LOGO_URL = 'https://www.google.com/s2/favicons?domain=resumeblast.ai&sz=64'
+
+function ResumeBlastLogo({ size = 24 }: { size?: number }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={LOGO_URL}
+      alt="ResumeBlast.ai logo"
+      width={size}
+      height={size}
+      className="rounded-sm shrink-0"
+    />
+  )
+}
+
 export function ResumeBlastFloat() {
   const [dismissed, setDismissed] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -16,7 +31,7 @@ export function ResumeBlastFloat() {
         <div className="bg-[#0f172a] text-white rounded-2xl shadow-2xl p-5 w-72 border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2">
-              <span className="text-xl">🚀</span>
+              <ResumeBlastLogo size={22} />
               <span className="font-bold text-sm">ResumeBlast.ai</span>
             </div>
             <button
@@ -48,7 +63,7 @@ export function ResumeBlastFloat() {
         className="flex items-center gap-2 bg-[#0f172a] text-white px-4 py-3 rounded-full shadow-2xl hover:bg-[#1e3a5f] transition-all border border-white/10 group"
         aria-label="ResumeBlast.ai"
       >
-        <span className="text-lg">🚀</span>
+        <ResumeBlastLogo size={20} />
         <span className="text-sm font-bold whitespace-nowrap">Blast Your Resume</span>
         <svg
           className={`w-4 h-4 text-white/60 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
