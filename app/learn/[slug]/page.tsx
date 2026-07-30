@@ -7,6 +7,7 @@ import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminFetch, adminUpsert } from '@/lib/supabase/admin'
 import Link from 'next/link'
+import CertificateNameGate from '@/components/CertificateNameGate'
 
 // Generate a unique certificate number
 function generateCertNumber(userId: string, courseId: string): string {
@@ -86,22 +87,20 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
   const isCourseComplete = completionPct === 100 && !!finalQuizPass
 
   // Auto-create certificate when course is 100% complete.
-  // Uses adminUpsert (service role key) to bypass RLS on the certificates table.
-  let certificate = null
-  if (isCourseComplete) {
-    const studentName =
-      user.user_metadata?.full_name ||
-      user.user_metadata?.name ||
-      user.email?.split('@')[0] ||
-      'Student'
+  // Only creates if the user has a real full_name — guest users without a name
+  // see the CertificateNameGate which collects the name first.
+  const fullName = user.user_metadata?.full_name || user.user_metadata?.name || ''
+  const hasName = fullName.trim().length > 0
 
+  let certificate = null
+  if (isCourseComplete && hasName) {
     const { data: cert } = await adminUpsert(
       'certificates',
       {
         user_id: user.id,
         course_id: course.id,
         certificate_number: generateCertNumber(user.id, course.id),
-        student_name: studentName,
+        student_name: fullName.trim(),
         course_title: course.title,
       },
       'user_id,course_id'
@@ -184,7 +183,10 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
               You've mastered all {totalModules} modules. Outstanding work!
             </p>
 
-            {certificate && (
+            {/* Name gate — guest users without a name must enter it before we generate the certificate */}
+            {!hasName ? (
+              <CertificateNameGate />
+            ) : certificate ? (
               <div className="bg-white border-2 border-green-400 rounded-xl px-8 py-6 max-w-md mx-auto">
                 <div className="text-4xl mb-3">🏆</div>
                 <p className="font-bold text-gray-900 text-xl mb-1">Certificate of Completion</p>
@@ -205,7 +207,7 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
                   </Link>
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         )}
 

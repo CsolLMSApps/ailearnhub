@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { generateSetupToken } from '@/lib/setup-token'
+import { sendSetupReminderEmail } from '@/lib/email'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
@@ -110,7 +112,18 @@ export async function POST(request: NextRequest) {
         userId = resolvedId
 
         if (isNew) {
-          console.log(`✅ New account auto-created for: ${email} (login handled by purchase-complete route)`)
+          console.log(`✅ New account auto-created for: ${email}`)
+          // Send setup reminder email with a direct link to the account setup page.
+          // We generate our own signed token — no Supabase emails involved.
+          try {
+            const token = generateSetupToken(resolvedId, email)
+            const setupUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/setup-account?token=${encodeURIComponent(token)}`
+            await sendSetupReminderEmail(email, setupUrl)
+            console.log(`📧 Setup reminder email sent to: ${email}`)
+          } catch (emailErr: any) {
+            // Non-fatal — purchase already completed, just log the error
+            console.error('Failed to send setup reminder email:', emailErr.message)
+          }
         }
       }
 
