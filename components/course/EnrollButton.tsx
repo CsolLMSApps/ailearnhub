@@ -9,9 +9,10 @@ import { useRouter } from 'next/navigation'
 interface EnrollButtonProps {
   slug: string
   fullWidth?: boolean
+  variant?: 'on-dark' | 'on-light'  // on-dark = white button (for orange BG), on-light = orange button (for white BG)
 }
 
-export default function EnrollButton({ slug, fullWidth = false }: EnrollButtonProps) {
+export default function EnrollButton({ slug, fullWidth = false, variant = 'on-dark' }: EnrollButtonProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -60,7 +61,11 @@ export default function EnrollButton({ slug, fullWidth = false }: EnrollButtonPr
         disabled={loading}
         className={`${
           fullWidth ? 'w-full' : ''
-        } bg-white text-[#FF6F00] font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+        } ${
+          variant === 'on-light'
+            ? 'bg-[#FF6F00] text-white hover:bg-[#E65100]'
+            : 'bg-white text-[#FF6F00] hover:bg-gray-100'
+        } font-bold py-3 px-8 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
       >
         {loading ? 'Processing...' : 'Enroll Now'}
       </button>

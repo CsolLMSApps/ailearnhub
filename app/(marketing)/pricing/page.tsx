@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import BundleCheckoutButton from '@/components/course/BundleCheckoutButton'
+import EnrollButton from '@/components/course/EnrollButton'
 
 const CHECK = (
   <svg className="w-5 h-5 text-[#FF6F00] shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -204,6 +205,80 @@ export default async function PricingPage() {
             <p className="text-xs text-white/60 mt-4">Secure checkout via Stripe · Instant access after payment</p>
           </section>
         )}
+
+        {/* ── Individual Course Pricing ── */}
+        <section>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Or buy a single course</h2>
+            <p className="text-gray-500 text-sm">
+              Prefer to start with one topic? Each course is available individually.
+              <span className="ml-1 text-[#FF6F00] font-semibold">The bundle saves you $34.</span>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {courses?.map((course, i) => {
+              const owned = ownedCourseIds.includes(course.id)
+              return (
+                <div
+                  key={course.id}
+                  className={`bg-white rounded-2xl border p-6 flex flex-col justify-between gap-4 ${owned ? 'border-green-200 bg-green-50/40' : 'border-gray-200'}`}
+                >
+                  <div>
+                    {/* Course number + popular badge */}
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="w-8 h-8 rounded-lg bg-orange-100 text-[#FF6F00] font-black text-xs flex items-center justify-center">
+                        {i + 1}
+                      </span>
+                      <div className="flex gap-2">
+                        {owned && (
+                          <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">✓ Owned</span>
+                        )}
+                        {course.featured && !owned && (
+                          <span className="text-xs font-semibold bg-orange-100 text-[#FF6F00] px-2 py-0.5 rounded-full">Popular</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <h3 className="font-bold text-gray-900 text-base mb-1 leading-snug">{course.title}</h3>
+                    <p className="text-sm text-gray-500 mb-3 leading-relaxed">{course.short_description}</p>
+
+                    <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
+                      <span>{course.total_modules} modules</span>
+                      <span>·</span>
+                      <span>Certificate included</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-2xl font-black text-gray-900">${(course.price_usd / 100).toFixed(0)}</span>
+                      <span className="text-xs text-gray-400 ml-1">USD</span>
+                    </div>
+                    {owned ? (
+                      <Link
+                        href={`/courses/${course.slug}`}
+                        className="text-sm font-semibold text-green-700 bg-green-100 px-4 py-2 rounded-lg hover:bg-green-200 transition-colors"
+                      >
+                        Go to Course →
+                      </Link>
+                    ) : (
+                      <EnrollButton slug={course.slug} variant="on-light" />
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Nudge toward bundle */}
+          <div className="mt-6 bg-orange-50 border border-orange-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <p className="text-sm text-gray-700">
+              <span className="font-semibold text-[#FF6F00]">💡 Better value:</span> Get all {totalCourses} courses for $99 and save $34 vs. buying individually.
+            </p>
+            <BundleCheckoutButton />
+          </div>
+        </section>
 
         {/* ── FAQ ── */}
         <section>
