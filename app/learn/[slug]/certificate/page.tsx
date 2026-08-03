@@ -55,9 +55,6 @@ export default async function CertificatePage({ params }: CertPageProps) {
     year: 'numeric', month: 'long', day: 'numeric',
   })
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearnhub.io'
-  const verifyUrl = `${siteUrl}/verify?id=${encodeURIComponent(certificate.certificate_number)}`
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(verifyUrl)}&size=90x90&margin=4&color=1A1A2E`
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -102,39 +99,20 @@ export default async function CertificatePage({ params }: CertPageProps) {
 
           <div className="w-24 h-0.5 bg-gray-200 mx-auto mb-6" />
 
-          {/* Meta + QR Code */}
-          <div className="flex items-center justify-center gap-10 mt-2">
-            {/* Certificate details */}
-            <div className="flex gap-10 text-center">
-              <div>
-                <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Issued</p>
-                <p className="text-sm font-semibold text-gray-700">{issuedDate}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Certificate ID</p>
-                <p className="text-sm font-semibold text-gray-700 font-mono">{certificate.certificate_number}</p>
-              </div>
+          {/* Meta */}
+          <div className="flex gap-12 justify-center text-center">
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Issued</p>
+              <p className="text-sm font-semibold text-gray-700">{issuedDate}</p>
             </div>
-
-            {/* Divider */}
-            <div className="w-px h-14 bg-gray-200" />
-
-            {/* QR Code */}
-            <div className="flex flex-col items-center gap-1">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={qrCodeUrl}
-                alt="Verify certificate"
-                width={72}
-                height={72}
-                className="rounded-sm"
-              />
-              <p className="text-[10px] text-gray-400 uppercase tracking-widest">Verify</p>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Certificate ID</p>
+              <p className="text-sm font-semibold text-gray-700 font-mono">{certificate.certificate_number}</p>
             </div>
           </div>
 
-          <div className="mt-8 border-t border-gray-300 pt-4 w-48 mx-auto">
-            <p className="text-xs text-gray-400">AILearnHub.IO · ailearnhub.io/verify</p>
+          <div className="mt-10 border-t border-gray-300 pt-4 w-48 mx-auto">
+            <p className="text-xs text-gray-400">AILearnHub.IO</p>
           </div>
         </div>
       </div>
