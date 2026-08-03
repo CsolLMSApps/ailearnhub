@@ -9,12 +9,18 @@ import { adminFetch, adminUpsert } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import CertificateNameGate from '@/components/CertificateNameGate'
 
-// Generate a unique certificate number
-function generateCertNumber(userId: string, courseId: string): string {
-  const ts = Date.now().toString(36).toUpperCase()
-  const uid = userId.replace(/-/g, '').substring(0, 6).toUpperCase()
-  const cid = courseId.replace(/-/g, '').substring(0, 4).toUpperCase()
-  return `AIH-${ts}-${uid}-${cid}`
+// Generate a unique certificate number: AILH-YYYYMM-XXXXX
+// Format: prefix + year+month + 5 random alphanumeric chars (60M combinations/month)
+function generateCertNumber(): string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let suffix = ''
+  for (let i = 0; i < 5; i++) {
+    suffix += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return `AILH-${year}${month}-${suffix}`
 }
 
 interface CourseLearnPageProps {
@@ -99,7 +105,7 @@ export default async function CourseLearnPage({ params }: CourseLearnPageProps) 
       {
         user_id: user.id,
         course_id: course.id,
-        certificate_number: generateCertNumber(user.id, course.id),
+        certificate_number: generateCertNumber(),
         student_name: fullName.trim(),
         course_title: course.title,
       },

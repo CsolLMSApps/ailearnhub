@@ -82,7 +82,7 @@ function VerifyForm() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-6">
           <h2 className="text-lg font-bold text-gray-900 mb-1">Enter Certificate ID</h2>
           <p className="text-sm text-gray-500 mb-5">
-            The certificate ID is printed on the certificate (e.g. <span className="font-mono text-gray-700">AIH-XXXXXXXX-XXXXXX-XXXX</span>). Hyphens are optional.
+            The certificate ID is printed on the certificate (e.g. <span className="font-mono text-gray-700">AILH-202608-K7M2N</span>). Hyphens are optional.
           </p>
 
           <div className="flex gap-3">
@@ -92,7 +92,7 @@ function VerifyForm() {
               value={certId}
               onChange={e => { setCertId(e.target.value.toUpperCase()); setResult(null) }}
               onKeyDown={e => e.key === 'Enter' && handleVerify()}
-              placeholder="e.g. AIH-XXXXXXXX-XXXXXX-XXXX"
+              placeholder="e.g. AILH-202608-K7M2N"
               className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-mono text-sm focus:ring-2 focus:ring-[#FF6F00] focus:border-transparent outline-none uppercase"
             />
             <button

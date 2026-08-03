@@ -7,18 +7,25 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminFetch } from '@/lib/supabase/admin'
 
 /**
- * Returns candidate certificate IDs to try:
+ * Returns candidate certificate IDs to try (handles typing with or without hyphens):
  * 1. The original input (as-is, uppercased)
  * 2. With all hyphens/spaces stripped
- * 3. Reformatted with dashes in the correct positions (AIH-TTTTTTTT-UUUUUU-CCCC)
- *    if the stripped value is exactly 21 chars and starts with AIH
+ * 3. New format: AILH(4) + YYYYMM(6) + alphanumeric(5) = 15 chars → AILH-YYYYMM-XXXXX
+ * 4. Legacy format: AIH(3) + ts(8) + uid(6) + cid(4) = 21 chars → AIH-TTTTTTTT-UUUUUU-CCCC
  */
 function candidateIds(raw: string): string[] {
   const base = raw.trim().toUpperCase()
   const stripped = base.replace(/[-\s]/g, '')
   const candidates = new Set<string>([base, stripped])
 
-  // Standard format: AIH(3) + ts(8) + uid(6) + cid(4) = 21 chars
+  // New format: AILH-YYYYMM-XXXXX (stripped = 15 chars starting with AILH)
+  if (stripped.length === 15 && stripped.startsWith('AILH')) {
+    candidates.add(
+      `${stripped.slice(0, 4)}-${stripped.slice(4, 10)}-${stripped.slice(10)}`
+    )
+  }
+
+  // Legacy format: AIH-TTTTTTTT-UUUUUU-CCCC (stripped = 21 chars starting with AIH)
   if (stripped.length === 21 && stripped.startsWith('AIH')) {
     candidates.add(
       `${stripped.slice(0, 3)}-${stripped.slice(3, 11)}-${stripped.slice(11, 17)}-${stripped.slice(17)}`
