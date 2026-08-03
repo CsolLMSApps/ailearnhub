@@ -1,13 +1,21 @@
 // app/learn/[slug]/certificate/page.tsx
 // Printable certificate of completion.
-// Uses adminFetch to bypass RLS on certificates table.
+// Uses adminFetch/adminUpsert to bypass RLS on certificates table.
+// Auto-creates the certificate record if the student has passed the final quiz.
 // Print button is in CertificateActions (client component) — no event handlers here.
 
 import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-import { adminFetch } from '@/lib/supabase/admin'
+import { adminFetch, adminUpsert } from '@/lib/supabase/admin'
 import { CertificateActions } from '@/components/CertificateActions'
 import Link from 'next/link'
+
+function generateCertNumber(userId: string, courseId: string): string {
+  const ts = Date.now().toString(36).toUpperCase()
+  const uid = userId.replace(/-/g, '').substring(0, 6).toUpperCase()
+  const cid = courseId.replace(/-/g, '').substring(0, 4).toUpperCase()
+  return `AIH-${ts}-${uid}-${cid}`
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -31,17 +39,61 @@ export default async function CertificatePage({ params }: CertPageProps) {
 
   if (!course) notFound()
 
-  // Use adminFetch to bypass RLS on certificates table
-  const { data: certificate } = await adminFetch(
+  // Try to fetch an existing certificate first
+  let { data: certificate } = await adminFetch(
     'certificates',
     `user_id=eq.${user.id}&course_id=eq.${course.id}&select=*&limit=1`
   )
+
+  // If no certificate yet, check if the student actually passed the final quiz.
+  // If yes, auto-create it here (creation normally happens on the course overview page,
+  // but students may navigate directly to /certificate via the quiz completion screen).
+  if (!certificate) {
+    const { data: modules } = await supabase
+      .from('course_modules')
+      .select('module_number')
+      .eq('course_id', course.id)
+      .order('module_number', { ascending: false })
+      .limit(1)
+
+    const lastModuleNumber = modules?.[0]?.module_number
+
+    if (lastModuleNumber) {
+      const { data: quizPass } = await supabase
+        .from('quiz_results')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('course_id', course.id)
+        .eq('module_number', lastModuleNumber)
+        .eq('passed', true)
+        .limit(1)
+        .single()
+
+      if (quizPass) {
+        const fullName = (user.user_metadata?.full_name || user.user_metadata?.name || '').trim()
+        if (fullName) {
+          const { data: cert } = await adminUpsert(
+            'certificates',
+            {
+              user_id: user.id,
+              course_id: course.id,
+              certificate_number: generateCertNumber(user.id, course.id),
+              student_name: fullName,
+              course_title: course.title,
+            },
+            'user_id,course_id'
+          )
+          certificate = cert
+        }
+      }
+    }
+  }
 
   if (!certificate) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600 mb-4">No certificate found. Complete all modules first.</p>
+          <p className="text-gray-600 mb-4">No certificate found. Complete all modules and pass the final quiz first.</p>
           <Link href={`/learn/${slug}`} className="text-[#FF6F00] hover:underline">
             ← Back to Course
           </Link>
