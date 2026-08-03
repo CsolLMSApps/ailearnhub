@@ -142,23 +142,88 @@ export default async function CourseQuizPage({ params }: Props) {
           <p className="text-white/80 text-base">
             {questions.length} questions · Score {quiz.pass_percentage}% or higher to earn your certificate
           </p>
+        </div>
 
-          {hasPassedQuiz && (
-            <div className="mt-5 inline-flex items-center gap-2 bg-white/20 border border-white/30 rounded-xl px-5 py-2.5 text-sm font-semibold">
-              ✅ You passed with {quizResult.percentage}% — retake to improve your score
+        {hasPassedQuiz ? (
+          /* ── Passed: show completion card ── */
+          <div className="space-y-6">
+            {/* Success card */}
+            <div className="bg-white rounded-2xl border-2 border-green-400 shadow-sm overflow-hidden">
+              <div className="bg-green-50 border-b border-green-200 px-8 py-6 flex items-center gap-4">
+                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-green-800">Quiz Passed! 🎉</h2>
+                  <p className="text-green-600 text-sm">You scored {quizResult.percentage}% — well above the {quiz.pass_percentage}% pass mark</p>
+                </div>
+              </div>
+
+              <div className="px-8 py-8 text-center">
+                <p className="text-gray-600 mb-6 text-base">
+                  Congratulations on completing <span className="font-semibold text-gray-900">{course.title}</span>!
+                  Your certificate is ready to download.
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link
+                    href={`/learn/${slug}/certificate`}
+                    className="inline-flex items-center gap-2 bg-[#FF6F00] hover:bg-[#E65100] text-white font-bold px-8 py-3 rounded-xl transition-colors text-base"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    View My Certificate
+                  </Link>
+                  <Link
+                    href={`/learn/${slug}`}
+                    className="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base"
+                  >
+                    ← Back to Course
+                  </Link>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Quiz component */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-          <QuizComponent
-            slug={slug}
-            moduleNumber={quiz.module_number}
-            questions={questions}
-            passPercentage={quiz.pass_percentage}
-          />
-        </div>
+            {/* Retake option */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+              <h3 className="font-semibold text-gray-900 mb-1">Want to improve your score?</h3>
+              <p className="text-sm text-gray-500 mb-4">
+                Your current best score is <span className="font-semibold text-gray-700">{quizResult.percentage}%</span>.
+                Retaking won't affect your certificate — it's already issued.
+              </p>
+              {/* Retake quiz inline */}
+              <details className="group">
+                <summary className="cursor-pointer text-sm font-semibold text-[#FF6F00] hover:text-[#E65100] list-none flex items-center gap-1">
+                  <svg className="w-4 h-4 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Retake the quiz
+                </summary>
+                <div className="mt-4 border-t border-gray-100 pt-4">
+                  <QuizComponent
+                    slug={slug}
+                    moduleNumber={quiz.module_number}
+                    questions={questions}
+                    passPercentage={quiz.pass_percentage}
+                  />
+                </div>
+              </details>
+            </div>
+          </div>
+        ) : (
+          /* ── Not yet passed: show quiz ── */
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+            <QuizComponent
+              slug={slug}
+              moduleNumber={quiz.module_number}
+              questions={questions}
+              passPercentage={quiz.pass_percentage}
+            />
+          </div>
+        )}
 
       </div>
     </div>
