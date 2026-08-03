@@ -59,7 +59,7 @@ export default async function CertificatePage({ params }: CertPageProps) {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Client component handles onClick → window.print() */}
-      <CertificateActions slug={slug} />
+      <CertificateActions slug={slug} certificateNumber={certificate.certificate_number} />
 
       {/* Certificate */}
       <div className="flex items-center justify-center py-10 print:py-0">

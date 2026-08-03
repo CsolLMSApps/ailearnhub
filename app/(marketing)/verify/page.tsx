@@ -3,7 +3,7 @@
 // app/(marketing)/verify/page.tsx
 // Public certificate verification page.
 // Accessible to anyone — no login required.
-// QR code on certificate links here with ?id=CERT_NUMBER pre-filled.
+// Accepts ?id=CERT_NUMBER pre-filled (e.g. from the Verify button on the certificate page).
 
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -82,7 +82,7 @@ function VerifyForm() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-6">
           <h2 className="text-lg font-bold text-gray-900 mb-1">Enter Certificate ID</h2>
           <p className="text-sm text-gray-500 mb-5">
-            The certificate ID is printed on the certificate (e.g. <span className="font-mono text-gray-700">AILH-2024-XXXXX</span>)
+            The certificate ID is printed on the certificate (e.g. <span className="font-mono text-gray-700">AIH-XXXXXXXX-XXXXXX-XXXX</span>). Hyphens are optional.
           </p>
 
           <div className="flex gap-3">
@@ -92,7 +92,7 @@ function VerifyForm() {
               value={certId}
               onChange={e => { setCertId(e.target.value.toUpperCase()); setResult(null) }}
               onKeyDown={e => e.key === 'Enter' && handleVerify()}
-              placeholder="e.g. AILH-2024-XXXXX"
+              placeholder="e.g. AIH-XXXXXXXX-XXXXXX-XXXX"
               className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-mono text-sm focus:ring-2 focus:ring-[#FF6F00] focus:border-transparent outline-none uppercase"
             />
             <button
@@ -178,8 +178,8 @@ function VerifyForm() {
           <div className="space-y-2 text-sm text-gray-600">
             <p>✓ Each certificate has a unique ID that can be verified here instantly</p>
             <p>✓ Certificates are issued after passing the final course quiz with 70%+</p>
-            <p>✓ Certificates are signed by AI Learn Hub and cannot be forged</p>
-            <p>✓ QR codes on certificates link directly to this verification page</p>
+            <p>✓ Certificate IDs are permanent and tied to the student's record</p>
+            <p>✓ Certificates are issued by AI Learn Hub and cannot be forged</p>
           </div>
         </div>
       </div>
