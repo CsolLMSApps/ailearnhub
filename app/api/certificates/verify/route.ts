@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
   for (const candidate of candidateIds(raw)) {
     const { data, error } = await adminFetch(
       'certificates',
-      `certificate_number=eq.${encodeURIComponent(candidate)}&select=certificate_number,student_name,course_title,issued_at,created_at&limit=1`
+      `certificate_number=eq.${encodeURIComponent(candidate)}&select=certificate_number,student_name,course_title,issued_at&limit=1`
     )
     if (!error && data) { cert = data; break }
   }
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ valid: false }, { status: 200 })
   }
 
-  const issuedAt = cert.issued_at || cert.created_at
+  const issuedAt = cert.issued_at
   return NextResponse.json({
     valid: true,
     certificateNumber: cert.certificate_number,
