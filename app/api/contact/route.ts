@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { verifyTurnstile } from '@/lib/turnstile'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -18,7 +19,16 @@ const supabaseAdmin = createClient(
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, subject, message } = body
+    const { name, email, subject, message, captchaToken } = body
+
+    // ── 0. Verify Turnstile CAPTCHA ──────────────────────────
+    const captchaOk = await verifyTurnstile(captchaToken)
+    if (!captchaOk) {
+      return NextResponse.json(
+        { error: 'CAPTCHA verification failed. Please refresh and try again.' },
+        { status: 400 }
+      )
+    }
 
     // Validate required fields
     if (!name || !email || !subject || !message) {

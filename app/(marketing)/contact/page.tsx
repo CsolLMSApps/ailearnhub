@@ -1,8 +1,9 @@
 // app/(marketing)/contact/page.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
+import TurnstileWidget from '@/components/TurnstileWidget'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,10 @@ export default function ContactPage() {
   })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
+  const handleCaptchaVerify = useCallback((token: string) => setCaptchaToken(token), [])
+  const handleCaptchaExpire = useCallback(() => setCaptchaToken(null), [])
 
   const subjects = [
     'General Inquiry',
@@ -27,6 +32,11 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!captchaToken) {
+      setStatus('error')
+      setErrorMessage('Please complete the security check before submitting.')
+      return
+    }
     setStatus('loading')
     setErrorMessage('')
 
@@ -36,7 +46,7 @@ export default function ContactPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, captchaToken }),
       })
 
       const data = await response.json()
@@ -206,6 +216,17 @@ export default function ContactPage() {
                   />
                 </div>
 
+                {/* Turnstile CAPTCHA */}
+                <div>
+                  <TurnstileWidget
+                    onVerify={handleCaptchaVerify}
+                    onExpire={handleCaptchaExpire}
+                  />
+                  {!captchaToken && (
+                    <p className="text-xs text-gray-400 mt-1">Security check required to submit</p>
+                  )}
+                </div>
+
                 {/* Status Messages */}
                 {status === 'success' && (
                   <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -226,7 +247,7 @@ export default function ContactPage() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={status === 'loading'}
+                  disabled={status === 'loading' || !captchaToken}
                   className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {status === 'loading' ? 'Sending...' : 'Send Message'}

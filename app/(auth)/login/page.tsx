@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createClient } from '@/lib/supabase/client'
+import TurnstileWidget from '@/components/TurnstileWidget'
 
 function LoginForm() {
   const router = useRouter()
@@ -16,16 +17,47 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const redirectTo = searchParams?.get('redirect') || '/dashboard'
   const action = searchParams?.get('action')
 
+  const handleCaptchaVerify = useCallback((token: string) => {
+    setCaptchaToken(token)
+  }, [])
+
+  const handleCaptchaExpire = useCallback(() => {
+    setCaptchaToken(null)
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
 
+    // Require CAPTCHA token before proceeding
+    if (!captchaToken) {
+      setError('Please complete the security check before signing in.')
+      return
+    }
+
+    setLoading(true)
+
     try {
+      // 1. Verify CAPTCHA server-side
+      const captchaRes = await fetch('/api/auth/verify-captcha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: captchaToken }),
+      })
+      if (!captchaRes.ok) {
+        const d = await captchaRes.json()
+        setError(d.error || 'CAPTCHA verification failed. Please try again.')
+        setLoading(false)
+        setCaptchaToken(null)
+        return
+      }
+
+      // 2. Sign in with Supabase
       const supabase = createClient()
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -39,7 +71,6 @@ function LoginForm() {
       }
 
       if (data.user) {
-        // Use window.location for a hard redirect so the browser sends all fresh cookies
         window.location.href = redirectTo
       }
     } catch (err: any) {
@@ -124,10 +155,22 @@ function LoginForm() {
                 </button>
               </div>
             </div>
+
+            {/* Turnstile CAPTCHA */}
+            <div>
+              <TurnstileWidget
+                onVerify={handleCaptchaVerify}
+                onExpire={handleCaptchaExpire}
+              />
+              {!captchaToken && (
+                <p className="text-xs text-gray-400 mt-1">Security check required to sign in</p>
+              )}
+            </div>
+
             <Button
               type="submit"
               className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-medium"
-              disabled={loading}
+              disabled={loading || !captchaToken}
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </Button>
