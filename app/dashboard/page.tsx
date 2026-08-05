@@ -188,13 +188,22 @@ export default async function DashboardPage({
             </div>
           </div>
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-gray-600 text-sm">Overall Progress</p>
                 <p className="text-3xl font-bold text-[#FF6F00]">{overallCompletion}%</p>
               </div>
               <div className="text-4xl">📈</div>
             </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="h-2.5 rounded-full bg-[#FF6F00] transition-all duration-500"
+                style={{ width: `${overallCompletion}%` }}
+              />
+            </div>
+            <p className="text-xs text-gray-400 mt-1.5">
+              {totalCompletedModules} of {totalModulesAcrossAllCourses} modules completed
+            </p>
           </div>
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
@@ -264,15 +273,17 @@ export default async function DashboardPage({
                       </p>
                       <div className="mb-3">
                         <div className="flex items-center justify-between text-sm mb-1">
-                          <span className="text-gray-600">Progress</span>
+                          <span className="text-gray-600">
+                            {completedCount} of {totalMods} modules
+                          </span>
                           <span className={`font-medium ${isComplete ? 'text-green-600' : 'text-[#FF6F00]'}`}>
-                            {pct}%
+                            {isComplete ? '100' : pct}%
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full transition-all ${isComplete ? 'bg-green-500' : 'bg-[#FF6F00]'}`}
-                            style={{ width: `${pct}%` }}
+                            style={{ width: `${isComplete ? 100 : pct}%` }}
                           />
                         </div>
                       </div>
