@@ -91,13 +91,18 @@ export default async function CoursesPage() {
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses?.map((course) => (
+          {courses?.map((course, index) => (
             <Link
               key={course.id}
               href={`/courses/${course.slug}`}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                {index === 0 && (
+                  <div className="absolute top-3 left-3 flex items-center gap-1 bg-white text-[#FF6F00] text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                    🏆 Bestseller
+                  </div>
+                )}
                 <Image
                   src={`/images/courses/${course.slug}.svg`}
                   alt={course.title}
@@ -212,14 +217,19 @@ export default async function CoursesPage() {
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses?.map((course) => (
+          {courses?.map((course, index) => (
             <div
               key={course.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-xl flex flex-col"
             >
               {/* Clickable top area → course detail page */}
               <Link href={`/courses/${course.slug}`} className="block">
                 <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                  {index === 0 && (
+                    <div className="absolute top-3 left-3 flex items-center gap-1 bg-white text-[#FF6F00] text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                      🏆 Bestseller
+                    </div>
+                  )}
                   <Image
                     src={`/images/courses/${course.slug}.svg`}
                     alt={course.title}
