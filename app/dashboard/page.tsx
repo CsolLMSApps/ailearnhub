@@ -155,16 +155,6 @@ export default async function DashboardPage({
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''}!
-          </h1>
-          <p className="text-gray-600">
-            Continue your learning journey
-          </p>
-        </div>
-
         {/* Purchase success banners */}
         {showBundleSuccess && <BundleSuccessBanner />}
         {showCourseSuccess && (
@@ -176,42 +166,81 @@ export default async function DashboardPage({
           />
         )}
 
+        {/* Hero Welcome Banner — Option A */}
+        <div
+          className="relative rounded-2xl overflow-hidden mb-6 px-8 py-7"
+          style={{ background: 'linear-gradient(135deg, #FF6F00 0%, #E65100 100%)' }}
+        >
+          {/* Decorative rings */}
+          <div className="absolute -top-6 -right-6 w-40 h-40 rounded-full border-2 border-white/10 pointer-events-none" />
+          <div className="absolute top-4 right-10 w-24 h-24 rounded-full border-2 border-white/10 pointer-events-none" />
+          {/* Dot grid */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.12) 1.5px, transparent 1.5px)',
+              backgroundSize: '20px 20px',
+            }}
+          />
+
+          <div className="relative flex items-center justify-between gap-6">
+            {/* Left — welcome text */}
+            <div>
+              <p className="text-white/70 text-xs font-medium uppercase tracking-widest mb-1">
+                Your learning dashboard
+              </p>
+              <h1 className="text-2xl font-bold text-white mb-1">
+                Welcome back{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''}!
+              </h1>
+              <p className="text-white/75 text-sm">
+                {overallCompletion > 0
+                  ? `You're ${overallCompletion}% through your learning journey — keep going!`
+                  : 'Start your AI learning journey today.'}
+              </p>
+            </div>
+
+            {/* Right — big percentage */}
+            <div className="shrink-0 text-right hidden sm:block">
+              <p className="text-white text-5xl font-bold leading-none">{overallCompletion}%</p>
+              <p className="text-white/60 text-xs mt-1">overall progress</p>
+              <div className="mt-3 w-28 bg-white/20 rounded-full h-1.5 ml-auto">
+                <div
+                  className="h-1.5 rounded-full bg-white transition-all duration-500"
+                  style={{ width: `${overallCompletion}%` }}
+                />
+              </div>
+              <p className="text-white/60 text-xs mt-1">{totalCompletedModules} / {totalModulesAcrossAllCourses} modules</p>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Enrolled Courses</p>
-                <p className="text-3xl font-bold text-gray-900">{(purchases as any[])?.length || 0}</p>
-              </div>
-              <div className="text-4xl">📚</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-2xl shrink-0">📚</div>
+            <div>
+              <p className="text-gray-500 text-xs">Enrolled courses</p>
+              <p className="text-2xl font-bold text-gray-900">{(purchases as any[])?.length || 0}</p>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <p className="text-gray-600 text-sm">Overall Progress</p>
-                <p className="text-3xl font-bold text-[#FF6F00]">{overallCompletion}%</p>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-2xl shrink-0">📈</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-gray-500 text-xs">Overall progress</p>
+              <p className="text-2xl font-bold text-[#FF6F00]">{overallCompletion}%</p>
+              <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1">
+                <div
+                  className="h-1.5 rounded-full bg-[#FF6F00]"
+                  style={{ width: `${overallCompletion}%` }}
+                />
               </div>
-              <div className="text-4xl">📈</div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="h-2.5 rounded-full bg-[#FF6F00] transition-all duration-500"
-                style={{ width: `${overallCompletion}%` }}
-              />
-            </div>
-            <p className="text-xs text-gray-400 mt-1.5">
-              {totalCompletedModules} of {totalModulesAcrossAllCourses} modules completed
-            </p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Certificates Earned</p>
-                <p className="text-3xl font-bold text-gray-900">{certificatesEarned}</p>
-              </div>
-              <div className="text-4xl">🏆</div>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center text-2xl shrink-0">🏆</div>
+            <div>
+              <p className="text-gray-500 text-xs">Certificates earned</p>
+              <p className="text-2xl font-bold text-gray-900">{certificatesEarned}</p>
             </div>
           </div>
         </div>
