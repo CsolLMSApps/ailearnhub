@@ -5,7 +5,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { adminFetchAll } from '@/lib/supabase/admin'
 import EnrollButton from '@/components/course/EnrollButton'
 
 export const dynamic = 'force-dynamic'
@@ -366,6 +368,49 @@ export default async function CoursePage({ params }: CoursePageProps) {
   const price = (course.price_usd / 100).toFixed(0)
   const seo = COURSE_SEO[slug] ?? null
 
+  // ── "Students Also Bought" ──────────────────────────────────────────────
+  // 1. Find users who bought this course
+  // 2. Find other courses those same users bought
+  // 3. Rank by frequency → show top 3
+  let alsoBought: Array<{ id: string; title: string; slug: string; short_description: string; price_usd: number; total_modules: number }> = []
+  try {
+    const { data: cobuyers } = await adminFetchAll(
+      'purchases',
+      `course_id=eq.${course.id}&status=eq.completed&select=user_id`
+    )
+    if (cobuyers && cobuyers.length > 0) {
+      const userIds = [...new Set((cobuyers as any[]).map((p: any) => p.user_id))].slice(0, 200)
+      const { data: otherPurchases } = await adminFetchAll(
+        'purchases',
+        `user_id=in.(${userIds.join(',')})&course_id=neq.${course.id}&status=eq.completed&select=course_id`
+      )
+      if (otherPurchases && otherPurchases.length > 0) {
+        // Count frequency per course
+        const freq: Record<string, number> = {}
+        for (const p of otherPurchases as any[]) {
+          freq[p.course_id] = (freq[p.course_id] || 0) + 1
+        }
+        const topIds = Object.entries(freq)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3)
+          .map(([id]) => id)
+
+        const { data: topCourses } = await adminFetchAll(
+          'courses',
+          `id=in.(${topIds.join(',')})&is_published=eq.true&select=id,title,slug,short_description,price_usd,total_modules`
+        )
+        if (topCourses) {
+          // Preserve frequency order
+          alsoBought = topIds
+            .map((id: string) => (topCourses as any[]).find((c: any) => c.id === id))
+            .filter(Boolean)
+        }
+      }
+    }
+  } catch {
+    // Non-critical — silently skip if query fails
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Back nav */}
@@ -514,6 +559,57 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </div>
           </div>
         </div>
+      {/* Students Also Bought */}
+      {alsoBought.length > 0 && (
+        <div className="bg-white border-t border-gray-200 mt-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Students Also Bought</h2>
+            <p className="text-gray-500 text-sm mb-8">
+              Learners who enrolled in this course also purchased these
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {alsoBought.map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/courses/${c.slug}`}
+                  className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md hover:border-[#FF6F00]/40 transition-all duration-200"
+                >
+                  {/* Thumbnail */}
+                  <div className="h-40 bg-gradient-to-br from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                    <Image
+                      src={`/images/courses/${c.slug}.svg`}
+                      alt={c.title}
+                      width={120}
+                      height={120}
+                      className="w-24 h-24 object-contain"
+                    />
+                    {/* Price badge */}
+                    <div className="absolute top-3 right-3 bg-white/90 text-[#FF6F00] text-xs font-bold px-2.5 py-1 rounded-full">
+                      ${(c.price_usd / 100).toFixed(0)}
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="p-5">
+                    <h3 className="font-bold text-gray-900 text-base leading-snug mb-1 group-hover:text-[#FF6F00] transition-colors line-clamp-2">
+                      {c.title}
+                    </h3>
+                    <p className="text-gray-500 text-sm line-clamp-2 mb-4">
+                      {c.short_description}
+                    </p>
+                    <div className="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-100">
+                      <span>{c.total_modules} modules</span>
+                      <span className="text-[#FF6F00] font-semibold group-hover:underline">
+                        View course →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   )
