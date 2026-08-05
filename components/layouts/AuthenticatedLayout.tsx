@@ -123,9 +123,24 @@ export default function AuthenticatedLayout({ children, user }: AuthenticatedLay
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
-            <p className="mt-2">701 Brazos Street Suite 720, Austin, TX 78701</p>
+          <div className="border-t border-gray-700 pt-8">
+            <div className="bg-[#2a2a2a] border border-[#FF6F00]/30 rounded-xl px-6 py-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🎓</span>
+                <div>
+                  <p className="text-white font-semibold text-sm">Verify an AI Learn Hub Certificate</p>
+                  <p className="text-gray-400 text-xs">Instantly confirm the authenticity of any certificate issued by us</p>
+                </div>
+              </div>
+              <Link
+                href="/verify"
+                className="shrink-0 bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-bold px-5 py-2 rounded-lg transition-colors"
+              >
+                Verify Now →
+              </Link>
+            </div>
+            <p className="text-center text-sm text-gray-400">&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
+            <p className="text-center text-sm text-gray-400 mt-2">701 Brazos Street Suite 720, Austin, TX 78701</p>
           </div>
         </div>
       </footer>
