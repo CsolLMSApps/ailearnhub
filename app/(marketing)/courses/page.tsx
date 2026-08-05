@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import EnrollButton from '@/components/course/EnrollButton'
 
 export const metadata: Metadata = {
   title: 'AI Courses | AI Certification for Professionals 2026 | AI Learn Hub',
@@ -212,36 +213,41 @@ export default async function CoursesPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses?.map((course) => (
-            <Link
+            <div
               key={course.id}
-              href={`/courses/${course.slug}`}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
             >
-              <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
-                <Image
-                  src={`/images/courses/${course.slug}.svg`}
-                  alt={course.title}
-                  width={200}
-                  height={200}
-                  className="w-32 h-32"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
+              {/* Clickable top area → course detail page */}
+              <Link href={`/courses/${course.slug}`} className="block">
+                <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                  <Image
+                    src={`/images/courses/${course.slug}.svg`}
+                    alt={course.title}
+                    width={200}
+                    height={200}
+                    className="w-32 h-32"
+                  />
+                </div>
+                <div className="px-6 pt-6 pb-3">
                   <span className="text-2xl font-bold text-[#FF6F00]">
                     ${(course.price_usd / 100).toFixed(0)}
                   </span>
+                  <h3 className="text-xl font-bold text-gray-900 mt-2 mb-2">{course.title}</h3>
+                  <p className="text-gray-600 text-sm">{course.short_description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{course.short_description}</p>
-                <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
+              </Link>
+
+              {/* Bottom: modules info + direct Stripe enroll button */}
+              <div className="px-6 pb-6 mt-auto">
+                <div className="flex items-center justify-between text-sm text-gray-500 py-3 border-t border-gray-100 mb-4">
                   <span>{course.total_modules} modules</span>
                   <span className="flex items-center gap-1 text-xs bg-orange-50 text-[#FF6F00] font-semibold px-2 py-0.5 rounded-full">
                     📋 Templates included
                   </span>
                 </div>
+                <EnrollButton slug={course.slug} fullWidth variant="on-light" />
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
