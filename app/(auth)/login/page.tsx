@@ -3,10 +3,6 @@
 import { useState, Suspense, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { createClient } from '@/lib/supabase/client'
 import TurnstileWidget from '@/components/TurnstileWidget'
 
@@ -34,7 +30,6 @@ function LoginForm() {
     e.preventDefault()
     setError(null)
 
-    // Require CAPTCHA token before proceeding
     if (!captchaToken) {
       setError('Please complete the security check before signing in.')
       return
@@ -43,7 +38,6 @@ function LoginForm() {
     setLoading(true)
 
     try {
-      // 1. Verify CAPTCHA server-side
       const captchaRes = await fetch('/api/auth/verify-captcha', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -57,7 +51,6 @@ function LoginForm() {
         return
       }
 
-      // 2. Sign in with Supabase
       const supabase = createClient()
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -84,61 +77,118 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12 bg-gray-50">
-      <div className="w-full max-w-md mb-4">
-        <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] hover:underline text-sm font-medium">
-          ← Back to Home
-        </Link>
+    <div className="flex min-h-screen">
+
+      {/* ── LEFT PANEL ── */}
+      <div
+        className="hidden lg:flex lg:w-5/12 flex-col justify-between p-10 relative overflow-hidden"
+        style={{ background: 'linear-gradient(145deg, #FF6F00 0%, #E65100 100%)' }}
+      >
+        {/* Decorative circles */}
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/[0.07] pointer-events-none" />
+        <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-white/[0.06] pointer-events-none" />
+        <div className="absolute top-1/2 -right-8 w-32 h-32 rounded-full bg-white/[0.05] pointer-events-none" />
+
+        {/* Brand */}
+        <div className="relative z-10">
+          <Link href="/" className="text-white text-2xl font-extrabold tracking-tight">
+            AI Learn Hub<span className="font-light opacity-70">.IO</span>
+          </Link>
+        </div>
+
+        {/* Headline + stats */}
+        <div className="relative z-10 space-y-6">
+          <div>
+            <h2 className="text-white text-3xl font-bold leading-snug">
+              Advance your career<br />
+              <span className="opacity-80 font-normal">with AI skills</span>
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {[
+              { icon: '🎓', label: 'Courses', value: '6 Expert-Led AI Courses' },
+              { icon: '📜', label: 'On Completion', value: 'Verified Certificate' },
+              { icon: '⚡', label: 'Access', value: 'Lifetime · Learn at Your Pace' },
+            ].map(({ icon, label, value }) => (
+              <div key={label} className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
+                <span className="text-xl">{icon}</span>
+                <div>
+                  <p className="text-white/60 text-[10px] uppercase tracking-widest">{label}</p>
+                  <p className="text-white text-sm font-semibold">{value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <p className="relative z-10 text-white/40 text-xs">© 2026 AI Learn Hub LLC</p>
       </div>
-      <Card className="w-full max-w-md border border-gray-200">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-medium text-[#212121]">Welcome back</CardTitle>
-          <CardDescription className="text-[#424242]">
-            {action === 'enroll' ? 'Sign in to enroll in the course' : 'Sign in to your account'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+
+      {/* ── RIGHT PANEL ── */}
+      <div className="flex-1 flex flex-col justify-center bg-white px-6 py-12 sm:px-12 lg:px-16">
+        <div className="w-full max-w-md mx-auto">
+
+          <Link href="/" className="inline-flex items-center gap-1 text-[#FF6F00] hover:text-[#E65100] text-sm font-semibold mb-8">
+            ← Back to Home
+          </Link>
+
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
+          <p className="text-sm text-gray-500 mb-8">
+            {action === 'enroll' ? 'Sign in to enroll in the course' : 'Sign in to continue your learning journey'}
+          </p>
+
+          {/* Alerts */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <div className="mb-5 p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
           {redirectTo !== '/dashboard' && action === 'enroll' && (
-            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-sm text-blue-600">Please sign in to continue with enrollment</p>
+            <div className="mb-5 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+              <p className="text-sm text-orange-700">Please sign in to continue with enrollment</p>
             </div>
           )}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-[#212121]">Email</Label>
-              <Input
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">
+                Email
+              </label>
+              <input
                 id="email"
                 type="email"
                 placeholder="you@example.com"
-                className="border-gray-300"
                 value={formData.email}
                 onChange={handleChange}
                 required
                 disabled={loading}
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6F00]/30 focus:border-[#FF6F00] disabled:opacity-50"
               />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-sm font-medium text-[#212121]">Password</Label>
-                <Link href="/forgot-password" className="text-xs text-[#FF6F00] hover:text-[#E65100] font-medium">
+
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="password" className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs text-[#FF6F00] hover:text-[#E65100] font-semibold">
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
-                <Input
+                <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="border-gray-300 pr-10"
                   value={formData.password}
                   onChange={handleChange}
                   required
                   disabled={loading}
+                  className="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-lg text-sm text-gray-900 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6F00]/30 focus:border-[#FF6F00] disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -167,25 +217,26 @@ function LoginForm() {
               )}
             </div>
 
-            <Button
+            <button
               type="submit"
-              className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-medium"
               disabled={loading || !captchaToken}
+              className="w-full bg-[#FF6F00] hover:bg-[#E65100] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors"
             >
               {loading ? 'Signing in...' : 'Sign in'}
-            </Button>
+            </button>
           </form>
-          <div className="mt-6 text-center text-sm text-[#424242]">
-            Don't have an account?{' '}
+
+          <p className="mt-6 text-center text-sm text-gray-500">
+            Don&apos;t have an account?{' '}
             <Link
               href={redirectTo !== '/dashboard' ? `/signup?redirect=${encodeURIComponent(redirectTo)}` : '/signup'}
-              className="text-[#FF6F00] hover:text-[#E65100] font-medium"
+              className="text-[#FF6F00] hover:text-[#E65100] font-semibold"
             >
               Sign up
             </Link>
-          </div>
-        </CardContent>
-      </Card>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -193,8 +244,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF6F00]"></div>
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF6F00]" />
       </div>
     }>
       <LoginForm />
