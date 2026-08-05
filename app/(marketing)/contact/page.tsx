@@ -298,14 +298,6 @@ export default function ContactPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-[#212121] text-white mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <p>&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

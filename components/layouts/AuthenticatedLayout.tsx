@@ -5,6 +5,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Footer from '@/components/Footer'
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode
@@ -89,61 +90,7 @@ export default function AuthenticatedLayout({ children, user }: AuthenticatedLay
         {children}
       </main>
 
-      {/* Unified Footer */}
-      <footer className="bg-[#212121] text-white mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4 text-[#FF6F00]">AI Learn Hub</h3>
-              <p className="text-gray-400 text-sm">
-                Master AI skills with practical, hands-on courses designed for professionals.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Courses</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/courses" className="hover:text-[#FF6F00]">Browse All</Link></li>
-                <li><Link href="/dashboard" className="hover:text-[#FF6F00]">My Learning</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/about" className="hover:text-[#FF6F00]">About</Link></li>
-                <li><Link href="/terms" className="hover:text-[#FF6F00]">Terms</Link></li>
-                <li><Link href="/privacy" className="hover:text-[#FF6F00]">Privacy</Link></li>
-                <li><Link href="/refund-policy" className="hover:text-[#FF6F00]">Refund Policy</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/contact" className="hover:text-[#FF6F00]">Contact Us</Link></li>
-                <li><a href="mailto:support@ailearnhub.io" className="hover:text-[#FF6F00]">support@ailearnhub.io</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 pt-8">
-            <div className="bg-[#2a2a2a] border border-[#FF6F00]/30 rounded-xl px-6 py-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🎓</span>
-                <div>
-                  <p className="text-white font-semibold text-sm">Verify an AI Learn Hub Certificate</p>
-                  <p className="text-gray-400 text-xs">Instantly confirm the authenticity of any certificate issued by us</p>
-                </div>
-              </div>
-              <Link
-                href="/verify"
-                className="shrink-0 bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-bold px-5 py-2 rounded-lg transition-colors"
-              >
-                Verify Now →
-              </Link>
-            </div>
-            <p className="text-center text-sm text-gray-400">&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
-            <p className="text-center text-sm text-gray-400 mt-2">701 Brazos Street Suite 720, Austin, TX 78701</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
