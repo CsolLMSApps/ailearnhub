@@ -136,9 +136,10 @@ export default async function DashboardPage({
                 userEmail={user.email ?? ''}
                 userName={user.user_metadata?.full_name ?? ''}
               />
-              <div className="text-right hidden sm:block">
-                <div className="text-sm text-gray-600">{user.email}</div>
-              </div>
+              <Link href="/profile" className="text-right hidden sm:block hover:opacity-75 transition-opacity">
+                <div className="text-sm font-medium text-gray-900">{user.user_metadata?.full_name || user.email?.split('@')[0]}</div>
+                <div className="text-xs text-[#FF6F00] font-semibold">My Profile →</div>
+              </Link>
               {isAdmin && (
                 <Link
                   href="/admin"
