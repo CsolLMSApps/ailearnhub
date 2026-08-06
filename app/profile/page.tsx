@@ -16,13 +16,12 @@ export default async function ProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Purchases — use authenticated supabase client (same as dashboard, proven to work with RLS)
+  // Purchases — no created_at column on purchases table
   const { data: rawPurchases } = await supabase
     .from('purchases')
-    .select('id, created_at, course_id, courses(id, title, slug, price_usd)')
+    .select('id, course_id, courses(id, title, slug, price_usd)')
     .eq('user_id', user.id)
     .eq('status', 'completed')
-    .order('created_at', { ascending: false })
   const purchases = rawPurchases || []
 
   // Build course map from the joined data
@@ -160,9 +159,6 @@ export default async function ProfilePage() {
               {(purchases as any[]).map((purchase) => {
                 const course = courseMap.get(purchase.course_id)
                 const cert = certMap.get(purchase.course_id)
-                const purchaseDate = new Date(purchase.created_at).toLocaleDateString('en-US', {
-                  year: 'numeric', month: 'short', day: 'numeric',
-                })
                 const price = course ? `$${(course.price_usd / 100).toFixed(0)}` : ''
 
                 return (
@@ -177,9 +173,7 @@ export default async function ProfilePage() {
                       <p className="text-sm font-semibold text-gray-900 truncate">
                         {course?.title || 'Course'}
                       </p>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {purchaseDate} · {price}
-                      </p>
+                      <p className="text-xs text-gray-400 mt-0.5">{price}</p>
                     </div>
 
                     {/* Status badge */}
