@@ -18,6 +18,7 @@ const supabaseAdmin = createClient(
 const navLinks = [
   { href: '/admin',               label: '📊 Overview' },
   { href: '/admin/analytics',     label: '📈 Analytics' },
+  { href: '/admin/activity',      label: '🏃 Activity' },
   { href: '/admin/users',         label: '👥 Users' },
   { href: '/admin/courses',       label: '📚 Courses' },
   { href: '/admin/modules',       label: '🎓 Modules' },
