@@ -16,10 +16,13 @@ export default async function ProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Purchases + course info
+  // Purchases + course info — use * to avoid silent join failures with selective columns
   const { data: purchases } = await supabase
     .from('purchases')
-    .select('id, created_at, course_id, courses(id, title, slug, price_usd)')
+    .select(`
+      *,
+      courses (*)
+    `)
     .eq('user_id', user.id)
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
