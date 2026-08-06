@@ -16,23 +16,19 @@ export default async function ProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Purchases — use adminFetchAll (service role) to bypass any RLS differences between routes
-  const { data: rawPurchases } = await adminFetchAll(
-    'purchases',
-    `user_id=eq.${user.id}&status=eq.completed&select=id,created_at,course_id&order=created_at.desc`
-  )
+  // Purchases — use authenticated supabase client (same as dashboard, proven to work with RLS)
+  const { data: rawPurchases } = await supabase
+    .from('purchases')
+    .select('id, created_at, course_id, courses(id, title, slug, price_usd)')
+    .eq('user_id', user.id)
+    .eq('status', 'completed')
+    .order('created_at', { ascending: false })
   const purchases = rawPurchases || []
 
-  // Fetch course details for each purchase
-  let courseMap: Map<string, any> = new Map()
-  if (purchases.length > 0) {
-    const courseIds = [...new Set(purchases.map((p: any) => p.course_id))].join(',')
-    const { data: courses } = await adminFetchAll(
-      'courses',
-      `id=in.(${courseIds})&select=id,title,slug,price_usd`
-    )
-    courseMap = new Map((courses || []).map((c: any) => [c.id, c]))
-  }
+  // Build course map from the joined data
+  const courseMap: Map<string, any> = new Map(
+    purchases.map((p: any) => [p.course_id, p.courses]).filter(([, c]: any[]) => c)
+  )
 
   // Certificates
   const { data: certificates } = await adminFetchAll(
