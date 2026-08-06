@@ -16,16 +16,23 @@ export default async function ProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Purchases + course info — use * to avoid silent join failures with selective columns
-  const { data: purchases } = await supabase
-    .from('purchases')
-    .select(`
-      *,
-      courses (*)
-    `)
-    .eq('user_id', user.id)
-    .eq('status', 'completed')
-    .order('created_at', { ascending: false })
+  // Purchases — use adminFetchAll (service role) to bypass any RLS differences between routes
+  const { data: rawPurchases } = await adminFetchAll(
+    'purchases',
+    `user_id=eq.${user.id}&status=eq.completed&select=id,created_at,course_id&order=created_at.desc`
+  )
+  const purchases = rawPurchases || []
+
+  // Fetch course details for each purchase
+  let courseMap: Map<string, any> = new Map()
+  if (purchases.length > 0) {
+    const courseIds = [...new Set(purchases.map((p: any) => p.course_id))].join(',')
+    const { data: courses } = await adminFetchAll(
+      'courses',
+      `id=in.(${courseIds})&select=id,title,slug,price_usd`
+    )
+    courseMap = new Map((courses || []).map((c: any) => [c.id, c]))
+  }
 
   // Certificates
   const { data: certificates } = await adminFetchAll(
@@ -52,7 +59,7 @@ export default async function ProfilePage() {
     ? fullName.split(' ').map((w: string) => w[0]).slice(0, 2).join('').toUpperCase()
     : email.slice(0, 2).toUpperCase()
 
-  const totalCourses = purchases?.length || 0
+  const totalCourses = purchases.length
   const totalCerts = certMap.size
 
   return (
@@ -143,7 +150,7 @@ export default async function ProfilePage() {
             <span>🧾</span> Purchase History
           </h2>
 
-          {!purchases?.length ? (
+          {purchases.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-400 text-sm">No purchases yet.</p>
               <Link href="/courses" className="text-[#FF6F00] hover:text-[#E65100] text-sm font-semibold mt-2 inline-block">
@@ -153,7 +160,7 @@ export default async function ProfilePage() {
           ) : (
             <div className="divide-y divide-gray-100">
               {(purchases as any[]).map((purchase) => {
-                const course = purchase.courses
+                const course = courseMap.get(purchase.course_id)
                 const cert = certMap.get(purchase.course_id)
                 const purchaseDate = new Date(purchase.created_at).toLocaleDateString('en-US', {
                   year: 'numeric', month: 'short', day: 'numeric',
