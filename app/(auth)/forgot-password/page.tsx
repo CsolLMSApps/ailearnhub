@@ -2,16 +2,15 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 export default function ForgotPasswordPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
+  const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,18 +24,18 @@ export default function ForgotPasswordPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
-      const data = await res.json()
 
       if (!res.ok) {
+        const data = await res.json()
         setError(data.error || 'Something went wrong')
         setLoading(false)
         return
       }
 
-      // Always redirect to verify page (even if email not found, for security)
-      router.push(`/forgot-password/verify?email=${encodeURIComponent(email)}`)
+      setSent(true)
     } catch {
       setError('Something went wrong. Please try again.')
+    } finally {
       setLoading(false)
     }
   }
@@ -56,45 +55,73 @@ export default function ForgotPasswordPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
           </div>
-          <CardTitle className="text-2xl font-medium text-[#212121]">Forgot Password?</CardTitle>
+          <CardTitle className="text-2xl font-medium text-[#212121]">
+            {sent ? 'Check your email' : 'Forgot Password?'}
+          </CardTitle>
           <CardDescription className="text-[#424242]">
-            Enter your email and we'll send you a 6-digit reset code
+            {sent
+              ? `We sent a reset link to ${email}. Click it to set a new password.`
+              : "Enter your email and we'll send you a password reset link"}
           </CardDescription>
         </CardHeader>
+
         <CardContent>
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{error}</p>
+          {sent ? (
+            <div className="space-y-4 text-center">
+              <div className="text-5xl">📬</div>
+              <p className="text-sm text-gray-500">
+                Didn't receive it? Check your spam folder, or{' '}
+                <button
+                  onClick={() => { setSent(false); setEmail('') }}
+                  className="text-[#FF6F00] hover:text-[#E65100] font-medium"
+                >
+                  try again
+                </button>.
+              </p>
+              <Link
+                href="/login"
+                className="block text-sm text-[#FF6F00] hover:text-[#E65100] font-medium"
+              >
+                Back to Login
+              </Link>
             </div>
+          ) : (
+            <>
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium text-[#212121]">Email address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    className="border-gray-300"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    disabled={loading}
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-medium"
+                  disabled={loading}
+                >
+                  {loading ? 'Sending…' : 'Send Reset Link'}
+                </Button>
+              </form>
+              <div className="mt-6 text-center text-sm text-[#424242]">
+                Remember your password?{' '}
+                <Link href="/login" className="text-[#FF6F00] hover:text-[#E65100] font-medium">
+                  Sign in
+                </Link>
+              </div>
+            </>
           )}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-[#212121]">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                className="border-gray-300"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-[#FF6F00] hover:bg-[#E65100] text-white text-sm font-medium"
-              disabled={loading}
-            >
-              {loading ? 'Sending code...' : 'Send Reset Code'}
-            </Button>
-          </form>
-          <div className="mt-6 text-center text-sm text-[#424242]">
-            Remember your password?{' '}
-            <Link href="/login" className="text-[#FF6F00] hover:text-[#E65100] font-medium">
-              Sign in
-            </Link>
-          </div>
         </CardContent>
       </Card>
     </div>
