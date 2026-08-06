@@ -37,9 +37,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Reset session expired. Please request a new code.' }, { status: 400 })
     }
 
-    // Find user by email
-    const { data: users } = await supabase.auth.admin.listUsers()
-    const user = users?.users?.find(u => u.email === email)
+    // Find user by email — perPage:1000 avoids missing users beyond the default 50-per-page limit
+    const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 })
+    const user = users?.users?.find(u => u.email?.toLowerCase() === email.toLowerCase())
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })

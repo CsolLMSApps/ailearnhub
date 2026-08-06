@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 })
     }
 
-    // Check if user exists
+    // Check if user exists — perPage:1000 avoids missing users beyond default 50-per-page limit
     const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 })
     const userExists = users?.users?.some(u => u.email?.toLowerCase() === email.toLowerCase())
 
