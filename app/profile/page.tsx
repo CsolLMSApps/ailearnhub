@@ -31,10 +31,10 @@ export default async function ProfilePage() {
       .map((p: any) => [p.course_id as string, p.courses] as [string, any])
   )
 
-  // Certificates
+  // Certificates — only select columns that exist (matches dashboard usage)
   const { data: certificates } = await adminFetchAll(
     'certificates',
-    `user_id=eq.${user.id}&select=course_id,certificate_number,issued_at,created_at`
+    `user_id=eq.${user.id}&select=course_id`
   )
   const certMap = new Map((certificates || []).map((c: any) => [c.course_id, c]))
 
