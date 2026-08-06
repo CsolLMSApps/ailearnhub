@@ -26,8 +26,10 @@ export default async function ProfilePage() {
   const purchases = rawPurchases || []
 
   // Build course map from the joined data
-  const courseMap: Map<string, any> = new Map(
-    purchases.map((p: any) => [p.course_id, p.courses]).filter(([, c]: any[]) => c)
+  const courseMap = new Map<string, any>(
+    purchases
+      .filter((p: any) => p.courses != null)
+      .map((p: any) => [p.course_id as string, p.courses] as [string, any])
   )
 
   // Certificates
