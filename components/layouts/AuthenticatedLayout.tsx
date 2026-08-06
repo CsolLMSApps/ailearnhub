@@ -65,12 +65,12 @@ export default function AuthenticatedLayout({ children, user }: AuthenticatedLay
               </Link>
               
               <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
-                <div className="text-sm">
+                <Link href="/profile" className="text-sm text-right hover:opacity-80 transition-opacity">
                   <div className="text-gray-900 font-medium">
                     {user.user_metadata?.full_name || user.email?.split('@')[0]}
                   </div>
                   <div className="text-gray-500 text-xs">{user.email}</div>
-                </div>
+                </Link>
                 <form action="/auth/signout" method="post">
                   <button
                     type="submit"
