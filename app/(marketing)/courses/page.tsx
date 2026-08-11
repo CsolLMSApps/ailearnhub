@@ -105,18 +105,17 @@ export default async function CoursesPage() {
               href={`/courses/${course.slug}`}
               className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+              <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] relative overflow-hidden">
                 {index === 0 && (
-                  <div className="absolute top-3 left-3 flex items-center gap-1 bg-white text-[#FF6F00] text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                  <div className="absolute top-3 left-3 z-10 flex items-center gap-1 bg-white text-[#FF6F00] text-xs font-bold px-3 py-1 rounded-full shadow-md">
                     🏆 Bestseller
                   </div>
                 )}
                 <Image
                   src={courseImageSrc(course.slug)}
                   alt={course.title}
-                  width={200}
-                  height={200}
-                  className="w-32 h-32"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <div className="p-6">
@@ -232,18 +231,17 @@ export default async function CoursesPage() {
             >
               {/* Clickable top area → course detail page */}
               <Link href={`/courses/${course.slug}`} className="block">
-                <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] relative overflow-hidden">
                   {index === 0 && (
-                    <div className="absolute top-3 left-3 flex items-center gap-1 bg-white text-[#FF6F00] text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                    <div className="absolute top-3 left-3 z-10 flex items-center gap-1 bg-white text-[#FF6F00] text-xs font-bold px-3 py-1 rounded-full shadow-md">
                       🏆 Bestseller
                     </div>
                   )}
                   <Image
                     src={courseImageSrc(course.slug)}
                     alt={course.title}
-                    width={200}
-                    height={200}
-                    className="w-32 h-32"
+                    fill
+                    className="object-cover"
                   />
                 </div>
                 <div className="px-6 pt-6 pb-3">
