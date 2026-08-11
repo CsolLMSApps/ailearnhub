@@ -577,7 +577,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                   {/* Thumbnail */}
                   <div className="h-40 bg-gradient-to-br from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
                     <Image
-                      src={['ai-for-beginners'].includes(c.slug) ? `/images/courses/${c.slug}.jpg` : `/images/courses/${c.slug}.svg`}
+                      src={`/images/courses/${c.slug}.svg`}
                       alt={c.title}
                       width={120}
                       height={120}
