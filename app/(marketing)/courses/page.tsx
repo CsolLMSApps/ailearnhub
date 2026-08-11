@@ -1,5 +1,13 @@
 // app/(marketing)/courses/page.tsx
-// Courses listing page with custom SVG icons
+// Courses listing page with custom course images
+
+// Courses with a custom JPG/PNG — add slug here as more images are uploaded
+const CUSTOM_IMAGE_SLUGS = new Set(['ai-for-beginners'])
+function courseImageSrc(slug: string) {
+  return CUSTOM_IMAGE_SLUGS.has(slug)
+    ? `/images/courses/${slug}.jpg`
+    : `/images/courses/${slug}.svg`
+}
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -104,7 +112,7 @@ export default async function CoursesPage() {
                   </div>
                 )}
                 <Image
-                  src={`/images/courses/${course.slug}.svg`}
+                  src={courseImageSrc(course.slug)}
                   alt={course.title}
                   width={200}
                   height={200}
@@ -231,7 +239,7 @@ export default async function CoursesPage() {
                     </div>
                   )}
                   <Image
-                    src={`/images/courses/${course.slug}.svg`}
+                    src={courseImageSrc(course.slug)}
                     alt={course.title}
                     width={200}
                     height={200}
