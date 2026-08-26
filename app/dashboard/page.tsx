@@ -12,6 +12,12 @@ import { PurchaseSuccessBanner } from '@/components/PurchaseSuccessBanner'
 import SetupNotification from '@/components/dashboard/SetupNotification'
 import SignOutButton from '@/components/dashboard/SignOutButton'
 
+// Courses with custom JPG images — keep in sync with courses/page.tsx
+const CUSTOM_IMAGE_SLUGS = new Set(['ai-for-beginners', 'chatgpt-mastery', 'ai-tools-productivity', 'email-marketing-ai', 'prompt-engineering-mastery', 'social-media-marketing-ai'])
+function courseImageSrc(slug: string) {
+  return CUSTOM_IMAGE_SLUGS.has(slug) ? `/images/courses/${slug}.jpg` : `/images/courses/${slug}.svg`
+}
+
 // Keep in sync with components/admin/AdminAuthGuard.tsx
 const ADMIN_EMAILS = [
   'srikanth@ctekksolutions.net',
@@ -275,13 +281,12 @@ export default async function DashboardPage({
                       isComplete ? 'border-green-400' : quizRequired ? 'border-amber-400' : 'border-gray-200'
                     }`}
                   >
-                    <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                    <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] relative overflow-hidden">
                       <Image
-                        src={`/images/courses/${course.slug}.svg`}
+                        src={courseImageSrc(course.slug)}
                         alt={course.title}
-                        width={200}
-                        height={200}
-                        className="w-32 h-32"
+                        fill
+                        className="object-cover"
                       />
                       {/* Status badge on image */}
                       {isComplete && (
@@ -436,13 +441,12 @@ export default async function DashboardPage({
                   href={`/courses/${course.slug}`}
                   className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                 >
-                  <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] flex items-center justify-center relative">
+                  <div className="h-48 bg-gradient-to-r from-[#FF6F00] to-[#E65100] relative overflow-hidden">
                     <Image
-                      src={`/images/courses/${course.slug}.svg`}
+                      src={courseImageSrc(course.slug)}
                       alt={course.title}
-                      width={200}
-                      height={200}
-                      className="w-32 h-32"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <div className="p-6">
