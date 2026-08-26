@@ -2,7 +2,7 @@
 // Courses listing page with custom course images
 
 // Courses with a custom JPG/PNG — add slug here as more images are uploaded
-const CUSTOM_IMAGE_SLUGS = new Set(['ai-for-beginners', 'chatgpt-mastery', 'ai-tools-productivity', 'email-marketing-ai', 'prompt-engineering-mastery'])
+const CUSTOM_IMAGE_SLUGS = new Set(['ai-for-beginners', 'chatgpt-mastery', 'ai-tools-productivity', 'email-marketing-ai', 'prompt-engineering-mastery', 'social-media-marketing-ai'])
 function courseImageSrc(slug: string) {
   return CUSTOM_IMAGE_SLUGS.has(slug)
     ? `/images/courses/${slug}.jpg`
