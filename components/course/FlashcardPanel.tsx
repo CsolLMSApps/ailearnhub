@@ -22,21 +22,28 @@ function parseFlashcards(markdown: string): Flashcard[] {
     const nonEmpty = lines.filter(l => l)
     if (!nonEmpty.length) continue
 
-    const label = nonEmpty[0].replace(/\*\*/g, '').trim().toUpperCase()
-    if (label !== 'KEY TAKEAWAY' && label !== 'DEFINITION') continue
+    // Strip bold markers and check what the first line starts with
+    const firstLine = nonEmpty[0].replace(/\*\*/g, '').trim()
+    const upper = firstLine.toUpperCase()
 
-    const body = nonEmpty
-      .slice(1)
-      .join(' ')
-      .replace(/\*\*/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
+    const isKT  = upper.startsWith('KEY TAKEAWAY')
+    const isDef = upper.startsWith('DEFINITION')
+    if (!isKT && !isDef) continue
+
+    const labelKey = isKT ? 'KEY TAKEAWAY' : 'DEFINITION'
+
+    // Body = rest of first line after the label keyword + subsequent lines
+    // Handles both single-line format ("KEY TAKEAWAY body here")
+    // and multi-line format ("KEY TAKEAWAY\n\nbody here")
+    const firstRest = firstLine.slice(labelKey.length).replace(/^[:\s\-—]+/, '').trim()
+    const restLines = nonEmpty.slice(1).join(' ').replace(/\*\*/g, '')
+    const body = (firstRest + ' ' + restLines).replace(/\s+/g, ' ').trim()
+
     if (body.length < 5) continue
 
-    if (label === 'DEFINITION') {
+    if (isDef) {
       const emDash = body.indexOf('—')
       const colon  = body.indexOf(':')
-      // Prefer em-dash split, fall back to colon, within first 60 chars
       const split  =
         emDash > 0 && emDash < 60 ? emDash :
         colon  > 0 && colon  < 60 ? colon  : -1
