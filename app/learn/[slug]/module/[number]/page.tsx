@@ -268,31 +268,50 @@ export default async function ModulePage({ params }: ModulePageProps) {
         </div>
 
         {/* Content */}
-        <div className="max-w-3xl mx-auto px-6 py-8 w-full">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 w-full">
 
-            {/* Module header */}
-            <div className="p-8 pb-0">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="inline-block px-3 py-1 bg-[#FF6F00] text-white rounded-full text-sm font-bold">
-                  Module {moduleNumber}
-                </span>
-                {isCompleted && (
-                  <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-bold">
-                    ✅ Completed
-                  </span>
-                )}
-                {isLastModule && (
-                  <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-bold">
-                    Final Module
-                  </span>
-                )}
+          {/* ── Module Header Card ── */}
+          <div className="relative bg-gradient-to-br from-[#FF6F00] via-[#F57C00] to-[#E65100] rounded-2xl shadow-lg shadow-orange-200/50 overflow-hidden mb-5">
+            {/* Dot pattern overlay */}
+            <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'radial-gradient(circle, white 1.5px, transparent 1.5px)', backgroundSize: '22px 22px' }} />
+            <div className="relative px-7 pt-7 pb-6">
+              {/* Top row: module bubble + course info + badges */}
+              <div className="flex items-start justify-between gap-3 mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex flex-col items-center justify-center shrink-0">
+                    <span className="text-white/60 text-[8px] font-bold uppercase tracking-wider leading-none">MOD</span>
+                    <span className="text-white text-xl font-black leading-none">{moduleNumber}</span>
+                  </div>
+                  <div>
+                    <p className="text-orange-100 text-[11px] font-semibold uppercase tracking-widest leading-none mb-1">{course.title}</p>
+                    <p className="text-white/60 text-xs">{doneCount} of {totalModules} modules completed</p>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-wrap justify-end shrink-0">
+                  {isCompleted && (
+                    <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-[11px] font-bold border border-white/25">
+                      ✅ Done
+                    </span>
+                  )}
+                  {isLastModule && (
+                    <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-[11px] font-bold border border-white/25">
+                      🏁 Final
+                    </span>
+                  )}
+                </div>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">{module.title}</h1>
+              {/* Module title */}
+              <h1 className="text-2xl sm:text-[28px] font-bold text-white leading-tight">{module.title}</h1>
             </div>
+            {/* Overall progress strip */}
+            <div className="bg-black/20 h-1.5">
+              <div className="bg-white/50 h-1.5 transition-all duration-700" style={{ width: `${overallPct}%` }} />
+            </div>
+          </div>
 
-            {/* Module body */}
-            <div className="p-8 pt-6">
+          {/* ── Content Card ── */}
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-7 sm:p-10">
 
               {/* Markdown content */}
               {module.content ? (
@@ -352,22 +371,24 @@ export default async function ModulePage({ params }: ModulePageProps) {
               />
 
               {/* Prev / Next navigation */}
-              <div className="flex items-center justify-between mt-6">
+              <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
                 {previousModule ? (
                   <Link
                     href={`/learn/${slug}/module/${previousModule.module_number}`}
-                    className="flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-[#FF6F00] hover:text-[#FF6F00] transition-colors"
+                    className="flex items-center gap-2 px-5 py-2.5 text-gray-500 hover:text-[#FF6F00] transition-colors text-sm font-medium group"
                   >
-                    ← Previous
+                    <span className="group-hover:-translate-x-1 transition-transform inline-block">←</span>
+                    <span>Previous</span>
                   </Link>
                 ) : <div />}
 
                 {isLastModule ? <div /> : nextModule ? (
                   <Link
                     href={`/learn/${slug}/module/${nextModule.module_number}`}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors font-bold"
+                    className="flex items-center gap-2 px-6 py-2.5 bg-[#FF6F00] text-white rounded-xl hover:bg-[#E65100] transition-colors font-bold text-sm shadow-sm shadow-orange-200 group"
                   >
-                    Next Module →
+                    <span>Next Module</span>
+                    <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
                   </Link>
                 ) : <div />}
               </div>
