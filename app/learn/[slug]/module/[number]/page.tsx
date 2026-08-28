@@ -11,6 +11,8 @@ import PdfIframe from '@/components/course/PdfIframe'
 import StudentNotes from '@/components/course/StudentNotes'
 import MarkdownRenderer from '@/components/course/MarkdownRenderer'
 import ModuleLayout from '@/components/course/ModuleLayout'
+import ReaderControls from '@/components/course/ReaderControls'
+import ReadingProgress from '@/components/course/ReadingProgress'
 
 export const dynamic = 'force-dynamic'
 
@@ -160,30 +162,29 @@ export default async function ModulePage({ params }: ModulePageProps) {
       <div className="flex-1 flex flex-col min-h-screen">
 
         {/* Top bar */}
-        <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-          <div className="px-6 py-3 flex items-center justify-between max-w-3xl mx-auto w-full">
+        <div className="module-topbar bg-white border-b border-gray-200 sticky top-0 z-10">
+          <div className="px-4 py-2.5 flex items-center gap-2 w-full">
             {/* Mobile back link */}
             <Link
               href={`/learn/${slug}`}
-              className="lg:hidden text-[#FF6F00] hover:underline text-sm font-medium"
+              className="lg:hidden text-[#FF6F00] hover:underline text-sm font-medium shrink-0"
             >
               ← Back
             </Link>
-            <span className="text-sm text-gray-400 ml-auto">
-              Module {moduleNumber} / {totalModules}
-            </span>
-          </div>
-          {/* Reading progress bar */}
-          <div className="w-full bg-gray-100 h-0.5">
-            <div
-              className="bg-[#FF6F00] h-0.5 transition-all duration-500"
-              style={{ width: `${(moduleNumber / totalModules) * 100}%` }}
+            {/* Reader controls: module label + search + font size + dark mode */}
+            <ReaderControls
+              moduleNumber={moduleNumber}
+              totalModules={totalModules}
+              slug={slug}
+              allModules={(allModules ?? []) as { module_number: number; title: string }[]}
             />
           </div>
+          {/* Scroll-based reading progress */}
+          <ReadingProgress />
         </div>
 
         {/* Content */}
-        <div className="px-4 sm:px-6 py-6 w-full">
+        <div className="module-content-area px-4 sm:px-6 py-6 w-full">
 
           {/* ── Module Header Card ── */}
           <div className="relative bg-gradient-to-br from-[#FF6F00] via-[#F57C00] to-[#E65100] rounded-2xl shadow-lg shadow-orange-200/50 overflow-hidden mb-5">
@@ -225,7 +226,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
           </div>
 
           {/* ── Content Card ── */}
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div className="module-card bg-white rounded-2xl shadow-sm overflow-hidden">
             <div className="px-5 py-7 sm:px-8 sm:py-8">
 
               {/* Markdown content */}

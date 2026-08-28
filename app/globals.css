@@ -86,6 +86,63 @@
   }
 }
 
+/* ── Reader Dark Mode ───────────────────────────────────────────────────────
+   Toggled by adding data-reader-dark to <html>. Scoped to module pages only.
+   ────────────────────────────────────────────────────────────────────────── */
+[data-reader-dark] .module-content-area { background: #181818 !important; }
+[data-reader-dark] .module-topbar       { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+[data-reader-dark] .module-topbar .text-gray-400 { color: #777 !important; }
+[data-reader-dark] .module-card         { background: #1e1e1e !important; }
+
+/* Typography */
+[data-reader-dark] .module-card p,
+[data-reader-dark] .module-card li span  { color: #ccc !important; }
+[data-reader-dark] .module-card h1,
+[data-reader-dark] .module-card h2,
+[data-reader-dark] .module-card h3       { color: #f0f0f0 !important; border-color: #333 !important; }
+[data-reader-dark] .module-card h4       { color: #FF9800 !important; }
+[data-reader-dark] .module-card strong   { color: #fff !important; }
+[data-reader-dark] .module-card em       { color: #aaa !important; }
+[data-reader-dark] .module-card a        { color: #FF9800 !important; }
+[data-reader-dark] .module-card hr       { border-color: #333 !important; }
+
+/* Inline code */
+[data-reader-dark] .module-card code    { background: #2d2d2d !important; color: #FF9800 !important; }
+
+/* Tables */
+[data-reader-dark] .module-card thead   { background: #2a2a2a !important; }
+[data-reader-dark] .module-card td      { border-color: #333 !important; color: #bbb !important; }
+[data-reader-dark] .module-card tr:hover { background: #252525 !important; }
+[data-reader-dark] .module-card .divide-y { border-color: #333 !important; }
+
+/* Callout boxes */
+[data-reader-dark] .module-card .bg-green-50   { background: #1a2e1a !important; }
+[data-reader-dark] .module-card .bg-blue-50    { background: #1a1a2e !important; }
+[data-reader-dark] .module-card .bg-amber-50   { background: #2e2a1a !important; }
+[data-reader-dark] .module-card .bg-purple-50  { background: #2a1a2e !important; }
+[data-reader-dark] .module-card .bg-orange-50  { background: #2e1e1a !important; }
+[data-reader-dark] .module-card .bg-slate-50   { background: #1e2228 !important; }
+
+/* Mermaid / syntax containers */
+[data-reader-dark] .module-card [class*="bg-orange-50"] { background: #221a12 !important; border-color: #3a2a1a !important; }
+
+/* Misc borders + text */
+[data-reader-dark] .module-card .border-gray-100,
+[data-reader-dark] .module-card .border-gray-200  { border-color: #2e2e2e !important; }
+[data-reader-dark] .module-card .text-gray-900     { color: #f0f0f0 !important; }
+[data-reader-dark] .module-card .text-gray-700,
+[data-reader-dark] .module-card .text-gray-600     { color: #ccc !important; }
+[data-reader-dark] .module-card .text-gray-500,
+[data-reader-dark] .module-card .text-gray-400     { color: #888 !important; }
+[data-reader-dark] .module-card .bg-gray-50        { background: #242424 !important; }
+[data-reader-dark] .module-card .bg-white          { background: #1e1e1e !important; }
+
+/* ── Reader Font Size ────────────────────────────────────────────────────── */
+[data-reader-fs="sm"] .module-card { font-size: 13px !important; }
+[data-reader-fs="md"] .module-card { font-size: 15px !important; }
+[data-reader-fs="lg"] .module-card { font-size: 17px !important; }
+[data-reader-fs="xl"] .module-card { font-size: 19px !important; }
+
 /* Custom utility classes for TensorFlow.org style */
 @layer utilities {
   .text-tf-orange {
