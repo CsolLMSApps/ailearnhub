@@ -268,7 +268,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
         </div>
 
         {/* Content */}
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 w-full">
+        <div className="px-4 sm:px-6 py-6 w-full">
 
           {/* ── Module Header Card ── */}
           <div className="relative bg-gradient-to-br from-[#FF6F00] via-[#F57C00] to-[#E65100] rounded-2xl shadow-lg shadow-orange-200/50 overflow-hidden mb-5">
@@ -311,7 +311,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
           {/* ── Content Card ── */}
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <div className="p-7 sm:p-10">
+            <div className="px-5 py-7 sm:px-8 sm:py-8">
 
               {/* Markdown content */}
               {module.content ? (
