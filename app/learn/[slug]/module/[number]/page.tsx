@@ -10,6 +10,7 @@ import Link from 'next/link'
 import PdfIframe from '@/components/course/PdfIframe'
 import StudentNotes from '@/components/course/StudentNotes'
 import MarkdownRenderer from '@/components/course/MarkdownRenderer'
+import ModuleLayout from '@/components/course/ModuleLayout'
 
 export const dynamic = 'force-dynamic'
 
@@ -142,107 +143,21 @@ export default async function ModulePage({ params }: ModulePageProps) {
   const overallPct = totalModules > 0 ? Math.round((doneCount / totalModules) * 100) : 0
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <ModuleLayout
+      slug={slug}
+      courseTitle={course.title}
+      moduleNumber={moduleNumber}
+      allModules={(allModules ?? []) as { module_number: number; title: string }[]}
+      completedModules={completedModules}
+      doneCount={doneCount}
+      totalModules={totalModules}
+      overallPct={overallPct}
+    >
       {/* Auto-mark non-final modules as complete on visit */}
       {!isLastModule && <AutoMarkVisited slug={slug} moduleNumber={moduleNumber} />}
 
-      {/* ── Sidebar ── */}
-      <aside className="hidden lg:flex flex-col w-64 bg-[#212121] fixed top-0 left-0 bottom-0 z-20 overflow-y-auto shrink-0">
-
-        {/* Course info + progress */}
-        <div className="p-5 border-b border-white/10">
-          <Link
-            href={`/learn/${slug}`}
-            className="flex items-center gap-1.5 text-white/50 hover:text-white text-xs font-medium transition-colors mb-3"
-          >
-            ← Back to course
-          </Link>
-          <p className="text-white font-bold text-sm leading-snug mb-4">{course.title}</p>
-          <div className="flex items-center justify-between text-xs text-white/40 mb-1.5">
-            <span>{doneCount} of {totalModules} modules done</span>
-            <span>{overallPct}%</span>
-          </div>
-          <div className="w-full bg-white/10 rounded-full h-1.5">
-            <div
-              className="bg-[#FF6F00] h-1.5 rounded-full transition-all duration-500"
-              style={{ width: `${overallPct}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Module list */}
-        <nav className="flex-1 py-3 overflow-y-auto">
-          {allModules?.map((m: any, idx: number) => {
-            const isActive  = m.module_number === moduleNumber
-            const isDone    = completedModules.includes(m.module_number)
-            const prevDone  = idx === 0 || completedModules.includes(allModules[idx - 1].module_number)
-            const isLocked  = !prevDone && !isDone && !isActive
-
-            if (isLocked) {
-              return (
-                <div
-                  key={m.module_number}
-                  className="flex items-start gap-3 px-5 py-3 opacity-35 cursor-not-allowed"
-                >
-                  <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center text-xs text-white/30 flex-shrink-0 mt-0.5">
-                    🔒
-                  </div>
-                  <span className="text-white/30 text-xs leading-snug">{m.title}</span>
-                </div>
-              )
-            }
-
-            return (
-              <Link
-                key={m.module_number}
-                href={`/learn/${slug}/module/${m.module_number}`}
-                className={`flex items-start gap-3 px-5 py-3 transition-colors border-r-2 ${
-                  isActive
-                    ? 'bg-[#FF6F00]/15 border-[#FF6F00]'
-                    : 'border-transparent hover:bg-white/5'
-                }`}
-              >
-                {/* Status indicator */}
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 ${
-                  isDone
-                    ? 'bg-green-500 text-white'
-                    : isActive
-                    ? 'bg-[#FF6F00] text-white'
-                    : 'border border-white/20 text-white/40'
-                }`}>
-                  {isDone ? '✓' : m.module_number}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <p className={`text-xs leading-snug ${
-                    isActive  ? 'text-white font-semibold' :
-                    isDone    ? 'text-white/50' :
-                                'text-white/65'
-                  }`}>
-                    {m.title}
-                  </p>
-                  {isActive && (
-                    <p className="text-[#FF6F00] text-[10px] mt-0.5 font-medium">Currently reading</p>
-                  )}
-                </div>
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* Sidebar footer */}
-        <div className="p-4 border-t border-white/10">
-          <Link
-            href={`/learn/${slug}/quiz`}
-            className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#FF6F00]/20 hover:bg-[#FF6F00]/30 text-[#FF6F00] rounded-lg text-xs font-bold transition-colors"
-          >
-            📝 Course Final Quiz
-          </Link>
-        </div>
-      </aside>
-
-      {/* ── Main content area ── */}
-      <div className="lg:ml-64 flex-1 flex flex-col min-h-screen">
+      {/* ── Main content area (inner) ── */}
+      <div className="flex-1 flex flex-col min-h-screen">
 
         {/* Top bar */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -397,6 +312,6 @@ export default async function ModulePage({ params }: ModulePageProps) {
           </div>
         </div>
       </div>
-    </div>
+    </ModuleLayout>
   )
 }
