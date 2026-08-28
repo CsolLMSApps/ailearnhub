@@ -143,10 +143,28 @@
 [data-reader-dark] .module-card .bg-orange-50  { background: #2e1e10 !important; }
 
 /* ── Reader Font Size ────────────────────────────────────────────────────── */
-[data-reader-fs="sm"] .module-card { font-size: 13px !important; }
-[data-reader-fs="md"] .module-card { font-size: 15px !important; }
-[data-reader-fs="lg"] .module-card { font-size: 17px !important; }
-[data-reader-fs="xl"] .module-card { font-size: 19px !important; }
+/* Must target child text elements directly — Tailwind's text-[15px] on <p>
+   overrides inherited font-size from the parent container.               */
+
+[data-reader-fs="sm"] .module-card p,
+[data-reader-fs="sm"] .module-card li span,
+[data-reader-fs="sm"] .module-card td,
+[data-reader-fs="sm"] .module-card th { font-size: 13px !important; line-height: 1.75 !important; }
+
+[data-reader-fs="md"] .module-card p,
+[data-reader-fs="md"] .module-card li span,
+[data-reader-fs="md"] .module-card td,
+[data-reader-fs="md"] .module-card th { font-size: 15px !important; line-height: 1.85 !important; }
+
+[data-reader-fs="lg"] .module-card p,
+[data-reader-fs="lg"] .module-card li span,
+[data-reader-fs="lg"] .module-card td,
+[data-reader-fs="lg"] .module-card th { font-size: 17px !important; line-height: 1.85 !important; }
+
+[data-reader-fs="xl"] .module-card p,
+[data-reader-fs="xl"] .module-card li span,
+[data-reader-fs="xl"] .module-card td,
+[data-reader-fs="xl"] .module-card th { font-size: 19px !important; line-height: 1.9  !important; }
 
 /* Custom utility classes for TensorFlow.org style */
 @layer utilities {
