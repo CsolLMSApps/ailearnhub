@@ -14,6 +14,7 @@ import ModuleLayout from '@/components/course/ModuleLayout'
 import ReaderControls from '@/components/course/ReaderControls'
 import ReadingProgress from '@/components/course/ReadingProgress'
 import FlashcardPanel from '@/components/course/FlashcardPanel'
+import MindMapPanel from '@/components/course/MindMapPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -243,6 +244,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   />
                 </div>
               ) : null}
+
+              {/* Mind map — auto-generated from module headings */}
+              {module.content && <MindMapPanel title={module.title} content={module.content} />}
 
               {/* Flashcards — auto-generated from KEY TAKEAWAY / DEFINITION callouts */}
               {module.content && <FlashcardPanel content={module.content} />}
