@@ -137,6 +137,11 @@
 [data-reader-dark] .module-card .bg-gray-50        { background: #242424 !important; }
 [data-reader-dark] .module-card .bg-white          { background: #1e1e1e !important; }
 
+/* ── Flashcard badges in dark mode ──────────────────────────────────────── */
+[data-reader-dark] .module-card .bg-blue-50   { background: #1a1e2e !important; }
+[data-reader-dark] .module-card .text-blue-700 { color: #7eb3ff !important; }
+[data-reader-dark] .module-card .bg-orange-50  { background: #2e1e10 !important; }
+
 /* ── Reader Font Size ────────────────────────────────────────────────────── */
 [data-reader-fs="sm"] .module-card { font-size: 13px !important; }
 [data-reader-fs="md"] .module-card { font-size: 15px !important; }

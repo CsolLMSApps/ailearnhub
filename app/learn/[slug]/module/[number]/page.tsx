@@ -13,6 +13,7 @@ import MarkdownRenderer from '@/components/course/MarkdownRenderer'
 import ModuleLayout from '@/components/course/ModuleLayout'
 import ReaderControls from '@/components/course/ReaderControls'
 import ReadingProgress from '@/components/course/ReadingProgress'
+import FlashcardPanel from '@/components/course/FlashcardPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -242,6 +243,9 @@ export default async function ModulePage({ params }: ModulePageProps) {
                   />
                 </div>
               ) : null}
+
+              {/* Flashcards — auto-generated from KEY TAKEAWAY / DEFINITION callouts */}
+              {module.content && <FlashcardPanel content={module.content} />}
 
               {/* Final Quiz CTA */}
               {isLastModule && (
