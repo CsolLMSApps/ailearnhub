@@ -3,9 +3,8 @@
 
 import { notFound } from 'next/navigation'
 import { adminFetch, adminFetchAll } from '@/lib/supabase/admin'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import Link from 'next/link'
+import MarkdownRenderer from '@/components/course/MarkdownRenderer'
 import PdfIframe from '@/components/course/PdfIframe'
 
 export const dynamic = 'force-dynamic'
@@ -117,66 +116,8 @@ export default async function AdminStudentViewModulePage({ params }: Props) {
                 />
               </div>
             ) : module.content ? (
-              <div className="prose max-w-none mb-10 overflow-hidden">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    h1: ({ children }) => (
-                      <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h1>
-                    ),
-                    h2: ({ children }) => (
-                      <h2 className="text-2xl font-bold text-gray-900 mt-6 mb-3">{children}</h2>
-                    ),
-                    h3: ({ children }) => (
-                      <h3 className="text-xl font-bold text-gray-900 mt-4 mb-2">{children}</h3>
-                    ),
-                    p: ({ children }) => (
-                      <p className="text-gray-700 leading-relaxed mb-4">{children}</p>
-                    ),
-                    ul: ({ children }) => (
-                      <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700">{children}</ul>
-                    ),
-                    ol: ({ children }) => (
-                      <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700">{children}</ol>
-                    ),
-                    li: ({ children }) => <li className="ml-4">{children}</li>,
-                    pre: ({ children }) => (
-                      <pre className="bg-gray-50 border border-gray-200 rounded-lg my-4 overflow-x-auto max-w-full">
-                        {children}
-                      </pre>
-                    ),
-                    code: ({ children, className }) => {
-                      const isInline = !className
-                      return isInline ? (
-                        <code className="bg-orange-50 text-[#FF6F00] px-1 py-0.5 rounded text-sm font-mono break-all">
-                          {children}
-                        </code>
-                      ) : (
-                        <code className="block text-gray-800 p-4 text-sm font-mono whitespace-pre-wrap break-words">
-                          {children}
-                        </code>
-                      )
-                    },
-                    blockquote: ({ children }) => (
-                      <blockquote className="border-l-4 border-[#FF6F00] pl-4 italic text-gray-600 my-4">
-                        {children}
-                      </blockquote>
-                    ),
-                    table: ({ children }) => (
-                      <div className="overflow-x-auto my-4">
-                        <table className="min-w-full border border-gray-200 rounded-lg">{children}</table>
-                      </div>
-                    ),
-                    th: ({ children }) => (
-                      <th className="px-4 py-2 bg-gray-50 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">{children}</th>
-                    ),
-                    td: ({ children }) => (
-                      <td className="px-4 py-2 border-b border-gray-100 text-sm text-gray-600">{children}</td>
-                    ),
-                  }}
-                >
-                  {module.content}
-                </ReactMarkdown>
+              <div className="mb-10 overflow-hidden">
+                <MarkdownRenderer content={module.content} />
               </div>
             ) : (
               <div className="py-12 text-center text-gray-400 mb-8">
