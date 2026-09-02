@@ -130,6 +130,10 @@ export default async function DashboardPage({
                 <Link href="/dashboard" className="text-[#FF6F00] font-medium border-b-2 border-[#FF6F00] pb-1">
                   Dashboard
                 </Link>
+                <Link href="/dashboard/bookmarks" className="text-gray-600 hover:text-gray-900 flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>
+                  Bookmarks
+                </Link>
                 <Link href="/courses" className="text-gray-600 hover:text-gray-900">
                   Browse Courses
                 </Link>

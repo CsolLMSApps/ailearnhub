@@ -15,6 +15,7 @@ import ReaderControls from '@/components/course/ReaderControls'
 import ReadingProgress from '@/components/course/ReadingProgress'
 import FlashcardPanel from '@/components/course/FlashcardPanel'
 import MindMapPanel from '@/components/course/MindMapPanel'
+import BookmarkButton from '@/components/course/BookmarkButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -109,6 +110,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
     .single()
 
   const initialNote = existingNote?.content ?? ''
+
 
   // Only fetch the quiz on the last module — it's the Course Final Quiz
   let quiz: any = null
@@ -205,7 +207,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                     <p className="text-white/60 text-xs">{doneCount} of {totalModules} modules completed</p>
                   </div>
                 </div>
-                <div className="flex gap-2 flex-wrap justify-end shrink-0">
+                <div className="flex gap-2 flex-wrap justify-end items-center shrink-0">
                   {isCompleted && (
                     <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-[11px] font-bold border border-white/25">
                       ✅ Done
@@ -216,6 +218,13 @@ export default async function ModulePage({ params }: ModulePageProps) {
                       🏁 Final
                     </span>
                   )}
+                  <BookmarkButton
+                    courseId={course.id}
+                    courseSlug={slug}
+                    courseTitle={course.title}
+                    moduleNumber={moduleNumber}
+                    moduleTitle={module.title}
+                  />
                 </div>
               </div>
               {/* Module title */}
