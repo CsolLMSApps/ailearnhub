@@ -1,6 +1,8 @@
 // app/admin/analytics/page.tsx — Revenue & Enrollment Analytics
 
 import { adminFetchAll } from '@/lib/supabase/admin'
+import RevenueLineChart from '@/components/admin/RevenueLineChart'
+import CourseDonutChart from '@/components/admin/CourseDonutChart'
 
 export const dynamic = 'force-dynamic'
 
@@ -104,44 +106,57 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      {/* Monthly Revenue Bar Chart */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-1">Monthly Revenue</h2>
-        <p className="text-xs text-gray-400 mb-6">{monthKeys.length} months of data</p>
+      {/* Monthly Revenue — Line chart + Course Donut side by side */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-gray-900 mb-0.5">Monthly Revenue Trend</h2>
+          <p className="text-xs text-gray-400 mb-4">{monthKeys.length} months of data · hover points for details</p>
+          {monthKeys.length === 0 ? (
+            <div className="h-48 flex items-center justify-center text-gray-400 text-sm">No purchase data yet</div>
+          ) : (
+            <RevenueLineChart
+              labels={monthKeys.map(monthLabel)}
+              revenues={monthKeys.map(k => monthlyMap[k] / 100)}
+              counts={monthKeys.map(k => monthlyCount[k])}
+            />
+          )}
+        </div>
 
-        {monthKeys.length === 0 ? (
-          <div className="h-40 flex items-center justify-center text-gray-400 text-sm">No purchase data yet</div>
-        ) : (
-          <div className="flex items-end gap-3 h-48 overflow-x-auto pb-2">
-            {monthKeys.map((key) => {
-              const rev = monthlyMap[key]
-              const count = monthlyCount[key]
-              const heightPct = Math.max(4, Math.round((rev / maxMonthRevenue) * 100))
-              return (
-                <div key={key} className="flex flex-col items-center gap-1 min-w-[48px] group">
-                  <div className="relative w-full flex flex-col items-center">
-                    {/* Tooltip */}
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-2 py-1 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                      ${(rev / 100).toFixed(0)} · {count} sale{count !== 1 ? 's' : ''}
-                    </div>
-                    <div
-                      className="w-10 rounded-t-lg bg-gradient-to-t from-orange-500 to-orange-400 transition-all hover:from-orange-600 hover:to-orange-500 cursor-default"
-                      style={{ height: `${heightPct * 1.7}px` }}
-                    />
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col">
+          <h2 className="text-base font-bold text-gray-900 mb-0.5">Revenue by Course</h2>
+          <p className="text-xs text-gray-400 mb-4">Share of total revenue</p>
+          {courseRevList.length === 0 ? (
+            <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">No data yet</div>
+          ) : (
+            <div className="flex flex-col items-center gap-4">
+              <CourseDonutChart
+                slices={courseRevList.map((c, i) => ({
+                  label: c.title,
+                  value: c.rev / 100,
+                  color: COLORS[i % COLORS.length],
+                }))}
+                centerLabel="Revenue"
+                formatValue={(v) => `$${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v.toFixed(0)}`}
+              />
+              {/* Legend */}
+              <div className="w-full space-y-1.5">
+                {courseRevList.slice(0, 5).map((c, i) => (
+                  <div key={c.id} className="flex items-center gap-2 text-xs">
+                    <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: COLORS[i % COLORS.length] }} />
+                    <span className="truncate text-gray-600 flex-1">{c.title}</span>
+                    <span className="font-semibold text-gray-800 shrink-0">${(c.rev / 100).toFixed(0)}</span>
                   </div>
-                  <span className="text-[10px] text-gray-500 font-medium">{monthLabel(key)}</span>
-                  <span className="text-[10px] font-bold text-gray-700">${(rev / 100).toFixed(0)}</span>
-                </div>
-              )
-            })}
-          </div>
-        )}
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Course Revenue Breakdown */}
+      {/* Course Revenue Detail — horizontal breakdown */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-1">Revenue by Course</h2>
-        <p className="text-xs text-gray-400 mb-6">Which courses drive the most revenue</p>
+        <h2 className="text-base font-bold text-gray-900 mb-1">Course Performance Breakdown</h2>
+        <p className="text-xs text-gray-400 mb-6">Revenue, enrollment, completion, and average progress per course</p>
 
         {courseRevList.length === 0 ? (
           <div className="text-gray-400 text-sm text-center py-8">No data yet</div>
@@ -158,17 +173,16 @@ export default async function AdminAnalyticsPage() {
                 <div key={course.id} className="flex items-center gap-4">
                   <div className="w-40 shrink-0">
                     <p className="text-sm font-semibold text-gray-800 truncate">{course.title}</p>
-                    <p className="text-xs text-gray-400">{course.enrollments} enrolled · {certs} certs</p>
+                    <p className="text-xs text-gray-400">{course.enrollments} enrolled · {certs} certs · avg {avgProg}%</p>
                   </div>
-                  <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
+                  <div className="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div
-                      className="h-3 rounded-full transition-all"
+                      className="h-2.5 rounded-full transition-all"
                       style={{ width: `${widthPct}%`, backgroundColor: color }}
                     />
                   </div>
                   <div className="w-20 text-right shrink-0">
                     <p className="text-sm font-bold text-gray-900">${(course.rev / 100).toFixed(2)}</p>
-                    <p className="text-xs text-gray-400">avg {avgProg}% done</p>
                   </div>
                 </div>
               )

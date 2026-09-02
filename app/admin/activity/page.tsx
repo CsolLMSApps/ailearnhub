@@ -2,6 +2,7 @@
 // User Activity Dashboard — tracks engagement across progress, quiz_results, purchases, certificates
 
 import { adminFetchAll, adminFetchUsers } from '@/lib/supabase/admin'
+import HorizontalBarChart from '@/components/admin/HorizontalBarChart'
 
 export const dynamic = 'force-dynamic'
 
@@ -243,30 +244,47 @@ export default async function ActivityPage() {
         ))}
       </div>
 
-      {/* Course Engagement */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-1">Course Engagement</h2>
-        <p className="text-xs text-gray-400 mb-6">Active learners per course in the last 30 days</p>
-        <div className="space-y-4">
-          {courseEngagement.map((c: any, i: number) => {
-            const bar30 = Math.round((c.active30d / maxEngagement) * 100)
-            const COLORS = ['#FF6F00', '#6366f1', '#10b981', '#f59e0b', '#3b82f6', '#ec4899']
-            return (
-              <div key={c.id} className="flex items-center gap-4">
-                <div className="w-44 shrink-0">
-                  <p className="text-sm font-semibold text-gray-800 truncate">{c.title}</p>
-                  <p className="text-xs text-gray-400">{c.enrolled} enrolled · {c.completed} completed · avg {c.avgPct}%</p>
-                </div>
-                <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                  <div className="h-3 rounded-full transition-all" style={{ width: `${bar30}%`, backgroundColor: COLORS[i % COLORS.length] }} />
-                </div>
-                <div className="w-28 shrink-0 text-right">
-                  <span className="text-sm font-bold text-gray-900">{c.active30d} active</span>
-                  <span className="text-xs text-gray-400 block">{c.active7d} this week</span>
-                </div>
-              </div>
-            )
-          })}
+      {/* Course Engagement — SVG horizontal bar chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-gray-900 mb-0.5">Course Engagement (30 days)</h2>
+          <p className="text-xs text-gray-400 mb-5">Active learners per course</p>
+          {courseEngagement.length === 0 ? (
+            <div className="h-40 flex items-center justify-center text-gray-400 text-sm">No data</div>
+          ) : (
+            <HorizontalBarChart
+              items={courseEngagement.map((c: any, i: number) => ({
+                label: c.title,
+                value: c.active30d,
+                max: maxEngagement,
+                subLabel: `${c.enrolled} enrolled · avg ${c.avgPct}%`,
+                color: ['#FF6F00', '#6366f1', '#10b981', '#f59e0b', '#3b82f6', '#ec4899'][i % 6],
+              }))}
+              formatValue={(v) => `${v}`}
+            />
+          )}
+        </div>
+
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-gray-900 mb-0.5">Course Completion Rate</h2>
+          <p className="text-xs text-gray-400 mb-5">% of enrolled learners who earned a certificate</p>
+          {courseEngagement.length === 0 ? (
+            <div className="h-40 flex items-center justify-center text-gray-400 text-sm">No data</div>
+          ) : (
+            <HorizontalBarChart
+              items={courseEngagement.map((c: any, i: number) => ({
+                label: c.title,
+                value: c.enrolled > 0 ? Math.round((c.completed / c.enrolled) * 100) : 0,
+                max: 100,
+                subLabel: `${c.completed} / ${c.enrolled} completed`,
+                color: (() => {
+                  const rate = c.enrolled > 0 ? (c.completed / c.enrolled) * 100 : 0
+                  return rate >= 50 ? '#10b981' : rate >= 25 ? '#f59e0b' : '#ef4444'
+                })(),
+              }))}
+              formatValue={(v) => `${v}%`}
+            />
+          )}
         </div>
       </div>
 
