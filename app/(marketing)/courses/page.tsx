@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     'No-code machine learning courses for business',
     'Business automation workflow certification',
     'NLP for business professionals',
+    'Best AI courses for professionals',
   ],
   openGraph: {
     title: 'AI Courses | AI Certification for Professionals 2026 | AI Learn Hub',

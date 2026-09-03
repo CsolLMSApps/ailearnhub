@@ -40,6 +40,7 @@ export const metadata: Metadata = {
     'AI marketing course',
     'prompt engineering mastery',
     'AI tools training',
+    'AI upskilling',
   ],
   authors: [{ name: 'Srikanth Merianda', url: 'https://ailearnhub.io/about' }],
   creator: 'AI Learn Hub LLC',
