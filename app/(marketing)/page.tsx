@@ -108,6 +108,32 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* How It Works Video */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#212121] mb-4">
+              See How <span className="text-[#FF6F00]">AI Learn Hub</span> Works
+            </h2>
+            <p className="text-lg text-[#757575] max-w-2xl mx-auto">
+              A 60-second look at picking a course, working through the modules, and earning your certificate
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-gray-200">
+            <video
+              className="w-full h-auto block"
+              controls
+              playsInline
+              preload="metadata"
+              poster="/images/how-it-works-poster.jpg"
+            >
+              <source src="/videos/how-it-works.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Courses */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">

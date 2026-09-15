@@ -1,0 +1,584 @@
+<title>Google Ads Launch Plan</title>
+<style>
+  :root {
+    --paper: #f3f1ec;
+    --paper-raised: #fbfaf7;
+    --ink: #1e1b16;
+    --ink-soft: #55503f;
+    --line: #d9d3c4;
+    --line-strong: #b9b09a;
+    --accent: #d1560c;
+    --accent-ink: #a6440a;
+    --accent-soft: #fbe4d1;
+    --done: #2f6b4f;
+    --done-soft: #dfeee5;
+    --info: #3e5c76;
+    --info-soft: #dfe6ee;
+    --warn: #9a5a00;
+    --warn-soft: #f6e6c8;
+    --mono-chip: #eae6da;
+    --shadow: 0 1px 0 rgba(30,27,22,0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1815;
+      --paper-raised: #242019;
+      --ink: #ede8df;
+      --ink-soft: #b8b1a0;
+      --line: #3c362b;
+      --line-strong: #524a3a;
+      --accent: #ff8a44;
+      --accent-ink: #ffab77;
+      --accent-soft: #3a2917;
+      --done: #6fcf9a;
+      --done-soft: #1f3329;
+      --info: #8fb4d9;
+      --info-soft: #1f2c38;
+      --warn: #e0b355;
+      --warn-soft: #3a2f14;
+      --mono-chip: #2a251d;
+      --shadow: 0 1px 0 rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1815;
+    --paper-raised: #242019;
+    --ink: #ede8df;
+    --ink-soft: #b8b1a0;
+    --line: #3c362b;
+    --line-strong: #524a3a;
+    --accent: #ff8a44;
+    --accent-ink: #ffab77;
+    --accent-soft: #3a2917;
+    --done: #6fcf9a;
+    --done-soft: #1f3329;
+    --info: #8fb4d9;
+    --info-soft: #1f2c38;
+    --warn: #e0b355;
+    --warn-soft: #3a2f14;
+    --mono-chip: #2a251d;
+    --shadow: 0 1px 0 rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    line-height: 1.62;
+    font-size: 16px;
+  }
+  h1, h2, h3, .label-face {
+    font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", Arial, sans-serif;
+    text-wrap: balance;
+  }
+  code, .mono, .data-cell, .kbd {
+    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sheet {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.75rem 1.75rem 6rem;
+  }
+
+  /* ---- brief header, like a trafficking sheet ---- */
+  .brief {
+    border: 1px solid var(--line-strong);
+    background: var(--paper-raised);
+    box-shadow: var(--shadow);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .brief-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  .brief-eyebrow {
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+  .brief-top h1 {
+    font-size: 1.9rem;
+    font-weight: 650;
+    margin: 0.2rem 0 0;
+    letter-spacing: -0.01em;
+  }
+  .brief-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem 1.5rem;
+  }
+  .field dt {
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.2rem;
+  }
+  .field dd {
+    margin: 0;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9rem;
+  }
+
+  /* ---- status chips ---- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.22em 0.65em;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .chip-done { background: var(--done-soft); color: var(--done); }
+  .chip-action { background: var(--accent-soft); color: var(--accent-ink); }
+  .chip-info { background: var(--info-soft); color: var(--info); }
+  .chip-warn { background: var(--warn-soft); color: var(--warn); }
+
+  /* ---- "already done" ledger ---- */
+  .ledger {
+    border: 1px solid var(--line-strong);
+    background: var(--paper-raised);
+    margin-bottom: 3rem;
+  }
+  .ledger h2 { margin: 0; padding: 1rem 1.5rem; border-bottom: 1px solid var(--line); font-size: 1.05rem; }
+  .ledger-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding: 0.7rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.94rem;
+  }
+  .ledger-row:last-child { border-bottom: none; }
+  .ledger-row .mono { color: var(--ink-soft); font-size: 0.85rem; }
+
+  /* ---- phases ---- */
+  .phase {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 0 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .phase-num {
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 650;
+    color: var(--line-strong);
+    line-height: 1.1;
+    position: relative;
+  }
+  .phase-num::after {
+    content: "";
+    position: absolute;
+    top: 2.4rem;
+    bottom: -3rem;
+    left: 50%;
+    width: 1px;
+    background: var(--line);
+  }
+  .phase:last-of-type .phase-num::after { display: none; }
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.65rem;
+  }
+  .phase-head h2 { font-size: 1.28rem; font-weight: 650; margin: 0; }
+  .phase-body p { margin: 0 0 0.9rem; }
+  .phase-body p:last-child { margin-bottom: 0; }
+
+  .step {
+    margin: 0 0 0.6rem;
+    padding-left: 1.4rem;
+    position: relative;
+  }
+  .step::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  ul.plain { list-style: none; margin: 0.6rem 0; padding: 0; }
+  ul.plain li { margin: 0 0 0.5rem 0; padding-left: 1.4rem; position: relative; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--ink-soft); }
+
+  .callout {
+    border-left: 3px solid var(--info);
+    background: var(--info-soft);
+    padding: 0.85rem 1.1rem;
+    margin: 1rem 0;
+    font-size: 0.92rem;
+  }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  .callout strong.callout-label {
+    display: block;
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .callout.warn strong.callout-label { color: var(--warn); }
+  .callout:not(.warn) strong.callout-label { color: var(--info); }
+
+  /* ---- tables ---- */
+  .table-wrap { overflow-x: auto; margin: 1rem 0 0.5rem; border: 1px solid var(--line-strong); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.86rem; min-width: 560px; }
+  thead th {
+    text-align: left;
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--mono-chip);
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid var(--line-strong);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.mono, th.mono { font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; }
+
+  .match-tag {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    padding: 0.1em 0.45em;
+    border-radius: 3px;
+    background: var(--mono-chip);
+    border: 1px solid var(--line-strong);
+  }
+
+  /* ---- ad copy cards ---- */
+  .ad-mock {
+    border: 1px solid var(--line-strong);
+    background: var(--paper-raised);
+    padding: 0.9rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.9rem;
+  }
+  .ad-mock .ad-url { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--done); margin-bottom: 0.25rem; }
+  .ad-mock .ad-headline { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; color: var(--accent-ink); font-size: 1rem; margin-bottom: 0.2rem; }
+  .ad-mock .ad-desc { color: var(--ink-soft); font-size: 0.85rem; }
+
+  /* ---- checklist ---- */
+  .checklist { border: 1px solid var(--line-strong); background: var(--paper-raised); }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.65rem 1.1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input {
+    margin-top: 0.28em;
+    accent-color: var(--accent);
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+  .check-item.checked span { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: var(--line-strong); }
+
+  hr.rule { border: none; border-top: 1px solid var(--line); margin: 0.5rem 0 1.5rem; }
+
+  a { color: var(--accent-ink); }
+
+  .foot-note { font-size: 0.82rem; color: var(--ink-soft); margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+
+  @media (max-width: 560px) {
+    .phase { grid-template-columns: 1fr; }
+    .phase-num { display: none; }
+  }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<div class="sheet">
+
+  <div class="brief">
+    <div class="brief-top">
+      <div>
+        <div class="brief-eyebrow">Campaign Launch Plan</div>
+        <h1>Google Ads for AI Learn Hub</h1>
+      </div>
+      <span class="chip chip-info">No code required</span>
+    </div>
+    <dl class="brief-fields">
+      <div class="field"><dt>Site</dt><dd>ailearnhub.io</dd></div>
+      <div class="field"><dt>Channel</dt><dd>Google Ads — Search</dd></div>
+      <div class="field"><dt>Keyword source</dt><dd>AILearnHub_Google_Ads_Keywords.csv</dd></div>
+      <div class="field"><dt>Prepared</dt><dd>Sep 2026</dd></div>
+    </dl>
+  </div>
+
+  <p>Everything below happens in the Google Ads and Google Analytics dashboards — nothing here touches your repo. Where the site already has what a step needs, it's marked <span class="chip chip-done">done</span> so you can skip straight past it.</p>
+
+  <div class="ledger">
+    <h2>Already in place — nothing to build</h2>
+    <div class="ledger-row">
+      <span class="chip chip-done">done</span>
+      <div><strong>Analytics tag is live sitewide.</strong> <span class="mono">components/GoogleAnalytics.tsx</span> loads GA4 (<span class="mono">G-BRP7N4DX9C</span>) on every page via <span class="mono">app/layout.tsx</span>. This is the tag Google Ads conversion import needs — see Phase 2.</div>
+    </div>
+    <div class="ledger-row">
+      <span class="chip chip-done">done</span>
+      <div><strong>Sitemap &amp; robots.txt are correct.</strong> <span class="mono">app/sitemap.ts</span> lists all published courses; <span class="mono">public/robots.txt</span> points to it. Nothing to fix before ads go live.</div>
+    </div>
+    <div class="ledger-row">
+      <span class="chip chip-done">done</span>
+      <div><strong>Landing pages are keyword-mapped.</strong> Each course page's metadata already carries the matching search terms — that's what makes Quality Score work in your favor from day one.</div>
+    </div>
+    <div class="ledger-row">
+      <span class="chip chip-done">done</span>
+      <div><strong>Keyword list is grouped and ready.</strong> 26 keywords across 4 ad groups with match types and landing pages, in <span class="mono">AILearnHub_Google_Ads_Keywords.csv</span> — Phase 4 just walks it into the Ads UI.</div>
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase">
+    <div class="phase-num">1</div>
+    <div>
+      <div class="phase-head">
+        <h2>Check the claims before you pay to promote them</h2>
+        <span class="chip chip-warn">do this first</span>
+      </div>
+      <div class="phase-body">
+        <p>Google's advertising policy on misrepresentation applies directly to education businesses: any claim about certification, outcomes, or credentials "must be accurate and verifiable." Your site's own metadata leans hard on the word <em>certification</em> — <span class="mono">"AI certification for professionals 2026"</span>, <span class="mono">"chatGPT certification"</span> — which is fine, but Google (and a disapproved-ad review) will read it literally.</p>
+        <p class="step">Confirm each course page is clear that this is a <em>course completion certificate</em>, not an accredited or third-party professional certification — if that distinction isn't already stated on the course page itself, add one line to the page copy (not the metadata) before running ads to it.</p>
+        <p class="step">Make sure pricing, refund terms, and what's included are visible on the landing page itself, not just linked from elsewhere — Google's editorial review checks the ad's destination, not just the ad text.</p>
+        <p class="step">Your <span class="mono">/refund-policy</span> and <span class="mono">/terms</span> pages are already live and linked — good, no action needed there.</p>
+        <div class="callout warn">
+          <strong class="callout-label">Why this matters</strong>
+          Certification and "guaranteed outcome" language is one of the most common reasons education ads get disapproved or accounts get flagged for review. A day spent tightening this copy now is cheaper than a paused campaign later.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase">
+    <div class="phase-num">2</div>
+    <div>
+      <div class="phase-head">
+        <h2>Create the Ads account &amp; link Analytics</h2>
+      </div>
+      <div class="phase-body">
+        <p class="step">Go to <span class="mono">ads.google.com</span> → <strong>Start now</strong> → sign in with the account you want to bill (a Google Workspace/business account, not a personal Gmail used elsewhere, keeps billing and access clean).</p>
+        <p class="step">Choose <strong>Switch to Expert Mode</strong> at setup — the guided "Smart" flow skips ad-group and keyword control you'll want for Phase 4.</p>
+        <p class="step">Add billing details. Google Ads has no fixed minimum spend — you set the daily budget in Phase 5.</p>
+        <p class="step">In <strong>Analytics</strong> (analytics.google.com), open <strong>Admin → Product Links → Google Ads Links</strong> for the AI Learn Hub GA4 property, and link the same Google Ads account. This is what lets Ads read conversions straight from the tag that's already on the site.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase">
+    <div class="phase-num">3</div>
+    <div>
+      <div class="phase-head">
+        <h2>Set up conversion tracking — without touching the codebase</h2>
+        <span class="chip chip-info">key phase</span>
+      </div>
+      <div class="phase-body">
+        <p>Google Ads <strong>requires at least one conversion goal</strong> before it will let you publish a Search campaign. Normally that means adding a tracking snippet to your purchase page — but GA4 is already firing on every page load, so you can define the conversion entirely inside the Analytics UI instead.</p>
+
+        <p class="step"><strong>In GA4:</strong> Admin → <strong>Events</strong> → <strong>Create event</strong>. Name it <span class="mono">course_purchase</span>, matching condition: <span class="mono">event_name</span> equals <span class="mono">page_view</span> <em>and</em> <span class="mono">page_location</span> contains <span class="mono">/payment-success</span>.</p>
+        <p class="step">Toggle that new event on as a <strong>Key event</strong> (Admin → Events → the toggle next to <span class="mono">course_purchase</span>).</p>
+        <p class="step"><strong>In Google Ads:</strong> Tools &amp; Settings (wrench icon) → <strong>Conversions</strong> → <strong>+ New conversion action</strong> → <strong>Import</strong> → <strong>Google Analytics 4 properties</strong> → select the AI Learn Hub property → tick <span class="mono">course_purchase</span> → <strong>Import and Continue</strong>.</p>
+        <p class="step">Set it as a <strong>Primary</strong> conversion action, count as <strong>One</strong> per click (not every).</p>
+
+        <div class="callout">
+          <strong class="callout-label">Data accuracy, honestly</strong>
+          The site's cookie banner (<span class="mono">components/CookieConsent.tsx</span>) only updates <span class="mono">analytics_storage</span> on accept — <span class="mono">ad_storage</span> stays denied by default for every visitor. That's a privacy-safe default, and Google Ads still reports conversions using statistical modeling to fill the gap, but exact per-user attribution will undercount versus a site that also grants ad-storage consent. This is a code change, so it's outside what you asked for here — flagging it only so the numbers you see later make sense. No action needed unless you want it addressed separately.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase">
+    <div class="phase-num">4</div>
+    <div>
+      <div class="phase-head">
+        <h2>Build the campaign from the keyword sheet</h2>
+      </div>
+      <div class="phase-body">
+        <p class="step">Campaigns → <strong>+ New campaign</strong> → objective <strong>Sales</strong> → type <strong>Search</strong> → conversion goal: select <span class="mono">course_purchase</span> (created in Phase 3).</p>
+        <p class="step">Campaign name: <span class="mono">AI Courses - Search</span> — matches the <span class="mono">Campaign</span> column in your CSV, so anyone reconciling the two later isn't guessing.</p>
+        <p class="step">Networks: turn <strong>off</strong> Display Network expansion and Search Partners for the first month — keeps early data clean while you learn what converts.</p>
+        <p class="step">Locations: whatever markets you actually serve (the site is USD-priced — start with US, add others deliberately rather than defaulting to "All countries").</p>
+        <p class="step">Bidding: <strong>Maximize Conversions</strong>, no target CPA yet — you don't have enough conversion history for Ads to optimize against a target.</p>
+        <p class="step">Create four ad groups exactly as grouped in the CSV — one keyword theme per group keeps Quality Score high because the ad and landing page stay tightly relevant to the search term:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Ad group</th><th>Sample keywords</th><th>Match</th><th class="mono">Landing page</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Prompt Engineering</td>
+                <td>prompt engineering course · certification · course online · basics</td>
+                <td><span class="match-tag">Phrase</span> <span class="match-tag">Exact</span></td>
+                <td class="mono">/courses/prompt-engineering-mastery</td>
+              </tr>
+              <tr>
+                <td>ChatGPT Training</td>
+                <td>chatgpt course · chatgpt for business · chatgpt certification</td>
+                <td><span class="match-tag">Phrase</span> <span class="match-tag">Exact</span></td>
+                <td class="mono">/courses/chatgpt-mastery</td>
+              </tr>
+              <tr>
+                <td>Business Automation</td>
+                <td>business automation course · workflow automation certification</td>
+                <td><span class="match-tag">Phrase</span> <span class="match-tag">Exact</span></td>
+                <td class="mono">/courses/ai-tools-productivity</td>
+              </tr>
+              <tr>
+                <td>AI Upskilling &amp; Certification</td>
+                <td>ai upskilling · ai certification for beginners · best ai courses</td>
+                <td><span class="match-tag">Phrase</span> <span class="match-tag">Broad</span></td>
+                <td class="mono">/courses</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:0.6rem;">Full 26-row list with every keyword and exact-match variant: <span class="mono">AILearnHub_Google_Ads_Keywords.csv</span> (sent earlier).</p>
+
+        <div class="callout">
+          <strong class="callout-label">Negative keywords — add these before you launch</strong>
+          Education searches attract a lot of non-buyers. Add as campaign-level negatives: <span class="mono">free</span>, <span class="mono">pdf</span>, <span class="mono">download</span>, <span class="mono">torrent</span>, <span class="mono">jobs</span>, <span class="mono">hiring</span>, <span class="mono">salary</span>, <span class="mono">internship</span>, <span class="mono">scholarship</span>, <span class="mono">reddit</span>, <span class="mono">course free</span>. Campaign → Keywords → Negative keywords → paste one per line.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase">
+    <div class="phase-num">5</div>
+    <div>
+      <div class="phase-head">
+        <h2>Write the ads</h2>
+      </div>
+      <div class="phase-body">
+        <p>Google requires at least 3 Responsive Search Ads worth of assets per ad group — up to 15 headlines and 4 descriptions, which it mixes automatically. Here's a starting set for the two highest-intent groups; adapt the pattern for the other two.</p>
+
+        <div class="ad-mock">
+          <div class="ad-url">Ad · ailearnhub.io/courses/prompt-engineering-mastery</div>
+          <div class="ad-headline">Prompt Engineering Mastery Course | Get Certified</div>
+          <div class="ad-desc">Learn the exact prompt frameworks top teams use. Self-paced, lifetime access, certificate on completion. Enroll today.</div>
+        </div>
+        <div class="ad-mock">
+          <div class="ad-url">Ad · ailearnhub.io/courses/chatgpt-mastery</div>
+          <div class="ad-headline">ChatGPT for Business | Advanced Course</div>
+          <div class="ad-desc">From basic prompts to advanced workflows. Built for working professionals. Lifetime access, no experience required.</div>
+        </div>
+
+        <p class="step" style="margin-top:1rem;">Headlines to add alongside these (30 characters each): <span class="mono">Prompt Engineering Certification</span>, <span class="mono">Learn ChatGPT for Business</span>, <span class="mono">AI Course for Professionals</span>, <span class="mono">Affordable AI Training</span>.</p>
+        <p class="step">Every headline and description must be true of the exact page it links to — an ad promising "certification" that lands on a page that never uses the word is a Quality Score and policy problem at once.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase">
+    <div class="phase-num">6</div>
+    <div>
+      <div class="phase-head">
+        <h2>Budget &amp; first-week bidding</h2>
+      </div>
+      <div class="phase-body">
+        <p class="step">Start the campaign daily budget around <strong>$20–30/day</strong> split across the four ad groups — enough for Ads to gather signal without a single bad keyword burning the week's spend.</p>
+        <p class="step">Leave <strong>Maximize Conversions</strong> running for at least 15–20 conversions (roughly 2–3 weeks at this budget) before considering a switch to Target CPA — switching earlier than that starves the algorithm of data and usually raises cost per lead, not lowers it.</p>
+        <p class="step">Check <strong>Search terms report</strong> (Campaign → Insights and reports → Search terms) every few days for the first two weeks — this is where you'll spot junk queries to add as negatives before they add up.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 7 -->
+  <div class="phase">
+    <div class="phase-num">7</div>
+    <div>
+      <div class="phase-head">
+        <h2>Publish &amp; what happens next</h2>
+      </div>
+      <div class="phase-body">
+        <p class="step">Click <strong>Publish</strong>. Google's editorial review typically takes <strong>under 1 business day</strong>, occasionally up to 3 for education-category ads.</p>
+        <p class="step">A <strong>Limited by policy</strong> or <strong>Disapproved</strong> status on a specific ad usually names the exact clause — re-read Phase 1 before appealing; most first-pass disapprovals in this category are the certification-language issue.</p>
+        <p class="step">Once live, conversions from <span class="mono">course_purchase</span> can take up to 24–48 hours to appear in the Ads UI as GA4 data settles — don't judge performance before that window closes.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2 style="font-size:1.1rem; margin-bottom:0.75rem;">Pre-launch checklist</h2>
+  <div class="checklist" id="checklist">
+    <label class="check-item"><input type="checkbox" data-id="c1"><span>Certification wording reviewed on all 4 course landing pages</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c2"><span>Google Ads account created, billing added</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c3"><span>GA4 linked to Google Ads account</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c4"><span><span class="mono">course_purchase</span> key event created and imported as a conversion</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c5"><span>4 ad groups built from the keyword CSV</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c6"><span>Negative keyword list added at campaign level</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c7"><span>At least 3 responsive search ads per ad group</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c8"><span>Daily budget set, Maximize Conversions selected</span></label>
+    <label class="check-item"><input type="checkbox" data-id="c9"><span>Published — awaiting editorial review</span></label>
+  </div>
+
+  <p class="foot-note">This plan only reads from and describes what's already on the site — no files in the ailearnhub-main repo were changed to produce it. Checkbox state is saved locally in this browser tab.</p>
+
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'ailearnhub-ads-checklist';
+  var state = {};
+  try {
+    state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch (e) { state = {}; }
+
+  var items = document.querySelectorAll('#checklist .check-item');
+  items.forEach(function (item) {
+    var box = item.querySelector('input');
+    var id = box.getAttribute('data-id');
+    if (state[id]) {
+      box.checked = true;
+      item.classList.add('checked');
+    }
+    item.addEventListener('change', function () {
+      state[id] = box.checked;
+      item.classList.toggle('checked', box.checked);
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    });
+  });
+})();
+</script>
