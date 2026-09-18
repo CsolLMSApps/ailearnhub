@@ -65,6 +65,16 @@ export async function GET(request: NextRequest) {
   try {
     // Fetch Stripe session to get customer email
     const stripeSession = await stripe.checkout.sessions.retrieve(sessionId)
+
+    // Only proceed if this session was actually paid. Without this check, anyone
+    // who obtains a session_id (expired, cancelled, or never paid) could reach
+    // this URL directly and get auto-created/logged in for that email -- no
+    // payment required.
+    if (stripeSession.payment_status !== 'paid') {
+      console.error('purchase-complete: session not paid', sessionId, stripeSession.payment_status)
+      return NextResponse.redirect(`${SITE_URL}/payment-success`)
+    }
+
     const email = stripeSession.customer_details?.email
 
     if (!email) {
