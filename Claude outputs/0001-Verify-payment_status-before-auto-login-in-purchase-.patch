@@ -1,0 +1,52 @@
+From 56bda5fc932b63527be6cca5601b348615a832d1 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 17 Sep 2026 17:12:48 +0000
+Subject: [PATCH] Verify payment_status before auto-login in purchase-complete
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The guest checkout success handler (app/api/auth/purchase-complete)
+created/logged into an account for whatever email was returned by
+Stripe for a given session_id, without checking whether that session
+was ever actually paid. Since checkout session_ids aren't secret
+(they surface in browser history, redirect URLs, etc.), anyone who
+obtained one — expired, cancelled, or unpaid — could reach this URL
+directly and get auto-created/logged in for that email with no
+payment required, including resetting the password on an existing
+guest account that never set a real one.
+
+Add a payment_status check right after the session is fetched: any
+session that isn't 'paid' now redirects to /payment-success instead
+of touching auth at all. Logged-in purchases (which never hit this
+route) and successfully paid guest purchases are unaffected. Course
+access is unaffected — that's granted only by the signature-verified
+webhook, which this route never touches.
+---
+ app/api/auth/purchase-complete/route.ts | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/app/api/auth/purchase-complete/route.ts b/app/api/auth/purchase-complete/route.ts
+index 1d0c8f8..b8d98ad 100644
+--- a/app/api/auth/purchase-complete/route.ts
++++ b/app/api/auth/purchase-complete/route.ts
+@@ -65,6 +65,16 @@ export async function GET(request: NextRequest) {
+   try {
+     // Fetch Stripe session to get customer email
+     const stripeSession = await stripe.checkout.sessions.retrieve(sessionId)
++
++    // Only proceed if this session was actually paid. Without this check, anyone
++    // who obtains a session_id (expired, cancelled, or never paid) could reach
++    // this URL directly and get auto-created/logged in for that email — no
++    // payment required.
++    if (stripeSession.payment_status !== 'paid') {
++      console.error('purchase-complete: session not paid', sessionId, stripeSession.payment_status)
++      return NextResponse.redirect(`${SITE_URL}/payment-success`)
++    }
++
+     const email = stripeSession.customer_details?.email
+ 
+     if (!email) {
+-- 
+2.43.0
+
