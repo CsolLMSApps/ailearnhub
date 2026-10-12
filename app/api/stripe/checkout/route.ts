@@ -40,10 +40,11 @@ export async function POST(request: NextRequest) {
       const BUNDLE_PRICE_CENTS = 9900
       const productName = `AI Learn Hub — Complete AI Mastery Bundle (All Courses)`
 
-      // Logged-in user → dashboard directly. Guest → purchase-complete which
-      // auto-creates their account and logs them in via magic link → dashboard.
+      // Logged-in user → thank-you page (which then continues to the dashboard).
+      // Guest → purchase-complete which auto-creates their account and logs
+      // them in → thank-you page → dashboard.
       const successUrl = user
-        ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&bundle=true`
+        ? `${process.env.NEXT_PUBLIC_SITE_URL}/thank-you?bundle=true`
         : `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/purchase-complete?session_id={CHECKOUT_SESSION_ID}&bundle=true`
 
       const session = await stripe.checkout.sessions.create({
@@ -119,10 +120,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Logged-in user → dashboard directly. Guest → purchase-complete which
-    // auto-creates their account and logs them in via magic link → dashboard.
+    // Logged-in user → thank-you page (which then continues to the dashboard).
+    // Guest → purchase-complete which auto-creates their account and logs
+    // them in → thank-you page → dashboard.
     const successUrl = user
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?purchase=success&course=${slug}`
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/thank-you?course=${slug}`
       : `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/purchase-complete?session_id={CHECKOUT_SESSION_ID}&slug=${slug}`
 
     const session = await stripe.checkout.sessions.create({

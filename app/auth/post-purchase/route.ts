@@ -6,7 +6,7 @@
 //   1. Verify our own token (no Supabase magic links involved)
 //   2. Sign in with the temp password using createServerClient
 //      → this sets proper server-side session cookies
-//   3. Redirect to /dashboard
+//   3. Redirect to /thank-you (which then continues on to /dashboard)
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
@@ -22,12 +22,14 @@ export async function GET(request: NextRequest) {
   const bundle = searchParams.get('bundle')
   const course = searchParams.get('course')
 
-  // Build the dashboard redirect URL with purchase params
+  // Build the post-login redirect URL with purchase params. Guests land on
+  // the thank-you page first; its own "Continue" button takes them on to the
+  // dashboard from there (same dashboard URL/params this used to go to directly).
   const dashParams = new URLSearchParams()
   if (purchase) dashParams.set('purchase', purchase)
   if (bundle) dashParams.set('bundle', bundle)
   if (course) dashParams.set('course', course)
-  const dashboardUrl = `${SITE_URL}/dashboard${dashParams.size ? `?${dashParams}` : ''}`
+  const thankYouUrl = `${SITE_URL}/thank-you${dashParams.size ? `?${dashParams}` : ''}`
 
   if (!rawToken) {
     return NextResponse.redirect(`${SITE_URL}/payment-success`)
@@ -73,8 +75,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Signed in successfully — go straight to dashboard
-    return NextResponse.redirect(dashboardUrl)
+    // Signed in successfully — on to the thank-you page
+    return NextResponse.redirect(thankYouUrl)
 
   } catch (err: any) {
     console.error('post-purchase error:', err.message)
