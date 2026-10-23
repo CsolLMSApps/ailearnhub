@@ -193,3 +193,22 @@
     border-color: #FF6F00;
   }
 }
+  .border-tf-orange {
+    border-color: #FF6F00;
+  }
+
+
+/* ── Footer badge marquee ────────────────────────────────────────────────
+   Scrolling strip of "featured on" directory badges at the very bottom of
+   the footer. The track renders the badge list twice back-to-back and
+   scrolls exactly one list-width (-50%) so the loop is seamless.         */
+@keyframes badge-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-badge-marquee {
+  animation: badge-marquee 22s linear infinite;
+}
+.animate-badge-marquee:hover {
+  animation-play-state: paused;
+}

@@ -110,19 +110,60 @@ export default function Footer() {
             </Link>
           </div>
 
-          <div className="flex justify-center mb-6">
-            <a href="https://smollaunch.com" target="_blank" rel="noopener">
-              <img
-                src="https://smollaunch.com/badges/featured.svg"
-                alt="AILearnHub.io — Featured on Smol Launch"
-                loading="lazy"
-                width={250}
-                height={60}
-              />
-            </a>
-          </div>
-
           <p className="text-center text-sm text-gray-400">&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
+        </div>
+      </div>
+
+      {/* Directory badges — scrolling strip, list rendered twice for a seamless loop */}
+      <div className="border-t border-gray-800 py-6 overflow-hidden">
+        <div className="flex w-max animate-badge-marquee">
+          {[0, 1].map((copy) => (
+            <div key={copy} className="flex items-center gap-10 pr-10 shrink-0">
+              <a href="https://smollaunch.com" target="_blank" rel="noopener">
+                <img
+                  src="https://smollaunch.com/badges/featured.svg"
+                  alt="AILearnHub.io — Featured on Smol Launch"
+                  loading="lazy"
+                  className="h-10 w-auto"
+                />
+              </a>
+              <a
+                href="https://alternativeto.net/software/ailearnhub-io/about/?utm_source=badge&utm_medium=referral"
+                target="_blank"
+                rel="noopener"
+              >
+                <img
+                  src="https://alternativeto.net/static/badges/badge-compact-color.svg"
+                  alt="AILearnHub.io | AlternativeTo"
+                  loading="lazy"
+                  className="h-10 w-auto"
+                />
+              </a>
+              {/* StackShare doesn't provide an embeddable badge image — this is
+                  a self-built card linking out to the listing instead. */}
+              <a
+                href="https://stackshare.io/info8956/ailearnhub"
+                target="_blank"
+                rel="noopener"
+                className="h-10 flex items-center gap-2 px-4 rounded-lg border border-gray-700 bg-[#2a2a2a] hover:border-[#FF6F00] transition-colors"
+              >
+                <svg className="w-4 h-4 text-[#FF6F00] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 2 2 7l10 5 10-5-10-5Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m2 17 10 5 10-5" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m2 12 10 5 10-5" />
+                </svg>
+                <span className="text-sm font-semibold text-white whitespace-nowrap">View us on StackShare</span>
+              </a>
+              <a href="https://turbo0.com/item/ai-learn-hub" target="_blank" rel="noopener noreferrer">
+                <img
+                  src="https://img.turbo0.com/badge-listed-light.svg"
+                  alt="Listed on Turbo0"
+                  loading="lazy"
+                  className="h-10 w-auto"
+                />
+              </a>
+            </div>
+          ))}
         </div>
       </div>
     </footer>
