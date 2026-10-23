@@ -162,6 +162,18 @@ export default function Footer() {
                   className="h-10 w-auto"
                 />
               </a>
+              <a
+                href="https://findly.tools/ailearnhub-io?utm_source=ailearnhub-io"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://findly.tools/badges/findly-tools-badge-light.svg"
+                  alt="Featured on Findly.tools"
+                  loading="lazy"
+                  className="h-10 w-auto"
+                />
+              </a>
             </div>
           ))}
         </div>
