@@ -1,0 +1,40 @@
+From 95c9595fefa2710766d4d9d4fa7e20412e3a6408 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 23 Oct 2026 10:30:45 +0000
+Subject: [PATCH 2/2] Add Smol Launch featured badge to footer
+
+Embeds the badge Smol Launch provided after listing AILearnHub.io,
+linking back to smollaunch.com.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_014nEJhhthABXgLtAVp4JDAX
+---
+ components/Footer.tsx | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/components/Footer.tsx b/components/Footer.tsx
+index 7a6450a..5c55f60 100644
+--- a/components/Footer.tsx
++++ b/components/Footer.tsx
+@@ -109,6 +109,18 @@ export default function Footer() {
+               Verify Now →
+             </Link>
+           </div>
++          <div className="flex justify-center mb-6">
++            <a href="https://smollaunch.com" target="_blank" rel="noopener">
++              <img
++                src="https://smollaunch.com/badges/featured.svg"
++                alt="AILearnHub.io — Featured on Smol Launch"
++                loading="lazy"
++                width={250}
++                height={60}
++              />
++            </a>
++          </div>
++
+           <p className="text-center text-sm text-gray-400">&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
+         </div>
+       </div>
+-- 
+2.43.0
+

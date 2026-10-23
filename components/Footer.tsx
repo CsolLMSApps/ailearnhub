@@ -109,6 +109,19 @@ export default function Footer() {
               Verify Now →
             </Link>
           </div>
+
+          <div className="flex justify-center mb-6">
+            <a href="https://smollaunch.com" target="_blank" rel="noopener">
+              <img
+                src="https://smollaunch.com/badges/featured.svg"
+                alt="AILearnHub.io — Featured on Smol Launch"
+                loading="lazy"
+                width={250}
+                height={60}
+              />
+            </a>
+          </div>
+
           <p className="text-center text-sm text-gray-400">&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
         </div>
       </div>
