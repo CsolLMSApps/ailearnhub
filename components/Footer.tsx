@@ -174,6 +174,18 @@ export default function Footer() {
                   className="h-10 w-auto"
                 />
               </a>
+              <a
+                href="https://sitepatent.com/?utm_source=ailearnhub.io&utm_medium=badge"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
+                <img
+                  src="https://sitepatent.com/api/badge?style=classic"
+                  alt="Selected for SitePatent"
+                  loading="lazy"
+                  className="h-10 w-auto"
+                />
+              </a>
             </div>
           ))}
         </div>
