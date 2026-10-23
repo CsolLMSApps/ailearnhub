@@ -109,7 +109,6 @@ export default function Footer() {
               Verify Now →
             </Link>
           </div>
-
           <p className="text-center text-sm text-gray-400">&copy; 2026 AI Learn Hub LLC. All rights reserved.</p>
         </div>
       </div>
@@ -140,19 +139,25 @@ export default function Footer() {
                 />
               </a>
               {/* StackShare doesn't provide an embeddable badge image — this is
-                  a self-built card linking out to the listing instead. */}
+                  a self-built card using their official logo (Simple Icons CDN,
+                  brand color #0690FA), styled to match the other white badges. */}
               <a
                 href="https://stackshare.io/info8956/ailearnhub"
                 target="_blank"
                 rel="noopener"
-                className="h-10 flex items-center gap-2 px-4 rounded-lg border border-gray-700 bg-[#2a2a2a] hover:border-[#FF6F00] transition-colors"
+                className="h-10 flex items-center gap-2 px-3 rounded-md bg-white shrink-0"
               >
-                <svg className="w-4 h-4 text-[#FF6F00] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 2 2 7l10 5 10-5-10-5Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m2 17 10 5 10-5" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m2 12 10 5 10-5" />
-                </svg>
-                <span className="text-sm font-semibold text-white whitespace-nowrap">View us on StackShare</span>
+                <img
+                  src="https://cdn.simpleicons.org/stackshare/0690FA"
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  className="w-5 h-5 shrink-0"
+                />
+                <span className="flex flex-col leading-none">
+                  <span className="text-[9px] font-bold uppercase tracking-wide text-gray-500">View us on</span>
+                  <span className="text-sm font-bold text-gray-900">StackShare</span>
+                </span>
               </a>
               <a href="https://turbo0.com/item/ai-learn-hub" target="_blank" rel="noopener noreferrer">
                 <img
