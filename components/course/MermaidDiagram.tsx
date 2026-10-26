@@ -17,6 +17,17 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
     const render = async () => {
       try {
         const mermaid = (await import('mermaid')).default
+
+        // Match whatever font is actually rendering on the page (next/font
+        // loads Roboto under a generated name, exposed via --font-roboto —
+        // the literal string 'Roboto' doesn't resolve to it on most OSes).
+        // Reading the live computed value keeps Mermaid's text-width
+        // measurement and the final rendered glyphs in sync, so node boxes
+        // size correctly instead of clipping their own labels.
+        const pageFont = typeof window !== 'undefined'
+          ? getComputedStyle(document.body).fontFamily
+          : 'Roboto, sans-serif'
+
         mermaid.initialize({
           startOnLoad: false,
           theme: 'base',
@@ -27,7 +38,7 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
             lineColor: '#FF6F00',
             secondaryColor: '#F5F5F5',
             tertiaryColor: '#ffffff',
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: pageFont,
             fontSize: '14px',
           },
           flowchart: { curve: 'basis', padding: 20 },
