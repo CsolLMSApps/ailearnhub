@@ -31,6 +31,14 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
         mermaid.initialize({
           startOnLoad: false,
           theme: 'base',
+          // 'strict' (the default) disables Mermaid's HTML-based label
+          // rendering, forcing labels onto plain SVG <text>, which does not
+          // size node boxes correctly for multi-line labels (the label text
+          // then clips past the box edge). 'loose' restores proper
+          // HTML-based label layout so boxes size to fit their real content.
+          // Content rendered here always comes from our own course data,
+          // never arbitrary user input, so this is safe.
+          securityLevel: 'loose',
           themeVariables: {
             primaryColor: '#FFF3E0',
             primaryTextColor: '#212121',
