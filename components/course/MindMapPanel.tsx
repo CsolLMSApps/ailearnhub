@@ -8,13 +8,22 @@ const MermaidDiagram = dynamic(() => import('./MermaidDiagram'), { ssr: false })
 // ── Sanitize text for Mermaid mindmap nodes ──────────────────────────────────
 // Mermaid mindmap chokes on (), [], {}, ", :, #, and very long text
 function sanitize(text: string, maxLen = 42): string {
-  return text
+  const cleaned = text
     .replace(/[`*_]/g, '')              // strip markdown inline formatting
     .replace(/["()\[\]{}<>:#]/g, '')    // strip Mermaid-special chars
     .replace(/&/g, 'and')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, maxLen)
+
+  if (cleaned.length <= maxLen) return cleaned
+
+  // Truncate at the last whole word instead of a hard mid-word cut, and
+  // mark it as shortened with an ellipsis — a bare mid-word cut (e.g.
+  // "...Make ChatGPT Wor") reads as a rendering bug instead of a
+  // deliberately shortened label.
+  const truncated = cleaned.slice(0, maxLen)
+  const lastSpace = truncated.lastIndexOf(' ')
+  return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated) + '…'
 }
 
 // ── Build Mermaid mindmap syntax from module title + markdown headings ────────
