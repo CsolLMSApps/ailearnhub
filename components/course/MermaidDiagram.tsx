@@ -60,6 +60,36 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
           ref.current.innerHTML = svg
           setRendered(true)
           setError(null)
+
+          // The overflow:visible safety net (globals.css) can let a node's
+          // label render slightly larger than the box Mermaid calculated
+          // for it. That keeps the text visible, but the diagram's own
+          // canvas (viewBox/width/height) is still sized to the smaller
+          // calculated box, so the label can visually bleed past the
+          // diagram's border. Once the real DOM has painted, re-measure the
+          // actual rendered content and resize the canvas to match it, so
+          // the border always wraps everything that's actually there.
+          requestAnimationFrame(() => {
+            const svgEl = ref.current?.querySelector('svg')
+            if (!svgEl) return
+            try {
+              const bbox = svgEl.getBBox()
+              const pad = 10
+              const x = bbox.x - pad
+              const y = bbox.y - pad
+              const w = bbox.width + pad * 2
+              const h = bbox.height + pad * 2
+              if (w > 0 && h > 0) {
+                svgEl.setAttribute('viewBox', `${x} ${y} ${w} ${h}`)
+                svgEl.setAttribute('width', '100%')
+                svgEl.removeAttribute('height')
+                ;(svgEl as unknown as HTMLElement).style.maxWidth = `${w}px`
+              }
+            } catch {
+              // getBBox can throw on a not-yet-laid-out/zero-size SVG in
+              // some browsers — fall back to Mermaid's own sizing silently.
+            }
+          })
         }
       } catch (e) {
         setError('Unable to render diagram')
