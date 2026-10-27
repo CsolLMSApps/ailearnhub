@@ -198,6 +198,24 @@
   }
 
 
+/* ── Mermaid diagram overflow safety net ─────────────────────────────────
+   With securityLevel:'loose', Mermaid renders node labels inside SVG
+   <foreignObject> elements, which clip their content by default. If
+   Mermaid's internal size calculation for a node is ever even slightly
+   off from how the label actually renders (font metrics, sub-pixel
+   rounding, etc.), that clipping makes part of the label invisible
+   instead of just slightly overflowing its box. These rules turn that
+   off so a label is always fully visible — worst case it overflows its
+   box a little, which is far better than text silently disappearing. */
+.mermaid-render-area svg foreignObject,
+.mermaid-render-area svg .node foreignObject,
+.mermaid-render-area svg .node rect,
+.mermaid-render-area svg .node polygon,
+.mermaid-render-area svg .nodeLabel,
+.mermaid-render-area svg .label {
+  overflow: visible;
+}
+
 /* ── Footer badge marquee ────────────────────────────────────────────────
    Scrolling strip of "featured on" directory badges at the very bottom of
    the footer. The track renders the badge list twice back-to-back and

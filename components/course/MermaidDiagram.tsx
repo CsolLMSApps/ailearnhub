@@ -83,7 +83,11 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
     <div className="my-6 flex flex-col items-center">
       <div
         ref={ref}
-        className={`w-full overflow-x-auto rounded-xl border border-orange-100 bg-orange-50/30 p-4 transition-opacity duration-300 ${rendered ? 'opacity-100' : 'opacity-0'}`}
+        // mermaid-render-area: scoping hook for the overflow-safety rules in
+        // globals.css (so a node label is never invisibly clipped even if
+        // Mermaid's internal size estimate is slightly off from the real
+        // rendered text).
+        className={`mermaid-render-area w-full overflow-x-auto rounded-xl border border-orange-100 bg-orange-50/30 p-4 transition-opacity duration-300 ${rendered ? 'opacity-100' : 'opacity-0'}`}
       />
       {!rendered && (
         <div className="my-6 flex items-center gap-2 text-sm text-gray-400">
