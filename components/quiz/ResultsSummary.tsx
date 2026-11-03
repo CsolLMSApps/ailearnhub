@@ -8,6 +8,10 @@ interface ResultsSummaryProps {
     passed: boolean
     attempt_number: number
     slug: string
+    // Present on responses from the updated /api/quiz/submit — see lib/quiz-lock.ts
+    attempts_remaining?: number
+    locked?: boolean
+    max_attempts?: number
   }
   passPercentage: number
   onRetry: () => void
@@ -18,7 +22,7 @@ export function ResultsSummary({
   passPercentage,
   onRetry,
 }: ResultsSummaryProps) {
-  const { score, total_questions, percentage, passed, attempt_number, slug } = results
+  const { score, total_questions, percentage, passed, attempt_number, slug, locked, attempts_remaining, max_attempts } = results
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -90,9 +94,38 @@ export function ResultsSummary({
         </div>
       </div>
 
+      {/* Attempts-used / locked notice */}
+      {!passed && locked && (
+        <div className="mb-6 flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-left">
+          <span className="text-xl shrink-0">🔒</span>
+          <div>
+            <p className="text-sm font-semibold text-red-700">
+              Quiz locked — all {max_attempts ?? 3} attempts used
+            </p>
+            <p className="text-xs text-red-500 mt-0.5">
+              You didn't reach the {passPercentage}% pass mark within {max_attempts ?? 3} attempts.
+              Contact support to request additional attempts.
+            </p>
+          </div>
+        </div>
+      )}
+      {!passed && !locked && typeof attempts_remaining === 'number' && (
+        <p className="text-xs text-gray-400 text-center mb-4">
+          {attempts_remaining} attempt{attempts_remaining === 1 ? '' : 's'} remaining before this quiz locks.
+        </p>
+      )}
+
       {/* Actions */}
       <div className="flex justify-center gap-4">
-        {!passed && (
+        {!passed && locked && (
+          <a
+            href="/contact"
+            className="px-8 py-3 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors font-bold inline-block"
+          >
+            Contact Support
+          </a>
+        )}
+        {!passed && !locked && (
           <button
             onClick={onRetry}
             className="px-8 py-3 bg-[#FF6F00] text-white rounded-lg hover:bg-[#E65100] transition-colors font-bold"

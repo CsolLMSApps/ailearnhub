@@ -154,6 +154,38 @@ export async function adminDeleteRow(
   }
 }
 
+/** INSERT a new row and return it (mimics .insert().select().single()) */
+export async function adminInsert(
+  table: string,
+  body: Record<string, any>
+): Promise<{ data: any; error: Error | null }> {
+  const { url, key } = getConfig()
+  if (!url || !key) return { data: null, error: new Error('Missing Supabase config') }
+
+  try {
+    const res = await fetch(`${url}/rest/v1/${table}`, {
+      method: 'POST',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify(body),
+      cache: 'no-store',
+    })
+    if (!res.ok) {
+      const errBody = await res.text()
+      return { data: null, error: new Error(`HTTP ${res.status}: ${errBody}`) }
+    }
+    const rows = await res.json()
+    const data = Array.isArray(rows) ? (rows[0] ?? null) : rows
+    return { data, error: null }
+  } catch (err: any) {
+    return { data: null, error: err }
+  }
+}
+
 /** UPSERT a row and return it (mimics .upsert().select().single()) */
 export async function adminUpsert(
   table: string,

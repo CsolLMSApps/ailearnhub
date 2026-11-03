@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminFetch } from '@/lib/supabase/admin'
+import { getQuizLockStatus } from '@/lib/quiz-lock'
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,17 +49,40 @@ export async function POST(request: NextRequest) {
     const percentage = Math.round((score / totalQuestions) * 100)
     const passed = percentage >= quiz.pass_percentage
 
-    // Get previous attempt number
+    // Get every previous attempt (needed both for the next attempt_number
+    // and for the 3-attempt lock check below)
     const { data: previousResults } = await supabase
       .from('quiz_results')
-      .select('attempt_number')
+      .select('attempt_number, completed_at, passed')
       .eq('user_id', user.id)
       .eq('course_id', course.id)
       .eq('module_number', moduleNumber)
       .order('attempt_number', { ascending: false })
-      .limit(1)
 
     const attemptNumber = (previousResults?.[0]?.attempt_number || 0) + 1
+
+    // Enforce the 3-attempt cap: if the student has already used 3 attempts
+    // since their last admin-granted unlock (or ever, if never unlocked)
+    // without passing, reject this submission before it's recorded. An
+    // admin can grant a fresh unlock from /admin/quiz-results.
+    const lockStatus = await getQuizLockStatus(
+      user.id,
+      course.id,
+      moduleNumber,
+      (previousResults ?? []).map(r => ({ completed_at: r.completed_at, passed: r.passed }))
+    )
+
+    if (lockStatus.locked) {
+      return NextResponse.json(
+        {
+          error: 'Quiz locked: maximum attempts reached',
+          locked: true,
+          attemptsUsed: lockStatus.attemptsUsed,
+          maxAttempts: lockStatus.maxAttempts,
+        },
+        { status: 403 }
+      )
+    }
 
     // Save quiz result
     const { data: result, error: saveError } = await supabase
@@ -132,12 +156,22 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Recompute remaining attempts including the one just saved, so the
+    // client can show "locked after this" / "2 attempts left" accurately.
+    const attemptsRemainingAfterThis = passed
+      ? lockStatus.maxAttempts
+      : Math.max(0, lockStatus.attemptsRemaining - 1)
+    const willBeLockedNext = !passed && attemptsRemainingAfterThis === 0
+
     return NextResponse.json({
       score,
       total_questions: totalQuestions,
       percentage,
       passed,
       attempt_number: attemptNumber,
+      attempts_remaining: attemptsRemainingAfterThis,
+      locked: willBeLockedNext,
+      max_attempts: lockStatus.maxAttempts,
       slug,
       moduleNumber
     })

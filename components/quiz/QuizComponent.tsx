@@ -18,6 +18,13 @@ interface QuizComponentProps {
   moduleNumber: number
   questions: Question[]
   passPercentage?: number
+  // Server-computed lock state as of page load (see lib/quiz-lock.ts). The
+  // quiz page already hides this component entirely when initialLocked is
+  // true, so this is mainly here so TypeScript/future callers stay honest
+  // about the prop; the live lock check that actually matters happens on
+  // every submit via /api/quiz/submit.
+  initialLocked?: boolean
+  attemptsRemaining?: number
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -34,6 +41,8 @@ export function QuizComponent({
   moduleNumber,
   questions: originalQuestions,
   passPercentage = 70,
+  initialLocked = false,
+  attemptsRemaining,
 }: QuizComponentProps) {
   const router = useRouter()
 
@@ -47,6 +56,8 @@ export function QuizComponent({
   const [submitting, setSubmitting] = useState(false)
   const [quizResults, setQuizResults] = useState<any>(null)
   const [submitAttempted, setSubmitAttempted] = useState(false)
+  const [locked, setLocked] = useState(initialLocked)
+  const [lockMessage, setLockMessage] = useState<string | null>(null)
 
   const totalQuestions = shuffledQuestions.length
   const answeredCount = Object.keys(userAnswers).length
@@ -86,11 +97,26 @@ export function QuizComponent({
         body: JSON.stringify({ slug, moduleNumber, answers: userAnswers }),
       })
 
-      if (!response.ok) throw new Error('Failed to submit quiz')
-
       const results = await response.json()
+
+      if (!response.ok) {
+        if (response.status === 403 && results?.locked) {
+          // Attempt cap hit — show the locked state instead of a generic error.
+          setLocked(true)
+          setLockMessage(
+            `You've used all ${results.maxAttempts ?? 3} attempts for this quiz without passing. Please contact support to request additional attempts.`
+          )
+          return
+        }
+        throw new Error(results?.error || 'Failed to submit quiz')
+      }
+
       setQuizResults(results)
       setShowResults(true)
+      // Don't flip to the locked screen yet — let them see this attempt's
+      // score first. results.locked (this was their last attempt and they
+      // still didn't pass) is handled by ResultsSummary hiding the Retry
+      // button; the actual lock is enforced server-side on the next submit.
 
       if (results.passed) router.refresh()
     } catch (error) {
@@ -102,6 +128,7 @@ export function QuizComponent({
   }
 
   const handleRetry = () => {
+    if (locked) return
     // Reshuffle questions on every retry
     setShuffledQuestions(shuffleArray(originalQuestions))
     setCurrentQuestion(0)
@@ -109,6 +136,32 @@ export function QuizComponent({
     setShowResults(false)
     setQuizResults(null)
     setSubmitAttempted(false)
+  }
+
+  if (locked) {
+    return (
+      <div className="max-w-2xl mx-auto text-center bg-red-50 border-2 border-red-200 rounded-2xl p-10">
+        <p className="text-5xl mb-4">🔒</p>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">Quiz Locked</h2>
+        <p className="text-gray-500 text-sm max-w-md mx-auto mb-6">
+          {lockMessage ?? "You've used all your attempts for this quiz without passing. Please contact support to request additional attempts."}
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <a
+            href="/contact"
+            className="px-6 py-3 bg-[#FF6F00] text-white font-bold rounded-xl hover:bg-[#E65100] transition-colors"
+          >
+            Contact Support
+          </a>
+          <a
+            href={`/learn/${slug}`}
+            className="px-6 py-3 border-2 border-gray-300 text-gray-600 font-bold rounded-xl hover:border-[#FF6F00] hover:text-[#FF6F00] transition-colors"
+          >
+            Back to Course
+          </a>
+        </div>
+      </div>
+    )
   }
 
   if (showResults && quizResults) {
@@ -125,6 +178,20 @@ export function QuizComponent({
 
   return (
     <div className="max-w-3xl mx-auto">
+
+      {/* Attempts-remaining notice — only shown once attempts are running low */}
+      {typeof attemptsRemaining === 'number' && attemptsRemaining <= 2 && attemptsRemaining > 0 && (
+        <div className="mb-5 flex items-start gap-3 bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
+          <svg className="w-5 h-5 text-[#FF6F00] shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          <p className="text-sm text-orange-700">
+            {attemptsRemaining === 1
+              ? "This is your last attempt before the quiz locks. If you don't pass, you'll need to contact support to continue."
+              : `You have ${attemptsRemaining} attempts remaining before this quiz locks.`}
+          </p>
+        </div>
+      )}
 
       {/* Progress bar */}
       <div className="mb-6">
