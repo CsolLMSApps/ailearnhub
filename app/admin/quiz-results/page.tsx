@@ -33,11 +33,15 @@ export default async function AdminQuizResultsPage() {
     ? Math.round((quizResults ?? []).reduce((sum: number, r: any) => sum + (r.percentage ?? 0), 0) / total)
     : 0
 
-  // ── Locked quizzes: group attempts by user+course+module and run the same
-  // attempt-cap logic the student-facing routes use (see lib/quiz-lock.ts),
-  // so admins can see exactly who needs an unlock and grant it in one click.
-  // The cap itself isn't fixed to 3 — it's whatever the admin chose the last
-  // time this user+course+module was unlocked (or the default, if never).
+  // ── Students still working on a quiz: group attempts by user+course+module,
+  // run the same attempt-cap logic the student-facing routes use (see
+  // lib/quiz-lock.ts), and keep every group that hasn't passed yet listed
+  // here — not just ones that are fully locked — so admins can see who's
+  // struggling and set/grant attempts for them at any point, not only once
+  // they're already locked out. A group drops off this list the moment one
+  // of its attempts is a pass. The cap itself isn't fixed to 3 — it's
+  // whatever the admin last chose for this user+course+module (or the
+  // default, if never set).
   type Group = { userId: string; courseId: string; moduleNumber: number; attempts: { completed_at: string; passed: boolean }[] }
   const groups = new Map<string, Group>()
   ;(quizResults ?? []).forEach((r: any) => {
@@ -58,13 +62,16 @@ export default async function AdminQuizResultsPage() {
     }
   })
 
-  const lockedGroups = Array.from(groups.entries())
+  const notYetPassedGroups = Array.from(groups.entries())
     .map(([key, group]) => {
       const lastUnlock = latestUnlockByGroup.get(key) ?? null
       const status = computeQuizLockStatus(group.attempts, lastUnlock)
-      return { ...group, status }
+      const hasEverPassed = group.attempts.some(a => a.passed)
+      return { ...group, status, hasEverPassed }
     })
-    .filter(g => g.status.locked)
+    .filter(g => !g.hasEverPassed)
+    // Locked students first, then by fewest attempts remaining.
+    .sort((a, b) => Number(b.status.locked) - Number(a.status.locked) || a.status.attemptsRemaining - b.status.attemptsRemaining)
 
   return (
     <div>
@@ -73,13 +80,16 @@ export default async function AdminQuizResultsPage() {
         <p className="text-sm text-gray-500 mt-1">{total} total attempts</p>
       </div>
 
-      {/* Locked quizzes — need admin action */}
-      {lockedGroups.length > 0 && (
-        <div className="mb-6 bg-white rounded-xl border-2 border-red-200 shadow-sm overflow-hidden">
-          <div className="px-4 py-3 bg-red-50 border-b border-red-200">
-            <h2 className="text-sm font-bold text-red-700">🔒 Locked Quizzes ({lockedGroups.length})</h2>
-            <p className="text-xs text-red-500 mt-0.5">
-              These students used all 3 attempts without passing. Grant an unlock to give them 3 fresh attempts.
+      {/* Students who haven't passed yet — stays listed until they do, so
+          admins can monitor and set/grant attempts at any point, not just
+          once a student is fully locked out. */}
+      {notYetPassedGroups.length > 0 && (
+        <div className="mb-6 bg-white rounded-xl border-2 border-orange-200 shadow-sm overflow-hidden">
+          <div className="px-4 py-3 bg-orange-50 border-b border-orange-200">
+            <h2 className="text-sm font-bold text-orange-700">📋 Quiz Attempts — Not Yet Passed ({notYetPassedGroups.length})</h2>
+            <p className="text-xs text-orange-600 mt-0.5">
+              Every student who hasn't passed this quiz yet. A row stays here until they pass — set or grant
+              attempts for any of them below, whether or not they're currently locked out.
             </p>
           </div>
           <div className="overflow-x-auto">
@@ -89,12 +99,13 @@ export default async function AdminQuizResultsPage() {
                   <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">User</th>
                   <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Course</th>
                   <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Module</th>
-                  <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Attempts Used</th>
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Attempts</th>
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Status</th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {lockedGroups.map(g => (
+                {notYetPassedGroups.map(g => (
                   <tr key={`${g.userId}-${g.courseId}-${g.moduleNumber}`} className="hover:bg-gray-50">
                     <td className="px-3 py-3 text-gray-700">
                       {userMap[g.userId] ?? (
@@ -104,9 +115,22 @@ export default async function AdminQuizResultsPage() {
                     <td className="px-3 py-3 text-gray-700">{courseMap[g.courseId] ?? '—'}</td>
                     <td className="px-3 py-3 text-center text-gray-700">{g.moduleNumber}</td>
                     <td className="px-3 py-3 text-center">
-                      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600">
+                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${
+                        g.status.locked ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'
+                      }`}>
                         {g.status.attemptsUsed}/{g.status.maxAttempts}
                       </span>
+                    </td>
+                    <td className="px-3 py-3 text-center">
+                      {g.status.locked ? (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600">
+                          🔒 Locked
+                        </span>
+                      ) : (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
+                          {g.status.attemptsRemaining} left
+                        </span>
+                      )}
                     </td>
                     <td className="px-3 py-3 text-right">
                       <div className="flex justify-end">

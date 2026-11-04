@@ -1,10 +1,11 @@
 'use server'
 
 // app/actions/admin-quiz-unlock.ts
-// Admin action: grant a student a fresh set of quiz attempts after they've
-// been locked out (see lib/quiz-lock.ts for the attempt-cap logic). Used
-// from /admin/quiz-results, typically after the student raises a support
-// ticket asking to retake a quiz.
+// Admin action: set how many fresh quiz attempts a student gets starting
+// now (see lib/quiz-lock.ts for the attempt-cap logic). Used from
+// /admin/quiz-results for any student who hasn't passed yet — whether
+// they're already locked out or an admin just wants to top them up early,
+// typically after the student raises a support ticket.
 
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
@@ -71,5 +72,5 @@ export async function grantQuizUnlock(
   if (error) return { error: `Failed to grant unlock: ${error.message}` }
 
   revalidatePath('/admin/quiz-results')
-  return { success: `Quiz unlocked — the student now has ${attempts_granted} fresh attempt${attempts_granted === 1 ? '' : 's'}.` }
+  return { success: `Done — the student now has ${attempts_granted} fresh attempt${attempts_granted === 1 ? '' : 's'} from now.` }
 }

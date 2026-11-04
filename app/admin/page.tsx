@@ -1,158 +1,224 @@
-// app/admin/page.tsx — Admin Overview Dashboard
+// app/admin/quiz-results/page.tsx — All quiz attempts
 
 import { adminFetchAll, adminFetchUsers } from '@/lib/supabase/admin'
-import Link from 'next/link'
+import { computeQuizLockStatus, UnlockInfo } from '@/lib/quiz-lock'
+import UnlockButton from './UnlockButton'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminOverviewPage() {
+export default async function AdminQuizResultsPage() {
   const [
+    { data: quizResults },
     { data: users },
     { data: courses },
-    { data: purchases },
-    { data: certificates },
-    { data: quizResults },
+    { data: unlocks },
   ] = await Promise.all([
+    adminFetchAll('quiz_results', 'select=*&order=completed_at.desc'),
     adminFetchUsers(),
-    adminFetchAll('courses', 'select=id,title,slug,total_modules&is_published=eq.true'),
-    adminFetchAll('purchases', 'select=*&order=purchased_at.desc'),
-    adminFetchAll('certificates', 'select=id,course_id,issued_at,student_name,course_title'),
-    adminFetchAll('quiz_results', 'select=id,passed,percentage,course_id,user_id,completed_at&order=completed_at.desc'),
+    adminFetchAll('courses', 'select=id,title'),
+    adminFetchAll('quiz_unlocks', 'select=user_id,course_id,module_number,granted_at,attempts_granted&order=granted_at.desc'),
   ])
 
-  const totalRevenue = (purchases ?? []).reduce((s: number, p: any) => s + (p.amount_paid ?? 0), 0)
-  const passedQuizzes = (quizResults ?? []).filter((q: any) => q.passed).length
-  const totalQuizzes = quizResults?.length ?? 0
-  const passRate = totalQuizzes > 0 ? Math.round((passedQuizzes / totalQuizzes) * 100) : 0
-
-  const userEmailMap: Record<string, string> = {}
-  ;(users ?? []).forEach((u: any) => { userEmailMap[u.id] = u.email })
+  const userMap: Record<string, string> = {}
+  ;(users ?? []).forEach((u: any) => { userMap[u.id] = u.email })
 
   const courseMap: Record<string, string> = {}
   ;(courses ?? []).forEach((c: any) => { courseMap[c.id] = c.title })
 
-  // Recent activity feed (last 8 across purchases + certs + quiz passes)
-  type ActivityItem = { type: string; label: string; sub: string; time: Date; icon: string; color: string }
-  const activity: ActivityItem[] = [
-    ...(purchases ?? []).slice(0, 5).map((p: any) => ({
-      type: 'purchase', icon: '💳', color: 'bg-green-100 text-green-700',
-      label: userEmailMap[p.user_id] ?? 'Unknown',
-      sub: `Enrolled in ${courseMap[p.course_id] ?? 'a course'} · $${(p.amount_paid / 100).toFixed(2)}`,
-      time: new Date(p.purchased_at),
-    })),
-    ...(certificates ?? []).slice(0, 3).map((c: any) => ({
-      type: 'cert', icon: '🏆', color: 'bg-amber-100 text-amber-700',
-      label: c.student_name ?? 'A student',
-      sub: `Earned certificate for ${c.course_title ?? 'a course'}`,
-      time: new Date(c.issued_at),
-    })),
-    ...(quizResults ?? []).filter((q: any) => q.passed).slice(0, 3).map((q: any) => ({
-      type: 'quiz', icon: '✅', color: 'bg-purple-100 text-purple-700',
-      label: userEmailMap[q.user_id] ?? 'A user',
-      sub: `Passed quiz for ${courseMap[q.course_id] ?? 'a course'} with ${q.percentage}%`,
-      time: new Date(q.completed_at),
-    })),
-  ].sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 8)
+  const total = quizResults?.length ?? 0
+  const passed = (quizResults ?? []).filter((r: any) => r.passed).length
+  const failed = total - passed
+  const passRate = total > 0 ? Math.round((passed / total) * 100) : 0
+  const avgScore = total > 0
+    ? Math.round((quizResults ?? []).reduce((sum: number, r: any) => sum + (r.percentage ?? 0), 0) / total)
+    : 0
 
-  // This month vs last month
-  const now = new Date()
-  const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-  const lastMonth = `${lastMonthDate.getFullYear()}-${String(lastMonthDate.getMonth() + 1).padStart(2, '0')}`
-  const thisMonthRev = (purchases ?? [])
-    .filter((p: any) => p.purchased_at?.startsWith(thisMonth))
-    .reduce((s: number, p: any) => s + (p.amount_paid ?? 0), 0)
-  const lastMonthRev = (purchases ?? [])
-    .filter((p: any) => p.purchased_at?.startsWith(lastMonth))
-    .reduce((s: number, p: any) => s + (p.amount_paid ?? 0), 0)
-  const revGrowth = lastMonthRev > 0 ? Math.round(((thisMonthRev - lastMonthRev) / lastMonthRev) * 100) : 0
+  // ── Students still working on a quiz: group attempts by user+course+module,
+  // run the same attempt-cap logic the student-facing routes use (see
+  // lib/quiz-lock.ts), and keep every group that hasn't passed yet listed
+  // here — not just ones that are fully locked — so admins can see who's
+  // struggling and set/grant attempts for them at any point, not only once
+  // they're already locked out. A group drops off this list the moment one
+  // of its attempts is a pass. The cap itself isn't fixed to 3 — it's
+  // whatever the admin last chose for this user+course+module (or the
+  // default, if never set).
+  type Group = { userId: string; courseId: string; moduleNumber: number; attempts: { completed_at: string; passed: boolean }[] }
+  const groups = new Map<string, Group>()
+  ;(quizResults ?? []).forEach((r: any) => {
+    const key = `${r.user_id}::${r.course_id}::${r.module_number}`
+    if (!groups.has(key)) {
+      groups.set(key, { userId: r.user_id, courseId: r.course_id, moduleNumber: r.module_number, attempts: [] })
+    }
+    groups.get(key)!.attempts.push({ completed_at: r.completed_at, passed: r.passed })
+  })
 
-  const statCards = [
-    { label: 'Total Users', value: users?.length ?? 0, sub: 'Registered accounts', icon: '👥', from: 'from-blue-500', to: 'to-blue-600', href: '/admin/users' },
-    { label: 'Total Revenue', value: `$${(totalRevenue / 100).toFixed(2)}`, sub: `${revGrowth >= 0 ? '+' : ''}${revGrowth}% vs last month`, icon: '💰', from: 'from-green-500', to: 'to-green-600', href: '/admin/analytics' },
-    { label: 'Enrollments', value: purchases?.length ?? 0, sub: 'Completed purchases', icon: '📚', from: 'from-orange-500', to: 'to-orange-600', href: '/admin/purchases' },
-    { label: 'Certificates', value: certificates?.length ?? 0, sub: 'Courses completed', icon: '🏆', from: 'from-amber-500', to: 'to-amber-600', href: '/admin/courses' },
-    { label: 'Quiz Pass Rate', value: `${passRate}%`, sub: `${passedQuizzes}/${totalQuizzes} attempts`, icon: '📝', from: 'from-purple-500', to: 'to-purple-600', href: '/admin/quiz-results' },
-    { label: 'Active Courses', value: courses?.length ?? 0, sub: 'Published & live', icon: '🎓', from: 'from-indigo-500', to: 'to-indigo-600', href: '/admin/courses' },
-  ]
+  const latestUnlockByGroup = new Map<string, UnlockInfo>()
+  ;(unlocks ?? []).forEach((u: any) => {
+    const key = `${u.user_id}::${u.course_id}::${u.module_number}`
+    // unlocks is already ordered granted_at desc, so the first one seen per
+    // key is the most recent.
+    if (!latestUnlockByGroup.has(key)) {
+      latestUnlockByGroup.set(key, { grantedAt: u.granted_at, attemptsGranted: u.attempts_granted })
+    }
+  })
+
+  const notYetPassedGroups = Array.from(groups.entries())
+    .map(([key, group]) => {
+      const lastUnlock = latestUnlockByGroup.get(key) ?? null
+      const status = computeQuizLockStatus(group.attempts, lastUnlock)
+      const hasEverPassed = group.attempts.some(a => a.passed)
+      return { ...group, status, hasEverPassed }
+    })
+    .filter(g => !g.hasEverPassed)
+    // Locked students first, then by fewest attempts remaining.
+    .sort((a, b) => Number(b.status.locked) - Number(a.status.locked) || a.status.attemptsRemaining - b.status.attemptsRemaining)
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Overview</h1>
-        <p className="text-sm text-gray-500 mt-1">Real-time snapshot of AI Learn Hub</p>
+    <div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Quiz Results</h1>
+        <p className="text-sm text-gray-500 mt-1">{total} total attempts</p>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {statCards.map((card) => (
-          <Link key={card.label} href={card.href} className="block group">
-            <div className={`bg-gradient-to-br ${card.from} ${card.to} rounded-2xl p-5 text-white shadow-md hover:shadow-xl transition-shadow`}>
-              <div className="flex items-start justify-between mb-3">
-                <span className="text-2xl">{card.icon}</span>
-                <span className="text-white/60 text-xs group-hover:text-white transition-colors">View →</span>
-              </div>
-              <p className="text-3xl font-bold">{card.value}</p>
-              <p className="text-xs font-semibold text-white/80 mt-1">{card.label}</p>
-              <p className="text-xs text-white/60 mt-0.5">{card.sub}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity Feed */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h2 className="text-base font-bold text-gray-900 mb-4">Recent Activity</h2>
-          {activity.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-8">No activity yet</p>
-          ) : (
-            <div className="space-y-3">
-              {activity.map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <span className={`text-xs px-2 py-1 rounded-full font-semibold shrink-0 ${item.color}`}>
-                    {item.icon}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-800 truncate">{item.label}</p>
-                    <p className="text-xs text-gray-500 truncate">{item.sub}</p>
-                  </div>
-                  <span className="text-xs text-gray-400 whitespace-nowrap shrink-0">
-                    {item.time.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Recent Purchases */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-bold text-gray-900">Recent Purchases</h2>
-            <Link href="/admin/purchases" className="text-xs text-[#FF6F00] hover:underline">View all →</Link>
+      {/* Students who haven't passed yet — stays listed until they do, so
+          admins can monitor and set/grant attempts at any point, not just
+          once a student is fully locked out. */}
+      {notYetPassedGroups.length > 0 && (
+        <div className="mb-6 bg-white rounded-xl border-2 border-orange-200 shadow-sm overflow-hidden">
+          <div className="px-4 py-3 bg-orange-50 border-b border-orange-200">
+            <h2 className="text-sm font-bold text-orange-700">📋 Quiz Attempts — Not Yet Passed ({notYetPassedGroups.length})</h2>
+            <p className="text-xs text-orange-600 mt-0.5">
+              Every student who hasn't passed this quiz yet. A row stays here until they pass — set or grant
+              attempts for any of them below, whether or not they're currently locked out.
+            </p>
           </div>
-          {(purchases ?? []).length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-8">No purchases yet</p>
-          ) : (
-            <div className="space-y-3">
-              {(purchases ?? []).slice(0, 6).map((p: any) => (
-                <div key={p.id} className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                    {(userEmailMap[p.user_id] ?? '?')[0]?.toUpperCase()}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{userEmailMap[p.user_id] ?? 'Unknown'}</p>
-                    <p className="text-xs text-gray-400 truncate">{courseMap[p.course_id] ?? '—'}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-sm font-bold text-green-600">${(p.amount_paid / 100).toFixed(2)}</p>
-                    <p className="text-xs text-gray-400">{new Date(p.purchased_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                  </div>
-                </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">User</th>
+                  <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Course</th>
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Module</th>
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Attempts</th>
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {notYetPassedGroups.map(g => (
+                  <tr key={`${g.userId}-${g.courseId}-${g.moduleNumber}`} className="hover:bg-gray-50">
+                    <td className="px-3 py-3 text-gray-700">
+                      {userMap[g.userId] ?? (
+                        <span className="text-gray-400 font-mono text-xs">{g.userId.slice(0, 8)}…</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-3 text-gray-700">{courseMap[g.courseId] ?? '—'}</td>
+                    <td className="px-3 py-3 text-center text-gray-700">{g.moduleNumber}</td>
+                    <td className="px-3 py-3 text-center">
+                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${
+                        g.status.locked ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {g.status.attemptsUsed}/{g.status.maxAttempts}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-center">
+                      {g.status.locked ? (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600">
+                          🔒 Locked
+                        </span>
+                      ) : (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
+                          {g.status.attemptsRemaining} left
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3 py-3 text-right">
+                      <div className="flex justify-end">
+                        <UnlockButton userId={g.userId} courseId={g.courseId} moduleNumber={g.moduleNumber} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Summary stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+          <p className="text-2xl font-bold text-gray-900">{total}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Total Attempts</p>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+          <p className="text-2xl font-bold text-green-600">{passed}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Passed</p>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+          <p className="text-2xl font-bold text-red-500">{failed}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Failed</p>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+          <p className="text-2xl font-bold text-[#FF6F00]">{passRate}%</p>
+          <p className="text-xs text-gray-500 mt-0.5">Pass Rate (avg {avgScore}%)</p>
+        </div>
+      </div>
+
+      {/* Results table */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">User</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Course</th>
+                <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Score</th>
+                <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Result</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {(quizResults ?? []).length === 0 && (
+                <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">No quiz attempts yet</td></tr>
+              )}
+              {(quizResults ?? []).map((r: any) => (
+                <tr key={r.id} className="hover:bg-gray-50">
+                  <td className="px-3 py-3 text-gray-500 whitespace-nowrap">
+                    {r.completed_at
+                      ? new Date(r.completed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                      : '—'}
+                  </td>
+                  <td className="px-3 py-3 text-gray-700">
+                    {userMap[r.user_id] ?? (
+                      <span className="text-gray-400 font-mono text-xs">{(r.user_id ?? '').slice(0, 8)}…</span>
+                    )}
+                  </td>
+                  <td className="px-3 py-3 text-gray-700">{courseMap[r.course_id] ?? '—'}</td>
+                  <td className="px-3 py-3 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                        <div
+                          className={`h-1.5 rounded-full ${r.passed ? 'bg-green-500' : 'bg-red-400'}`}
+                          style={{ width: `${r.percentage ?? 0}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-semibold text-gray-700">{r.percentage ?? 0}%</span>
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 text-center">
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${
+                      r.passed
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-600'
+                    }`}>
+                      {r.passed ? '✓ Passed' : '✗ Failed'}
+                    </span>
+                  </td>
+                </tr>
               ))}
-            </div>
-          )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

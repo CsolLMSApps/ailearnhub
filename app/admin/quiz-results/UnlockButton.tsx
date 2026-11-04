@@ -1,8 +1,10 @@
 'use client'
 
 // app/admin/quiz-results/UnlockButton.tsx
-// Small inline form + button that grants a locked student a fresh set of
-// quiz attempts — the admin chooses how many (see
+// Small inline form + button that sets how many fresh quiz attempts a
+// student gets from right now — usable for any not-yet-passed student, not
+// only ones who are already locked out, so an admin can top them up
+// proactively. The admin chooses the count (see
 // app/actions/admin-quiz-unlock.ts and lib/quiz-lock.ts).
 
 import { useActionState, useState, useEffect } from 'react'
@@ -31,7 +33,7 @@ export default function UnlockButton({ userId, courseId, moduleNumber }: UnlockB
   if (state.success) {
     return (
       <span className="text-xs font-semibold text-green-700 bg-green-100 px-2.5 py-1 rounded-full">
-        ✓ Unlocked
+        ✓ Attempts set
       </span>
     )
   }
@@ -42,7 +44,7 @@ export default function UnlockButton({ userId, courseId, moduleNumber }: UnlockB
         onClick={() => setOpen(true)}
         className="text-xs font-semibold text-white bg-[#FF6F00] hover:bg-[#E65100] px-3 py-1.5 rounded-lg transition-colors"
       >
-        🔓 Unlock
+        ⚙️ Set Attempts
       </button>
     )
   }
