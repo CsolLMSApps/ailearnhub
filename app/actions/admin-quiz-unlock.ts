@@ -9,6 +9,7 @@
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { adminFetchAll, adminInsert } from '@/lib/supabase/admin'
+import { DEFAULT_MAX_QUIZ_ATTEMPTS } from '@/lib/quiz-lock'
 
 const SUPER_ADMIN_EMAILS = [
   'srikanth@ctekksolutions.net',
@@ -30,7 +31,10 @@ async function isAdmin(email: string): Promise<boolean> {
   return data.length > 0
 }
 
-// ── Grant a quiz unlock (resets the 3-attempt cap going forward) ──────────────
+// ── Grant a quiz unlock (resets the attempt cap going forward) ────────────────
+// The admin decides how many attempts this unlock is worth — it's no longer
+// fixed to 3. If the admin leaves it blank, it falls back to
+// DEFAULT_MAX_QUIZ_ATTEMPTS (the same default a never-unlocked student gets).
 export async function grantQuizUnlock(
   _prevState: { error?: string; success?: string },
   formData: FormData
@@ -45,9 +49,15 @@ export async function grantQuizUnlock(
   const module_number = parseInt(formData.get('module_number')?.toString() ?? '0')
   const note = formData.get('note')?.toString().trim() ?? ''
 
+  const attemptsRaw = formData.get('attempts')?.toString().trim()
+  const attempts_granted = attemptsRaw ? parseInt(attemptsRaw) : DEFAULT_MAX_QUIZ_ATTEMPTS
+
   if (!user_id) return { error: 'Missing student.' }
   if (!course_id) return { error: 'Missing course.' }
   if (!module_number || module_number < 1) return { error: 'Missing module.' }
+  if (!Number.isFinite(attempts_granted) || attempts_granted < 1) {
+    return { error: 'Attempts to grant must be a whole number of 1 or more.' }
+  }
 
   const { error } = await adminInsert('quiz_unlocks', {
     user_id,
@@ -55,10 +65,11 @@ export async function grantQuizUnlock(
     module_number,
     granted_by: callerEmail,
     note: note || null,
+    attempts_granted,
   })
 
   if (error) return { error: `Failed to grant unlock: ${error.message}` }
 
   revalidatePath('/admin/quiz-results')
-  return { success: 'Quiz unlocked — the student now has 3 fresh attempts.' }
+  return { success: `Quiz unlocked — the student now has ${attempts_granted} fresh attempt${attempts_granted === 1 ? '' : 's'}.` }
 }

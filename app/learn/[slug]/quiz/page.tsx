@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 import { redirect, notFound } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { adminFetch } from '@/lib/supabase/admin'
-import { getQuizLockStatus, MAX_QUIZ_ATTEMPTS } from '@/lib/quiz-lock'
+import { getQuizLockStatus } from '@/lib/quiz-lock'
 import { QuizComponent } from '@/components/quiz/QuizComponent'
 import Link from 'next/link'
 
@@ -108,8 +108,8 @@ export default async function CourseQuizPage({ params }: Props) {
   const hasPassedQuiz = !!quizResult
 
   // Fetch every attempt for this module to work out whether the student has
-  // used up their 3 attempts without passing (see lib/quiz-lock.ts). An
-  // admin can grant a fresh unlock from /admin/quiz-results.
+  // used up their attempts without passing (see lib/quiz-lock.ts). An admin
+  // can grant a fresh unlock from /admin/quiz-results.
   const { data: allAttempts } = await supabase
     .from('quiz_results')
     .select('completed_at, passed')
@@ -238,7 +238,7 @@ export default async function CourseQuizPage({ params }: Props) {
             <p className="text-5xl mb-4">🔒</p>
             <h2 className="text-xl font-bold text-gray-900 mb-2">Quiz Locked</h2>
             <p className="text-gray-500 text-sm max-w-md mx-auto mb-6">
-              You've used all {MAX_QUIZ_ATTEMPTS} attempts for this quiz without passing.
+              You've used all {lockStatus.maxAttempts} attempts for this quiz without passing.
               Please contact support to request additional attempts.
             </p>
             <div className="flex items-center justify-center gap-4">

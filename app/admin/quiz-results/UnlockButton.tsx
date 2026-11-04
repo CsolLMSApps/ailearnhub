@@ -1,11 +1,13 @@
 'use client'
 
 // app/admin/quiz-results/UnlockButton.tsx
-// Small inline form + button that grants a locked student 3 fresh quiz
-// attempts (see app/actions/admin-quiz-unlock.ts and lib/quiz-lock.ts).
+// Small inline form + button that grants a locked student a fresh set of
+// quiz attempts — the admin chooses how many (see
+// app/actions/admin-quiz-unlock.ts and lib/quiz-lock.ts).
 
 import { useActionState, useState, useEffect } from 'react'
 import { grantQuizUnlock } from '@/app/actions/admin-quiz-unlock'
+import { DEFAULT_MAX_QUIZ_ATTEMPTS } from '@/lib/quiz-lock'
 
 interface UnlockButtonProps {
   userId: string
@@ -19,6 +21,7 @@ export default function UnlockButton({ userId, courseId, moduleNumber }: UnlockB
   const [state, formAction, pending] = useActionState(grantQuizUnlock, initialState)
   const [open, setOpen] = useState(false)
   const [note, setNote] = useState('')
+  const [attempts, setAttempts] = useState(String(DEFAULT_MAX_QUIZ_ATTEMPTS))
 
   // Once the unlock succeeds, collapse the note form back down.
   useEffect(() => {
@@ -49,6 +52,19 @@ export default function UnlockButton({ userId, courseId, moduleNumber }: UnlockB
       <input type="hidden" name="user_id" value={userId} />
       <input type="hidden" name="course_id" value={courseId} />
       <input type="hidden" name="module_number" value={moduleNumber} />
+      <label className="flex items-center gap-1 text-xs text-gray-500">
+        Attempts
+        <input
+          type="number"
+          name="attempts"
+          min={1}
+          step={1}
+          value={attempts}
+          onChange={e => setAttempts(e.target.value)}
+          disabled={pending}
+          className="text-xs border border-gray-300 rounded-lg px-2 py-1.5 w-14 text-center focus:outline-none focus:ring-2 focus:ring-[#FF6F00] disabled:opacity-50"
+        />
+      </label>
       <input
         type="text"
         name="note"

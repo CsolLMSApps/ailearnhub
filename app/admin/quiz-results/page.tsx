@@ -1,7 +1,7 @@
 // app/admin/quiz-results/page.tsx — All quiz attempts
 
 import { adminFetchAll, adminFetchUsers } from '@/lib/supabase/admin'
-import { computeQuizLockStatus } from '@/lib/quiz-lock'
+import { computeQuizLockStatus, UnlockInfo } from '@/lib/quiz-lock'
 import UnlockButton from './UnlockButton'
 
 export const dynamic = 'force-dynamic'
@@ -16,7 +16,7 @@ export default async function AdminQuizResultsPage() {
     adminFetchAll('quiz_results', 'select=*&order=completed_at.desc'),
     adminFetchUsers(),
     adminFetchAll('courses', 'select=id,title'),
-    adminFetchAll('quiz_unlocks', 'select=user_id,course_id,module_number,granted_at&order=granted_at.desc'),
+    adminFetchAll('quiz_unlocks', 'select=user_id,course_id,module_number,granted_at,attempts_granted&order=granted_at.desc'),
   ])
 
   const userMap: Record<string, string> = {}
@@ -34,8 +34,10 @@ export default async function AdminQuizResultsPage() {
     : 0
 
   // ── Locked quizzes: group attempts by user+course+module and run the same
-  // 3-attempt-cap logic the student-facing routes use (see lib/quiz-lock.ts),
+  // attempt-cap logic the student-facing routes use (see lib/quiz-lock.ts),
   // so admins can see exactly who needs an unlock and grant it in one click.
+  // The cap itself isn't fixed to 3 — it's whatever the admin chose the last
+  // time this user+course+module was unlocked (or the default, if never).
   type Group = { userId: string; courseId: string; moduleNumber: number; attempts: { completed_at: string; passed: boolean }[] }
   const groups = new Map<string, Group>()
   ;(quizResults ?? []).forEach((r: any) => {
@@ -46,18 +48,20 @@ export default async function AdminQuizResultsPage() {
     groups.get(key)!.attempts.push({ completed_at: r.completed_at, passed: r.passed })
   })
 
-  const latestUnlockByGroup = new Map<string, string>()
+  const latestUnlockByGroup = new Map<string, UnlockInfo>()
   ;(unlocks ?? []).forEach((u: any) => {
     const key = `${u.user_id}::${u.course_id}::${u.module_number}`
     // unlocks is already ordered granted_at desc, so the first one seen per
     // key is the most recent.
-    if (!latestUnlockByGroup.has(key)) latestUnlockByGroup.set(key, u.granted_at)
+    if (!latestUnlockByGroup.has(key)) {
+      latestUnlockByGroup.set(key, { grantedAt: u.granted_at, attemptsGranted: u.attempts_granted })
+    }
   })
 
   const lockedGroups = Array.from(groups.entries())
     .map(([key, group]) => {
-      const lastUnlockAt = latestUnlockByGroup.get(key) ?? null
-      const status = computeQuizLockStatus(group.attempts, lastUnlockAt)
+      const lastUnlock = latestUnlockByGroup.get(key) ?? null
+      const status = computeQuizLockStatus(group.attempts, lastUnlock)
       return { ...group, status }
     })
     .filter(g => g.status.locked)
