@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import TurnstileWidget from '@/components/TurnstileWidget'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -12,13 +13,41 @@ export default function SignupPage() {
   const [confirmSent, setConfirmSent] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({ name: '', email: '', password: '' })
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
+  const handleCaptchaVerify = useCallback((token: string) => {
+    setCaptchaToken(token)
+  }, [])
+
+  const handleCaptchaExpire = useCallback(() => {
+    setCaptchaToken(null)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
 
+    if (!captchaToken) {
+      setError('Please complete the security check before creating your account.')
+      return
+    }
+
+    setLoading(true)
+
     try {
+      const captchaRes = await fetch('/api/auth/verify-captcha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: captchaToken }),
+      })
+      if (!captchaRes.ok) {
+        const d = await captchaRes.json()
+        setError(d.error || 'CAPTCHA verification failed. Please try again.')
+        setLoading(false)
+        setCaptchaToken(null)
+        return
+      }
+
       const supabase = createClient()
 
       const { data, error: signUpError } = await supabase.auth.signUp({
@@ -213,9 +242,20 @@ export default function SignupPage() {
                   <p className="text-xs text-gray-400 mt-1">At least 6 characters</p>
                 </div>
 
+                {/* Turnstile CAPTCHA */}
+                <div>
+                  <TurnstileWidget
+                    onVerify={handleCaptchaVerify}
+                    onExpire={handleCaptchaExpire}
+                  />
+                  {!captchaToken && (
+                    <p className="text-xs text-gray-400 mt-1">Security check required to create an account</p>
+                  )}
+                </div>
+
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !captchaToken}
                   className="w-full bg-[#FF6F00] hover:bg-[#E65100] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors"
                 >
                   {loading ? 'Creating account...' : 'Create account'}
