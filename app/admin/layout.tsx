@@ -29,7 +29,8 @@ const navLinks = [
   { href: '/admin/resources',     label: '📁 Resources' },
   { href: '/admin/support',       label: '🎫 Support' },
   { href: '/admin/blog',          label: '✍️ Blog' },
-  { href: '/admin/admin-access',  label: '🔑 Admin Access' },
+    { href: '/admin/admin-access',  label: '🔑 Admin Access' },
+  { href: '/admin/nexus-keys',    label: '🔌 Nexus API Keys' },
   { href: '/admin/system-health', label: '🩺 System Health' },
 ]
 
