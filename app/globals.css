@@ -36,6 +36,11 @@
     --ring: 25 100% 50%;  /* #FF6F00 */
 
     --radius: 0.5rem;
+
+    /* Roboto is now loaded as a plain <link> stylesheet in app/layout.tsx
+       instead of via next/font/google (see comment there for why), so this
+       variable just points at the font family name directly. */
+    --font-roboto: 'Roboto', sans-serif;
   }
 
   .dark {
